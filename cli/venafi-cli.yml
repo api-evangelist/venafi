@@ -1,0 +1,107 @@
+generated: '2026-09-02'
+method: searched
+source: https://github.com/Venafi/vcert (README + README-CLI-CLOUD.md + README-CLI-PLATFORM.md +
+  README-CLI-FIREFLY.md), https://github.com/Venafi/vsign, https://github.com/Venafi/vssh-cli,
+  https://developer.venafi.com/tlsprotectcloud/docs/libraries-and-sdks,
+  https://docs.venafi.cloud/api/obtaining-api-key/
+note: Four first-party command line tools. vcert is the one that matters — it is both the Go SDK
+  and the CLI, it speaks to all three products (Certificate Manager Self-Hosted, Certificate
+  Manager SaaS, Workload Identity Manager), and the provider's own docs use it as the supported
+  way to obtain an API key. Binaries live in packages/venafi-packages.yml.
+tools:
+- name: vcert
+  primary: true
+  repository: https://github.com/Venafi/vcert
+  docs: https://developer.venafi.com/tlsprotectcloud/docs/libraries-and-sdks-vcert
+  language: Go
+  license: Apache-2.0
+  support_level: community-supported (stated on the repository badge)
+  version: v5.13.9
+  install:
+  - method: release binary
+    detail: https://github.com/Venafi/vcert/releases — prebuilt binaries per OS under Assets
+  - method: go
+    detail: go get github.com/Venafi/vcert/v5
+  - method: homebrew
+    detail: tap at https://github.com/Venafi/homebrew-tap
+  compatibility: Certificate Manager Self-Hosted 17.3+; token authentication requires 20.1+;
+    custom fields and instance tracking require 18.2+.
+  commands:
+  - command: enroll
+    group: certificate lifecycle
+    summary: Request and retrieve a certificate (generates the key pair or takes a CSR).
+  - command: pickup
+    group: certificate lifecycle
+    summary: Retrieve a certificate for a previously submitted request.
+  - command: renew
+    group: certificate lifecycle
+    summary: Renew an existing certificate.
+  - command: revoke
+    group: certificate lifecycle
+    summary: Revoke an issued certificate.
+  - command: retire
+    group: certificate lifecycle
+    summary: Retire a certificate from inventory.
+  - command: gencsr
+    group: keys
+    summary: Generate a key pair and certificate signing request locally.
+  - command: getcred
+    group: credentials
+    summary: Obtain or refresh a credential. On SaaS this is the documented way to obtain an API
+      key (`vcert getcred --email <address>`); on self-hosted it exchanges for an OAuth token.
+  - command: checkcred
+    group: credentials
+    summary: Validate an existing credential.
+  - command: voidcred
+    group: credentials
+    summary: Invalidate a credential.
+  - command: getpolicy
+    group: policy
+    summary: Read a certificate policy as a policy specification file.
+  - command: setpolicy
+    group: policy
+    summary: Apply a policy specification. The provider documents this as the way to generate a
+      starting policy template for the Terraform provider.
+  - command: provisioning
+    group: provisioning
+    summary: Provision an issued certificate to a target keystore (cloud keystores and machines).
+  - command: sshenroll
+    group: ssh
+    summary: Request an SSH certificate (self-hosted only).
+  - command: sshpickup
+    group: ssh
+    summary: Retrieve a previously requested SSH certificate.
+  - command: sshgetconfig
+    group: ssh
+    summary: Read the SSH CA configuration.
+  key_flows:
+  - name: obtain an API key for the SaaS API
+    steps:
+    - vcert getcred --email <address> [--format json]
+    - complete the emailed activation, then send the key as the tppl-api-key header
+    docs: https://docs.venafi.cloud/api/obtaining-api-key/
+  - name: enroll a certificate against the SaaS Control Plane
+    steps:
+    - vcert enroll -k <apikey> -z <application\issuing-template> --cn <common name>
+- name: vsign
+  primary: false
+  repository: https://github.com/Venafi/vsign
+  language: Go
+  version: v1.0.3
+  summary: CodeSign Protect / Code Sign Manager CLI and Go SDK — signing, verification and
+    key-server interaction against the self-hosted code-signing service.
+- name: vssh
+  primary: false
+  repository: https://github.com/Venafi/vssh-cli
+  summary: Requests SSH credentials for authentication to servers and for applications or hosts an
+    administrator manages.
+- name: vsatctl
+  primary: false
+  repository: null
+  docs: https://docs.venafi.cloud/
+  summary: 'VSatellite control tool shipped with the SaaS edge appliance. Documented subcommands:
+    diagnostics, uninstall, export, update, restart, support-bundle, version, recover. Distributed
+    with the VSatellite rather than as a public package, so it has no registry entry.'
+summary:
+  tool_count: 4
+  first_party: true

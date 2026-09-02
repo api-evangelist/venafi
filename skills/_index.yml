@@ -1,0 +1,42 @@
+generated: '2026-09-02'
+method: generated
+source: openapi/venafi-certificate-manager-saas-openapi.yml,
+  openapi/venafi-trust-protection-foundation-websdk-openapi.yml, plus this repository's
+  conventions/, errors/ and scopes/ artifacts
+note: 'Authored, not harvested. Venafi publishes no AGENTS.md and no skills/ directory on any host
+  or in its GitHub organization — searched developer.venafi.com, docs.venafi.cloud, docs.venafi.com
+  and github.com/Venafi. Every operationId referenced in these skills was verified to exist
+  verbatim in the linked contract.'
+skills:
+- file: venafi-request-tls-certificate.md
+  api: Certificate Manager - SaaS
+  title: Request a TLS certificate
+  summary: Application and template lookup, dry-run validation, submit, poll, download — with the
+    no-idempotency warning that makes a naive retry issue a duplicate.
+  operations: 6
+- file: venafi-find-expiring-certificates.md
+  api: Certificate Manager - SaaS
+  title: Find expiring certificates
+  summary: The expression-tree search body, page-number paging, and the distinction between
+    inventory and discovered installations.
+  operations: 3
+- file: venafi-retire-and-recover-certificates.md
+  api: Certificate Manager - SaaS
+  title: Retire, recover, delete
+  summary: The one reversible write path in this API and the one permanent one, plus why
+    retirement is not revocation.
+  operations: 4
+- file: venafi-configure-expiration-webhook.md
+  api: Certificate Manager - SaaS
+  title: Configure expiration webhooks
+  summary: Monitoring configuration and connector must agree; the 10-connector and 3-threshold
+    ceilings; no signing secret exists.
+  operations: 5
+- file: venafi-authenticate-websdk-oauth.md
+  api: Trust Protection Foundation WebSDK
+  title: Authenticate with OAuth against a self-hosted instance
+  summary: Five grant types, token revocation, and how to resolve the required scope when it is
+    published as prose rather than as a securityScheme.
+  operations: 4
+summary:
+  skill_count: 5

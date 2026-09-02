@@ -1,0 +1,94 @@
+generated: '2026-09-02'
+method: searched
+source: https://docs.venafi.cloud/whatsnew/
+also: https://docs.venafi.cloud/enhancements/
+note: 'Two dated feeds, both public and both current as of 2026-09-02. "What''s New: Product
+  Capabilities" carries user-facing platform capability announcements; "What''s New: Enhancements
+  and Software Version Updates" carries component release notes (cert-manager, istio-csr, CSI
+  drivers, Enterprise Issuer, Approver Policy, Trust Manager). Neither feed is an API changelog
+  per se — the provider does not publish a versioned changelog for the REST contracts themselves,
+  and no Sunset or Deprecation headers appear in either OpenAPI. Entries are recorded verbatim as
+  the docs title them; only the recent window is captured.'
+scheme:
+  api_versioning: path segment (/v1/, /outagedetection/v1/) on the SaaS API; product release
+    number (26.1.1) on the self-hosted Trust Protection Foundation WebSDK
+  current_version:
+    certificate_manager_saas: v1
+    trust_protection_foundation_websdk: 26.1.1
+  cadence: continuous for SaaS; numbered releases (24.1, 24.3, 25.1, 25.3, 26.1) for self-hosted
+entries:
+- date: '2026-08-27'
+  feed: product-capabilities
+  title: TLS certificate verification for ACMEv2 certificate authority connections
+  breaking: false
+  additions: true
+  highlight: VSatellites 2.0.30+ now verify the TLS certificate an ACMEv2 server presents;
+    on by default for VSatellites deployed on or after this date.
+- date: '2026-08-13'
+  feed: product-capabilities
+  title: CNAME delegation for domain validation
+  breaking: false
+  additions: true
+- date: '2026-08-13'
+  feed: product-capabilities
+  title: Certificate renewal support for GlobalSign MSSL Certificate Authorities
+  breaking: false
+  additions: true
+- date: '2026-08-11'
+  feed: product-capabilities
+  title: Support for AWS IAM role ARN paths in AWS ACM integration
+  breaking: false
+  additions: true
+- date: '2026-08-11'
+  feed: product-capabilities
+  title: Support for Azure API Management machine integration, discovery, and provisioning
+  breaking: false
+  additions: true
+- date: '2026-08-06'
+  feed: product-capabilities
+  title: Policy naming updates
+  breaking: false
+  additions: false
+  highlight: Naming change across the policy surface; recorded because rename-shaped entries are
+    the ones most likely to reach the API vocabulary.
+- date: '2026-07-31'
+  feed: product-capabilities
+  title: Support for Google CAS (GCAS) connector
+  breaking: false
+  additions: true
+- date: '2026-07-29'
+  feed: product-capabilities
+  title: Support for SSL.com certificate authority connector; Authorized Domains visibility for
+    HID PKIaaS, GlobalSign Atlas, GlobalSign MSSL, DigiCert and Sectigo Certificate Manager
+  breaking: false
+  additions: true
+- date: '2026-08-31'
+  feed: enhancements
+  title: cert-manager 1.17.9 LTS released
+  breaking: false
+  additions: true
+- date: '2026-08-26'
+  feed: enhancements
+  title: Google Private CA for Workload Identity Manager
+  breaking: false
+  additions: true
+- date: '2026-08-14'
+  feed: enhancements
+  title: Istio CSR 0.17.0 released
+  breaking: false
+  additions: true
+- date: '2026-08-05'
+  feed: enhancements
+  title: CSI Driver for SPIFFE 0.15.0 released; CSI Driver 0.16.0 released; Cloudflare dual
+    certificate pack support
+  breaking: false
+  additions: true
+- date: '2026-07-09'
+  feed: enhancements
+  title: Post-quantum ready certificates in Zero Touch PKI
+  breaking: false
+  additions: true
+summary:
+  entry_count: 13
+  window: 2026-07-09 to 2026-08-31
+  breaking_changes_in_window: 0

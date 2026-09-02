@@ -1,0 +1,132 @@
+generated: '2026-09-02'
+method: searched
+source: https://github.com/Venafi + registry metadata endpoints (proxy.golang.org, pypi.org,
+  rubygems.org, search.maven.org, powershellgallery.com, galaxy.ansible.com, registry.terraform.io)
+  and https://developer.venafi.com/tlsprotectcloud/docs/libraries-and-sdks
+note: 'Every package below is published from the github.com/Venafi organization (now titled
+  "CyberArk (former Venafi projects)"). Packages authored by third parties that merely wrap the
+  Venafi API (@pulumi/venafi, @itentialopensource/adapter-venafi, community MCP shims on npm) are
+  deliberately excluded: they are real, but they are not first-party. Version and published dates
+  were read from each registry''s metadata endpoint on 2026-09-02.'
+packages:
+- name: vcert
+  language: Go
+  registry: go
+  official: true
+  id: github.com/Venafi/vcert/v5
+  url: https://pkg.go.dev/github.com/Venafi/vcert/v5
+  repository: https://github.com/Venafi/vcert
+  version: v5.13.9
+  published: '2026-07-27'
+  note: Flagship Go client SDK and the vcert CLI binary. Supports both the SaaS Control Plane
+    and the self-hosted Trust Protection Foundation.
+- name: vcert
+  language: Python
+  registry: pypi
+  official: true
+  id: vcert
+  url: https://pypi.org/project/vcert/
+  repository: https://github.com/Venafi/vcert-python
+  version: 0.21.1
+  published: '2026-08-21'
+  note: Published by "CyberArk, Inc." (mis-opensource@cyberark.com); Apache-2.0, community
+    support level.
+- name: pyvenafi
+  language: Python
+  registry: pypi
+  official: true
+  id: pyvenafi
+  url: https://pypi.org/project/pyvenafi/
+  repository: https://github.com/Venafi/pyVenafi
+  version: 1.1.0
+  published: '2025-12-31'
+  note: Higher-level Python library covering both the TPP/WebSDK and Cloud APIs. Successor to
+    the archived pytpp.
+- name: vsign
+  language: Go
+  registry: go
+  official: true
+  id: github.com/Venafi/vsign
+  url: https://pkg.go.dev/github.com/Venafi/vsign
+  repository: https://github.com/Venafi/vsign
+  version: v1.0.3
+  published: '2026-06-24'
+  note: CodeSign Protect Go SDK and CLI.
+- name: VenafiPS
+  language: PowerShell
+  registry: powershellgallery
+  official: true
+  id: VenafiPS
+  url: https://www.powershellgallery.com/packages/VenafiPS
+  repository: https://github.com/Venafi/venafips
+  version: 7.0.6
+  published: '2026-08-14'
+  note: PowerShell module for both the SaaS and self-hosted platforms; linked from the Venafi
+    developer portal's libraries-and-sdks page.
+- name: venafi.machine_identity
+  language: Python/Ansible
+  registry: ansible-galaxy
+  official: true
+  id: venafi.machine_identity
+  url: https://galaxy.ansible.com/ui/repo/published/venafi/machine_identity/
+  repository: https://github.com/Venafi/ansible-collection-venafi
+  version: 1.3.1
+  published: '2026-08-26'
+- name: terraform-provider-venafi
+  language: Go/HCL
+  registry: terraform-registry
+  official: true
+  id: Venafi/venafi
+  url: https://registry.terraform.io/providers/Venafi/venafi/latest
+  repository: https://github.com/Venafi/terraform-provider-venafi
+  version: 0.24.1
+  published: '2026-07-10'
+- name: vcert-java
+  language: Java
+  registry: maven
+  official: true
+  id: io.github.venafi:vcert-java
+  url: https://central.sonatype.com/artifact/io.github.venafi/vcert-java
+  repository: https://github.com/Venafi/vcert-java
+  version: 0.9.3
+  published: '2022-09-01'
+  status: archived
+  note: 'DECAY SIGNAL: the GitHub repository is archived and the last Maven Central release
+    predates the current Certificate Manager - SaaS contract by roughly four years. Java
+    consumers have no maintained first-party SDK.'
+- name: vcert-ruby
+  language: Ruby
+  registry: rubygems
+  official: true
+  id: vcert
+  url: https://rubygems.org/gems/vcert
+  repository: https://github.com/Venafi/vcert-ruby
+  version: 0.3.1
+  published: '2021-02-04'
+  status: archived
+  note: 'DECAY SIGNAL: repository archived; last gem release 2021. Not usable as a current
+    client for the SaaS API.'
+- name: homebrew-tap
+  language: Ruby
+  registry: homebrew
+  official: true
+  id: venafi/tap
+  url: https://github.com/Venafi/homebrew-tap
+  repository: https://github.com/Venafi/homebrew-tap
+  version: null
+  published: null
+  note: Homebrew tap for Venafi CLI tools. A tap is not a versioned registry artifact, so there
+    is no single version/published pair to record; the individual formulae carry their own
+    versions.
+summary:
+  package_count: 10
+  official_count: 10
+  archived_count: 2
+  languages:
+  - Go
+  - Python
+  - Java
+  - Ruby
+  - PowerShell
+  - HCL
+  - Ansible

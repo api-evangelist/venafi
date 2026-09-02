@@ -1,0 +1,110 @@
+generated: '2026-09-02'
+method: derived
+source: openapi/venafi-certificate-manager-saas-openapi.yml
+status: candidate
+note: 'No first-party MCP server exists. Searched the developer portal (developer.venafi.com),
+  the documentation sites (docs.venafi.cloud, docs.venafi.com), the github.com/Venafi organization
+  (41 repositories, none MCP) and npm. The npm packages that match "venafi" and mention MCP
+  (venafi-integration-core, venafi-connector-machine, venafi-connector-ca, venafi-adaptable-app,
+  all published from github.com/abhadfield/venafi-integration-mcps) are third-party work by an
+  individual, not a Venafi release, and are deliberately NOT recorded as a provider surface.
+  CyberArk publishes explainer content about MCP as a technology
+  (https://www.cyberark.com/what-is/model-context-protocol/) but ships no server for this product.
+  The tools below are a DERIVED candidate mapping of Certificate Manager - SaaS operations onto
+  MCP tool shapes so the gap is legible; nobody serves them.'
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: derived
+surfaces:
+  openapi: openapi/venafi-certificate-manager-saas-openapi.yml
+  graphql: null
+  mcp: null
+candidate_tools:
+- tool: list_certificates
+  rest:
+  - certificates_getAll
+  category: certificates
+  summary: Retrieve all certificate data for the tenant.
+- tool: search_certificates
+  rest:
+  - certificates_search_getByExpression
+  category: certificates
+  summary: Retrieve certificate data matching a search expression (AND/OR expression tree with
+    paging and ordering).
+- tool: get_certificate
+  rest:
+  - certificates_getById
+  category: certificates
+- tool: download_certificate
+  rest:
+  - certificates_getContentsById
+  category: certificates
+- tool: request_certificate
+  rest:
+  - certificaterequests_create
+  category: issuance
+  write: true
+- tool: validate_certificate_request
+  rest:
+  - certificaterequests_validation
+  category: issuance
+  summary: Dry-run a certificate request without submitting it.
+- tool: get_certificate_request
+  rest:
+  - certificaterequests_getById
+  category: issuance
+- tool: approve_certificate_request
+  rest:
+  - certificaterequests_approve
+  category: approvals
+  write: true
+- tool: retire_certificates
+  rest:
+  - certificateretirement_retireCertificates
+  category: retirement
+  write: true
+  reversible_by: recover_certificates
+- tool: recover_certificates
+  rest:
+  - certificateretirement_recoverCertificates
+  category: retirement
+  write: true
+- tool: list_applications
+  rest:
+  - applications_getAll
+  category: applications
+- tool: list_issuing_templates
+  rest:
+  - certificateissuingtemplate_getAll
+  category: policy
+- tool: list_machines
+  rest:
+  - machines_getAll
+  category: machines
+- tool: search_machine_identities
+  rest:
+  - getMachineIdentitiesByExpression
+  category: machines
+- tool: list_service_accounts
+  rest:
+  - get-v1-serviceaccounts
+  category: identity
+- tool: list_service_account_scopes
+  rest:
+  - get-v1-serviceaccountscopes
+  category: identity
+- tool: search_activity_log
+  rest:
+  - activitylogs_getByExpression
+  category: audit
+- tool: list_connectors
+  rest:
+  - connectors_getAll
+  category: webhooks
+summary:
+  candidate_tool_count: 18
+  official_server: false

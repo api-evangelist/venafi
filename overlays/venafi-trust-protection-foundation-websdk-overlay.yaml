@@ -1,0 +1,57 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements — Venafi Trust Protection Foundation WebSDK
+  version: 1.0.0
+extends: openapi/venafi-trust-protection-foundation-websdk-openapi.yml
+x-generated: '2026-09-02'
+x-method: generated
+x-source: openapi/venafi-trust-protection-foundation-websdk-openapi.yml + this repository's derived
+  artifacts
+x-note: >-
+  Additive only. The harvested contract is never mutated. This overlay records three things the
+  published spec leaves implicit: that the required OAuth scope is written into each operation's
+  description as prose rather than into an oauth2 securityScheme (so no tool can enforce it), that
+  the spec ships a placeholder server value, and that the contract belongs to a customer-installed
+  product whose real host is supplied per deployment.
+actions:
+- target: $.info
+  description: Add the contact and cross-references the published contract omits.
+  update:
+    contact:
+      name: Venafi / CyberArk Web SDK documentation
+      url: https://docs.venafi.com/Docs/currentAPI/
+    x-api-evangelist:
+      profile: https://apis.io/provider/venafi
+      artifacts:
+        scopes: scopes/venafi-scopes.yml
+        authentication: authentication/venafi-authentication.yml
+        conventions: conventions/venafi-conventions.yml
+        lifecycle: lifecycle/venafi-lifecycle.yml
+        conformance: conformance/venafi-conformance.yml
+    x-agent-notes:
+      deployment: >-
+        Customer-installed. The only real base URL is the one the operator supplies; the contract's
+        {dnsname} server variable is correct and must not be replaced with a vendor host.
+      scopes: >-
+        Every operation states its required scope in the description as "_Required scope: X_". This
+        is prose, not machine-readable security, so a client cannot compute its token scope from the
+        securitySchemes block. scopes/venafi-scopes.yml normalises all 33 values with counts.
+      malformed_scopes: >-
+        11 operations publish "_Required scope: :manage_" and 4 publish "_Required scope: :approve_"
+        with an empty scope prefix. The provider's scope map resolves these to the implicit "any"
+        scope carrying the Manage / Approve privilege.
+      reversibility: POST /vedsdk/recyclebin/restore restores deleted items (scope admin:recyclebin);
+        DELETE /vedauth/revoke/token revokes an OAuth grant.
+- target: $.servers
+  description: Flag the placeholder server entry the provider ships alongside the templated one.
+  update:
+  - url: https://{dnsname}/
+    description: Configurable hostname of the customer's own Trust Protection Foundation instance.
+      This is the correct, authoritative server for this contract.
+    x-api-evangelist-note: >-
+      The published spec also carries a literal "https://REPLACEdnsnameME/" entry. It is a
+      placeholder that escaped into the released document, not a host; do not resolve it.
+    variables:
+      dnsname:
+        default: localhost
+        description: Production API hostname

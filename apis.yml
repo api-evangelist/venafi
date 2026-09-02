@@ -1,23 +1,146 @@
 aid: venafi
 name: Venafi
-description: 'Venafi is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'Venafi is the machine identity security platform for discovering, issuing, provisioning
+  and retiring TLS/SSL certificates, SSH keys, code-signing keys and workload identities across data centers,
+  clouds and Kubernetes. Its Control Plane ships two public REST contracts: the SaaS "Certificate Manager
+  - SaaS" API on api.venafi.cloud (six data-residency regions) and the self-hosted Trust Protection Foundation
+  WebSDK. Venafi was acquired by CyberArk in 2024 and the products now carry CyberArk Certificate Manager
+  branding; venafi.com itself 301s to Palo Alto Networks following its acquisition of CyberArk, while
+  developer.venafi.com, docs.venafi.com, docs.venafi.cloud, api.venafi.cloud and github.com/Venafi remain
+  live and are where every artifact in this profile came from.'
+image: https://avatars.githubusercontent.com/u/7817722?v=4
 url: https://raw.githubusercontent.com/api-evangelist/venafi/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-09-02'
 modified: '2026-09-02'
 tags:
 - Company
-apis: []
+- Security
+- Certificates
+- PKI
+- Machine Identity
+- Identity
+- Cryptography
+- Key Management
+- Certificate Lifecycle Management
+- DevOps
+- Kubernetes
+- Code Signing
+apis:
+- aid: venafi:certificate-manager-saas
+  name: Certificate Manager - SaaS API (Venafi Control Plane)
+  description: The Venafi / CyberArk Certificate Manager - SaaS REST API. 184 operations across 120 paths
+    covering certificate inventory and search, certificate requests and issuing templates, applications,
+    machines and machine identities, credential managers, teams and users, service accounts and scopes,
+    tags, event logs, VSatellites (edge instances/workers), webhook connectors, expiration/auto-renewal
+    monitoring, approval rules, plugins and Workload Identity Manager (distributed issuers). Served from
+    six regional hosts under venafi.cloud.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Certificates
+  - PKI
+  - Machine Identity
+  - Certificate Lifecycle Management
+  - Security
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-certificate-manager-saas-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+- aid: venafi:trust-protection-foundation-websdk
+  name: Trust Protection Foundation WebSDK (Venafi Trust Protection Platform)
+  description: The self-hosted Venafi / CyberArk Trust Protection Foundation Web SDK, version 26.1.1.
+    388 operations across 364 paths covering certificate management, discovery, identity and permissions,
+    OAuth application/scope administration (/vedauth, /vedsdk/oauth), SSH certificates and authorized
+    keys, code signing and HSM, SecretStore, flows, recycle bin, processing engines, statistics and system
+    status. Because the product is customer-installed, the contract publishes a templated server (https://{dnsname}/)
+    rather than a vendor host.
+  humanURL: https://docs.venafi.com/Docs/currentAPI/
+  baseURL: https://{dnsname}/
+  tags:
+  - Certificates
+  - PKI
+  - SSH
+  - Code Signing
+  - Machine Identity
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-trust-protection-foundation-websdk-openapi.yml
+  - type: Documentation
+    url: https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/venafi-domain-security.yml
+- type: Authentication
+  url: authentication/venafi-authentication.yml
 - type: Website
-  url: https://forgeglobal.com/venafi_stock/
+  url: https://venafi.com/
+- type: DeveloperPortal
+  url: https://developer.venafi.com/tlsprotectcloud
+- type: Documentation
+  url: https://docs.venafi.cloud/
+- type: APIReference
+  url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+- type: GettingStarted
+  url: https://docs.venafi.cloud/api/api-setup/
+- type: Support
+  url: https://community.cyberark.com/s/
+- type: GitHubOrganization
+  url: https://github.com/Venafi
+- type: SignUp
+  url: https://login.venafi.cloud/
+- type: StatusPage
+  url: https://status.venafi.cloud/
+- type: ChangeLog
+  url: https://docs.venafi.cloud/whatsnew/
+- type: Packages
+  url: packages/venafi-packages.yml
+- type: SDKs
+  url: packages/venafi-packages.yml
+- type: CLI
+  url: cli/venafi-cli.yml
+- type: MCPServer
+  url: mcp/venafi-mcp.yml
+- type: LLMsTxt
+  url: llms/venafi-llms.txt
+- type: Overlay
+  url: overlays/venafi-certificate-manager-saas-overlay.yaml
+- type: Overlay
+  url: overlays/venafi-trust-protection-foundation-websdk-overlay.yaml
+- type: Conformance
+  url: conformance/venafi-conformance.yml
+- type: ErrorCatalog
+  url: errors/venafi-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/venafi-lifecycle.yml
+- type: OAuthScopes
+  url: scopes/venafi-scopes.yml
+- type: Conventions
+  url: conventions/venafi-conventions.yml
+- type: ChangeLog
+  url: changelog/venafi-changelog.yml
+- type: DataModel
+  url: data-model/venafi-data-model.yml
+- type: Webhooks
+  url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Plans
+  url: plans/venafi-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/venafi-rate-limits.yml
+x-enrichment:
+  date: '2026-09-02'
+  status: enriched
+  artifacts_added: 29
+  pass: local-v1

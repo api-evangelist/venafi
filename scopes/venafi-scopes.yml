@@ -1,0 +1,144 @@
+generated: '2026-09-02'
+method: searched
+source: openapi/venafi-trust-protection-foundation-websdk-openapi.yml (per-operation "_Required
+  scope:_" annotations) + openapi/venafi-certificate-manager-saas-openapi.yml
+docs: https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/AuthSDK/r-SDKa-OAuthScopePrivilegeMapping.php
+note: 'Two different authorization models. (1) The self-hosted Trust Protection Foundation WebSDK
+  is a full OAuth 2.0 authorization server (POST /vedauth/authorize/oauth, /device, /jwt,
+  /certificate, /integrated, /token, and DELETE /vedauth/revoke/token) and every operation in the
+  published contract annotates its required scope in the operation description. Scopes take the
+  form <scope>:<privilege> where privilege is one of manage, delete, discover, revoke, approve,
+  read; a bare scope name grants read. The provider docs describe a client declaring, e.g.,
+  "scope: certificate:discover,delete,manage,revoke". (2) The SaaS Control Plane does NOT use
+  OAuth scopes in its OpenAPI securitySchemes — it authenticates with the tppl-api-key header or
+  a service-account bearer token, and the scope a service account may hold is enumerated at
+  runtime from GET /v1/serviceaccounts/scopes. Counts below are the number of operations in the
+  WebSDK contract that declare each scope.'
+oauth:
+  authorization_server: self-hosted Trust Protection Foundation (/vedauth)
+  flows:
+  - authorization_code (POST /vedauth/authorize/oauth)
+  - device_code (POST /vedauth/authorize/device)
+  - jwt_bearer (POST /vedauth/authorize/jwt)
+  - client_certificate (POST /vedauth/authorize/certificate)
+  - integrated_windows_auth (POST /vedauth/authorize/integrated)
+  - refresh_token (POST /vedauth/authorize/token)
+  revocation: DELETE /vedauth/revoke/token
+  introspection: GET /vedauth/authorize/verify
+scopes:
+- name: any
+  description: Implicitly granted alongside any other valid scope; covers read-only system,
+    config-lookup, metadata, log and workflow-ticket endpoints.
+  operations: 82
+- name: configuration
+  description: Read policy-tree configuration objects.
+  operations: 40
+- name: configuration:manage
+  description: Create, update and move configuration objects and policy folders.
+  operations: 35
+- name: configuration:delete
+  description: Delete configuration objects.
+  operations: 8
+- name: admin
+  description: Platform administration — engines, upgrades, system settings.
+  operations: 33
+- name: admin:recyclebin
+  description: Read and restore items from the recycle bin.
+  operations: 10
+- name: admin:algorithms
+  description: Manage the algorithm selector.
+  operations: 1
+- name: admin:rotate
+  description: Key/secret rotation administration.
+  operations: 1
+- name: certificate
+  description: Read certificate objects and their details.
+  operations: 17
+- name: certificate:manage
+  description: Request, renew, retry, import and provision certificates.
+  operations: 15
+- name: certificate:delete
+  description: Delete certificate objects.
+  operations: 2
+- name: certificate:discover
+  description: Run and manage certificate discovery jobs.
+  operations: 2
+- name: certificate:revoke
+  description: Revoke issued certificates.
+  operations: 1
+- name: codesign
+  description: Read Code Sign Manager projects, applications, environments and templates.
+  operations: 16
+- name: codesign:manage
+  description: Create and update code-signing projects, environments and applications.
+  operations: 20
+- name: codesign:admin
+  description: Code Signing Administrator operations, including HSM configuration.
+  operations: 9
+- name: codesign:delete
+  description: Delete code-signing objects.
+  operations: 5
+- name: codesign:approve
+  description: Approve code-signing requests.
+  operations: 2
+- name: codesignclient
+  description: Client-side signing scope (API/Sign, API/SignJWT, GPG public key retrieval).
+  operations: 10
+- name: security
+  description: Read identity, credential and permission security objects.
+  operations: 13
+- name: security:manage
+  description: Manage credentials, identities and permissions.
+  operations: 15
+- name: security:delete
+  description: Delete credentials and security objects.
+  operations: 4
+- name: restricted
+  description: Read access to restricted objects (SecretStore and similar).
+  operations: 10
+- name: restricted:manage
+  description: Manage restricted objects.
+  operations: 7
+- name: restricted:delete
+  description: Delete restricted objects.
+  operations: 2
+- name: statistics
+  description: Read platform statistics.
+  operations: 5
+- name: statistics:manage
+  description: Manage statistics collection.
+  operations: 3
+- name: statistics:delete
+  description: Delete statistics.
+  operations: 1
+- name: agent
+  description: Client/agent registration and management.
+  operations: 3
+- name: agent:delete
+  description: Delete agent registrations.
+  operations: 1
+- name: ssh
+  description: SSH key and SSH certificate management.
+  operations: 1
+- name: ':manage'
+  description: 'Published verbatim in the contract as "_Required scope: :manage_" with an empty
+    scope prefix. The provider''s own scope map documents this as the "any" scope carrying the
+    Manage privilege (POST Log, POST Metadata/Set). Recorded as published — a consumer reading
+    only the OpenAPI cannot resolve it.'
+  operations: 11
+- name: ':approve'
+  description: 'Published verbatim as "_Required scope: :approve_"; the scope map documents it as
+    the "any" scope carrying the Approve privilege (Flow/Tickets/Approve, Flow/Tickets/Reject,
+    Workflow/Ticket/UpdateStatus).'
+  operations: 4
+saas_service_account_scopes:
+  discovery: GET /v1/serviceaccounts/scopes
+  note: The SaaS contract enumerates scopes at runtime rather than listing them statically; the
+    published schema examples name "distributed-issuance" and "certificate-issuance" with an
+    authenticationType (e.g. rsaKey) per scope.
+  observed_in_spec:
+  - distributed-issuance
+  - certificate-issuance
+summary:
+  scope_count: 33
+  source_operations_annotated: 388

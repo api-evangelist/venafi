@@ -1,0 +1,151 @@
+generated: '2026-09-02'
+method: probed
+source: direct HTTPS GETs on 2026-09-02 with a browser User-Agent
+note: 'Nothing was served. Every 200 in this record is a single-page-app or docs catch-all
+  returning the same HTML shell for any /.well-known/* path (developer.venafi.com returns an
+  identical 716,483-byte ReadMe shell for all of them; venafi.cloud returns a 1,683-byte SPA
+  shell; docs.venafi.cloud and docs.venafi.com return their 404 page with a 404 code). No
+  security.txt, no OpenID/OAuth metadata, no api-catalog, no ai-plugin, no agent card. Because
+  no path returned a real document, NO WellKnown or SecurityTxt pointer is emitted in apis.yml.'
+hosts:
+- host: developer.venafi.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: null
+    note: HTML SPA shell, not a document
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    file: null
+    note: HTML SPA shell, not a document
+  - path: /.well-known/agent-card.json
+    status: 200
+    file: null
+    note: HTML SPA shell, not an AgentCard
+  - path: /.well-known/agent.json
+    status: 200
+    file: null
+    note: HTML SPA shell, not an AgentCard
+  - path: /llms.txt
+    status: 404
+    file: null
+- host: api.venafi.cloud
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+  - path: /llms.txt
+    status: 404
+    file: null
+- host: venafi.cloud
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    file: null
+    note: S3 AccessDenied XML
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: null
+    note: 1,683-byte SPA shell, not a document
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: null
+    note: 1,683-byte SPA shell, not a document
+  - path: /.well-known/api-catalog
+    status: 200
+    file: null
+    note: 1,683-byte SPA shell, not a document
+  - path: /.well-known/ai-plugin.json
+    status: 403
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 403
+    file: null
+  - path: /.well-known/agent.json
+    status: 403
+    file: null
+  - path: /llms.txt
+    status: 403
+    file: null
+- host: docs.venafi.cloud
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+  - path: /llms.txt
+    status: 404
+    file: null
+- host: docs.venafi.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+  - path: /llms.txt
+    status: 404
+    file: null
+summary:
+  hosts_probed: 5
+  documents_found: 0

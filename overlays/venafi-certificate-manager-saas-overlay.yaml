@@ -1,0 +1,105 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements — Venafi Certificate Manager - SaaS API
+  version: 1.0.0
+extends: openapi/venafi-certificate-manager-saas-openapi.yml
+x-generated: '2026-09-02'
+x-method: generated
+x-source: openapi/venafi-certificate-manager-saas-openapi.yml + this repository's derived artifacts
+x-note: >-
+  Additive only. The harvested contract is never mutated; everything below is an API Evangelist
+  annotation. The provider's spec ships no info.description, no contact, no termsOfService, no
+  license and an empty root tags[] (all 30 tags are used on operations but none is declared with a
+  description), and it declares no 429 response anywhere. These actions record what we know about
+  the surface without changing a single operation's behaviour.
+actions:
+- target: $.info
+  description: Add the identity fields the published contract omits.
+  update:
+    description: >-
+      The Venafi / CyberArk Certificate Manager - SaaS REST API (formerly TLS Protect Cloud). 184
+      operations over six regional hosts under venafi.cloud. Authentication is a tppl-api-key
+      header for user keys or a service-account bearer token. Search operations take an AND/OR
+      expression tree with a paging object; errors return {"errors":[{"code","message","args"}]}
+      with stable numeric codes.
+    contact:
+      name: Venafi Dev Central
+      url: https://developer.venafi.com/tlsprotectcloud
+    x-api-evangelist:
+      profile: https://apis.io/provider/venafi
+      artifacts:
+        authentication: authentication/venafi-authentication.yml
+        conventions: conventions/venafi-conventions.yml
+        errors: errors/venafi-problem-types.yml
+        data_model: data-model/venafi-data-model.yml
+        lifecycle: lifecycle/venafi-lifecycle.yml
+        webhooks: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+        rate_limits: rate-limits/venafi-rate-limits.yml
+        conformance: conformance/venafi-conformance.yml
+    x-agent-notes:
+      idempotency: none published — do not assume a retried POST is replay-safe
+      dry_run: >-
+        POST /outagedetection/v1/certificaterequests/validation,
+        /outagedetection/v1/certificates/validation and
+        /outagedetection/v1/certificateinstances/validation evaluate a request without committing
+        it
+      reversibility: >-
+        retirement (POST /outagedetection/v1/certificates/retirement) is reversible via
+        /certificates/recovery; /certificates/deletion is permanent and accepts only already-retired
+        certificates
+      rate_limits: none published; no 429 response and no RateLimit headers exist in the contract
+- target: $
+  description: Declare the 30 tags the operations already use so tooling can group them.
+  update:
+    tags:
+    - name: Certificates
+      description: Certificate inventory — retrieve, download, validate, retire, recover and
+        permanently delete.
+    - name: Certificate Request
+      description: Requesting, resubmitting, validating and searching certificate requests.
+    - name: Certificate Policy
+      description: Issuing templates that constrain subject, SANs, key algorithm, validity and CA.
+    - name: Certificate Approvals
+      description: Approval rules and approve/reject decisions for certificate requests.
+    - name: Certificate Revocation Approvals
+      description: Approval rules governing revocation.
+    - name: Application
+      description: The grouping certificates, issuing templates and notifications are scoped to.
+    - name: Machines
+      description: Provisioning targets — load balancers, WAFs, cloud keystores, clusters,
+        firewalls.
+    - name: Machine Identities
+      description: The binding of a certificate to a machine; what is actually provisioned and
+        renewed.
+    - name: Service Accounts
+      description: Non-human credentials and the scopes available to them.
+    - name: Teams
+      description: Ownership and approval units.
+    - name: Users
+      description: Human accounts, roles and local login control.
+    - name: Tags
+      description: Free-form labelling applied across entities, including bulk assignment.
+    - name: Event Logs
+      description: Activity log search and export.
+    - name: VSatellite
+      description: Customer-hosted edge appliance — instances, workers, encryption keys and
+        pairing codes.
+    - name: Webhooks
+      description: Outbound connectors (generic and Slack) for notifications and event forwarding.
+    - name: Plugins
+      description: CA and machine connector extension points; replaces the deprecated machine
+        types surface.
+    - name: Credential Management
+      description: Credential Manager Service configurations and shared credentials.
+    - name: Workload Identity Manager Configurations
+      description: Distributed issuer configurations authenticated by JWT or cloud identity.
+    - name: Workload Identity Manager Policies
+      description: Workload issuance policies.
+    - name: Workload Identity Manager Sub CA Providers
+      description: Sub CA providers backing distributed issuance.
+- target: $.paths['/v1/machinetypes'].get
+  description: Reinforce the provider's own deprecation note so tooling can act on it.
+  update:
+    x-deprecation:
+      replaced_by: /v1/plugins
+      source: operation description in the published contract

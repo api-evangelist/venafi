@@ -1,0 +1,78 @@
+generated: '2026-09-02'
+method: searched
+source: https://developer.venafi.com/tlsprotectcloud/docs/control-plane-receive-webhook-notifications,
+  https://developer.venafi.com/tlsprotectcloud/docs/control-plane-forwarding-logged-events,
+  openapi/venafi-certificate-manager-saas-openapi.yml
+type: Webhooks
+note: 'Venafi publishes an outbound webhook surface but no AsyncAPI document, and no AsyncAPI file
+  was found on any host or in the GitHub organization — so this artifact is the webhook catalog,
+  not a fabricated spec. Delivery is configured through the Connectors API rather than by
+  registering a URL per event: you create a connector (POST /v1/connectors) with a connectorKind,
+  a filterType and a target URL, and you configure what fires it through the inventory monitoring
+  configuration. There is no signing secret, no replay/retry policy and no delivery-log endpoint
+  in the published surface.'
+control_api:
+  base: https://api.venafi.cloud
+  operations:
+  - operationId: connectors_getAll
+    method: GET
+    path: /v1/connectors
+    summary: Retrieve all connectors for a company.
+  - operationId: connectors_create
+    method: POST
+    path: /v1/connectors
+    summary: Create a connector (webhook).
+  - operationId: connectors_update
+    method: PUT
+    path: /v1/connectors/{id}
+  - operationId: connectors_delete
+    method: DELETE
+    path: /v1/connectors/{id}
+  - operationId: inventorymonitoringconfig_get
+    method: GET
+    path: /outagedetection/v1/inventorymonitoringconfig/{type}
+    summary: Read the global inventory monitoring configuration that drives expiration
+      notifications.
+  - operationId: inventorymonitoringconfig_update
+    method: PUT
+    path: /outagedetection/v1/inventorymonitoringconfig/{type}
+connector_kinds:
+- kind: WEBHOOK
+  types:
+  - id: generic
+    summary: POST to any URI you own — SIEM, ITSM or other security systems.
+  - id: slack
+    summary: POST to a Slack incoming webhook URL.
+- kind: log-forwarding
+  summary: Event-log forwarding connectors, documented separately at
+    developer.venafi.com/tlsprotectcloud/docs/control-plane-forwarding-logged-events. Named
+    destinations in the docs navigation include PagerDuty and Zoom Team Chat.
+events:
+- filter_type: EXPIRATION
+  trigger: certificate expiration threshold reached
+  configuration:
+    thresholds: array of days before expiry; the provider states the limit is 3 values
+    applicationIds: array of application ids the connector applies to; empty means fall back to
+      the global inventory monitoring settings
+    includeUnassignedCertificates: boolean
+  note: EXPIRATION is the only filterType named in the provider's own webhook guide.
+- filter_type: event log
+  trigger: logged events forwarded to a connector
+  configuration:
+    note: Event types are enumerated by the API at GET /v1/activitytypes and documented at
+      https://docs.venafi.cloud/api/r-event-types/.
+limits:
+  webhook_connections_per_tenant: 10
+  expiration_thresholds_per_configuration: 3
+  source: https://developer.venafi.com/tlsprotectcloud/docs/control-plane-receive-webhook-notifications
+security:
+  signature_header: null
+  secret: null
+  retry_policy: null
+  note: None published. A consumer cannot verify that an inbound POST came from Venafi from
+    anything the provider documents.
+asyncapi_document: null
+summary:
+  webhook_surface: true
+  asyncapi_published: false
+  event_types_documented: true

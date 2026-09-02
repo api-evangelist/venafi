@@ -1,0 +1,71 @@
+generated: '2026-09-02'
+method: searched
+source: openapi/venafi-certificate-manager-saas-openapi.yml,
+  openapi/venafi-trust-protection-foundation-websdk-openapi.yml, https://status.venafi.cloud/,
+  https://docs.venafi.cloud/whatsnew/
+versioning:
+  scheme: URI path
+  certificate_manager_saas:
+    current: v1
+    note: 'Two path prefixes coexist and both are v1: /v1/ for platform resources and
+      /outagedetection/v1/ for certificate inventory, requests, applications and monitoring. No
+      Accept-header or query-parameter versioning; no version negotiation is published.'
+  trust_protection_foundation_websdk:
+    current: 26.1.1
+    note: Versioned with the self-hosted product release (24.1, 24.3, 25.1, 25.3, 26.1). The docs
+      host serves both a "currentAPI" alias and pinned per-release explorers
+      (docs.venafi.com/Docs/24.1API/), so a customer on an older release can read the contract
+      that matches their installation.
+deprecation:
+  policy_published: false
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  note: No deprecation or sunset policy could be found on any Venafi-controlled host, and neither
+    contract emits RFC 8594 Sunset or Deprecation response headers. Deprecation is communicated
+    only by the OpenAPI `deprecated` flag and by prose in the operation description.
+  deprecated_operations:
+  - api: Certificate Manager - SaaS
+    operationId: machineTypes_getAll
+    path: GET /v1/machinetypes
+    note: 'Marked deprecated in the contract: "This functionality is no longer supported. Use the
+      Plugins API set instead."'
+  - api: Certificate Manager - SaaS
+    operationId: configurations_create
+    path: POST /v1/distributedissuers/configurations
+  - api: Certificate Manager - SaaS
+    operationId: configurations_update
+    path: PATCH /v1/distributedissuers/configurations/{id}
+  - api: Trust Protection Foundation WebSDK
+    count: 12
+    note: Twelve operations under /vedsdk/permissions/object/* are flagged deprecated; the
+      contract also carries a "Legacy Workflow APIs" tag alongside the current "Flow APIs" tag,
+      which is the same signal expressed as a tag rather than a flag.
+  deprecated_operation_count: 15
+status_page:
+  url: https://status.venafi.cloud/
+  provider: Atlassian Statuspage
+  page_name: CyberArk Certificate Management
+  machine_readable: https://status.venafi.cloud/api/v2/summary.json
+  verified: '2026-09-02'
+sla:
+  published: false
+  note: No public SLA document was reachable; venafi.com legal paths all 301 to the Palo Alto
+    Networks product page.
+support:
+  community: https://community.cyberark.com/s/
+corporate_lifecycle:
+  note: 'Venafi was acquired by CyberArk in 2024 and every product has been renamed (TLS Protect
+    Cloud -> Certificate Manager - SaaS; Trust Protection Platform -> Trust Protection Foundation
+    / Certificate Manager - Self-Hosted). Palo Alto Networks subsequently acquired CyberArk, and
+    as of 2026-09-02 every path on venafi.com 301s to
+    https://www.paloaltonetworks.com/network-security/next-gen-trust-security/certificate-manager.
+    The engineering surfaces — developer.venafi.com, docs.venafi.com, docs.venafi.cloud,
+    api.venafi.cloud, login.venafi.cloud, status.venafi.cloud and github.com/Venafi — are all
+    still live and still Venafi-branded in their URLs, which is why this profile points at them
+    rather than at the marketing domain.'
+summary:
+  versioning_documented: true
+  deprecation_policy_documented: false
+  status_page_present: true
+  sla_published: false

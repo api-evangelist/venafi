@@ -1,0 +1,587 @@
+generated: '2026-09-02'
+method: derived
+source: openapi/venafi-certificate-manager-saas-openapi.yml
+note: Derived from the Certificate Manager - SaaS contract by walking every component schema that carries
+  an `id` and reading its *Id / *Ids reference fields into edges. The generator that produced this spec
+  emits numbered schema variants (ErrorResponse1..11, AnyValue1..9, ApplicationInformation2 and so on)
+  rather than one canonical component per entity, so entity names below are the schema names as published,
+  with the trailing variant digit stripped from the edge endpoints. Nothing here is inferred from prose;
+  every edge is a field that exists in the contract. The self-hosted WebSDK contract is not modelled here
+  — it is a policy-tree object store addressed by DN and GUID rather than a typed resource graph, so id-reference
+  derivation would misrepresent it.
+id_convention:
+  form: UUID v1/v4 strings
+  example: 4b7e4cd0-9009-11ed-95eb-4397cbb5e509
+  prefixed_ids: false
+  note: No type-prefixed ids (no cert_..., app_...). Every entity is addressed by a bare UUID, so an id
+    alone does not tell an agent what it points at — the field name does.
+tenancy:
+  root: company
+  note: companyId is the most common foreign key in the whole schema set (35 distinct referencing fields),
+    which is the tenant boundary. tsgId / subTsgId / consumerTsgId carry the Tenant Service Group hierarchy
+    used by Workload Identity Manager; error code 1002 ("The operation is restricted to the primary TSG;
+    sub-TSG callers are rejected") is the enforcement of that boundary.
+core_entities:
+- name: Certificate
+  api_paths:
+  - /outagedetection/v1/certificates
+  - /outagedetection/v1/certificates/{id}
+  - /outagedetection/v1/certificatesearch
+  summary: An X.509 certificate in inventory, with versions, instances and an owning application.
+- name: CertificateRequest
+  api_paths:
+  - /outagedetection/v1/certificaterequests
+  summary: A request for issuance, subject to an issuing template and an approval rule.
+- name: CertificateIssuingTemplate
+  api_paths:
+  - /v1/certificateissuingtemplates
+  summary: The policy that constrains subject, SANs, key algorithm, validity and CA for a request.
+- name: Application
+  api_paths:
+  - /outagedetection/v1/applications
+  summary: The grouping certificates and issuing templates hang off; the unit notifications and monitoring
+    are scoped to.
+- name: CertificateInstance
+  api_paths:
+  - /outagedetection/v1/certificateinstances
+  summary: A discovered installation of a certificate on a host/port.
+- name: Machine
+  api_paths:
+  - /v1/machines
+  - /v1/machinesearch
+  summary: A provisioning target (F5, Citrix, cloud keystore, Kubernetes cluster, firewall).
+- name: MachineIdentity
+  api_paths:
+  - /v1/machineidentities
+  - /v1/machineidentitysearch
+  summary: The binding of a certificate to a machine — what actually gets provisioned and renewed.
+- name: ServiceAccount
+  api_paths:
+  - /v1/serviceaccounts
+  - /v1/serviceaccounts/scopes
+  summary: Non-human credential with scopes; the machine-to-machine identity for the API itself.
+- name: Team
+  api_paths:
+  - /v1/teams
+  summary: Ownership and approval unit; certificates, applications and approval rules reference owning
+    teams.
+- name: User
+  api_paths:
+  - /v1/users
+  - /v1/useraccounts
+  summary: Human account; roles, local login and password expiry are managed per user.
+- name: Connector
+  api_paths:
+  - /v1/connectors
+  summary: Outbound webhook / log-forwarding target. See asyncapi/venafi-certificate-manager-saas-webhooks.yml.
+- name: Tag
+  api_paths:
+  - /v1/tags
+  - /v1/tagsassignment
+  summary: Free-form key/value labelling applied across entities in bulk.
+- name: VSatellite (edge instance/worker)
+  api_paths:
+  - /v1/edgeinstances
+  - /v1/edgeworkers
+  - /v1/edgeencryptionkeys
+  summary: Customer-hosted edge appliance that reaches private networks; carries its own encryption keys
+    and pairing codes.
+- name: Plugin
+  api_paths:
+  - /v1/plugins
+  summary: CA connector / machine connector extension point; replaces the deprecated machinetypes surface.
+- name: IssuerConfiguration / SubCaProvider / Policy
+  api_paths:
+  - /v1/distributedissuers/configurations
+  - /v1/distributedissuers/subcaproviders
+  - /v1/distributedissuers/policies
+  summary: 'Workload Identity Manager: short-lived workload issuance, authenticated by JWT_JWKS / JWT_OIDC
+    / JWT_STANDARD_CLAIMS or cloud (AWS/Azure/Google) identity.'
+relationships:
+- from: ActivityLogEntryInformation
+  to: company
+  type: belongs_to
+  via: companyId
+- from: ActivityLogEntryInformation
+  to: tsg
+  type: belongs_to
+  via: tsgId
+- from: ApplicationInformation
+  to: company
+  type: belongs_to
+  via: companyId
+- from: ApprovalRequestInformation
+  to: company
+  type: belongs_to
+  via: companyId
+- from: ApprovalRequestInformation
+  to: entity
+  type: belongs_to
+  via: entityId
+- from: ApprovalRequestInformation
+  to: requestor
+  type: belongs_to
+  via: requestorId
+- from: ApproverOutcomeInformation
+  to: company
+  type: belongs_to
+  via: companyId
+- from: ApproverOutcomeInformation
+  to: user
+  type: belongs_to
+  via: userId
+- from: CMSConfigurationResponse
+  to: company
+  type: belongs_to
+  via: companyId
+- from: CMSConfigurationResponse
+  to: consumerTsg
+  type: has_many
+  via: consumerTsgIds
+- from: CMSConfigurationResponse
+  to: vSatellite
+  type: has_many
+  via: vSatelliteIds
+- from: CertificateInformation
+  to: application
+  type: has_many
+  via: applicationIds
+- from: CertificateInformation
+  to: certificateAuthorityAccount
+  type: belongs_to
+  via: certificateAuthorityAccountId
+- from: CertificateInformation
+  to: certificateRequest
+  type: belongs_to
+  via: certificateRequestId
+- from: CertificateInformation
+  to: company
+  type: belongs_to
+  via: companyId
+- from: CertificateInformation
+  to: issuerCertificate
+  type: has_many
+  via: issuerCertificateIds
+- from: CertificateInformation
+  to: managedCertificate
+  type: belongs_to
+  via: managedCertificateId
+- from: CertificateInformation
+  to: statusModificationUser
+  type: belongs_to
+  via: statusModificationUserId
+- from: CertificateIssuingTemplateInformation
+  to: certificateAuthorityAccount
+  type: belongs_to
+  via: certificateAuthorityAccountId
+- from: CertificateIssuingTemplateInformation
+  to: certificateAuthorityProductOption
+  type: belongs_to
+  via: certificateAuthorityProductOptionId
+- from: CertificateIssuingTemplateInformation
+  to: company
+  type: belongs_to
+  via: companyId
+- from: CertificateIssuingTemplateInformation
+  to: resourceConsumerTeam
+  type: has_many
+  via: resourceConsumerTeamIds
+- from: CertificateIssuingTemplateInformation
+  to: resourceConsumerUser
+  type: has_many
+  via: resourceConsumerUserIds
+- from: CertificateIssuingTemplateInformation
+  to: consumerTsg
+  type: has_many
+  via: consumerTsgIds
+- from: CertificateIssuingTemplateInformation
+  to: driver
+  type: belongs_to
+  via: driverId
+- from: CertificateIssuingTemplateInformation
+  to: keyPair
+  type: belongs_to
+  via: keyPairId
+- from: CertificateIssuingTemplateInformation
+  to: location
+  type: belongs_to
+  via: locationId
+- from: CertificateIssuingTemplateInformation
+  to: referencingApplication
+  type: has_many
+  via: referencingApplicationIds
+- from: CertificateRequestDocumentInformation
+  to: application
+  type: belongs_to
+  via: applicationId
+- from: CertificateRequestDocumentInformation
+  to: approved
+  type: has_many
+  via: approvedIds
+- from: CertificateRequestDocumentInformation
+  to: approverTeam
+  type: has_many
+  via: approverTeamIds
+- from: CertificateRequestDocumentInformation
+  to: approverUser
+  type: has_many
+  via: approverUserIds
+- from: CertificateRequestDocumentInformation
+  to: caOrder
+  type: belongs_to
+  via: caOrderId
+- from: CertificateRequestDocumentInformation
+  to: certificate
+  type: has_many
+  via: certificateIds
+- from: CertificateRequestDocumentInformation
+  to: certificateIssuingTemplate
+  type: belongs_to
+  via: certificateIssuingTemplateId
+- from: CertificateRequestDocumentInformation
+  to: certificateOwnerUser
+  type: belongs_to
+  via: certificateOwnerUserId
+- from: CertificateRequestDocumentInformation
+  to: company
+  type: belongs_to
+  via: companyId
+- from: CertificateRequestDocumentInformation
+  to: finalApprover
+  type: belongs_to
+  via: finalApproverId
+- from: CertificateRequestInformation
+  to: application
+  type: belongs_to
+  via: applicationId
+- from: CertificateRequestInformation
+  to: approved
+  type: has_many
+  via: approvedIds
+- from: CertificateRequestInformation
+  to: approverTeam
+  type: has_many
+  via: approverTeamIds
+- from: CertificateRequestInformation
+  to: approverUser
+  type: has_many
+  via: approverUserIds
+- from: CertificateRequestInformation
+  to: caOrder
+  type: belongs_to
+  via: caOrderId
+- from: CertificateRequestInformation
+  to: certificate
+  type: has_many
+  via: certificateIds
+- from: CertificateRequestInformation
+  to: certificateIssuingTemplate
+  type: belongs_to
+  via: certificateIssuingTemplateId
+- from: CertificateRequestInformation
+  to: certificateOwnerUser
+  type: belongs_to
+  via: certificateOwnerUserId
+- from: CertificateRequestInformation
+  to: company
+  type: belongs_to
+  via: companyId
+- from: CertificateRequestInformation
+  to: finalApprover
+  type: belongs_to
+  via: finalApproverId
+- from: CompanyInformation
+  to: instance
+  type: belongs_to
+  via: instanceId
+- from: CompanyInformation
+  to: tsg
+  type: belongs_to
+  via: tsgId
+- from: ConfigurationGetResponse
+  to: company
+  type: belongs_to
+  via: companyId
+- from: ConfigurationGetResponse
+  to: subTsg
+  type: belongs_to
+  via: subTsgId
+- from: CredentialResponse
+  to: cmsConfig
+  type: belongs_to
+  via: cmsConfigId
+- from: CredentialResponse
+  to: teams
+  type: has_many
+  via: teamsIds
+- from: CredentialResponse
+  to: tsg
+  type: belongs_to
+  via: tsgId
+- from: EdgeInstanceInformation
+  to: client
+  type: belongs_to
+  via: clientId
+- from: EdgeInstanceInformation
+  to: company
+  type: belongs_to
+  via: companyId
+- from: EdgeInstanceInformation
+  to: encryptionKey
+  type: belongs_to
+  via: encryptionKeyId
+- from: EdgeInstanceInformation
+  to: environment
+  type: belongs_to
+  via: environmentId
+- from: EdgeInstanceInformation
+  to: pairingCode
+  type: belongs_to
+  via: pairingCodeId
+- from: EdgeInstanceInformation
+  to: primaryInstance
+  type: belongs_to
+  via: primaryInstanceId
+- from: EdgeInstanceInformation
+  to: serviceAccount
+  type: belongs_to
+  via: serviceAccountId
+- from: EdgeWorkerInformation
+  to: company
+  type: belongs_to
+  via: companyId
+- from: EdgeWorkerInformation
+  to: edgeInstance
+  type: belongs_to
+  via: edgeInstanceId
+- from: EdgeWorkerInformation
+  to: environment
+  type: belongs_to
+  via: environmentId
+- from: ExtendedCertificateInformation
+  to: application
+  type: has_many
+  via: applicationIds
+- from: ExtendedCertificateInformation
+  to: certificateAuthorityAccount
+  type: belongs_to
+  via: certificateAuthorityAccountId
+- from: ExtendedCertificateInformation
+  to: certificateRequest
+  type: belongs_to
+  via: certificateRequestId
+- from: ExtendedCertificateInformation
+  to: company
+  type: belongs_to
+  via: companyId
+- from: ExtendedCertificateInformation
+  to: issuerCertificate
+  type: has_many
+  via: issuerCertificateIds
+- from: ExtendedCertificateInformation
+  to: managedCertificate
+  type: belongs_to
+  via: managedCertificateId
+- from: ExtendedCertificateInformation
+  to: statusModificationUser
+  type: belongs_to
+  via: statusModificationUserId
+- from: ImportedCertificateInformation
+  to: company
+  type: belongs_to
+  via: companyId
+- from: ImportedCertificateInformation
+  to: issuerCertificate
+  type: has_many
+  via: issuerCertificateIds
+- from: ImportedCertificateInformation
+  to: managedCertificate
+  type: belongs_to
+  via: managedCertificateId
+- from: IntegrationServiceInformation
+  to: company
+  type: belongs_to
+  via: companyId
+- from: IntegrationServiceInformation
+  to: edgeInstances
+  type: has_many
+  via: edgeInstancesIds
+- from: IntegrationServiceInformation
+  to: encryptionKey
+  type: belongs_to
+  via: encryptionKeyId
+- from: IntegrationServiceInformation
+  to: environment
+  type: belongs_to
+  via: environmentId
+- from: IntermediateCertificateGetResponse
+  to: company
+  type: belongs_to
+  via: companyId
+- from: IntermediateCertificateGetResponse
+  to: subTsg
+  type: belongs_to
+  via: subTsgId
+- from: IntermediateCertificateGetResponse
+  to: workflow
+  type: belongs_to
+  via: workflowId
+- from: MachineDocumentInformation
+  to: company
+  type: belongs_to
+  via: companyId
+- from: MachineDocumentInformation
+  to: integration
+  type: belongs_to
+  via: integrationId
+- from: MachineDocumentInformation
+  to: machineType
+  type: belongs_to
+  via: machineTypeId
+- from: MachineDocumentInformation
+  to: plugin
+  type: belongs_to
+  via: pluginId
+- from: MachineDocumentInformation
+  to: tsg
+  type: belongs_to
+  via: tsgId
+- from: MachineIdentityDocumentInformation
+  to: application
+  type: has_many
+  via: applicationIds
+- from: MachineIdentityDocumentInformation
+  to: certificate
+  type: belongs_to
+  via: certificateId
+- from: MachineIdentityDocumentInformation
+  to: company
+  type: belongs_to
+  via: companyId
+- from: MachineIdentityDocumentInformation
+  to: machine
+  type: belongs_to
+  via: machineId
+- from: MachineIdentityInformation
+  to: certificate
+  type: belongs_to
+  via: certificateId
+- from: MachineIdentityInformation
+  to: company
+  type: belongs_to
+  via: companyId
+- from: MachineIdentityInformation
+  to: machine
+  type: belongs_to
+  via: machineId
+- from: MachineIdentityInformation
+  to: tsg
+  type: belongs_to
+  via: tsgId
+- from: MachineInformation
+  to: company
+  type: belongs_to
+  via: companyId
+- from: MachineInformation
+  to: consumerTsg
+  type: has_many
+  via: consumerTsgIds
+- from: MachineInformation
+  to: edgeInstance
+  type: belongs_to
+  via: edgeInstanceId
+- from: MachineInformation
+  to: integration
+  type: belongs_to
+  via: integrationId
+- from: MachineInformation
+  to: owningTeam
+  type: belongs_to
+  via: owningTeamId
+- from: MachineInformation
+  to: plugin
+  type: belongs_to
+  via: pluginId
+- from: MachineInformation
+  to: tsg
+  type: belongs_to
+  via: tsgId
+- from: PairingCodeInformation
+  to: company
+  type: belongs_to
+  via: companyId
+- from: PairingCodeInformation
+  to: environment
+  type: belongs_to
+  via: environmentId
+- from: PolicyGetResponse
+  to: company
+  type: belongs_to
+  via: companyId
+- from: PolicyGetResponse
+  to: sharedWithSubTsg
+  type: has_many
+  via: sharedWithSubTsgIds
+- from: RecoveryCodeInformation
+  to: company
+  type: belongs_to
+  via: companyId
+- from: RecoveryCodeInformation
+  to: tsg
+  type: belongs_to
+  via: tsgId
+- from: ServiceAccountInformation
+  to: company
+  type: belongs_to
+  via: companyId
+- from: ServiceAccountInformation
+  to: tenant
+  type: belongs_to
+  via: tenantId
+- from: SubCAProviderGetResponse
+  to: caAccount
+  type: belongs_to
+  via: caAccountId
+- from: SubCAProviderGetResponse
+  to: caProductOption
+  type: belongs_to
+  via: caProductOptionId
+- from: SubCAProviderGetResponse
+  to: company
+  type: belongs_to
+  via: companyId
+- from: SubCAProviderGetResponse
+  to: sharedWithSubTsg
+  type: has_many
+  via: sharedWithSubTsgIds
+- from: TeamInformation
+  to: company
+  type: belongs_to
+  via: companyId
+- from: TestCMSConfigurationRequest
+  to: vSatellite
+  type: has_many
+  via: vSatelliteIds
+- from: TestCMSConfigurationRequest
+  to: wsClient
+  type: belongs_to
+  via: wsClientId
+- from: UpdateCMSConfigurationRequest
+  to: consumerTsg
+  type: has_many
+  via: consumerTsgIds
+- from: UpdateCMSConfigurationRequest
+  to: vSatellite
+  type: has_many
+  via: vSatelliteIds
+- from: UserInformation
+  to: company
+  type: belongs_to
+  via: companyId
+- from: UserInformation
+  to: teams
+  type: has_many
+  via: teamsIds
+summary:
+  entity_schemas_with_ids: 40
+  relationship_edges: 121

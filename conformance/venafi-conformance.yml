@@ -1,0 +1,119 @@
+generated: '2026-09-02'
+method: searched
+source: openapi/venafi-certificate-manager-saas-openapi.yml,
+  openapi/venafi-trust-protection-foundation-websdk-openapi.yml,
+  https://docs.venafi.cloud/vaas/configurations/acme-server-overview/,
+  https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/AuthSDK/r-SDKa-OAuthScopePrivilegeMapping.php
+note: Reward-only. Every entry below is asserted from the contract or from a provider docs page
+  that is named in its evidence; where a standard is plausible for a PKI vendor but not evidenced
+  in the published surface, conforms is false and the evidence says so.
+standards:
+- id: oauth2
+  conforms: true
+  evidence: 'openapi/venafi-trust-protection-foundation-websdk-openapi.yml declares a complete
+    OAuth 2.0 authorization server: POST /vedauth/authorize/oauth (authorization code), /device
+    (RFC 8628 device grant), /jwt (RFC 7523 JWT bearer), /certificate, /integrated, /token
+    (refresh) and DELETE /vedauth/revoke/token (RFC 7009). securitySchemes declares
+    AccessToken as http/bearer, and every operation annotates its required scope.'
+- id: oidc
+  conforms: false
+  evidence: No /.well-known/openid-configuration was served on any probed host (see
+    well-known/venafi-well-known.yml) and no openIdConnect securityScheme appears in either
+    contract. JWT mapping endpoints (/vedsdk/oauth/createjwtmapping) accept external OIDC
+    issuers, but the platform does not publish OIDC discovery metadata itself.
+- id: rfc9457
+  conforms: false
+  evidence: No application/problem+json media type appears in either contract; errors are plain
+    application/json objects. See errors/venafi-problem-types.yml.
+- id: pagination
+  conforms: true
+  evidence: 'SaaS search operations take a Paging object in the request body ({pageNumber,
+    pageSize}) alongside an Ordering object — see components/schemas/Paging in
+    openapi/venafi-certificate-manager-saas-openapi.yml. The WebSDK uses offset/limit query
+    parameters. There is no cursor/link-header pagination and no RFC 8288 Link header.'
+- id: idempotency
+  conforms: false
+  evidence: Neither contract declares an Idempotency-Key header or any idempotency semantics; the
+    string "idempoten" appears zero times in both specs.
+- id: scim
+  conforms: partial
+  evidence: 'openapi/venafi-trust-protection-foundation-websdk-openapi.yml exposes a SCIM service
+    surface at /vedscim (GET /vedscim/available and GET /vedscim/{owner}/available). Only the
+    availability endpoints are published in the contract, so the SCIM 2.0 resource schemas
+    (urn:ietf:params:scim:schemas:*) are not present in the machine-readable surface and a
+    consumer cannot integrate from the spec alone.'
+- id: json:api
+  conforms: false
+  evidence: Responses are plain JSON objects with camelCase properties and a top-level "object"
+    type discriminator, not a JSON:API document envelope.
+- id: odata
+  conforms: false
+  evidence: No $metadata surface or OData query options in either contract.
+domain_standards:
+- id: acme
+  name: ACME (RFC 8555) — Automatic Certificate Management Environment
+  conforms: true
+  evidence: 'https://docs.venafi.cloud/vaas/configurations/acme-server-overview/ — "An ACMEv2
+    server in CyberArk Certificate Manager - SaaS provides a way for ACME-compatible clients to
+    request certificates by using the ACME protocol." The provider names ACME External Account
+    Binding (RFC 8555 §7.3.4) as its client authentication model and names Lego and cert-manager
+    as compatible clients.'
+  deviations:
+  - ACME challenge types HTTP-01, DNS-01 and TLS-ALPN-01 are not used; issuance authorization is
+    delegated to the configured application and request policy rather than to domain-ownership
+    validation.
+  - The ACME renewal workflow is not used; renewal is a new order plus CSR.
+  configuration: https://docs.venafi.cloud/vaas/configurations/configure-acme-server-connection/
+- id: acme-client
+  name: ACMEv2 as a CA connector (Let's Encrypt)
+  conforms: true
+  evidence: https://docs.venafi.cloud/ navigation publishes "Using ACMEv2 Let's Encrypt" under
+    Issue certificates — the platform is an ACME client as well as an ACME server.
+- id: x509-pkix
+  name: X.509 / PKIX certificate lifecycle
+  conforms: true
+  evidence: 'openapi/venafi-trust-protection-foundation-websdk-openapi.yml publishes an
+    X509CertificateStore API set (/vedsdk/X509CertificateStore/add, /lookup, /lookupexpiring,
+    /remove, /retrieve); the SaaS contract exposes certificate contents, chains and keystore
+    downloads. This is the provider''s core domain.'
+- id: pkcs
+  name: PKCS#8 / PKCS#12 / PKCS#11
+  conforms: true
+  evidence: 'The SaaS API documents private key import in both PKCS#12 and PKCS#8 form
+    (https://docs.venafi.cloud/api/importing-private-key-via-api-pkcs12/,
+    .../importing-private-key-via-api-pkcs8/) and keystore download; the WebSDK publishes a
+    CodeSigning HSM API and the Firefly/Code Sign client documents PKCS#11 HSM integration.'
+- id: ssh-certificates
+  name: OpenSSH certificate and authorized_keys management
+  conforms: true
+  evidence: 'openapi/venafi-trust-protection-foundation-websdk-openapi.yml tags "SSH Certificate
+    APIs" and "SSH Management APIs" with /vedsdk/sshcertificates/request,
+    /vedsdk/ssh/AddAuthorizedKey, /ImportAuthorizedKey and self-service authorized-key
+    operations.'
+- id: spiffe
+  name: SPIFFE / SPIRE workload identity
+  conforms: true
+  evidence: The Control Plane documentation publishes a "CSI driver for SPIFFE" component and a
+    Workload Identity Manager surface (/v1/distributedissuers/* in the SaaS contract) for issuing
+    short-lived workload identities into Kubernetes.
+- id: sigstore
+  name: Sigstore / cosign KMS plugin
+  conforms: true
+  evidence: First-party plugin github.com/Venafi/sigstore-kms-venafi (CodeSign Protect plugin for
+    Sigstore cosign) and github.com/Venafi/notation-venafi-csp (Notation CLI signing plugin).
+- id: cert-manager
+  name: cert-manager Issuer / Kubernetes CSR
+  conforms: true
+  evidence: 'https://cert-manager.io/docs/configuration/venafi/ documents a first-class Venafi
+    (now "CyberArk") Issuer; the Control Plane ships its own approver-policy, istio-csr, CSI
+    driver, trust-manager and OpenShift-routes components documented at docs.venafi.cloud.'
+compliance:
+  published_certifications: []
+  note: No trust center or certification listing was reachable on a Venafi-controlled host.
+    trust.venafi.com returns a Vercel DEPLOYMENT_NOT_FOUND (404) and every venafi.com path 301s to
+    the Palo Alto Networks Certificate Manager product page, so no SOC 2 / ISO 27001 / FedRAMP
+    claim could be verified from a Venafi surface. No Compliance pointer is emitted.
+summary:
+  standards_checked: 8
+  standards_conformant: 3
+  domain_standards_conformant: 8

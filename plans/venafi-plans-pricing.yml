@@ -1,0 +1,28 @@
+generated: '2026-09-02'
+method: searched
+source: https://venafi.com/pricing/ (301 -> Palo Alto Networks product page),
+  https://docs.venafi.cloud/, https://developer.venafi.com/
+plan_count: 0
+note: 'Venafi publishes no plans, no price list and no self-serve tier. Two things make this a
+  measured zero rather than an unfound page. First, the product has always been an enterprise
+  sales motion — the console sign-up at login.venafi.cloud is an account login, and the docs carry
+  an "About licensing" page rather than a price page. Second, the marketing surface no longer
+  exists on a Venafi domain at all: every path under venafi.com, including /pricing/, returns a
+  301 to https://www.paloaltonetworks.com/network-security/next-gen-trust-security/certificate-manager,
+  which is a blanket catch-all redirect and not a pricing page. Because of that catch-all, no
+  Pricing pointer is emitted in apis.yml — a link to venafi.com/pricing/ would assert a page the
+  provider does not serve.'
+plans: []
+billing:
+  model: enterprise contract / licensed
+  self_serve: false
+  free_tier: false
+  trial: unknown
+  metering_api: null
+evidence:
+- url: https://venafi.com/pricing/
+  status: 301
+  redirects_to: https://www.paloaltonetworks.com/network-security/next-gen-trust-security/certificate-manager
+- url: https://login.venafi.cloud/
+  status: 200
+  note: Account login, not a sign-up-and-pay flow.

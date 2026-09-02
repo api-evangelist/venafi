@@ -1,0 +1,409 @@
+generated: '2026-09-02'
+method: derived
+source: openapi/venafi-certificate-manager-saas-openapi.yml, openapi/venafi-trust-protection-foundation-websdk-openapi.yml
+format: vendor-json
+note: Neither contract uses RFC 9457 application/problem+json. Both return plain application/json. The
+  SaaS API envelope is {"errors":[{"code":<int>,"message":<string>,"args":[...]}]} — the schema documents
+  the numeric code as stable and says clients should branch on it rather than parse the message. The 90
+  numeric codes below were extracted from the "Possible causes, by error code:" blocks the provider writes
+  into its 4xx/5xx response descriptions; they are the provider's own text, verbatim. Codes are namespaced
+  by feature area (1xxxx platform/tenant, 5010x-5012x Workload Identity Manager policies, 502xx issuer
+  configurations, 503xx Sub CA providers). The self-hosted WebSDK does not publish numeric codes; it relies
+  on HTTP status plus an Error/Message body.
+envelope:
+  saas: '{"errors": [{"code": <integer>, "message": <string>, "args": [<interpolated values>]}]}'
+  websdk: plain application/json object; no numeric code vocabulary is published
+http_statuses:
+- status: '400'
+  certificate_manager_saas: 155
+  trust_protection_foundation_websdk: 326
+- status: '401'
+  certificate_manager_saas: 32
+  trust_protection_foundation_websdk: 284
+- status: '403'
+  certificate_manager_saas: 23
+  trust_protection_foundation_websdk: 271
+- status: '404'
+  certificate_manager_saas: 76
+  trust_protection_foundation_websdk: 3
+- status: '405'
+  certificate_manager_saas: 2
+  trust_protection_foundation_websdk: 0
+- status: '409'
+  certificate_manager_saas: 2
+  trust_protection_foundation_websdk: 0
+- status: '412'
+  certificate_manager_saas: 109
+  trust_protection_foundation_websdk: 0
+- status: '422'
+  certificate_manager_saas: 6
+  trust_protection_foundation_websdk: 0
+- status: '500'
+  certificate_manager_saas: 32
+  trust_protection_foundation_websdk: 25
+problem_types:
+- code: 1002
+  http_status: 403
+  title: The operation is restricted to the primary TSG; sub-TSG callers are rejected.
+  occurrences: 6
+- code: 10006
+  http_status: 400
+  title: Malformed JSON body or an unknown/unrecognized field; or sharing
+  occurrences: 6
+- code: 10051
+  http_status: 404
+  title: No Issuer configuration with the given `id` exists in this tenant.
+  occurrences: 9
+- code: 10055
+  http_status: 400
+  title: The `id` path parameter is not a valid UUID.
+  occurrences: 9
+- code: 50100
+  http_status: 400
+  title: '`name` is empty.'
+  occurrences: 2
+- code: 50101
+  http_status: 400
+  title: '`validityPeriod` is empty or not a valid ISO-8601 period.'
+  occurrences: 2
+- code: 50102
+  http_status: 400
+  title: '`subject` is omitted from the body.'
+  occurrences: 1
+- code: 50103
+  http_status: 400
+  title: '`sans` is omitted from the body.'
+  occurrences: 1
+- code: 50104
+  http_status: 400
+  title: '`keyUsages` list is empty.'
+  occurrences: 1
+- code: 50105
+  http_status: 400
+  title: '`extendedKeyUsages` list is empty.'
+  occurrences: 1
+- code: 50106
+  http_status: 400
+  title: '`keyAlgorithm` is omitted.'
+  occurrences: 1
+- code: 50107
+  http_status: 400
+  title: '`keyAlgorithm.allowedValues` list is empty.'
+  occurrences: 2
+- code: 50108
+  http_status: 400
+  title: '`keyAlgorithm.defaultValue` is empty.'
+  occurrences: 2
+- code: 50110
+  http_status: 400
+  title: The policy cannot be deleted because it is still referenced by
+  occurrences: 1
+- code: 50111
+  http_status: 400
+  title: A policy with the same `name` already exists.
+  occurrences: 2
+- code: 50112
+  http_status: 400
+  title: Invalid subject common name.
+  occurrences: 2
+- code: 50113
+  http_status: 400
+  title: Invalid subject organization.
+  occurrences: 2
+- code: 50114
+  http_status: 400
+  title: Invalid subject organizational unit.
+  occurrences: 2
+- code: 50115
+  http_status: 400
+  title: Invalid subject locality.
+  occurrences: 2
+- code: 50116
+  http_status: 400
+  title: Invalid subject state or province.
+  occurrences: 2
+- code: 50117
+  http_status: 400
+  title: Invalid subject country.
+  occurrences: 2
+- code: 50118
+  http_status: 400
+  title: Invalid SAN DNS name.
+  occurrences: 2
+- code: 50119
+  http_status: 400
+  title: Invalid SAN IP address.
+  occurrences: 2
+- code: 50120
+  http_status: 400
+  title: Invalid SAN RFC822/email name.
+  occurrences: 2
+- code: 50121
+  http_status: 400
+  title: Invalid SAN URI.
+  occurrences: 2
+- code: 50122
+  http_status: 400
+  title: '`name` is longer than 64 characters.'
+  occurrences: 2
+- code: 50123
+  http_status: 400
+  title: '`extendedKeyUsages` contains a value unsupported by Workload Identity Manager.'
+  occurrences: 2
+- code: 50124
+  http_status: 400
+  title: A sub-TSG id is not a 10-digit number starting with 1.
+  occurrences: 2
+- code: 50200
+  http_status: 400
+  title: '`name` is empty.'
+  occurrences: 2
+- code: 50201
+  http_status: 400
+  title: '`subCaProviderId` is missing.'
+  occurrences: 1
+- code: 50202
+  http_status: 400
+  title: The `policyIds` list is empty.
+  occurrences: 1
+- code: 50203
+  http_status: 404
+  title: The referenced Sub CA provider does not exist in this tenant.
+  occurrences: 2
+- code: 50204
+  http_status: 404
+  title: One or more of the referenced policies do not exist in this tenant.
+  occurrences: 2
+- code: 50205
+  http_status: 400
+  title: A configuration with the same `name` already exists.
+  occurrences: 2
+- code: 50207
+  http_status: 400
+  title: JWT_JWKS `urls` list is empty.
+  occurrences: 2
+- code: 50208
+  http_status: 400
+  title: JWT_OIDC `baseUrl` is empty.
+  occurrences: 2
+- code: 50209
+  http_status: 400
+  title: JWT_OIDC `audience` is empty.
+  occurrences: 2
+- code: 50212
+  http_status: 400
+  title: AWS `accountIds` contains a value that is not a 12-digit string.
+  occurrences: 2
+- code: 50213
+  http_status: 400
+  title: AWS `accountIds` list is empty.
+  occurrences: 2
+- code: 50214
+  http_status: 400
+  title: AWS `regions` is missing.
+  occurrences: 2
+- code: 50216
+  http_status: 400
+  title: Azure `subscriptionIds` list is empty.
+  occurrences: 2
+- code: 50218
+  http_status: 400
+  title: Google `projectIdentifiers` contains an invalid identifier.
+  occurrences: 2
+- code: 50219
+  http_status: 400
+  title: Google `projectIdentifiers` list is empty.
+  occurrences: 2
+- code: 50220
+  http_status: 400
+  title: Google `regions` is missing.
+  occurrences: 2
+- code: 50221
+  http_status: 400
+  title: '`name` is longer than 64 characters.'
+  occurrences: 2
+- code: 50222
+  http_status: 400
+  title: A JWT_JWKS URL is not a valid HTTPS URL of at most 2048 characters.
+  occurrences: 2
+- code: 50223
+  http_status: 400
+  title: JWT_OIDC `baseUrl` is longer than 2048 characters.
+  occurrences: 2
+- code: 50224
+  http_status: 400
+  title: JWT_OIDC `audience` is longer than 256 characters.
+  occurrences: 2
+- code: 50225
+  http_status: 400
+  title: '`clientAuthorization` configuration custom-claim alias exceeds 128 characters.'
+  occurrences: 2
+- code: 50226
+  http_status: 400
+  title: '`clientAuthorization` allow-all-policies custom-claim alias exceeds 128 characters.'
+  occurrences: 2
+- code: 50227
+  http_status: 400
+  title: '`clientAuthorization` allowed-policies custom-claim alias exceeds 128 characters.'
+  occurrences: 2
+- code: 50228
+  http_status: 400
+  title: '`advancedSettings` is invalid (e.g. `includeRawCertDataInAuditLog`'
+  occurrences: 2
+- code: 50229
+  http_status: 400
+  title: JWT_STANDARD_CLAIMS `clients` list is empty.
+  occurrences: 2
+- code: 50230
+  http_status: 400
+  title: Two JWT_STANDARD_CLAIMS clients share the same issuer/JWKS-URI pair.
+  occurrences: 2
+- code: 50231
+  http_status: 400
+  title: A JWT_STANDARD_CLAIMS client issuer is not a valid HTTPS URL while `jwksUri` is absent.
+  occurrences: 2
+- code: 50232
+  http_status: 400
+  title: JWT_STANDARD_CLAIMS `audience` is empty.
+  occurrences: 2
+- code: 50233
+  http_status: 400
+  title: JWT_STANDARD_CLAIMS `audience` is longer than 256 characters.
+  occurrences: 2
+- code: 50234
+  http_status: 400
+  title: A JWT_STANDARD_CLAIMS client `name` is empty.
+  occurrences: 2
+- code: 50235
+  http_status: 400
+  title: A JWT_STANDARD_CLAIMS client `name` is longer than 64 characters.
+  occurrences: 2
+- code: 50236
+  http_status: 400
+  title: A JWT_STANDARD_CLAIMS client `issuer` is empty.
+  occurrences: 2
+- code: 50237
+  http_status: 400
+  title: A JWT_STANDARD_CLAIMS client `issuer` is longer than 2048 characters.
+  occurrences: 2
+- code: 50238
+  http_status: 400
+  title: A JWT_STANDARD_CLAIMS client `jwksUri` is longer than 2048 characters.
+  occurrences: 2
+- code: 50239
+  http_status: 400
+  title: A JWT_STANDARD_CLAIMS client `jwksUri` is invalid.
+  occurrences: 2
+- code: 50240
+  http_status: 400
+  title: A JWT_STANDARD_CLAIMS client `subjects` list is empty.
+  occurrences: 2
+- code: 50241
+  http_status: 400
+  title: A JWT_STANDARD_CLAIMS client `allowedPolicyIds` list is empty.
+  occurrences: 2
+- code: 50242
+  http_status: 400
+  title: JWT_OIDC `baseUrl` is not a valid HTTPS URL.
+  occurrences: 2
+- code: 50247
+  http_status: 400
+  title: HSM signing cannot be enabled because the Sub CA provider is
+  occurrences: 1
+- code: 50300
+  http_status: 400
+  title: The Sub CA provider cannot be deleted because it is still
+  occurrences: 1
+- code: 50301
+  http_status: 400
+  title: '`name` is empty.'
+  occurrences: 2
+- code: 50302
+  http_status: 400
+  title: '`caAccountId` is missing.'
+  occurrences: 1
+- code: 50303
+  http_status: 400
+  title: '`caProductOptionId` is missing.'
+  occurrences: 1
+- code: 50304
+  http_status: 400
+  title: '`validityPeriod` is empty or not a valid ISO-8601 period.'
+  occurrences: 2
+- code: 50305
+  http_status: 400
+  title: '`commonName` is empty.'
+  occurrences: 2
+- code: 50306
+  http_status: 400
+  title: '`keyAlgorithm` is empty.'
+  occurrences: 1
+- code: 50307
+  http_status: 404
+  title: The referenced CA account does not exist (or belongs to another tenant).
+  occurrences: 2
+- code: 50308
+  http_status: 400
+  title: '`caType` is not a supported Sub CA type.'
+  occurrences: 1
+- code: 50309
+  http_status: 404
+  title: The referenced CA product option does not exist on that CA account.
+  occurrences: 2
+- code: 50310
+  http_status: 400
+  title: '`caType` is empty.'
+  occurrences: 1
+- code: 50311
+  http_status: 400
+  title: A Sub CA provider with the same `name` already exists.
+  occurrences: 2
+- code: 50312
+  http_status: 400
+  title: '`name` is longer than 64 characters.'
+  occurrences: 2
+- code: 50313
+  http_status: 400
+  title: '`commonName` is longer than 64 characters.'
+  occurrences: 2
+- code: 50314
+  http_status: 400
+  title: '`organization` is longer than 64 characters.'
+  occurrences: 2
+- code: 50315
+  http_status: 400
+  title: '`organizationalUnit` is longer than 64 characters.'
+  occurrences: 2
+- code: 50316
+  http_status: 400
+  title: '`locality` is longer than 64 characters.'
+  occurrences: 2
+- code: 50317
+  http_status: 400
+  title: '`stateOrProvince` is longer than 64 characters.'
+  occurrences: 2
+- code: 50318
+  http_status: 400
+  title: '`country` is longer than 64 characters.'
+  occurrences: 2
+- code: 50319
+  http_status: 400
+  title: When signing is enabled, the PKCS11 partition label is empty or
+  occurrences: 2
+- code: 50320
+  http_status: 400
+  title: A PKCS11 allowed client library is not a 64-character SHA-256 hash.
+  occurrences: 2
+- code: 50321
+  http_status: 400
+  title: The PKCS11 partition serial number is not up to 18 numeric/hex characters.
+  occurrences: 2
+- code: 50322
+  http_status: 400
+  title: A sub-TSG id is not a 10-digit number starting with 1.
+  occurrences: 2
+summary:
+  code_count: 90
+  rfc9457: false
+  retry_after_published: false
+  rate_limit_status_published: false

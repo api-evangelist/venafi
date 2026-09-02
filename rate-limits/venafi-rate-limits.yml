@@ -1,0 +1,33 @@
+generated: '2026-09-02'
+method: searched
+source: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview,
+  https://docs.venafi.cloud/api/api-setup/,
+  openapi/venafi-certificate-manager-saas-openapi.yml,
+  openapi/venafi-trust-protection-foundation-websdk-openapi.yml
+limit_count: 0
+note: 'No published rate limits. The API reference introduction, the API setup guide and both
+  OpenAPI contracts are silent: neither spec declares a 429 response on any of its 572 operations,
+  and the tokens "ratelimit", "rate-limit" and "retry-after" appear zero times in either document.
+  An agent therefore has no runtime signal to back off on and no documented ceiling to plan
+  against. This is an honest zero, not an unchecked field.'
+limits: []
+response_headers:
+  published: false
+  observed: []
+  note: No X-RateLimit-*, RateLimit-* or Retry-After header is declared. Nothing was observed on
+    a live response because every operation on both APIs requires credentials, and this pipeline
+    does not authenticate.
+status_on_exhaustion: null
+adjacent_documented_quotas:
+- scope: per tenant account
+  resource: webhook connections
+  limit: 10
+  source: https://developer.venafi.com/tlsprotectcloud/docs/control-plane-receive-webhook-notifications
+  note: 'Verbatim: "Currently, the number of webhook connections is limited to 10, per tenant
+    account." This is a resource quota, not a request-rate limit, and is recorded here only
+    because it is the single numeric ceiling the provider does publish.'
+- scope: per inventory monitoring configuration
+  resource: certificate expiration notification thresholds
+  limit: 3
+  source: https://developer.venafi.com/tlsprotectcloud/docs/control-plane-receive-webhook-notifications
+  note: '"thresholds - Array of certificate expiration thresholds, in days ... Limit is 3 values."'

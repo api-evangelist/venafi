@@ -1,0 +1,140 @@
+generated: '2026-09-02'
+method: searched
+source: openapi/venafi-certificate-manager-saas-openapi.yml,
+  openapi/venafi-trust-protection-foundation-websdk-openapi.yml,
+  https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview,
+  https://docs.venafi.cloud/api/obtaining-api-key/
+auth:
+  style: API key header (SaaS) and OAuth 2.0 bearer token (self-hosted)
+  detail: See authentication/venafi-authentication.yml and scopes/venafi-scopes.yml.
+  transport: HTTPS required for all API requests (stated in the API reference introduction).
+serialization:
+  media_type: application/json
+  property_case: camelCase
+  note: 'The provider states plainly: "Request and response bodies are encoded as JSON. Top-level
+    resources have an ''object'' property. This property can be used to determine the type of
+    resource. Property names are in camelCase (not snake_case or kebab-case)." Non-JSON responses
+    exist for exports (text/csv on activity-log export) and binary downloads
+    (application/octet-stream for certificate contents and keystores).'
+pagination:
+  style: request-body paging object (SaaS search) and offset/limit query parameters (WebSDK)
+  saas:
+    applies_to: the *search* operations — /outagedetection/v1/certificatesearch,
+      /certificateinstancesearch, /certificaterequestssearch, /v1/machinesearch,
+      /v1/machineidentitysearch, /v1/activitylogsearch
+    request_fields:
+    - paging.pageNumber
+    - paging.pageSize
+    - ordering
+    - expression
+    note: Filtering uses a recursive ExpressionNode tree — a compound node carries an AND/OR
+      operator and nests child nodes in `operands`; a leaf node applies a comparison operator to a
+      `field` with `value` or `values`.
+  websdk:
+    query_params:
+    - offset
+    - limit
+  cursor_pagination: false
+  link_header: false
+expansion:
+  supported: false
+  note: No expand/fields/include parameter is published. The WebSDK exposes an `optionalfields`
+    query parameter on a small number of operations, which is the closest analogue.
+metadata:
+  supported: true
+  note: 'Both surfaces expose user-defined metadata. SaaS ships a Tags API (/v1/tags,
+    /v1/tagsassignment) with bulk create/delete and per-entity aggregates; the WebSDK ships
+    Metadata APIs (Custom Fields) under /vedsdk/metadata/*.'
+request_id_tracing:
+  supported: false
+  note: No X-Request-Id / request-id correlation header is declared in either contract. Auditing
+    is done server-side through the event log (/v1/activitylogsearch, /v1/activitytypes) rather
+    than by returning a client-visible trace id.
+versioning:
+  detail: See lifecycle/venafi-lifecycle.yml.
+error_envelope:
+  shape: '{"errors": [{"code": <integer>, "message": <string>, "args": [...]}]}'
+  rfc9457: false
+  stable_numeric_codes: true
+  detail: See errors/venafi-problem-types.yml (90 documented codes).
+rate_limit_signaling:
+  headers_published: false
+  status_on_exhaustion: null
+  detail: See rate-limits/venafi-rate-limits.yml — no limits, no headers and no 429 response are
+    declared anywhere in the published surface.
+idempotency:
+  supported: false
+  header: null
+  scope: null
+  retention: null
+  note: 'Neither contract declares an Idempotency-Key header or documents replay-safe retries;
+    the token "idempoten" appears zero times in both specs. Several write operations are naturally
+    idempotent by shape (PUT /v1/certificateissuingtemplates/{id} overwrites; POST
+    /outagedetection/v1/certificates/retirement takes a certificateIds set), but that is a
+    property of the resource model, not a published guarantee, and an agent must not treat it as
+    one.'
+dry_run_mode:
+  supported: partial
+  note: 'The SaaS API publishes explicit validation endpoints that evaluate a request without
+    committing it: POST /outagedetection/v1/certificaterequests/validation, POST
+    /outagedetection/v1/certificates/validation and POST
+    /outagedetection/v1/certificateinstances/validation. Connection-test operations
+    (POST /v1/credentialmanagerconfigurations/test, /v1/credentials/test,
+    /v1/machines/{id}/workflows "test connection only", /vedsdk/ssh/TestDeviceConnection) are the
+    same idea for integrations. There is no global dry-run flag on ordinary writes.'
+reversibility:
+  grade: documented
+  note: 'Every reversal path below exists as a first-class published operation, which is why the
+    grade is `documented` rather than `na`. It is NOT `verified`, because the provider does not
+    state a window anywhere in the contract or in the docs pages reached for this pass — no
+    retention period is given for retired certificates before deletion, and no retention period is
+    given for the recycle bin. No window is asserted here that the provider did not state.'
+  write_surfaces:
+  - surface: certificate inventory (Certificate Manager - SaaS)
+    forward_operation: certificateretirement_retireCertificates (POST
+      /outagedetection/v1/certificates/retirement)
+    reversal_operation: certificateretirement_recoverCertificates (POST
+      /outagedetection/v1/certificates/recovery)
+    reversal_semantics: 'Recovers the certificates named by `certificateIds`, including any
+      previous versions of those certificates.'
+    window: null
+    window_source: null
+    irreversible_sibling: certificateretirement_deleteCertificates (POST
+      /outagedetection/v1/certificates/deletion) — "Permanently deletes the retired certificates
+      ... from the inventory." This is the point of no return, and it only accepts certificates
+      that are already retired, so retirement is the reversible gate in front of it.
+  - surface: configuration objects (Trust Protection Foundation WebSDK)
+    forward_operation: object delete (various /vedsdk/config/* and /vedsdk/certificates/*
+      delete operations)
+    reversal_operation: Venafi_Core_WebSDK_RecycleBinRest_Restore (POST /vedsdk/recyclebin/restore)
+    reversal_semantics: Restores a deleted item from the recycle bin. Requires the
+      admin:recyclebin scope.
+    window: null
+    window_source: null
+  - surface: certificate issuance
+    forward_operation: certificaterequests_create (POST
+      /outagedetection/v1/certificaterequests)
+    reversal_operation: certificate revocation — /vedsdk/certificates/Revoke on the WebSDK, and
+      revocation approval rules (/v1/certificates/revocations/approvalrules) on SaaS
+    reversal_semantics: Revocation invalidates an issued certificate; it does not un-issue it.
+      A revoked certificate cannot be un-revoked, so this is mitigation, not reversal.
+    window: null
+    window_source: null
+  - surface: plugins
+    forward_operation: plugin disablement (POST /v1/plugins/{id}/disablements)
+    reversal_operation: remove plugin disablement (DELETE /v1/plugins/{id}/disablements)
+    reversal_semantics: Symmetric enable/disable pair.
+    window: null
+    window_source: null
+  - surface: OAuth grants (Trust Protection Foundation WebSDK)
+    forward_operation: POST /vedauth/authorize/oauth (issue token)
+    reversal_operation: DELETE /vedauth/revoke/token
+    reversal_semantics: Revokes the grant carried by the token. RFC 7009 shaped.
+    window: null
+    window_source: null
+cross_links:
+  errors: errors/venafi-problem-types.yml
+  lifecycle: lifecycle/venafi-lifecycle.yml
+  authentication: authentication/venafi-authentication.yml
+  scopes: scopes/venafi-scopes.yml
+  rate_limits: rate-limits/venafi-rate-limits.yml
