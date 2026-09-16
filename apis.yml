@@ -45,50 +45,1489 @@ tags:
 - Kubernetes
 - Code Signing
 apis:
-- aid: venafi:certificate-manager-saas
-  name: Certificate Manager - SaaS API (Venafi Control Plane)
-  description: The Venafi / CyberArk Certificate Manager - SaaS REST API. 184 operations across 120 paths
-    covering certificate inventory and search, certificate requests and issuing templates, applications,
-    machines and machine identities, credential managers, teams and users, service accounts and scopes,
-    tags, event logs, VSatellites (edge instances/workers), webhook connectors, expiration/auto-renewal
-    monitoring, approval rules, plugins and Workload Identity Manager (distributed issuers). Served from
-    six regional hosts under venafi.cloud.
+- aid: venafi:venafi-access-management-apis-api
+  name: Venafi Access Management APIs API
+  description: "The endpoints in this section allow you to manage your OAuth environment. \nUsing endpoints\
+    \ described in this section, you can configure your global OAuth properties, assign roles \nto identities,\
+    \ create and manage applications, and create grant rules. After these are in \nplace, users can request\
+    \ grants using the authentication server. This section also includes \ndescriptions of endpoints that\
+    \ allow you to view and revoke issued grants."
   humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
   baseURL: https://api.venafi.cloud
   tags:
-  - Certificates
-  - PKI
-  - Machine Identity
-  - Certificate Lifecycle Management
-  - Security
+  - Access Management APIs
   properties:
   - type: OpenAPI
-    url: openapi/venafi-certificate-manager-saas-openapi.yml
+    url: openapi/venafi-access-management-apis-api-openapi.yml
   - type: Documentation
     url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
   - type: Webhooks
     url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
-- aid: venafi:trust-protection-foundation-websdk
-  name: Trust Protection Foundation WebSDK (Venafi Trust Protection Platform)
-  description: The self-hosted Venafi / CyberArk Trust Protection Foundation Web SDK, version 26.1.1.
-    388 operations across 364 paths covering certificate management, discovery, identity and permissions,
-    OAuth application/scope administration (/vedauth, /vedsdk/oauth), SSH certificates and authorized
-    keys, code signing and HSM, SecretStore, flows, recycle bin, processing engines, statistics and system
-    status. Because the product is customer-installed, the contract publishes a templated server (https://{dnsname}/)
-    rather than a vendor host.
-  humanURL: https://docs.venafi.com/Docs/currentAPI/
-  baseURL: https://{dnsname}/
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-algorithmselector-apis-api
+  name: Venafi AlgorithmSelector APIs API
+  description: >-
+    The AlgorithmSelector interface provides the ability to retrieve and configure allowed Key Algorithms
+    for policy, key and certificate objects
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
   tags:
-  - Certificates
-  - PKI
-  - SSH
-  - Code Signing
-  - Machine Identity
+  - AlgorithmSelector APIs
   properties:
   - type: OpenAPI
-    url: openapi/venafi-trust-protection-foundation-websdk-openapi.yml
+    url: openapi/venafi-algorithmselector-apis-api-openapi.yml
   - type: Documentation
-    url: https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-application-api
+  name: Venafi Application API
+  description: The Application API from Venafi — 7 operation(s) for application.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Application
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-application-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-authentication-server-apis-api
+  name: Venafi Authentication Server APIs API
+  description: "The Auth REST SDK manages authorization bearer tokens. The tokens you need are based on\
+    \ the set of API calls that your client uses.\n\n\nThe Auth SDK uses the VEDauth service to grant\
+    \ access and manage tokens. No installation is necessary. \nHowever, configuration is required. For\
+    \ more information, see Setting up token authentication."
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Authentication Server APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-authentication-server-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-certificate-approvals-api
+  name: Venafi Certificate Approvals API
+  description: The Certificate Approvals API from Venafi — 5 operation(s) for certificate approvals.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Certificate Approvals
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-certificate-approvals-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-certificate-auto-renewal-monitoring-api
+  name: Venafi Certificate Auto-renewal Monitoring API
+  description: >-
+    The Certificate Auto-renewal Monitoring API from Venafi — 4 operation(s) for certificate auto-renewal
+    monitoring.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Certificate Auto-renewal Monitoring
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-certificate-auto-renewal-monitoring-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-certificate-discovery-api
+  name: Venafi Certificate Discovery API
+  description: The Certificate Discovery API from Venafi — 2 operation(s) for certificate discovery.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Certificate Discovery
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-certificate-discovery-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-certificate-expiration-reports-api
+  name: Venafi Certificate Expiration Reports API
+  description: >-
+    The Certificate Expiration Reports API from Venafi — 2 operation(s) for certificate expiration reports.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Certificate Expiration Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-certificate-expiration-reports-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-certificate-import-api
+  name: Venafi Certificate Import API
+  description: The Certificate Import API from Venafi — 1 operation(s) for certificate import.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Certificate Import
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-certificate-import-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-certificate-installations-api
+  name: Venafi Certificate Installations API
+  description: >-
+    The Certificate Installations API from Venafi — 4 operation(s) for certificate installations.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Certificate Installations
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-certificate-installations-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-certificate-inventory-monitoring-api
+  name: Venafi Certificate Inventory Monitoring API
+  description: >-
+    The Certificate Inventory Monitoring API from Venafi — 3 operation(s) for certificate inventory monitoring.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Certificate Inventory Monitoring
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-certificate-inventory-monitoring-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-certificate-management-apis-api
+  name: Venafi Certificate Management APIs API
+  description: "The endpoints in this section manage TLS certificates. If you want certificates to secure\
+    \ SSH keys, see the _SshCertificates_ section\n## PKIX Parameter Set ##\nAs of TPP 25.1 algorithms\
+    \ are identified by an OID called PKIX Parameter Set. The following table lists the OID for each algorithm:\
+    \ \n\n\n\n**RSA Algorithms**\n\n| Algorithm | PKIX Parameter Set | Description |\n|-----------|--------------------|--------------------------|\n\
+    | RSA 1024 | 1.3.6.1.4.1.28783.10.1.1.1024| RSA 1024 bits offers moderate security but is now considered\
+    \ vulnerable and outdated for most modern applications. |\n| RSA 2048 | 1.3.6.1.4.1.28783.10.1.1.2048|\
+    \ RSA 2048 bits offers strong security and is widely used for modern encryption and digital signatures.\
+    \ |\n| RSA 3072 | 1.3.6.1.4.1.28783.10.1.1.3072| RSA 3072 bits provides a higher security level, suitable\
+    \ for long-term protection of sensitive data. |\n| RSA 4096 | 1.3.6.1.4.1.28783.10.1.1.4096| RSA 4096\
+    \ bits offers very high security, commonly used for highly sensitive data and long-term encryption.\
+    \ |\n| RSA 8192 | 1.3.6.1.4.1.28783.10.1.1.8192| RSA 8192 bits provides extremely high security, used\
+    \ for the most sensitive data and long-term protection. |\n| RSA PSS/OAEP 1024 | 1.3.6.1.4.1.28783.10.1.2.1024|\
+    \ RSA 1024 bits PSS provides moderate security for digital signatures, with PSS offering improved\
+    \ resistance against certain attacks, though it's now considered vulnerable for most applications.\
+    \ |\n| RSA PSS/OAEP 2048 | 1.3.6.1.4.1.28783.10.1.2.2048| RSA 2048 bits PSS offers strong security\
+    \ with enhanced resistance to forgery and adaptive chosen-message attacks, making it widely used in\
+    \ modern systems. |\n| RSA PSS/OAEP 3072 | 1.3.6.1.4.1.28783.10.1.2.3072| RSA 3072 bits PSS provides\
+    \ enhanced security for long-term digital signature protection, with PSS improving resistance to certain\
+    \ signature-related attacks. |\n| RSA PSS/OAEP 4096 | 1.3.6.1.4.1.28783.10.1.2.4096| RSA 4096 bits\
+    \ PSS provides very high security for digital signatures, with PSS offering added protection against\
+    \ vulnerabilities in deterministic signature schemes. |\n| RSA PSS/OAEP 8192 | 1.3.6.1.4.1.28783.10.1.2.8192|\
+    \ RSA 8192 bits PSS offers extremely high security for critical digital signatures, with PSS further\
+    \ strengthening resistance to advanced cryptographic attacks and long-term protection. |\n\n**Elliptic\
+    \ Curve Digital Signature Algorithms (ECDSA)**\n\n| Algorithm | PKIX Parameter Set | Description |\n\
+    |-----------|--------------------|--------------------------|\n| ECDSA P-256 | 1.3.6.1.4.1.28783.10.2.1.256|\
+    \ Digital signature algorithm based on the NIST P-256 curve, providing 128-bit security. |\n| ECDSA\
+    \ P-384 | 1.3.6.1.4.1.28783.10.2.1.384| Digital signature algorithm based on the NIST P-384 curve,\
+    \ providing 192-bit security. |\n| ECDSA P-521 | 1.3.6.1.4.1.28783.10.2.1.521| Digital signature algorithm\
+    \ based on the NIST P-521 curve, providing 256-bit security. |\n| Brainpool P-256r1 | 1.3.6.1.4.1.28783.10.2.2.1|\
+    \ Brainpool P256 is a 256-bit elliptic curve offering strong security for digital signatures and key\
+    \ exchange. |\n| Brainpool P-384r1 | 1.3.6.1.4.1.28783.10.2.2.2| Brainpool P384 is a 384-bit elliptic\
+    \ curve providing enhanced security for high-assurance applications. |\n| Brainpool P-512r1 | 1.3.6.1.4.1.28783.10.2.2.3|\
+    \ Brainpool P512 is a 512-bit elliptic curve offering very high security for sensitive data and long-term\
+    \ protection. |\n| Brainpool P-160r1 | 1.3.6.1.4.1.28783.10.2.2.4| Brainpool P160 is a 160-bit curve,\
+    \ offering moderate security for lightweight cryptographic applications. |\n| Brainpool P-160t1 |\
+    \ 1.3.6.1.4.1.28783.10.2.2.5| Brainpool P160T is a 160-bit twisted curve, offering efficient performance\
+    \ and moderate security for lightweight applications. |\n| Brainpool P-192r1 | 1.3.6.1.4.1.28783.10.2.2.6|\
+    \ Brainpool P192 is a 192-bit curve providing a balanced security level for general-purpose cryptography.\
+    \ |\n| Brainpool P-192t1 | 1.3.6.1.4.1.28783.10.2.2.7| Brainpool P192T is a 192-bit twisted curve,\
+    \ optimized for faster cryptographic operations with improved security. |\n| Brainpool P-224r1 | 1.3.6.1.4.1.28783.10.2.2.8|\
+    \ Brainpool P224 is a 224-bit curve offering strong security for medium-strength cryptographic applications.\
+    \ |\n| Brainpool P-224t1 | 1.3.6.1.4.1.28783.10.2.2.9| Brainpool P224T is a 224-bit twisted Edwards\
+    \ curve, optimized for efficient cryptographic operations with strong security. |\n| Brainpool P-256t1\
+    \ | 1.3.6.1.4.1.28783.10.2.2.10| Brainpool P256T is a 256-bit twisted curve, optimized for faster\
+    \ operations and improved security in digital signatures and key exchange. |\n| Brainpool P-320r1\
+    \ | 1.3.6.1.4.1.28783.10.2.2.11| Brainpool P320 is a 320-bit curve providing strong security for cryptographic\
+    \ operations, suitable for high-security applications. |\n| Brainpool P-320t1 | 1.3.6.1.4.1.28783.10.2.2.12|\
+    \ Brainpool P320T is a 320-bit twisted curve, balancing strong security and efficient performance\
+    \ for cryptographic tasks. |\n| Brainpool P-384t1 | 1.3.6.1.4.1.28783.10.2.2.13| Brainpool P384T is\
+    \ a 384-bit twisted curve providing strong security for digital signatures and key exchange, optimized\
+    \ for performance and efficiency. |\n| Brainpool P-512t1 | 1.3.6.1.4.1.28783.10.2.2.14| Brainpool\
+    \ P512T is a 512-bit twisted curve, providing very high security and optimized for efficient cryptographic\
+    \ processing. |\n| SEC P-256k1 | 1.3.6.1.4.1.28783.10.2.3.1| Sec P256K is a 256-bit curve widely used\
+    \ in Bitcoin and blockchain technologies, optimized for fast elliptic curve operations. |\n| SEC P-224r1\
+    \ | 1.3.6.1.4.1.28783.10.2.3.2| Sec P224 is a 224-bit curve offering strong security for general-purpose\
+    \ cryptography, commonly used in digital signatures. |\n| SEC P-224k1 | 1.3.6.1.4.1.28783.10.2.3.3|\
+    \ Sec P224K is a 224-bit curve used in cryptographic applications with an emphasis on fast and efficient\
+    \ operations. |\n| SEC P-192r1 | 1.3.6.1.4.1.28783.10.2.3.4| Sec P192 is a 192-bit curve providing\
+    \ moderate security for lightweight cryptographic applications. |\n| SEC P-192k1 | 1.3.6.1.4.1.28783.10.2.3.5|\
+    \ Sec P192K is a 192-bit curve widely used in blockchain and cryptographic systems, optimized for\
+    \ efficient operations. |\n\n**Edwards Curve Algorithms**\n\n| Algorithm | PKIX Parameter Set | Description\
+    \ |\n|-----------|--------------------|--------------------------|\n| Ed25519 | 1.3.6.1.4.1.28783.10.3.25519|\
+    \ Ed25519 is a high-security elliptic curve signature algorithm, designed for fast performance and\
+    \ resistance to side-channel attacks. |\n| Ed448 | 1.3.6.1.4.1.28783.10.3.44448| Ed448 is a highly\
+    \ secure elliptic curve signature algorithm, offering stronger security than ED25519, with a larger\
+    \ key size. |\n\n**ML-DSA Quantum-Safe Algorithms**\n\n| Algorithm | PKIX Parameter Set | Description\
+    \ |\n|-----------|--------------------|--------------------------|\n| ML-DSA44 | 1.3.6.1.4.1.28783.10.4.44|\
+    \ ML-DSA44 offers 128-bit quantum security, designed for lightweight applications that require post-quantum\
+    \ resilience with moderate security. |\n| ML-DSA65 | 1.3.6.1.4.1.28783.10.4.65| ML-DSA65 provides\
+    \ 192-bit quantum security, offering stronger protection against quantum adversaries while maintaining\
+    \ efficiency for broader use cases. |\n| ML-DSA87 | 1.3.6.1.4.1.28783.10.4.87| ML-DSA87 delivers 256-bit\
+    \ quantum security, designed for high-assurance applications needing robust resistance to future quantum\
+    \ computing threats. |\n\n**SLH-DSA Quantum-Safe Algorithms**\n\n| Algorithm | PKIX Parameter Set\
+    \ | Description |\n|-----------|--------------------|--------------------------|\n| SLH-DSA-SHA2-128s\
+    \ | 1.3.6.1.4.1.28783.10.5.1.1| SLH-DSA SHA2 128bit Small: Offers 128-bit security with SHA-2, optimized\
+    \ for small footprint applications. |\n| SLH-DSA-SHA2-128f | 1.3.6.1.4.1.28783.10.5.1.2| SLH-DSA SHAKE\
+    \ 128bit Fast: Delivers 128-bit security with SHAKE, optimized for fast performance. |\n| SLH-DSA-SHA2-192s\
+    \ | 1.3.6.1.4.1.28783.10.5.1.3| SLH-DSA SHA2 192bit Small: Offers 192-bit security with SHA-2, suitable\
+    \ for small footprint applications. |\n| SLH-DSA-SHA2-192f | 1.3.6.1.4.1.28783.10.5.1.4| SLH-DSA SHA2\
+    \ 192bit Fast: Ensures 192-bit security with SHA-2, optimized for fast performance. |\n| SLH-DSA-SHA2-256s\
+    \ | 1.3.6.1.4.1.28783.10.5.1.5| SLH-DSA SHA2 256bit Small: Offers 256-bit security with SHA-2, suitable\
+    \ for small footprint applications. |\n| SLH-DSA-SHA2-256f | 1.3.6.1.4.1.28783.10.5.1.6| SLH-DSA SHA2\
+    \ 256bit Small: Offers 256-bit security with SHA-2, suitable for small footprint applications. |\n\
+    | SLH-DSA-Shake-128s | 1.3.6.1.4.1.28783.10.5.1.7| SLH-DSA SHAKE 128bit Small: Provides 128-bit security\
+    \ with SHAKE, designed for small footprint applications. |\n| SLH-DSA-Shake-128f | 1.3.6.1.4.1.28783.10.5.1.8|\
+    \ SLH-DSA SHAKE 128bit Fast: Ensures 128-bit security with SHAKE, optimized for fast performance.\
+    \ |\n| SLH-DSA-Shake-192s | 1.3.6.1.4.1.28783.10.5.1.9| SLH-DSA SHAKE 192bit Small: Provides 192-bit\
+    \ security with SHAKE, designed for small footprint applications. |\n| SLH-DSA-Shake-192f | 1.3.6.1.4.1.28783.10.5.1.10|\
+    \ SLH-DSA SHAKE 192bit Fast: Delivers 192-bit security with SHAKE, optimized for fast performance.\
+    \ |\n| SLH-DSA-Shake-256s | 1.3.6.1.4.1.28783.10.5.1.11| SLH-DSA SHAKE 256bit Small: Offers 256-bit\
+    \ security with SHAKE, suitable for small footprint applications. |\n| SLH-DSA-Shake-256f | 1.3.6.1.4.1.28783.10.5.1.12|\
+    \ SLH-DSA SHA2 256bit Fast: Offers 256-bit security with SHAKE, optimized for fast performance. |\n\
+    \n**Pre-Hash SLH-DSA Quantum-Safe Algorithms**\n\n| Algorithm | PKIX Parameter Set | Description |\n\
+    |-----------|--------------------|--------------------------|\n| HASH-SLH-DSA-SHA2-128s-SHA256 | 1.3.6.1.4.1.28783.10.5.2.1|\
+    \ Pre-Hash SLH-DSA SHA2 128bit Small: Offers 128-bit security with SHA-2, optimized for small footprint\
+    \ applications. |\n| HASH-SLH-DSA-SHA2-128f-SHA256 | 1.3.6.1.4.1.28783.10.5.2.2| Pre-Hash SLH-DSA\
+    \ SHA2 128bit Fast: Delivers 128-bit security with SHA-2, optimized for fast performance. |\n| HASH-SLH-DSA-SHA2-192s-SHA512\
+    \ | 1.3.6.1.4.1.28783.10.5.2.3| Pre-Hash SLH-DSA SHA2 192bit Small: Offers 192-bit security with SHA-2,\
+    \ suitable for small footprint applications. |\n| HASH-SLH-DSA-SHA2-192f-SHA512 | 1.3.6.1.4.1.28783.10.5.2.4|\
+    \ Pre-Hash SLH-DSA SHA2 192bit Fast: Ensures 192-bit security with SHA-2, optimized for fast performance.\
+    \ |\n| HASH-SLH-DSA-SHA2-256s-SHA512 | 1.3.6.1.4.1.28783.10.5.2.5| Pre-Hash SLH-DSA SHA2 256bit Small:\
+    \ Offers 256-bit security with SHA-2, suitable for small footprint applications. |\n| HASH-SLH-DSA-SHA2-256f-SHA512\
+    \ | 1.3.6.1.4.1.28783.10.5.2.6| Pre-Hash SLH-DSA SHA2 256bit Small: Offers 256-bit security with SHA-2,\
+    \ suitable for small footprint applications. |\n| HASH-SLH-DSA-Shake-128s-Shake128 | 1.3.6.1.4.1.28783.10.5.2.7|\
+    \ Pre-Hash SLH-DSA SHAKE 128bit Small: Provides 128-bit security with SHAKE, designed for small footprint\
+    \ applications. |\n| HASH-SLH-DSA-Shake-128f-Shake128 | 1.3.6.1.4.1.28783.10.5.2.8| Pre-Hash SLH-DSA\
+    \ SHA2 128bit Fast: Ensures 128-bit security with SHA-2, optimized for fast performance. |\n| HASH-SLH-DSA-Shake-192s-SHAke256\
+    \ | 1.3.6.1.4.1.28783.10.5.2.9| Pre-Hash SLH-DSA SHAKE 192bit Small: Provides 192-bit security with\
+    \ SHAKE, designed for small footprint applications. |\n| HASH-SLH-DSA-Shake-192f-SHAke256 | 1.3.6.1.4.1.28783.10.5.2.10|\
+    \ Pre-Hash SLH-DSA SHAKE 192bit Fast: Delivers 192-bit security with SHAKE, optimized for fast performance.\
+    \ |\n| HASH-SLH-DSA-Shake-256s-SHAke256 | 1.3.6.1.4.1.28783.10.5.2.11| Pre-Hash SLH-DSA SHA2 256bit\
+    \ Small: Offers 256-bit security with SHA-2, suitable for small footprint applications. |\n| HASH-SLH-DSA-Shake-256f-SHAke256\
+    \ | 1.3.6.1.4.1.28783.10.5.2.12| Pre-Hash SLH-DSA SHA2 256bit Fast: Offers 256-bit security with SHAKE,\
+    \ optimized for fast performance. |\n\n**Composite Quantum-Safe Algorithms**\n\n| Algorithm | PKIX\
+    \ Parameter Set | Description |\n|-----------|--------------------|--------------------------|\n|\
+    \ Composite ML-DSA44 / PSS2048 | 1.3.6.1.4.1.28783.10.7.1| ML-DSA44 / RSA 2048 PSS combines 128-bit\
+    \ quantum security of ML-DSA44 with RSA2048PSS, suitable for moderate security applications requiring\
+    \ post-quantum and classical resilience. |\n| Composite ML-DSA44 / RSA2048 | 1.3.6.1.4.1.28783.10.7.2|\
+    \ ML-DSA44 / RSA 2048 combines 128-bit quantum security of ML-DSA44 with RSA 2048, suitable for moderate\
+    \ security applications requiring post-quantum and classical resilience. |\n| Composite ML-DSA44 /\
+    \ Ed25519 | 1.3.6.1.4.1.28783.10.7.3| ML-DSA44 / Ed25519 offers 128-bit quantum security of ML-DSA44\
+    \ with Ed25519, optimized for fast and secure digital signatures. |\n| Composite ML-DSA44 / ECP256\
+    \ | 1.3.6.1.4.1.28783.10.7.4| ML-DSA44 / ECP256 provides 128-bit quantum security of ML-DSA44 with\
+    \ ECDSA P-256, ideal for secure communications and data integrity. |\n| Composite ML-DSA65 / PSS3072\
+    \ | 1.3.6.1.4.1.28783.10.7.5| ML-DSA65 / RSA 3072 PSS combines 192-bit quantum security of ML-DSA65\
+    \ with RSA 3072 PSS, suitable for long-term protection and moderate security applications. |\n| Composite\
+    \ ML-DSA65 / RSA3072 | 1.3.6.1.4.1.28783.10.7.6| ML-DSA65 / RSA 3072 offers 192-bit quantum security\
+    \ of ML-DSA65 with RSA 3072, ideal for secure communications and data integrity. |\n| Composite ML-DSA65\
+    \ / PSS4096 | 1.3.6.1.4.1.28783.10.7.7| ML-DSA65 / RSA 4096 PSS provides 192-bit quantum security\
+    \ of ML-DSA65 with RSA 4096 PSS, suitable for highly sensitive data and long-term protection. |\n\
+    | Composite ML-DSA65 / RSA4096 | 1.3.6.1.4.1.28783.10.7.8| ML-DSA65 / RSA 4096 combines 192-bit quantum\
+    \ security of ML-DSA65 with RSA 4096, ideal for high-security applications needing long-term protection.\
+    \ |\n| Composite ML-DSA65 / ECP256 | 1.3.6.1.4.1.28783.10.7.9| ML-DSA65 / ECP256 offers 192-bit quantum\
+    \ security of ML-DSA65 with ECDSA P-256, designed for secure communications and data integrity. |\n\
+    | Composite ML-DSA65 / ECP384 | 1.3.6.1.4.1.28783.10.7.10| ML-DSA65 / ECP384 offers 192-bit quantum\
+    \ security of ML-DSA65 with ECDSA P-384, ideal for high-security applications needing long-term protection.\
+    \ |\n| Composite ML-DSA65 / Brainpool P-256 | 1.3.6.1.4.1.28783.10.7.11| ML-DSA65 / Brainpool P-256\
+    \ provides 192-bit quantum security of ML-DSA65 with Brainpool P-256, designed for secure communications\
+    \ and data integrity. |\n| Composite ML-DSA65 / Ed25519 | 1.3.6.1.4.1.28783.10.7.12| ML-DSA65 / Ed25519\
+    \ combines 192-bit quantum security of ML-DSA65 with Ed25519, optimized for fast and secure digital\
+    \ signatures. |\n| Composite ML-DSA87 / ECP384 | 1.3.6.1.4.1.28783.10.7.13| ML-DSA87 / ECP384 ensures\
+    \ 256-bit quantum security of ML-DSA87 with ECDSA P-384, suitable for highly sensitive data and long-term\
+    \ protection. |\n| Composite ML-DSA87 / Brainpool P-384 | 1.3.6.1.4.1.28783.10.7.14| ML-DSA87 / Brainpool\
+    \ P-384 offers 256-bit quantum security of ML-DSA87 with Brainpool P-384, ideal for secure financial\
+    \ transactions and data integrity. |\n| Composite ML-DSA87 / Ed448 | 1.3.6.1.4.1.28783.10.7.15| ML-DSA87\
+    \ / Ed448 combines 256-bit quantum security of ML-DSA87 with Ed448, designed for high-security digital\
+    \ signatures and fast performance. |\n| Composite ML-DSA87 / PSS4096 | 1.3.6.1.4.1.28783.10.7.16|\
+    \ ML-DSA87 / RSA 4096 PSS provides 256-bit quantum security of ML-DSA87 with RSA 4096 PSS, suitable\
+    \ for highly sensitive data and long-term protection. |\n| Composite ML-DSA87 / PSS3072 | 1.3.6.1.4.1.28783.10.7.17|\
+    \ ML-DSA87 / RSA 3072 PSS provides 256-bit quantum security of ML-DSA87 with RSA 3072 PSS, suitable\
+    \ for highly sensitive data and long-term protection. |\n| Composite ML-DSA87 / ECP521 | 1.3.6.1.4.1.28783.10.7.18|\
+    \ ML-DSA87 / ECP521 ensures 256-bit quantum security of ML-DSA87 with ECDSA P-521, suitable for highly\
+    \ sensitive data and long-term protection. |"
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Certificate Management APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-certificate-management-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-certificate-policy-api
+  name: Venafi Certificate Policy API
+  description: The Certificate Policy API from Venafi — 3 operation(s) for certificate policy.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Certificate Policy
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-certificate-policy-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-certificate-request-api
+  name: Venafi Certificate Request API
+  description: The Certificate Request API from Venafi — 5 operation(s) for certificate request.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Certificate Request
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-certificate-request-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-certificate-revocation-approvals-api
+  name: Venafi Certificate Revocation Approvals API
+  description: >-
+    The Certificate Revocation Approvals API from Venafi — 2 operation(s) for certificate revocation approvals.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Certificate Revocation Approvals
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-certificate-revocation-approvals-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-certificates-api
+  name: Venafi Certificates API
+  description: The Certificates API from Venafi — 8 operation(s) for certificates.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Certificates
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-certificates-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-client-management-apis-api
+  name: Venafi Client Management APIs API
+  description: >-
+    ## OSName Definitions ##
+
+
+    * AIX
+
+    * Android
+
+    * BlackBerry
+
+    * BSD
+
+    * HPux
+
+    * iOS
+
+    * Linux
+
+    * MacOS
+
+    * Other
+
+    * Solaris
+
+    * Unknown
+
+    * Windows
+
+    * zOS
+
+
+
+    ## ClientType Definitions ##
+
+
+    |ClientType|Description|
+
+    |---|---|
+
+    |VenafiAgent|Return information about server agent clients|
+
+    |AgentJuniorMachine|Return information about Windows user agent clients running as system|
+
+    |AgentJuniorUser|Return information about Windows user agent clients running as user|
+
+    |Portal|Return information about end user portal clients|
+
+    |Agentless|Return information about agentless clients|
+
+    |PreEnrollment|Return information about Pre-enrollment user clients|
+
+    |iOS|Return information about IOS clients|
+
+    |Android|Return information about Android clients|
+
+
+
+    ## WorkType definitions ##
+
+
+    |WorkType|Description|
+
+    |---|---|
+
+    |Client Agent Configuration Work|The frequency that agents can check in with the Trust Protection
+    Foundation server to retrieve work assignments and schedules|
+
+    |Client Agent Automatic Upgrade Work|The manner that agents upgrade devices|
+
+    |Client Agent Device Placement Work|The manner that agents manage traffic isolation, scalability,
+    manageability, and serviceability|
+
+    |Certificate Provisioning Work|The manner that agents install certificates on devices|
+
+    |Client Agent SSH Discovery Work|The manner that agents discover certificates on devices|
+
+    |Client Agent SSH Provisioning Work|The manner that agents install certificates and keys on UNIX or
+    Linux devices|
+
+    |Client Agent SSH Key Usage Work|The manner that agents monitor SSH Key usage|
+
+    |Client User Certificate Work|The manner that agents enroll certificates on behalf of devices|
+
+    |Client Certificate Work|The manner that agents install certificates for browsers|
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Client Management APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-client-management-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-codesigning-apis-api
+  name: Venafi CodeSigning APIs API
+  description: >-
+    Code Sign Manager allows you to make REST API calls to manage global configurations, templates, projects,
+    signing applications, and rights.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - CodeSigning APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-codesigning-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-codesigning-hsm-api-api
+  name: Venafi CodeSigning HSM API
+  description: >-
+    This API allows you to request digital signing of software and manage signing, authentication, and
+    encryption keys.
+
+
+    This API requires the CyberArk Code Sign Manager product.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - CodeSigning HSM API
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-codesigning-hsm-api-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-configuration-apis-api
+  name: Venafi Configuration APIs API
+  description: "## Introduction ##\nThe Config interface manages objects, attributes, and policy values.\
+    \ \n\n\n\nAPI responses include a `Result` value that describes the result of the API call. If an\
+    \ operation failed, the API call returns an additional `Error` field that describes the cause of the\
+    \ error"
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Configuration APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-configuration-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-credential-apis-api
+  name: Venafi Credential APIs API
+  description: "The Credentials interface stores information about credentials for use in requesting certificates\
+    \ \nand other activities. Trust Protection Foundation only stores the credentials you create. Any\
+    \ remote \ncredentials remain only under the management of the parent. For example, a vault or safe\
+    \ manages its \nown secrets.\n\n**What is the difference between Credentials, Permissions, and Identity?**\n\
+    * Credentials endpoints manage certificate and other activities. For more information, see Credentials\
+    \ APIs.\n* Identity endpoints manage CyberArk users. For more information, see Identity APIs.\n* Permissions\
+    \ endpoints grant principals (users and groups) privileges to objects within Trust Protection Foundation.\
+    \ For more information, see Permission APIs."
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Credential APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-credential-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-credential-management-api
+  name: Venafi Credential Management API
+  description: The Credential Management API from Venafi — 7 operation(s) for credential management.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Credential Management
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-credential-management-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-discovery-management-apis-api
+  name: Venafi Discovery Management APIs API
+  description: >-
+    The Discovery interface manages certificate, device, and application information from your network.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Discovery Management APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-discovery-management-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-encryption-apis-api
+  name: Venafi Encryption APIs API
+  description: "The Crypto interface provides limited access to the cryptography configuration.\n\n\n\n\
+    Trust Protection Foundation installs with two encryption keys, the default Trust Protection Foundation\
+    \ software encryption key, which is an AES-256 bit \nsymmetric key generated using the Windows Data\
+    \ Protection API, and the Null key which is the equivalent of no encryption. \nYou can add additional\
+    \ encryption keys from the Trust Protection Foundation Configuration Console, including those accessible\
+    \ from PKCS#11-compatible hardware security modules (HSMs)."
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Encryption APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-encryption-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-event-logs-api
+  name: Venafi Event Logs API
+  description: The Event Logs API from Venafi — 3 operation(s) for event logs.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Event Logs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-event-logs-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-flow-apis-api
+  name: Venafi Flow APIs API
+  description: >-
+    The Flow API manages the sequence of tasks. If one of the tasks is has an 'approval required', Flow
+    Tickets manages that approval.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Flow APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-flow-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-hashicorp-pki-apis-api
+  name: Venafi HashiCorp PKI APIs API
+  description: "The Public Key Infrastructure (PKI) interface allows Trust Protection Foundation to act\
+    \ as an Intermediate Certificate \nAuthority for certificate vaults. This interface also sends the\
+    \ CSR to the CA to sign.\n\n\n\nThe signed certificate includes the root, intermediate, and end user\
+    \ certificate chain. Trust Protection Foundation provisions \nthe chain to the vault and stores information\
+    \ about the chain. The vault stores the intermediate and end user certificates.\n\n\n\nThe PKI interface\
+    \ is only available through the Web SDK.However, the HashiCorpVault PKI application object and Role\
+    \ object appear \nin the Policy folder. For other details, see HashiCorp Vault PKI—overview.\n\n\n\
+    \nThis interface is valid only if you purchased a certificate product."
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - HashiCorp PKI APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-hashicorp-pki-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-identity-apis-api
+  name: Venafi Identity APIs API
+  description: >-
+    The Identity interface manages users and group access. The Web SDK supports the following identity
+    providers for viewing individuals and groups of users:
+
+
+    |Provider|Requirements|
+
+    |---|---|
+
+    |AD|Read only. Allows view capability from an external Microsoft Active Directory (AD). Requires an
+    Active Directory connection before making API calls. For more information, see the Administration
+    Guide.|
+
+    |LDAP|Read only. Allows view capability from an external Lightweight Directory Access Protocol (LDAP)
+    data source. Requires setup before making API calls. Use the LDAP Identity Provider Wizard. For more
+    information, see the Administration Guide.|
+
+    |Local|Default. Allows view capability and password rotation only in Trust Protection Foundation.|
+
+
+    **What is the difference between Credentials, Permissions, and Identity?**
+
+    * Credentials endpoints manage certificate and other activities. For more information, see Credentials
+    APIs.
+
+    * Identity endpoints manage CyberArk users. For more information, see Identity APIs.
+
+    * Permissions endpoints grant principals (users and groups) privileges to objects within Trust Protection
+    Foundation. For more information, see Permission API.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Identity APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-identity-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-legacy-workflow-apis-api
+  name: Venafi Legacy Workflow APIs API
+  description: >-
+    The Workflow/Ticket interface manages certificates in an automated workflow. Trust Protection Foundation
+    engines rely upon workflow object settings and their assignment to folders for the creation of workflow
+    tickets and their impact on the objects to which they apply.
+
+
+
+
+    The methods provided in this section allow for workflow tickets to be generated, updated, and removed
+    independent of Trust Protection Foundation processing, making them applicable to external use cases
+    that involve Trust Protection Foundation objects. A workflow can now apply to certificate renewal
+    and provisioning to Windows or SSH devices.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Legacy Workflow APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-legacy-workflow-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-log-apis-api
+  name: Venafi Log APIs API
+  description: "The Log APIs allow to manage CyberArk application event logs. The Log interface allow\
+    \ for events to be recorded in the \nTrust Protection Foundation log table. Many API method calls\
+    \ do not automatically generate log events. Therefore, you should consider using the Log API to track\
+    \ events for auditing and troubleshooting purposes.\n\n\n\n# Log server event definitions\nThe Log\
+    \ server relies on event definitions to categorize events. You can call POST Log and these types of\
+    \ event definitions to log events:\n\n* **Add-on application event definitions**: An optional set\
+    \ of event definitions that you define for your custom SDK applications. \nAdd-on application event\
+    \ definitions use Component IDs in the 0200-0299 range. This reserved range of Component IDs ensures\
+    \ that your \nevent definitions have unique Event IDs. After a successful import, the event definitions\
+    \ appear in the Logging Event Definitions folder.\nFor more information about importing add-on application\
+    \ event definitions, see the Log Server Administration Guide.\n* **Predefined event definitions**:\
+    \ A set of Trust Protection Foundation event definitions. The event definitions appear in the Logging\
+    \ Event Definitions folder.\nTo see a complete list of Trust Protection Foundation Event Group IDs\
+    \ and error codes, which are in hexadecimal format, visit our Support article."
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Log APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-log-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-machine-identities-api
+  name: Venafi Machine Identities API
+  description: The Machine Identities API from Venafi — 4 operation(s) for machine identities.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Machine Identities
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-machine-identities-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-machine-types-api
+  name: Venafi Machine Types API
+  description: The Machine Types API from Venafi — 1 operation(s) for machine types.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Machine Types
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-machine-types-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-machines-api
+  name: Venafi Machines API
+  description: The Machines API from Venafi — 8 operation(s) for machines.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Machines
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-machines-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-metadata-apis-api
+  name: Venafi Metadata APIs API
+  description: >-
+    The Metadata interface manages Custom Fields for objects that appear in the following places of the
+    UI:
+
+
+    * Certificates
+
+    * Devices
+
+    * Code Signing Projects
+
+    * Code Signing Environments
+
+
+
+
+
+    # Metadata Types
+
+
+    |Type|Name|Description|
+
+    |----|----|-----------|
+
+    |1|Text|Can accept a single line of text. `MinimumLength`, `MaximumLength`, `Mask` and `RegularExpression`
+    apply to this field type|
+
+    |2|List|Provides the user with a list of selectable items. `Single` controls if one or more items
+    can be selected|
+
+    |3|Choice|Provides the user with options. if `Single` is **true**, the options are presented as radio-buttons,
+    otherwise they are checkboxes|
+
+    |4|Date|Provides the user with a date/time selector. `DateOnly` and `TimeOnly` apply to this field
+    type|
+
+    |5|Identity|Provides the user with the ability to select an identity. If `Single` is **true**, only
+    one identity can be selected|
+
+
+
+
+    # Metadata Item (Custom Field Definition)
+
+    The Metadata Item describes a Custom Field.
+
+
+    |Property name|Data Type|Description|
+
+    |-------------|---------|-----------|
+
+    |AllowedCharacters|string|_Optional_: All characters allowed in values|
+
+    |AllowedValues|[string]|_Optional_: An array of allowable values|
+
+    |Classes|[string]|An array of schema classes that can use the custom field|
+
+    |SchemaAttribute|string|_Read-Only_: The Custom Field GUID|
+
+    |DateOnly|boolean|_For Date type Custom Fields_: Only ask for date, hide time|
+
+    |DN|string|_Read-Only_: The DN of the Custom Field definition object|
+
+    |DefaultValues|[string]|_Optional_: An array of values used set by default on the CustomField|
+
+    |Guid|string|_Read-Only_: The Custom Field GUID|
+
+    |Help|string|_Optional_: The tool tip to show the user how to populate the Custom Field|
+
+    |Label|string|The text that describes the Custom Field in the UI|
+
+    |Mandatory|boolean|_Optional_: If **true**, users must enter a value for the Custom Field in the UI|
+
+    |Mask|string|_Optional_: An input mask to use for Text type Custom Fields. The '#'-character represents
+    characters the user may provide|
+
+    |MaximumLength|nullable integer|_Optional_: The maximum number of characters a user can input for
+    the Custom Field that accepts a string|
+
+    |MinimumLength|nullable integer|_Optional_: The minimum number of characters a user must input for
+    the Custom field that accepts a string|
+
+    |Name|string|The name (CN) of the Custom Field. Required for `POST metadata/defineitem`, read-only
+    otherwise|
+
+    |Policyable|boolean|_Optional_: If **true**, policy will be applied to a Custom Field|
+
+    |RegularExpression|string|_Optional_: The regular expression to apply to user input in a Text type
+    Custom Field|
+
+    |RenderHidden|boolean|_Optional_: If **true**, the UI will not display the Custom Field|
+
+    |RenderReadOnly|boolean|_Optional_: If **true**, the UI will display the Custom Field but not let
+    the user change it|
+
+    |Single|boolean|_Optional_: If **true**, only a single value can be selected for a List or Choice
+    type Custom Field|
+
+    |TimeOnly|boolean|_Optional_: If **true**, only a time can be entered in a Date type Custom Field|
+
+    |Type|integer|The type of the Custom Field. Required for `Post metadata/defineitem`, read-only otherwise|
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Metadata APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-metadata-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-permission-apis-api
+  name: Venafi Permission APIs API
+  description: "The Permissions interface enables the management and querying of permissions within CyberArk\
+    \ Trust Protection Foundation™. \nPermissions grant principals (users and groups) privileges to objects\
+    \ within Trust Protection Foundation.\nIn the Permissions interface, when a HTTP GET retrieves the\
+    \ permissions for a specific principal, both the effective \nand Implicit Permissions are returned.POST,\
+    \ PUT, or DELETE operations in this interface can successfully apply \nEffective Permissions parameters\
+    \ to principals in different identity providers.\n**What is the difference between Credentials, Permissions,\
+    \ and Identity?**\n* Credentials endpoints manage certificate and other activities. For more information,\
+    \ see Credentials APIs.\n* Identity endpoints manage CyberArk users. For more information, see Identity\
+    \ APIs.\n* Permissions endpoints grant principals (users and groups) privileges to objects within\
+    \ Trust Protection Foundation."
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Permission APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-permission-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-platform-apis-api
+  name: Venafi Platform APIs API
+  description: "The ServerStatus endpoints allow you to query if a Trust Protection Foundation is in the\
+    \ active or idle state. This can be useful in configurations where \nthe standby feature is enabled\
+    \ and load balancers are used. This API allows load balancers, for example, to check server \nstatus\
+    \ to determine if a server endpoint should be part of a balanced group."
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Platform APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-platform-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-plugins-api
+  name: Venafi Plugins API
+  description: The Plugins API from Venafi — 4 operation(s) for plugins.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Plugins
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-plugins-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-private-key-import-api
+  name: Venafi Private Key Import API
+  description: The Private Key Import API from Venafi — 2 operation(s) for private key import.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Private Key Import
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-private-key-import-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-processing-engines-apis-api
+  name: Venafi Processing Engines APIs API
+  description: >-
+    The ProcessingEngines interface assigns and controls how Platforms engines manage information in Policy
+    folders. These features provide a means for load balancing certificate management across a network.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Processing Engines APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-processing-engines-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-recycle-bin-apis-api
+  name: Venafi Recycle Bin APIs API
+  description: The RecycleBin interface allows you to manage old or recently deleted data.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Recycle Bin APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-recycle-bin-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-secretstore-apis-api
+  name: Venafi SecretStore APIs API
+  description: SecretStore APIs
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - SecretStore APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-secretstore-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-service-accounts-api
+  name: Venafi Service Accounts API
+  description: The Service Accounts API from Venafi — 5 operation(s) for service accounts.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Service Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-service-accounts-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-ssh-certificate-apis-api
+  name: Venafi SSH Certificate APIs API
+  description: >-
+    The SSH Certificate APIs allow to manage the issuance of special certificates for SSH devices. These
+    endpoints are valid only if you purchased SSH Manager for Machines.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - SSH Certificate APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-ssh-certificate-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-ssh-management-apis-api
+  name: Venafi SSH Management APIs API
+  description: "The SSH Management APIs allow to manage device keys and keysets. This interface is valid\
+    \ only if you purchased SSH Manager for Machines.\n\n\nAll product-supported operations are exposed\
+    \ via this API, including key operations (addition, removal, and editing of keys), rotation and \n\
+    methods to get the actual state of data. For more information about the SSH objects, see the Web SDK\
+    \ Object class reference."
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - SSH Management APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-ssh-management-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-statistics-apis-api
+  name: Venafi Statistics APIs API
+  description: >-
+    The Statistics APIs provide metrics about Trust Protection Foundation operations. You can query, group,
+    and filter data and then use it in your own reporting applications.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Statistics APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-statistics-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-system-status-apis-api
+  name: Venafi System Status APIs API
+  description: "The SystemStatus interface provides status and upgrade information about Trust Protection\
+    \ Foundation engines. This information also appears in the UI.\n# Engine Upgrade Status\nEngineUpgradeState\
+    \ describes the following Trust Protection Foundation upgrade statuses:\n\n* _Upgrade Complete_: The\
+    \ upgrade completed on all Trust Protection Foundation engines.\n* _Upgrade Blocked_: One or more\
+    \ dependency tasks prevented the upgrade from completing.\n* _Upgrade In Error_: The upgrade encountered\
+    \ an error.\n* _Upgrade Running_: The upgrade is to a newer version is in progress.\n* _Upgrade Pending\
+    \ Install_: The numbers of engines that still have a previous version of Trust Protection Foundation.\
+    \ An upgrade is required.\n\n\n# Service Status\nThe Service status describes engine availability:\
+    \ \n\n* _Down_: The service is deemed unavailable for operations. The service is considered down if\
+    \ the TimeSinceLastSeen is greater than six minutes. When Demo mode is enabled to allow updates every\
+    \ 30 seconds, the service is considered down if TimeSinceLastSeen is greater than 45 seconds.\n* _New_:\
+    \ The vPlatform service never detected operations for this service. The corresponding timeSinceFirstSeen\
+    \ and TimeSinceLastSeen values are also empty.\n* _Unknown_: The IIS status is unknown because the\
+    \ vPlatform service is not currently available to report the status.\n* _Up_: The service is deemed\
+    \ available for operations. The service is considered up if the TimeSinceLastSeen is less than six\
+    \ minutes. When Demo mode is enabled to allow updates every 30 seconds, the service is considered\
+    \ up if TimeSinceLastSeen is less than 45 seconds.\n\n\n# Upgrade Status Summary Details object\n\
+    The UpgradeSummary object describes the status of a Trust Protection Foundation upgrade:\n\n\n* _Status_:\
+    \ The Engine Upgrade Status.\n* _StatusDetails_: Appears only when an upgrade is blocked, in error,\
+    \ or pending installation. Additional information about the upgrade.\n* _UpgradeStartTime_: The UTC\
+    \ start time that the upgrade began on the first engine.\n* _UpgradeStopTime_: The UTC completion\
+    \ time when the last engine finished the upgrade.\n* _CompletedTasks_: The total number of upgrade\
+    \ task across all engines.\n* _OriginVersion_: Appears on any upgrades that occur after 20.1. For\
+    \ example, if you are upgrading to 20.1 or higher for the first time, the value is omitted. The starting\
+    \ point version prior to Trust Protection Foundation upgrades.\n* _TargetVersion_: The intended Trust\
+    \ Protection Foundation version.\n* _RemainingTasks_: Appears only when additional upgrade tasks are\
+    \ present.\n* _EnginesComplete_: The number of engines that successfully completed the upgrade.\n\
+    * _EnginesRunning_: The number of engines that are currently upgrading.\n* _EnginesBlocked_: The number\
+    \ of engines blocked by other upgrade tasks or dependencies.\n* _EnginesInError_: The number of engines\
+    \ that are in a failed state. These engines retry every three minutes.\n* _EnginesPendingInstall_:\
+    \ The number of engines that still have a previous version of Trust Protection Foundation installed.\
+    \ An upgrade is required."
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - System Status APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-system-status-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-tags-api
+  name: Venafi Tags API
+  description: The Tags API from Venafi — 9 operation(s) for tags.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Tags
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-tags-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-teams-api
+  name: Venafi Teams API
+  description: The Teams API from Venafi — 4 operation(s) for teams.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Teams
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-teams-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-teams-apis-api
+  name: Venafi Teams APIs API
+  description: >-
+    The Teams interface allows you to associate AD, LDAP, and local Identities to Policy assets and CyberArk
+    products.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Teams APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-teams-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-user-accounts-api
+  name: Venafi User Accounts API
+  description: The User Accounts API from Venafi — 1 operation(s) for user accounts.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - User Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-user-accounts-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-user-preference-apis-api
+  name: Venafi User Preference APIs API
+  description: The Preference APIs allow to manages the caller's user preferences
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - User Preference APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-user-preference-apis-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-users-api
+  name: Venafi Users API
+  description: The Users API from Venafi — 7 operation(s) for users.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-users-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-vsatellite-api
+  name: Venafi V Satellite API
+  description: The VSatellite API from Venafi — 11 operation(s) for vsatellite.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - VSatellite
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-vsatellite-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-webhooks-api
+  name: Venafi Webhooks API
+  description: The Webhooks API from Venafi — 2 operation(s) for webhooks.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-webhooks-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-workload-identity-manager-configurations-api
+  name: Venafi Workload Identity Manager Configurations API
+  description: >-
+    The Workload Identity Manager Configurations API from Venafi — 2 operation(s) for workload identity
+    manager configurations.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Workload Identity Manager Configurations
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-workload-identity-manager-configurations-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-workload-identity-manager-intermediate-certificates-api
+  name: Venafi Workload Identity Manager Intermediate Certificates API
+  description: >-
+    The Workload Identity Manager Intermediate Certificates API from Venafi — 1 operation(s) for workload
+    identity manager intermediate certificates.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Workload Identity Manager Intermediate Certificates
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-workload-identity-manager-intermediate-certificates-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-workload-identity-manager-policies-api
+  name: Venafi Workload Identity Manager Policies API
+  description: >-
+    The Workload Identity Manager Policies API from Venafi — 2 operation(s) for workload identity manager
+    policies.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Workload Identity Manager Policies
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-workload-identity-manager-policies-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
+- aid: venafi:venafi-workload-identity-manager-sub-ca-providers-api
+  name: Venafi Workload Identity Manager Sub CA Providers API
+  description: >-
+    The Workload Identity Manager Sub CA Providers API from Venafi — 2 operation(s) for workload identity
+    manager sub ca providers.
+  humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  baseURL: https://api.venafi.cloud
+  tags:
+  - Workload Identity Manager Sub CA Providers
+  properties:
+  - type: OpenAPI
+    url: openapi/venafi-workload-identity-manager-sub-ca-providers-api-openapi.yml
+  - type: Documentation
+    url: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
+  - type: Webhooks
+    url: asyncapi/venafi-certificate-manager-saas-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.venafi.com/Docs/currentSDK/TopNav/Content/SDK/WebSDK/cco-sdk-GettingStarted.php
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
