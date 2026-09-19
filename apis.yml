@@ -1337,6 +1337,8 @@ apis:
   humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
   baseURL: https://api.venafi.cloud
   tags:
+  - Team
+  tags_raw:
   - Teams
   properties:
   - type: OpenAPI
@@ -1407,6 +1409,8 @@ apis:
   humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
   baseURL: https://api.venafi.cloud
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
@@ -1441,6 +1445,8 @@ apis:
   humanURL: https://developer.venafi.com/tlsprotectcloud/reference/tls-protect-overview
   baseURL: https://api.venafi.cloud
   tags:
+  - Webhook
+  tags_raw:
   - Webhooks
   properties:
   - type: OpenAPI
@@ -1534,6 +1540,11 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: ParentCompany
+  url: https://apis.io/providers/palo-alto-networks/
+  name: Palo Alto Networks
+  x-relationship: acquired
+  x-evidence: "https://venafi.com/ now redirects to paloaltonetworks.com; the description names CyberArk, who has since been acquired — ParentCompany records the CURRENT owner (roadmap#390, Kin 2026-09-18)"
 - type: DomainSecurity
   url: security/venafi-domain-security.yml
 - type: Authentication
