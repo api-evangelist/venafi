@@ -1,0 +1,556 @@
+openapi: 3.2.0
+info:
+  title: Trust Protection Foundation WebSDK Legacy Workflow APIs API
+  description: '# Introduction
+
+    The Trust Protection Foundation Web SDK is a subset of REST APIs that allow you to:
+
+    * Automate certificate management
+
+    * Integrate with DevOps processes
+
+    * Discover machine identities
+
+    * Extract data to integrate with data warehouses
+
+    * Perform bulk actions
+
+    * Set up and administer Trust Protection Foundation
+
+    * Onboard teams
+
+    * Create custom, automated business logic and flows between internal systems
+
+
+    All these use cases can be accomplished using the Trust Protection Foundation REST…'
+  version: 26.1.1
+servers:
+- url: /
+  description: Current Host
+- url: https://REPLACEdnsnameME/
+  description: System
+- url: https://{dnsname}/
+  description: Configurable Hostname
+  variables:
+    dnsname:
+      default: localhost
+      description: Production API Hostname
+security:
+- AccessToken: []
+tags:
+- name: Legacy Workflow APIs
+  description: The Workflow/Ticket interface manages certificates in an automated workflow.
+paths:
+  /vedsdk/workflow/ticket/create:
+    post:
+      tags:
+      - Legacy Workflow APIs
+      summary: Create a workflow ticket
+      description: 'Initiates a ticket to proceed through an existing workflow and act on a Policy tree object.
+
+
+        _Required scope: configuration:manage_'
+      operationId: Venafi_Core_WebSDK_WorkflowTicketRest_TicketCreate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebRequest_ticket_create'
+        required: true
+      responses:
+        '200':
+          description: The workflow ticket was successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+        '400':
+          description: The request was invalid, possibly due to missing required properties.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+        '401':
+          description: The user is not authorized to create the workflow ticket.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+        '500':
+          description: An error occurred on the server while creating the workflow ticket.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+      security:
+      - AccessToken: []
+  /vedsdk/workflow/ticket/delete:
+    post:
+      tags:
+      - Legacy Workflow APIs
+      summary: Remove a workflow ticket
+      description: 'Permanently removes an existing workflow ticket from the platform.
+
+
+        _Required scope: configuration:delete_'
+      operationId: Venafi_Core_WebSDK_WorkflowTicketRest_TicketDelete
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebRequest_ticket_delete'
+        required: true
+      responses:
+        '200':
+          description: The workflow ticket was successfully deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+        '400':
+          description: The request was invalid, possibly due to missing required properties.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+        '401':
+          description: The user is not authorized to delete the workflow ticket.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+        '500':
+          description: An error occurred on the server while deleting the workflow ticket.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+      security:
+      - AccessToken: []
+  /vedsdk/workflow/ticket/details:
+    post:
+      tags:
+      - Legacy Workflow APIs
+      summary: Get workflow ticket details
+      description: 'Returns the status, list of approvers, and other details about a workflow ticket.
+
+
+        _Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_WorkflowTicketRest_TicketDetails
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebRequest_ticket_details'
+        required: true
+      responses:
+        '200':
+          description: The workflow ticket details were successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+        '400':
+          description: The request was invalid, possibly due to missing required properties.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+        '401':
+          description: The user is not authorized to retrieve the workflow ticket details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+        '500':
+          description: An error occurred on the server while retrieving the workflow ticket details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+      security:
+      - AccessToken: []
+  /vedsdk/workflow/ticket/enumerate:
+    post:
+      tags:
+      - Legacy Workflow APIs
+      summary: Enumerate workflow tickets
+      description: 'Returns the GUIDs of all workflow tickets associated with the object and user. If no Object DN is provided, it will use the current session ID.
+
+
+        _Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_WorkflowTicketRest_TicketEnumerate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebRequest_ticket_enumerate'
+        required: true
+      responses:
+        '200':
+          description: The workflow ticket GUIDs were successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+        '400':
+          description: The request was invalid, possibly due to missing required properties.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+        '401':
+          description: The user is not authorized to retrieve the workflow ticket GUIDs.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+        '500':
+          description: An error occurred on the server while retrieving the workflow ticket GUIDs.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+      security:
+      - AccessToken: []
+  /vedsdk/workflow/ticket/exists:
+    post:
+      tags:
+      - Legacy Workflow APIs
+      summary: Verify workflow ticket exists
+      description: 'Verifies whether a workflow ticket exists.
+
+
+        _Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_WorkflowTicketRest_TicketExists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebRequest_ticket_exists'
+        required: true
+      responses:
+        '200':
+          description: The workflow ticket existence was successfully verified.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+        '400':
+          description: The request was invalid, possibly due to missing required properties.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+        '401':
+          description: The user is not authorized to verify the workflow ticket existence.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+        '500':
+          description: ' An error occurred on the server while verifying the workflow ticket existence.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+      security:
+      - AccessToken: []
+  /vedsdk/workflow/ticket/status:
+    post:
+      tags:
+      - Legacy Workflow APIs
+      summary: Get workflow ticket status
+      description: 'Retrieves the status string for an existing workflow ticket.
+
+
+        _Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_WorkflowTicketRest_TicketStatus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebRequest_ticket_status'
+        required: true
+      responses:
+        '200':
+          description: The workflow ticket status was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+        '400':
+          description: The request was invalid, possibly due to missing required properties.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+        '401':
+          description: The user is not authorized to retrieve the workflow ticket status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+        '500':
+          description: ' An error occurred on the server while retrieving the workflow ticket status.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+      security:
+      - AccessToken: []
+  /vedsdk/workflow/ticket/updatestatus:
+    post:
+      tags:
+      - Legacy Workflow APIs
+      summary: Update workflow ticket status
+      description: 'Updates the status of a workflow ticket as approved or rejected and provides the option to set a schedule for approved tickets.
+
+
+        _Required scope: :approve_'
+      operationId: Venafi_Core_WebSDK_WorkflowTicketRest_TicketUpdateStatus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebRequest_ticket_updatestatus'
+        required: true
+      responses:
+        '200':
+          description: The workflow ticket status was successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+        '400':
+          description: The request was invalid, possibly due to missing required properties.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+        '401':
+          description: The user is not authorized to update the workflow ticket status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+        '500':
+          description: ' An error occurred on the server while updating the workflow ticket status.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_WorkflowTicketsWebResponse'
+      security:
+      - AccessToken: []
+components:
+  schemas:
+    Core_WebSDK_WorkflowTicketsWebRequest_ticket_delete:
+      required:
+      - GUID
+      type: object
+      properties:
+        GUID:
+          type: string
+          description: The unique identifier for the workflow ticket.
+    Core_WebSDK_WorkflowTicketsWebRequest_ticket_updatestatus:
+      required:
+      - GUID
+      - Status
+      type: object
+      properties:
+        GUID:
+          type: string
+          description: The unique identifier for the workflow ticket.
+        Status:
+          type: string
+          description: The status of the workflow ticket.
+        Explanation:
+          type: string
+          description: An explanation for the workflow ticket.
+        ScheduledStart:
+          type: string
+          description: The scheduled start time for the workflow ticket.
+        ScheduledStop:
+          type: string
+          description: The scheduled stop time for the workflow ticket.
+    Core_WebSDK_WorkflowTicketsWebRequest_ticket_status:
+      required:
+      - GUID
+      type: object
+      properties:
+        GUID:
+          type: string
+          description: The unique identifier for the workflow ticket.
+    Core_WebSDK_WorkflowTicketsWebRequest_ticket_create:
+      required:
+      - WorkflowDN
+      - Approvers
+      - ObjectDN
+      - Reason
+      - UserData
+      type: object
+      properties:
+        WorkflowDN:
+          type: string
+          description: The distinguished name of the workflow.
+        Approvers:
+          type: array
+          items:
+            type: object
+            properties:
+              Prefix:
+                type: string
+                description: Gets the prefix of the identity provider owning the entry
+              PrefixedName:
+                type: string
+                description: The name of the prefixed.
+              PrefixedUniversal:
+                type: string
+                description: Gets the prefixed universal.
+              Name:
+                type: string
+                description: Gets the name of the entry
+              FullName:
+                type: string
+                description: Gets the full name of the entry
+              Universal:
+                type: string
+                description: Gets the universal (machine-readable) name of the entry
+              IsGroup:
+                type: boolean
+                description: True if the entry represents a group
+              Type:
+                $ref: '#/components/schemas/Core_IdentityType'
+              State:
+                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+            description: Describes an Identity
+          description: A list of approvers for the workflow ticket.
+        ObjectDN:
+          type: string
+          description: The distinguished name of the object the workflow ticket is associated with.
+        Reason:
+          type:
+          - integer
+          - 'null'
+          description: The reason for creating the workflow ticket.
+          format: int32
+        UserData:
+          type: string
+          description: User-specific data associated with the workflow ticket.
+    Core_WebSDK_WorkflowTicketsWebRequest_ticket_exists:
+      required:
+      - GUID
+      type: object
+      properties:
+        GUID:
+          type: string
+          description: The unique identifier for the workflow ticket.
+    Core_IdentityType:
+      title: Enumeration defining Identity type objects
+      enum:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      - 16
+      - 32
+      type: integer
+      description: "\n\n**0**: **Undefined**  \nUndefined\n\n**1**: **User**  \nUser object\n\n**2**: **Group**  \nGroup object\n\n**4**: **Container**  \nContainer of users and groups\n\n**8**: **DistributionList**  \nDistribution List\n\n**16**: **Machine**  \nMachine\n\n**32**: **Provider**  \nThe Identity Provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
+    Core_WorkflowResult:
+      title: Enumeration for Workflow operation results
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      type: integer
+      description: "\n\n**0**: **None**  \nNone\n\n**1**: **Success**  \nSuccess\n\n**2**: **GenericFailure**  \nNondescript failure\n\n**3**: **TicketDoesNotExist**  \nThe referenced ticket does not exist\n\n**4**: **InsufficientPrivileges**  \nNot enough rights\n\n**5**: **BadArguments**  \nBad/Invalid arguments were passed\n\n**6**: **ObjectDoesNotExist**  \nThe object DN that the workflow is being attached to does not exist.\n\n**7**: **RemoteError**  \nA remote request failed; see Error property for details\n\n**8**: **WorkflowObjectDoesNotExist**  \nThe object dn for the workflow does not exist.\n"
+      format: int32
+    Core_IdentityEntry_EntryState:
+      title: Enumeration indicating the state of an IdentityEntry
+      enum:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      type: integer
+      description: "\n\n**0**: **Normal**  \nNo special state associated with the entry\n\n**1**: **Disabled**  \nThe identity has been disabled\n\n**2**: **LockedOut**  \nThe identity has been locked out\n\n**4**: **Deleted**  \nThe identity has been deleted\n\n**8**: **Unverifiable**  \nThe identity could not be verified with a provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
+    Core_WebSDK_WorkflowTicketsWebRequest_ticket_details:
+      required:
+      - GUID
+      type: object
+      properties:
+        GUID:
+          type: string
+          description: The unique identifier for the workflow ticket.
+    Core_WebSDK_WorkflowTicketsWebRequest_ticket_enumerate:
+      type: object
+      properties:
+        ObjectDN:
+          type: string
+          description: The distinguished name of the object the workflow ticket is associated with.
+        UserData:
+          type: string
+          description: User-specific data associated with the workflow ticket.
+    Core_WebSDK_WorkflowTicketsWebResponse:
+      type: object
+      properties:
+        GUID:
+          type: string
+          description: The unique identifier for the created workflow ticket.
+        GUIDs:
+          type: array
+          items:
+            type: string
+          description: A list of GUIDs associated with the workflow ticket.
+        Result:
+          $ref: '#/components/schemas/Core_WorkflowResult'
+        IssuedDueTo:
+          type: string
+          description: The reason the workflow ticket was issued.
+        Status:
+          type: string
+          description: The status of the workflow ticket.
+        Created:
+          type: string
+          description: The creation time of the workflow ticket.
+        Updated:
+          type: string
+          description: The last updated time of the workflow ticket.
+        Blocking:
+          type: string
+          description: Indicates if the workflow ticket is blocking.
+        ApprovalFrom:
+          type: string
+          description: The approver of the workflow ticket (obsolete).
+        Approvers:
+          type: array
+          items:
+            type: string
+          description: A list of approvers for the workflow ticket.
+        ApprovalReason:
+          type: string
+          description: The reason for the approval of the workflow ticket.
+        ApprovalExplanation:
+          type: string
+          description: The explanation for the approval of the workflow ticket.
+        ScheduledStart:
+          type: string
+          description: The scheduled start time for the workflow ticket.
+        ScheduledStop:
+          type: string
+          description: The scheduled stop time for the workflow ticket.
+      description: ''
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer

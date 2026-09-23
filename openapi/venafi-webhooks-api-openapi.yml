@@ -1,0 +1,335 @@
+openapi: 3.2.0
+info:
+  title: Certificate Manager - SaaS Webhooks API
+  version: '1.0'
+servers:
+- description: US Region
+  url: https://api.venafi.cloud
+- description: EU Region
+  url: https://api.eu.venafi.cloud
+- description: AU Region
+  url: https://api.au.venafi.cloud
+- description: UK Region
+  url: https://api.uk.venafi.cloud
+- description: SG Region
+  url: https://api.sg.venafi.cloud
+- description: CA Region
+  url: https://api.ca.venafi.cloud
+tags:
+- name: Webhooks
+paths:
+  /v1/connectors/{id}:
+    put:
+      description: 'Can be used to update specific fields. Only fields specified in the request will be updated.
+
+        When the connector’s target is a webhook (`generic`, `slack`, or `teams`), updating the connector triggers the same outbound connectivity check as creation. The service performs a live POST request Certificate Manager - SaaS to the configured `connection.url`. If the endpoint is unreachable (for example, due to DNS failure, TLS handshake issues, or network/firewall restrictions), the update request fails with a descriptive error.'
+      operationId: connectors_update
+      parameters:
+      - description: Connector ID
+        in: path
+        name: id
+        required: true
+        schema:
+          description: Connector ID
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectorsUpdateRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectorsInformation'
+          description: Connector Updated
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: Request Conditions Failed
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: Connector Not Found
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: Request Conditions Failed
+      security:
+      - tppl-api-key: []
+      summary: Update Connector properties
+      tags:
+      - Webhooks
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: write
+          description: Ability to update a connector
+          name: ngts.connector.update
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+    delete:
+      description: 'Delete a Connector.
+
+        Deleting a connector removes its configuration for delivering events to the target endpoint, but it does not modify any customer firewall allowlisting or network settings. If your webhook endpoint requires allowlisting Venafi Cloud NAT IP addresses, that configuration must be managed separately.'
+      operationId: connectors_delete
+      parameters:
+      - description: Connector ID
+        in: path
+        name: id
+        required: true
+        schema:
+          description: Connector ID
+          format: uuid
+          type: string
+      responses:
+        '204':
+          description: Connector Deleted
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: Request Conditions Failed
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: Connector Not Found
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: Request Conditions Failed
+      security:
+      - tppl-api-key: []
+      summary: Delete a Connector
+      tags:
+      - Webhooks
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: write
+          description: Ability to delete a connector
+          name: ngts.connector.delete
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+  /v1/connectors:
+    get:
+      description: Retrieve a list of all Connectors for a company
+      operationId: connectors_getAll
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectorsResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: Request Conditions Failed
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: Request Conditions Failed
+      security:
+      - tppl-api-key: []
+      summary: Retrieve all Connectors for a company
+      tags:
+      - Webhooks
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: read
+          description: Ability to read all connectors
+          name: ngts.connector.get
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+    post:
+      description: Create a Connector for your company. When the connector’s target is a webhook (`generic`, `slack`, or `teams`), the service performs a live outbound POST request from Certificate Manager - SaaS to the specified `connection.url` during creation. This validates DNS resolution, TLS handshake, and network reachability. If the URL is unreachable (for example, blocked by firewall rules or incorrect DNS), the connector creation request fails with a timeout or connection error. This behavior is expected and prevents creating connectors that cannot receive webhook notifications.
+      operationId: connectors_create
+      requestBody:
+        content:
+          application/json:
+            examples:
+              simpleWebhook:
+                summary: Simple generic webhook connector
+                value:
+                  name: simple-webhook
+                  properties:
+                    filter: '{}'
+                    target:
+                      connection: "{\n  \"url\": \"https://example.com/webhook\",\n  \"headers\": {\n    \"Authorization\": \"Splunk 12345678-ABCD\"\n  }\n}\n"
+                      type: generic
+            schema:
+              $ref: '#/components/schemas/ConnectorsCreationRequest'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectorsInformation'
+          description: Connector Created
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: Request Conditions Failed
+      security:
+      - tppl-api-key: []
+      summary: Create a Connector
+      tags:
+      - Webhooks
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: write
+          description: Ability to create a connector
+          name: ngts.connector.create
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+components:
+  schemas:
+    ConnectorsInformation:
+      properties:
+        id:
+          description: Unique identifier of the connector.
+          format: uuid
+          type: string
+        name:
+          description: Human-readable name of the connector.
+          type: string
+        properties:
+          $ref: '#/components/schemas/WebhookProperties'
+        status:
+          description: Current status of the connector (for example, enabled or disabled).
+          type: string
+      required:
+      - id
+      - name
+      - status
+      - properties
+      type: object
+    Target:
+      properties:
+        connection:
+          description: "JSON object that configures the webhook connection for this target.\nSupported fields:\n- `url` (string, required): HTTPS endpoint URL for the webhook.\n- `headers` (object, optional): Key/value pairs of HTTP headers. Only the `Authorization` header is honored by the webhook service; all other headers are ignored.\n- `secret` (string, optional): Shared secret used to generate an HMAC signature sent in the `VaaS-Signature` header.\nWebhook deliveries always use `Content-Type: application/json`. Custom `Content-Type` values are not supported.\nExample:\n ```json\n{\n\"url\": \"https://example.com/webhook\",\n\"headers\": {\n\"Authorization\": \"Splunk 12345678-ABCD\"\n},\n\"secret\": \"my-shared-secret\"\n }\n"
+          format: json
+          type: string
+        type:
+          description: 'The delivery mechanism for this connector. For webhook-based notifications, use:
+
+            - `generic` for a standard HTTPS webhook endpoint
+
+            - `slack` for a Slack webhook target
+
+            - `teams` for a Microsoft Teams webhook target
+
+            '
+          enum:
+          - generic
+          - slack
+          - teams
+          type: string
+      required:
+      - connection
+      - type
+      type: object
+    WebhookProperties:
+      description: "Connector properties for webhook-based notifications.\nWebhook notifications are delivered as HTTP POST requests with a JSON body structured as:\n```json\n{\n  \"events\": [\n    {\n      \"eventName\": \"string\",\n      \"eventType\": \"string\",\n      \"message\": \"string\",\n      \"criticality\": 0,\n      \"createdAt\": \"2025-01-15T12:45:00Z\"\n    }\n  ]\n}\n```\nOnly one event is included per request. The webhook service sets `Content-Type: application/json`, `VaaS-Timestamp`, and, when a `secret` is configured in the connection, `VaaS-Signature`.\n"
+      properties:
+        filter:
+          $ref: '#/components/schemas/Filter1'
+        target:
+          $ref: '#/components/schemas/Target'
+      required:
+      - filter
+      - target
+      type: object
+    ErrorInformation3:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue3'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+    ErrorResponse4:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation3'
+          type: array
+      type: object
+    Filter1:
+      format: json
+      type: string
+    ConnectorsCreationRequest:
+      properties:
+        name:
+          type: string
+        properties:
+          $ref: '#/components/schemas/WebhookProperties'
+      required:
+      - name
+      - properties
+      type: object
+    ConnectorsUpdateRequest:
+      properties:
+        properties:
+          $ref: '#/components/schemas/WebhookProperties'
+      required:
+      - properties
+      type: object
+    ConnectorsResponse:
+      properties:
+        connectors:
+          items:
+            $ref: '#/components/schemas/ConnectorsInformation'
+          type: array
+      required:
+      - connectors
+      type: object
+    AnyValue3:
+      description: Can be any value - string, number, boolean, array or object.
+  securitySchemes:
+    service-account:
+      in: header
+      name: service-account
+      type: apiKey
+    tppl-api-key:
+      in: header
+      name: tppl-api-key
+      type: apiKey
+x-readme:
+  samples-languages:
+  - curl
+  - go
+  - java
+  - javascript
+  - node
+  - python

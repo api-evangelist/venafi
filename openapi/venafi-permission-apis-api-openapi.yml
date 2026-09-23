@@ -1,0 +1,1107 @@
+openapi: 3.2.0
+info:
+  title: Trust Protection Foundation WebSDK Permission APIs API
+  description: '# Introduction
+
+    The Trust Protection Foundation Web SDK is a subset of REST APIs that allow you to:
+
+    * Automate certificate management
+
+    * Integrate with DevOps processes
+
+    * Discover machine identities
+
+    * Extract data to integrate with data warehouses
+
+    * Perform bulk actions
+
+    * Set up and administer Trust Protection Foundation
+
+    * Onboard teams
+
+    * Create custom, automated business logic and flows between internal systems
+
+
+    All these use cases can be accomplished using the Trust Protection Foundation REST…'
+  version: 26.1.1
+servers:
+- url: /
+  description: Current Host
+- url: https://REPLACEdnsnameME/
+  description: System
+- url: https://{dnsname}/
+  description: Configurable Hostname
+  variables:
+    dnsname:
+      default: localhost
+      description: Production API Hostname
+security:
+- AccessToken: []
+tags:
+- name: Permission APIs
+  description: The Permissions interface enables the management and querying of permissions within CyberArk Trust Protection Foundation™.
+paths:
+  /vedsdk/permissions/getprincipals:
+    post:
+      tags:
+      - Permission APIs
+      summary: Get trustees
+      description: '_Required scope: security_'
+      operationId: Venafi_Core_WebSDK_PermissionsRest_GetPrincipals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_PermissionsWebRequest_getprincipals'
+        required: true
+      responses:
+        '200':
+          description: Permissions updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_PermissionsWebResponse_getprincipals'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/permissions/getpermissions:
+    post:
+      tags:
+      - Permission APIs
+      summary: Get assigned permissions
+      description: '_Required scope: security_'
+      operationId: Venafi_Core_WebSDK_PermissionsRest_GetPermissions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_PermissionsWebRequest_getpermissions'
+        required: true
+      responses:
+        '200':
+          description: Assigned permissions returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_PermissionsWebResponse_getpermissions'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/permissions/geteffectivepermissions:
+    post:
+      tags:
+      - Permission APIs
+      summary: Get effective permissions
+      description: '_Required scope: security_'
+      operationId: Venafi_Core_WebSDK_PermissionsRest_GetEffectivePermissions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_PermissionsWebRequest_geteffectivepermissions'
+        required: true
+      responses:
+        '200':
+          description: Effective permissions returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_PermissionsWebResponse_geteffectivepermissions'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/permissions/grantpermissions:
+    post:
+      tags:
+      - Permission APIs
+      summary: Grant permissions
+      description: '_Required scope: security:manage_'
+      operationId: Venafi_Core_WebSDK_PermissionsRest_GrantPermissions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_PermissionsWebRequest'
+        required: true
+      responses:
+        '200':
+          description: Permissions granted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_PermissionsWebResponse_grantpermissions'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/permissions/revokepermissions:
+    post:
+      tags:
+      - Permission APIs
+      summary: Revoke permissions
+      description: '_Required scope: security:delete_'
+      operationId: Venafi_Core_WebSDK_PermissionsRest_RevokePermissions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_PermissionsWebRequest_revokepermissions'
+        required: true
+      responses:
+        '200':
+          description: Permissions revoked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_PermissionsWebResponse_revokepermissions'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/permissions/replacepermissions:
+    post:
+      tags:
+      - Permission APIs
+      summary: Update permissions
+      description: '_Required scope: security:manage_'
+      operationId: Venafi_Core_WebSDK_PermissionsRest_ReplacePermissions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_PermissionsWebRequest'
+        required: true
+      responses:
+        '200':
+          description: Permissions updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_PermissionsWebResponse_replacepermissions'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/permissions/refresh:
+    get:
+      tags:
+      - Permission APIs
+      summary: Refresh permissions
+      description: '_Required scope: security_'
+      operationId: Venafi_Core_WebSDK_PermissionsRest_Refresh
+      responses:
+        '200':
+          description: Permissions refreshed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_PermissionsWebResponse_refresh'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/permissions/object/{guid}:
+    parameters:
+    - name: guid
+      in: path
+      description: Object GUID
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Permission APIs
+      summary: Gets object trustees
+      description: 'Returns a list of identities with permission to the object
+
+
+        _Required scope: security_'
+      operationId: Venafi_Core_WebSDK_PermissionsRest_GetPrincipalsForObject
+      responses:
+        '200':
+          description: Principals returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+      deprecated: true
+      security:
+      - AccessToken: []
+  /vedsdk/permissions/object/{guid}/local/{identity}:
+    parameters:
+    - name: guid
+      in: path
+      description: Object GUID
+      required: true
+      schema:
+        type: string
+    - name: identity
+      in: path
+      description: Universal identifier
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Permission APIs
+      summary: Get assigned permissions of a local identity
+      description: 'Returns the assigned permissions of the local identity for the object
+
+
+        _Required scope: security_'
+      operationId: Venafi_Core_WebSDK_PermissionsRest_GetLocalPermissions
+      responses:
+        '200':
+          description: Assigned permissions returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_AssignedPermissionsResponse'
+      deprecated: true
+      security:
+      - AccessToken: []
+  /vedsdk/permissions/object/{guid}/local/{identity}/effective:
+    parameters:
+    - name: guid
+      in: path
+      description: Object GUID
+      required: true
+      schema:
+        type: string
+    - name: identity
+      in: path
+      description: Universal identifier
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Permission APIs
+      summary: Get effective permissions of local identity
+      description: 'Returns the effective permissions of the local principal for the object
+
+
+        _Required scope: security_'
+      operationId: Venafi_Core_WebSDK_PermissionsRest_GetLocalEffectivePermissions
+      responses:
+        '200':
+          description: Effective permissions returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_EffectivePermissionsResponse'
+      deprecated: true
+      security:
+      - AccessToken: []
+  /vedsdk/permissions/object/{guid}/{prefix}/{identity}/{principal}:
+    parameters:
+    - name: guid
+      in: path
+      description: Object GUID
+      required: true
+      schema:
+        type: string
+    - name: prefix
+      in: path
+      description: Provider prefix
+      required: true
+      schema:
+        type: string
+    - name: identity
+      in: path
+      description: Provider name
+      required: true
+      schema:
+        type: string
+    - name: principal
+      in: path
+      description: Universal identifier
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Permission APIs
+      summary: Get assigned permissions of an identity
+      description: 'Returns the assigned permissions of the principal
+
+
+        _Required scope: security_'
+      operationId: Venafi_Core_WebSDK_PermissionsRest_GetExtProviderPermissions
+      responses:
+        '200':
+          description: Assigned permissions returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_EffectivePermissionsResponse'
+      deprecated: true
+      security:
+      - AccessToken: []
+    delete:
+      tags:
+      - Permission APIs
+      summary: Delete permissions
+      description: 'Deletes the permissions of the principal
+
+
+        _Required scope: security:delete_'
+      operationId: Venafi_Core_WebSDK_PermissionsRest_DeleteExtProviderPermission
+      responses:
+        '200':
+          description: Effective permissions returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_AssignedPermissionsResponse'
+      deprecated: true
+      security:
+      - AccessToken: []
+    post:
+      tags:
+      - Permission APIs
+      summary: Add permissions
+      description: 'Adds permissions to an object
+
+
+        _Required scope: security:manage_'
+      operationId: Venafi_Core_WebSDK_PermissionsRest_AddExtProviderPermission
+      responses:
+        '200':
+          description: Permissions added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_AssignedPermissionsResponse'
+      deprecated: true
+      security:
+      - AccessToken: []
+    put:
+      tags:
+      - Permission APIs
+      summary: Update permissions
+      description: 'Update permissions to an object
+
+
+        _Required scope: security:manage_'
+      operationId: Venafi_Core_WebSDK_PermissionsRest_UpdateExtProviderPermission
+      responses:
+        '200':
+          description: Permissions updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_AssignedPermissionsResponse'
+      deprecated: true
+      security:
+      - AccessToken: []
+  /vedsdk/permissions/object/{guid}/{prefix}/{identity}/{principal}/effective:
+    parameters:
+    - name: guid
+      in: path
+      description: Object GUID
+      required: true
+      schema:
+        type: string
+    - name: prefix
+      in: path
+      description: Provider prefix
+      required: true
+      schema:
+        type: string
+    - name: identity
+      in: path
+      description: Provider name
+      required: true
+      schema:
+        type: string
+    - name: principal
+      in: path
+      description: Universal identifier
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Permission APIs
+      summary: Get effective permissions of an identity
+      description: 'Returns the effective permissions of the principal
+
+
+        _Required scope: security_'
+      operationId: Venafi_Core_WebSDK_PermissionsRest_GetExtProviderEffectivePermissions
+      responses:
+        '200':
+          description: Effective permissions returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_EffectivePermissionsResponse'
+      deprecated: true
+      security:
+      - AccessToken: []
+  /vedsdk/permissions/object/{guid}/myeffective:
+    parameters:
+    - name: guid
+      in: path
+      description: Object GUID
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Permission APIs
+      summary: Gets the effective permissions of the session's user for the given object
+      description: 'Returns the effective permissions of the caller
+
+
+        _Required scope: security_'
+      operationId: Venafi_Core_WebSDK_PermissionsRest_GetMyEffectivePermissions
+      responses:
+        '200':
+          description: Effective permissions returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_EffectivePermissionsResponse'
+      deprecated: true
+      security:
+      - AccessToken: []
+  /vedsdk/permissions/object/{guid}/local/{principal}:
+    parameters:
+    - name: guid
+      in: path
+      description: Object GUID
+      required: true
+      schema:
+        type: string
+    - name: principal
+      in: path
+      description: Universal identifier
+      required: true
+      schema:
+        type: string
+    delete:
+      tags:
+      - Permission APIs
+      summary: Delete permissions
+      description: 'Deletes the permissions of the local principal
+
+
+        _Required scope: security:delete_'
+      operationId: Venafi_Core_WebSDK_PermissionsRest_DeleteLocalPermission
+      responses:
+        '200':
+          description: Effective permissions returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_AssignedPermissionsResponse'
+      deprecated: true
+      security:
+      - AccessToken: []
+    post:
+      tags:
+      - Permission APIs
+      summary: Add permissions
+      description: 'Adds permissions to an object
+
+
+        _Required scope: security:manage_'
+      operationId: Venafi_Core_WebSDK_PermissionsRest_AddLocalPermission
+      responses:
+        '200':
+          description: Permissions added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_AssignedPermissionsResponse'
+      deprecated: true
+      security:
+      - AccessToken: []
+    put:
+      tags:
+      - Permission APIs
+      summary: Update permissions
+      description: 'Update permissions to an object
+
+
+        _Required scope: security:manage_'
+      operationId: Venafi_Core_WebSDK_PermissionsRest_UpdateLocalPermission
+      responses:
+        '200':
+          description: Permissions updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_AssignedPermissionsResponse'
+      deprecated: true
+      security:
+      - AccessToken: []
+components:
+  schemas:
+    Core_WebSDK_PermissionsWebResponse_grantpermissions:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Permissions_PermissionsResult'
+    Core_WebSDK_AssignedPermissionsResponse:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: The error.
+        ExplicitPermissions:
+          type: object
+          properties:
+            IsViewAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to view objects.
+            IsReadAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to read objects.
+            IsWriteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to write objects.
+            IsPolicyWriteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to write policy to objects.
+            IsCreateAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to create objects.
+            IsDeleteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to delete objects.
+            IsRenameAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to rename objects.
+            IsManagePermissionsAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to manage rights to objects.
+            IsAssociateAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to associate objects.
+            IsRevokeAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to revoke objects.
+            IsPrivateKeyReadAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to read private keys.
+            IsPrivateKeyWriteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to write private keys.
+          description: The explicit permissions.
+        ImplicitPermissions:
+          type: object
+          properties:
+            IsViewAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to view objects.
+            IsReadAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to read objects.
+            IsWriteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to write objects.
+            IsPolicyWriteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to write policy to objects.
+            IsCreateAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to create objects.
+            IsDeleteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to delete objects.
+            IsRenameAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to rename objects.
+            IsManagePermissionsAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to manage rights to objects.
+            IsAssociateAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to associate objects.
+            IsRevokeAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to revoke objects.
+            IsPrivateKeyReadAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to read private keys.
+            IsPrivateKeyWriteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to write private keys.
+          description: The implicit permissions.
+      description: ''
+    Permissions_PermissionsResult:
+      title: Permissions operations result
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      type: integer
+      description: "\n\n**0**: **None**  \nNo result set\n\n**1**: **Success**  \nThe operation completed successfully\n\n**2**: **RemoteError**  \nA remote request failed; see Error property for details\n\n**3**: **MissingObjectArgument**  \nThe request did not contain an object Guid or DN\n\n**4**: **MissingPrincipalArgument**  \nThe request did not contain a valid principal identity\n\n**5**: **ObjectDoesNotExist**  \nThe specific object (DN or Guid) does not exist\n\n**6**: **NoAccessControlRights**  \nThe requestor does not have access control rights for the specified object\n\n**7**: **MissingPermissionsArgument**  \nThe request did not contain Permissions\n\n**8**: **GrantConfigFailed**  \nFailed to grant Config permissions\n\n**9**: **GrantSecretStoreFailed**  \nFailed to grant SecretStore permissions\n\n**10**: **GrantUIFailed**  \nFailed to grant UI permissions\n\n**11**: **GrantFailed**  \nFailed to grant permissions\n\n**12**: **RevokeConfigFailed**  \nFailed to revoke Config permissions\n\n**13**: **RevokeSecretStoreFailed**  \nFailed to revoke SecretStore permissions\n\n**14**: **RevokeUIFailed**  \nFailed to revoke UI permissions\n\n**15**: **RevokeFailed**  \nFailed to revoke permissions\n"
+      format: int32
+    Core_WebSDK_PermissionsWebRequest_getpermissions:
+      type: object
+      properties:
+        Principal:
+          type: string
+          description: The prefixed universal string
+        ObjectDN:
+          type: string
+          description: The object dn.
+        ObjectGuid:
+          type: string
+          description: The object unique identifier.
+    Core_WebSDK_PermissionsWebResponse_refresh:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Permissions_PermissionsResult'
+    Core_WebSDK_PermissionsWebResponse_getprincipals:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Permissions_PermissionsResult'
+        Principals:
+          type: array
+          items:
+            type: object
+            properties:
+              Prefix:
+                type: string
+                description: Gets the prefix of the identity provider owning the entry
+              PrefixedName:
+                type: string
+                description: The name of the prefixed.
+              PrefixedUniversal:
+                type: string
+                description: Gets the prefixed universal.
+              Name:
+                type: string
+                description: Gets the name of the entry
+              FullName:
+                type: string
+                description: Gets the full name of the entry
+              Universal:
+                type: string
+                description: Gets the universal (machine-readable) name of the entry
+              IsGroup:
+                type: boolean
+                description: True if the entry represents a group
+              Type:
+                $ref: '#/components/schemas/Core_IdentityType'
+              State:
+                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+            description: Describes an Identity
+          description: The principals.
+    Core_WebSDK_EffectivePermissionsResponse:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: The error.
+        EffectivePermissions:
+          type: object
+          properties:
+            IsViewAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to view objects.
+            IsReadAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to read objects.
+            IsWriteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to write objects.
+            IsPolicyWriteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to write policy to objects.
+            IsCreateAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to create objects.
+            IsDeleteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to delete objects.
+            IsRenameAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to rename objects.
+            IsManagePermissionsAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to manage rights to objects.
+            IsAssociateAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to associate objects.
+            IsRevokeAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to revoke objects.
+            IsPrivateKeyReadAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to read private keys.
+            IsPrivateKeyWriteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to write private keys.
+          description: The effective permissions.
+      description: Data class representing REST permission response
+    Core_WebSDK_PermissionsWebResponse_geteffectivepermissions:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Permissions_PermissionsResult'
+        Permissions:
+          type: object
+          properties:
+            IsViewAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to view objects.
+            IsReadAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to read objects.
+            IsWriteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to write objects.
+            IsPolicyWriteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to write policy to objects.
+            IsCreateAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to create objects.
+            IsDeleteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to delete objects.
+            IsRenameAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to rename objects.
+            IsManagePermissionsAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to manage rights to objects.
+            IsAssociateAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to associate objects.
+            IsRevokeAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to revoke objects.
+            IsPrivateKeyReadAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to read private keys.
+            IsPrivateKeyWriteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to write private keys.
+            IsAuditor:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is an auditor.
+          description: The explicit permissions.
+    Core_WebSDK_PermissionsWebRequest:
+      type: object
+      properties:
+        ObjectDN:
+          type: string
+          description: The object dn.
+        ObjectGuid:
+          type: string
+          description: The object unique identifier.
+        Principal:
+          type: string
+          description: The prefixed universal string
+        Permissions:
+          type: object
+          properties:
+            IsViewAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to view objects.
+            IsReadAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to read objects.
+            IsWriteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to write objects.
+            IsPolicyWriteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to write policy to objects.
+            IsCreateAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to create objects.
+            IsDeleteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to delete objects.
+            IsRenameAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to rename objects.
+            IsManagePermissionsAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to manage rights to objects.
+            IsAssociateAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to associate objects.
+            IsRevokeAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to revoke objects.
+            IsPrivateKeyReadAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to read private keys.
+            IsPrivateKeyWriteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to write private keys.
+            IsAuditor:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is an auditor.
+          description: The explicit permissions.
+      description: ''
+    Core_WebSDK_PermissionsWebResponse_replacepermissions:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Permissions_PermissionsResult'
+    Core_IdentityType:
+      title: Enumeration defining Identity type objects
+      enum:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      - 16
+      - 32
+      type: integer
+      description: "\n\n**0**: **Undefined**  \nUndefined\n\n**1**: **User**  \nUser object\n\n**2**: **Group**  \nGroup object\n\n**4**: **Container**  \nContainer of users and groups\n\n**8**: **DistributionList**  \nDistribution List\n\n**16**: **Machine**  \nMachine\n\n**32**: **Provider**  \nThe Identity Provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
+    Core_WebSDK_PermissionsWebRequest_revokepermissions:
+      type: object
+      properties:
+        Principal:
+          type: string
+          description: The prefixed universal string
+        ObjectDN:
+          type: string
+          description: The object dn.
+        ObjectGuid:
+          type: string
+          description: The object unique identifier.
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
+    Core_IdentityEntry_EntryState:
+      title: Enumeration indicating the state of an IdentityEntry
+      enum:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      type: integer
+      description: "\n\n**0**: **Normal**  \nNo special state associated with the entry\n\n**1**: **Disabled**  \nThe identity has been disabled\n\n**2**: **LockedOut**  \nThe identity has been locked out\n\n**4**: **Deleted**  \nThe identity has been deleted\n\n**8**: **Unverifiable**  \nThe identity could not be verified with a provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
+    Core_WebSDK_PermissionsWebResponse_getpermissions:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Permissions_PermissionsResult'
+        Permissions:
+          type: object
+          properties:
+            IsViewAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to view objects.
+            IsReadAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to read objects.
+            IsWriteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to write objects.
+            IsPolicyWriteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to write policy to objects.
+            IsCreateAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to create objects.
+            IsDeleteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to delete objects.
+            IsRenameAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to rename objects.
+            IsManagePermissionsAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to manage rights to objects.
+            IsAssociateAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to associate objects.
+            IsRevokeAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to revoke objects.
+            IsPrivateKeyReadAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to read private keys.
+            IsPrivateKeyWriteAllowed:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is allowed to write private keys.
+            IsAuditor:
+              type: boolean
+              description: Gets or sets a value indicating whether the principal is an auditor.
+          description: The explicit permissions.
+    Core_WebSDK_PermissionsWebRequest_getprincipals:
+      type: object
+      properties:
+        ObjectDN:
+          type: string
+          description: The object dn.
+        ObjectGuid:
+          type: string
+          description: The object unique identifier.
+    Core_WebSDK_PermissionsWebRequest_geteffectivepermissions:
+      type: object
+      properties:
+        Principal:
+          type: string
+          description: The prefixed universal string
+        ObjectDN:
+          type: string
+          description: The object dn.
+        ObjectGuid:
+          type: string
+          description: The object unique identifier.
+    Core_WebSDK_PermissionsWebResponse_revokepermissions:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Permissions_PermissionsResult'
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer

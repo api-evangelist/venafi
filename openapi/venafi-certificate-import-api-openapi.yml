@@ -1,0 +1,294 @@
+openapi: 3.2.0
+info:
+  title: Certificate Manager - SaaS Certificate Import API
+  version: '1.0'
+servers:
+- description: US Region
+  url: https://api.venafi.cloud
+- description: EU Region
+  url: https://api.eu.venafi.cloud
+- description: AU Region
+  url: https://api.au.venafi.cloud
+- description: UK Region
+  url: https://api.uk.venafi.cloud
+- description: SG Region
+  url: https://api.sg.venafi.cloud
+- description: CA Region
+  url: https://api.ca.venafi.cloud
+tags:
+- name: Certificate Import
+paths:
+  /outagedetection/v1/certificates:
+    post:
+      description: Adds to the inventory one or more certificates to the inventory.the certificates are specified in raw base64-encoded format (PEM without header/footer). Chain CA certificates are optional but may be provided using `issuerCertificates`.
+      operationId: certificateimports_create
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Certificate import request:
+                description: Certificate import request
+                summary: Certificate Import
+                value:
+                  certificates:
+                  - apiClientInformation:
+                      identifier: 192.168.1.63
+                      type: Venafi VCert CLI
+                    applicationIds:
+                    - 47c9d920-da21-11ed-a63c-d508f08eeaa0
+                    certificate: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUlKekNDQmcrZ0F3SUJBZ0lVWlM1bm5PMEZDemowN3lyYkpyUXZzRTVDbDNBd0RRWUpLb1pJaHZjTkFRRUwKQlFBd1hURUxNQWtHQTFVRUJoTUNWVk14TURBdUJnTlZCQW9NSjBoNVpISmhiblJKUkNBb1FYWmhiR0Z1WTJobApJRU5zYjNWa0lFTnZjbkJ2Y21GMGFXOXVLVEVjTUJvR0ExVUVBd3dUU0hsa2NtRnVkRWxFSUZOVFRDQkRRU0JICk16QWVGdzB5TWpBME1qZ3dOVEE0TURCYUZ3MHlNekEwTWpnd05URTNNREJhTUdZeEN6QUpCZ05WQkFZVEFsVlQKTVEwd0N3WURWUVFJREFSVmRHRm9NUmN3RlFZRFZRUUhEQTVUWVd4MElFeGhhMlVnUTJsMGVURVZNQk1HQTFVRQpDZ3dNVm1WdVlXWnBMQ0JKYm1NdU1SZ3dGZ1lEVlFRRERBOWtiMk56TG5abGJtRm1hUzVqYjIwd2dnRWlNQTBHCkNTcUdTSWIzRFFFQkFRVUFBNElCRHdBd2dnRUtBb0lCQVFESTdpYW9yK2U1VFlEQmZwR0tvOCs1eGc0a2F4aWQKUld5a0NDWDloOG04SGU4cU1iTDBNWHk5K2FVYlIxRHFZQVhqU1lBQWx0YzBPS0FvNGY4K0laU3hVY0tNSkpRNAo3UzlPZjhBOW43cU85cVB2RTZzYjltMXovQnZlRWhlYjVBbDNyWEFnWFd0OTE1YTlaV0lCcjRlWHNLeVFYZGJhCk9WVG9SeUVGMndma0UzZVlTdThXckFGSXZPcFl5RExKampENXV3UHpGNGp4eXFvSWh5eVpDU2tnUDl2TVc2Zk8KbXhRdGhST2JaOEJyaTdlQm5EaWgvNyt6YTVXTk1wNm13Q3pDdjJsYWVBc3hHMVJnYnBwZjY4dnBFV1B3ZUh3cwp2VUk0ODFsMUtLUjgwSkZId2UycDJHNDE0Mzk0ZVNnNlVOR0NoZEtrQ3N0bkJadzgvbGxpbzZQVkFnTUJBQUdqCmdnUFVNSUlEMERBTUJnTlZIUk1CQWY4RUFqQUFNQjhHQTFVZEl3UVlNQmFBRk15aTh6aXQ5c1ZVSnpKR3hUbGYKU1hJVEU0QjVNSHdHQ0NzR0FRVUZCd0VCQkhBd2JqQkFCZ2dyQmdFRkJRY3dBb1kwYUhSMGNEb3ZMM1J5ZFhOMApMbkYxYjNaaFpHbHpaMnh2WW1Gc0xtTnZiUzlvZVdSeVlXNTBhV1J6YzJ4allXY3pMbU55ZERBcUJnZ3JCZ0VGCkJRY3dBWVllYUhSMGNEb3ZMMjlqYzNBdWNYVnZkbUZrYVhObmJHOWlZV3d1WTI5dE1EUUdBMVVkRVFRdE1DdUMKRDJSdlkzTXVkbVZ1WVdacExtTnZiWUlZWkc5amRXMWxiblJoZEdsdmJpNTJaVzVoWm1rdVkyOXRNRjRHQTFVZApJQVJYTUZVd0NBWUdaNEVNQVFJQ01Fa0dEQ3NHQVFRQnZsZ0FBNGNFQURBNU1EY0dDQ3NHQVFVRkJ3SUJGaXRvCmRIUndPaTh2ZDNkM0xtaDVaSEpoYm5ScFpDNWpiMjB2YzNWd2NHOXlkQzl5WlhCdmMybDBiM0o1TUIwR0ExVWQKSlFRV01CUUdDQ3NHQVFVRkJ3TUNCZ2dyQmdFRkJRY0RBVEJEQmdOVkhSOEVQREE2TURpZ05xQTBoakpvZEhSdwpPaTh2WTNKc0xuRjFiM1poWkdseloyeHZZbUZzTG1OdmJTOW9lV1J5WVc1MGFXUnpjMnhqWVdjekxtTnliREFkCkJnTlZIUTRFRmdRVXlZSWc4WTVMUnMrZDFyblBuUWVZRXVLb2FqQXdEZ1lEVlIwUEFRSC9CQVFEQWdXZ01JSUIKOWdZS0t3WUJCQUhXZVFJRUFnU0NBZVlFZ2dIaUFlQUFkZ0N6YzNjSDRZUlErR09HMWdXcDNCRUpTbmt0c1djTQpDNGZjOEFNT2VUYWxtZ0FBQVlCdW1zNjlBQUFFQXdCSE1FVUNJQVROQmM5ZFBZaVl2SnVGcmxFVzh6ZzNSNnhJClJsUG1BWHhMNlpsa21TNVJBaUVBa241TGQzLzR5MzZLa2R6MzBMb25EQThuSWY0Y1NpY09JdzFrRXQ2dUduY0EKZGdCNk1veFUyTGN0dGlEcU9PQlNIdW1FRm5BeUU0Vk5POUlyd1RwWG8xTHJVZ0FBQVlCdW10RzRBQUFFQXdCSApNRVVDSUF2MURBNjdsY25KZDNpNE5XRVp0ckVOUzlxYVhLb3k2V2tmOUY0SFV3cVhBaUVBOEUwWDlmQW9EcGkvCk9QVnkzL05RdU9OcnFnR08wU0FGaFl5OW41LzY5L0VBZGdDdDk3NzZmUDhReUl1ZFBad2VQaGhxdEdjcFhjK3gKRENUS2hZWTA2OXlDaWdBQUFZQnVtczF2QUFBRUF3QkhNRVVDSVFDUEtjT05jcGVBVjZPSkRLRzhxbW1ic1NUZwo1K25CL09DQ3lOOWRwOFptc2dJZ1lmVVBEL3FrMEdmQkY0dTlVNC9taFo4c1k1b2c1dWZwQjdPRENwd2kwMm9BCmRnQTF6eGtidjdGc1Y3OFByVXh0UXN1N3RpY2dKbEhxUCtFcTc2Z0R3enZXVEFBQUFZQnVtczllQUFBRUF3QkgKTUVVQ0lHQ3owUjR6bUFkc3FXWTBRRVVMc283REpRbEdGanMyS2sxY1g3a3Q3WlcwQWlFQXVuUkRQTENEcG1qNApnQUhSYy9vb1J1c0VNMXdwYXdRQWdJUE14UVk0eUhVd0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dJQkFDYTZnWDBxCjF0V3k5dlFTeGJPSjl4UFNtY3hYN3RjdkhsbEtjWDRoc1dWaVgxS0EvZlJhblBTNFlHOTd6QnQ0aWZEOWNXaTYKcjBzNWpjTUxwcEhENm04WkxDVkNzZjY3Qnk5WUNWUW04dCtoNFI2YS9DZnJBNWUvaU1wZjhwMVhCS0tjNmZTNgpna0QwSjRDejNyZ2RseGdTWWZONi9HaXVDQk02NHRsTllHWWhXNHF2WEp2R3ZWUjJCeXg2cDNvVlJPbG5TUk5UCmFkTkg5bURHN3R6RzErTW1TMmh3YU5aT04waVNYR2dTTXU0M2thSkhCdllEb2lzL2w1MzBxcEV3R2dLTnlyNncKV2lHWEQ1bEVQUmVvRmh5UWZqWFpxajg5RlIxMGdsSHpudTNCaitEcjFldUp3cytxZWpZc0JHQ3krcDJFTURDcgo0ZUdjUWFZWGIzR1lpOHpnQU9laTRGSFlHQlZ3UU5zeFpPN29EOXZlZmRYQnMxVmxYNU8yYmhldVdpUnd6ZnJjClJEZlc4dGhzWmpxMmpScHEzMXBVWjBIUEJhUjFmaDNSSUFhNTFISTJ6RnVUWWV1V29BcHhiUUoyVjZUZ2UzQkoKSVhQWUkwVnJZQWhvcDZIdHl3RThvRFpvZjZOUHBlSmhJeS96Q0tHTVZLZVJob2FscmtrNnR1emNFL1RQbm1wNApjZXV2T0JNZjZpSlM0S1ZTWGFpeERNSlNRMnJjMnJoS2htaHliQnBveDkyclZ5bWdENEdYckdVZFkvZUVQb2FoCmtyYWVzQlA3cjlXZ09xR2ptNFJKaGZkV29tZHFpSTkzQTBBalZna1BZQ1hpOXp3UGNKS2pkai95b09WSStmQnUKQzJ5YXF4UEJCeGZKZVp2OHpMRVAwbjFKdHRpaFVkcXpaeHJCCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+                    certificateUsageMetadata:
+                    - appName: venafi app1
+                      automationMetadata: automation data 008
+                      nodeName: venafi node 007
+                  overrideBlocklist: true
+            schema:
+              $ref: '#/components/schemas/CertificateImportRequest2'
+      responses:
+        '201':
+          content:
+            application/json:
+              examples:
+                Certificate import response:
+                  description: Certificate import response
+                  summary: Certificate import
+                  value:
+                    certificateInformations:
+                    - base64Certificate: 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
+                      certificateSource: USER_IMPORTED
+                      companyId: 2d558b30-da16-11ed-8e4f-8339a1bc8d58
+                      fingerprint: D9D4965F9A116D457FA43FF23605CFCB5277BE38
+                      id: 4d4e1c30-e2eb-11ed-a644-4fab0ea00b60
+                      issuerCertificateIds:
+                      - 4d4b8420-e2eb-11ed-a644-4fab0ea00b60
+                      - d50a4410-297e-11eb-bc4c-8b24e5a66fb6
+                      managedCertificateId: 4d515080-e2eb-11ed-aed6-79d407efea73
+                    statistics:
+                      existed: 0
+                      failed: 0
+                      ignored: 0
+                      imported: 1
+              schema:
+                $ref: '#/components/schemas/CertificateImportResponse2'
+          description: Certificates were imported; details in response body.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: Incomplete or malformed request.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Import a set of raw certificates
+      tags:
+      - Certificate Import
+components:
+  schemas:
+    CertificateUsageMetadata:
+      properties:
+        appName:
+          type: string
+        automationMetadata:
+          type: string
+        nodeName:
+          type: string
+      type: object
+    CertificateImportResponse2:
+      properties:
+        certificateInformations:
+          description: A collection of information about certificates that were newly imported.
+          items:
+            $ref: '#/components/schemas/ImportedCertificateInformation'
+          type: array
+        statistics:
+          additionalProperties:
+            description: Certificate import statistics
+            format: int32
+            type: integer
+          description: Certificate import statistics
+          type: object
+      type: object
+    CertificateImportInfo:
+      description: Base64 encoding certificate content.
+      properties:
+        apiClientInformation:
+          $ref: '#/components/schemas/ApiClientInformation'
+        applicationIds:
+          description: A collection of application IDs
+          example:
+          - 47c9d920-da21-11ed-a63c-d508f08eeaa0
+          - 9303e940-df9d-11ed-8850-f18176fc5513
+          items:
+            format: uuid
+            type: string
+          type: array
+        certificate:
+          description: Certificate base64 encoded format (PEM without header/footer
+          type: string
+        certificateUsageMetadata:
+          description: A collection of certificate request metadata
+          example:
+          - appName: venafi app1
+            automationMetadata: automation data 008
+            nodeName: venafi node 007
+          - appName: venafi app2
+            automationMetadata: automation data 0013
+            nodeName: venafi node 005
+          items:
+            $ref: '#/components/schemas/CertificateUsageMetadata'
+          type: array
+        issuerCertificates:
+          description: A collection of issuer certificates
+          example:
+          - Venafi issuer
+          - QA Venafi issuer
+          items:
+            type: string
+          type: array
+      required:
+      - certificate
+      type: object
+    ErrorInformation3:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue3'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+    ImportedCertificateInformation:
+      properties:
+        apiClientInformation:
+          $ref: '#/components/schemas/ApiClientInformation'
+        base64Certificate:
+          description: Certificate base64 encoded format (PEM without header/footer
+          type: string
+        certificateSource:
+          description: A certificate source
+          enum:
+          - UNKNOWN
+          - USER_PROVIDED
+          - USER_IMPORTED
+          - USER_SCAN
+          - TRUSTNET_SCAN
+          - ON_PREM_CA_IMPORT
+          - EXTERNAL_CA_IMPORT
+          - FILE_IMPORT
+          - EXTERNAL_SCAN
+          - DOMAIN_SCAN
+          - SMART_SCAN_INTERNAL
+          - SMART_SCAN_EXTERNAL
+          - SMART_VALIDATION_INTERNAL
+          - SMART_VALIDATION_EXTERNAL
+          - MACHINE_DISCOVERY
+          - KUBERNETES_DISCOVERY
+          - AWS_DISCOVERY
+          - AZURE_DISCOVERY
+          - GCP_DISCOVERY
+          example: USER_PROVIDED
+          type: string
+        certificateUsageMetadata:
+          description: A collection of certificate request metadata
+          example:
+          - appName: venafi app1
+            automationMetadata: automation data 008
+            nodeName: venafi node 007
+          - appName: venafi app2
+            automationMetadata: automation data 0013
+            nodeName: venafi node 005
+          items:
+            $ref: '#/components/schemas/CertificateUsageMetadata'
+          type: array
+        companyId:
+          description: UUID of a company
+          example: 2d558b30-da16-11ed-8e4f-8339a1bc8d58
+          format: uuid
+          type: string
+        fingerprint:
+          description: A certificate fingerprint
+          example: 2C85B0AD64F55AA70BAC75F69711578DC505C3F9
+          type: string
+        id:
+          description: UUID of a Certificate
+          example: 16cb6940-e2de-11ed-a644-4fab0ea00b60
+          format: uuid
+          type: string
+        issuerCertificateIds:
+          description: A collection of issuer certificates
+          example:
+          - Venafi issuer
+          - QA Venafi issuer
+          items:
+            format: uuid
+            type: string
+          type: array
+        managedCertificateId:
+          description: UUID of a managed certificate
+          example: 17488880-e2de-11ed-aed6-79d407efea73
+          format: uuid
+          type: string
+      type: object
+    ErrorResponse4:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation3'
+          type: array
+      type: object
+    CertificateImportRequest2:
+      properties:
+        certificates:
+          description: Base64 encoding certificate content.
+          items:
+            $ref: '#/components/schemas/CertificateImportInfo'
+          type: array
+        overrideBlocklist:
+          description: Imports the certificate even if it's present in the Certificates blocklist.
+          type: boolean
+      required:
+      - certificates
+      type: object
+    ApiClientInformation:
+      description: Represents the information of the client that is calling the API
+      example:
+        identifier: 192.168.1.63
+        type: Venafi VCert CLI
+      properties:
+        identifier:
+          description: Client identifier
+          example: 199.121.8.74
+          type: string
+        type:
+          description: Client type
+          example: Venafi VCert CLI
+          type: string
+      type: object
+    AnyValue3:
+      description: Can be any value - string, number, boolean, array or object.
+  securitySchemes:
+    service-account:
+      in: header
+      name: service-account
+      type: apiKey
+    tppl-api-key:
+      in: header
+      name: tppl-api-key
+      type: apiKey
+x-readme:
+  samples-languages:
+  - curl
+  - go
+  - java
+  - javascript
+  - node
+  - python

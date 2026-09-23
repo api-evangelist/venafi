@@ -1,0 +1,413 @@
+openapi: 3.2.0
+info:
+  title: Certificate Manager - SaaS User Accounts API
+  version: '1.0'
+servers:
+- description: US Region
+  url: https://api.venafi.cloud
+- description: EU Region
+  url: https://api.eu.venafi.cloud
+- description: AU Region
+  url: https://api.au.venafi.cloud
+- description: UK Region
+  url: https://api.uk.venafi.cloud
+- description: SG Region
+  url: https://api.sg.venafi.cloud
+- description: CA Region
+  url: https://api.ca.venafi.cloud
+tags:
+- name: User Accounts
+paths:
+  /v1/useraccounts:
+    get:
+      description: 'Retrieve user account information for API key specified in header: User details, User''s API key details and Associated company details.'
+      operationId: useraccounts_getByAuth
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAccountResponse'
+          description: 'Authenticated user''s account information: user details, user''s API key details, and associated company details.'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: User account was not found for the specified API Key.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Retrieve an authenticated user's account details
+      tags:
+      - User Accounts
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: read
+          description: Ability to read your user account information
+          name: ngts.user_account.get
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+        - Guest
+components:
+  schemas:
+    SSOStatus:
+      enum:
+      - ACTIVE
+      - INACTIVE
+      type: string
+    UserAccountType:
+      enum:
+      - WEB_UI
+      - API
+      type: string
+    AnyValue6:
+      description: Can be any value - string, number, boolean, array or object.
+    ApiKeyInformation:
+      properties:
+        apiKeyStatus:
+          $ref: '#/components/schemas/ApiKeyStatus'
+        apiVersion:
+          $ref: '#/components/schemas/ApiVersion'
+        companyId:
+          description: UUID of a company.
+          format: uuid
+          type: string
+        creationDate:
+          description: The date and time the API key was created.
+          format: date-time
+          type: string
+        key:
+          description: UUID of an API key.
+          format: uuid
+          type: string
+        memberedTeams:
+          description: Membered teams of the user associated with this API key.
+          items:
+            description: Membered teams of the user associated with this API key.
+            format: uuid
+            type: string
+          type: array
+          uniqueItems: true
+        productRoles:
+          additionalProperties:
+            description: Product roles of the user associated with this API key.
+            items:
+              $ref: '#/components/schemas/Role2'
+            type: array
+            uniqueItems: true
+          description: Product roles of the user associated with this API key.
+          type: object
+        systemRoles:
+          description: System roles of the user associated with this API key.
+          items:
+            $ref: '#/components/schemas/SystemRole'
+          type: array
+          uniqueItems: true
+        urlPrefix:
+          description: Tenant URL Prefix.
+          type: string
+        userId:
+          description: UUID of a user.
+          format: uuid
+          type: string
+        username:
+          description: Email address of the registered user.
+          type: string
+        validityEndDate:
+          description: The date and time the API key will no longer be valid.
+          format: date-time
+          type: string
+        validityStartDate:
+          description: The date and time the API key became valid.
+          format: date-time
+          type: string
+      type: object
+    SystemRole:
+      enum:
+      - SYSTEM_ADMIN
+      - CONDOR_METRICS
+      type: string
+    ProductEntitlementInformation:
+      properties:
+        capabilities:
+          items:
+            $ref: '#/components/schemas/CapabilityInformation'
+          type: array
+        label:
+          $ref: '#/components/schemas/ProductEntitlement1'
+        visibilityConstraintsInformation:
+          $ref: '#/components/schemas/VisibilityConstraintsInformation'
+      required:
+      - capabilities
+      - label
+      - visibilityConstraintsInformation
+      type: object
+    UserAccountResponse:
+      properties:
+        apiKey:
+          $ref: '#/components/schemas/ApiKeyInformation'
+        company:
+          $ref: '#/components/schemas/CompanyInformation'
+        user:
+          $ref: '#/components/schemas/UserInformation2'
+      type: object
+    ProductEntitlement1:
+      enum:
+      - ANY
+      - MIRA
+      - DEVOPS
+      - OUTAGE_DETECTION
+      - CODESIGN
+      type: string
+    CompanyType:
+      enum:
+      - INTERNAL
+      - CA
+      - TPP_CUSTOMER
+      - REGULAR
+      - OTHER
+      type: string
+    CompanyInformation:
+      properties:
+        active:
+          type: boolean
+        companyType:
+          $ref: '#/components/schemas/CompanyType'
+        creationDate:
+          format: date-time
+          type: string
+        domains:
+          items:
+            type: string
+          type: array
+        id:
+          format: uuid
+          type: string
+        instanceId:
+          type: string
+        name:
+          type: string
+        productEntitlements:
+          items:
+            $ref: '#/components/schemas/ProductEntitlementInformation'
+          type: array
+        tsgId:
+          type: string
+        urlPrefix:
+          type: string
+      required:
+      - id
+      - productEntitlements
+      type: object
+    CapabilityInformation:
+      properties:
+        isTrial:
+          type: boolean
+        name:
+          $ref: '#/components/schemas/Capability'
+        productExpiryDate:
+          format: date-time
+          type: string
+        productGraceExpiryDate:
+          format: date-time
+          type: string
+      required:
+      - isTrial
+      - name
+      - productExpiryDate
+      type: object
+    UserType:
+      enum:
+      - EXTERNAL
+      - INTERNAL
+      type: string
+    ApiKeyStatus:
+      enum:
+      - PENDING_ACTIVATION
+      - ACTIVE
+      - INACTIVE
+      - PENDING_ROTATION
+      - ROTATED
+      - EXPIRED
+      type: string
+    VisibilityConstraintsInformation:
+      properties:
+        fullAccessDurationDays:
+          format: int32
+          minimum: 0
+          type: integer
+        limitedAccessNotificationDays:
+          format: int32
+          minimum: 0
+          type: integer
+        limitedVisibilityCertCount:
+          format: int32
+          minimum: 0
+          type: integer
+        limitedVisibilityCertInstallPerCertCount:
+          format: int32
+          minimum: 0
+          type: integer
+      type: object
+    UserInformation2:
+      properties:
+        companyId:
+          format: uuid
+          type: string
+        creationDate:
+          format: date-time
+          type: string
+        deleted:
+          type: boolean
+        disabled:
+          type: boolean
+        emailAddress:
+          type: string
+        firstLoginDate:
+          format: date-time
+          type: string
+        firstname:
+          type: string
+        forceLocalPasswordExpiration:
+          type: boolean
+        hasPassword:
+          type: boolean
+        id:
+          format: uuid
+          type: string
+        lastname:
+          type: string
+        localLoginDisabled:
+          type: boolean
+        memberedTeams:
+          items:
+            format: uuid
+            type: string
+          type: array
+          uniqueItems: true
+        ownedTeams:
+          items:
+            format: uuid
+            type: string
+          type: array
+          uniqueItems: true
+        productRoles:
+          additionalProperties:
+            items:
+              $ref: '#/components/schemas/Role2'
+            type: array
+            uniqueItems: true
+          type: object
+        signupAttributes:
+          additionalProperties:
+            type: string
+          type: object
+        ssoStatus:
+          $ref: '#/components/schemas/SSOStatus'
+        systemRoles:
+          items:
+            $ref: '#/components/schemas/SystemRole'
+          type: array
+          uniqueItems: true
+        userAccountType:
+          $ref: '#/components/schemas/UserAccountType'
+        userStatus:
+          $ref: '#/components/schemas/UserStatus'
+        userType:
+          $ref: '#/components/schemas/UserType'
+        username:
+          type: string
+      type: object
+    UserStatus:
+      enum:
+      - PENDING_ACTIVATION
+      - ACTIVE
+      - INACTIVE
+      type: string
+    ErrorResponse8:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation6'
+          type: array
+      type: object
+    Role2:
+      enum:
+      - SECURITY_ADMIN
+      - DEVOPS_LEAD
+      - DEVOPS_USER
+      - OUTAGEDETECTION_ADMIN
+      - RESOURCE_OWNER
+      - PKI_ADMIN
+      - GUEST
+      - PLATFORM_ADMIN
+      type: string
+    ApiVersion:
+      description: Indicates version of the API.
+      enum:
+      - ALL
+      - V1
+      type: string
+    ErrorInformation6:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue6'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+    Capability:
+      enum:
+      - DEFAULT
+      - ISSUANCE
+      - VALIDATION
+      - ENTERPRISE
+      - PROVISIONING
+      - SINGLE_SIGN_ON
+      - DISTRIBUTED_ISSUER
+      - CLOUD_PROVIDERS
+      - CREDENTIAL_MANAGER
+      - KUBERNETES_DISCOVERY
+      - KUBERNETES_ENTERPRISE_COMPONENTS
+      - KUBERNETES_ENTERPRISE_COMPONENTS_CERT_MANAGER
+      - KUBERNETES_ENTERPRISE_COMPONENTS_VEI
+      - KUBERNETES_ENTERPRISE_COMPONENTS_APE
+      - KUBERNETES_ENTERPRISE_COMPONENTS_OS
+      - KUBERNETES_INTEGRATION_TLSPDC
+      type: string
+  securitySchemes:
+    service-account:
+      in: header
+      name: service-account
+      type: apiKey
+    tppl-api-key:
+      in: header
+      name: tppl-api-key
+      type: apiKey
+x-readme:
+  samples-languages:
+  - curl
+  - go
+  - java
+  - javascript
+  - node
+  - python

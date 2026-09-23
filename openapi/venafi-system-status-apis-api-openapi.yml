@@ -1,0 +1,782 @@
+openapi: 3.2.0
+info:
+  title: Trust Protection Foundation WebSDK System Status APIs API
+  description: '# Introduction
+
+    The Trust Protection Foundation Web SDK is a subset of REST APIs that allow you to:
+
+    * Automate certificate management
+
+    * Integrate with DevOps processes
+
+    * Discover machine identities
+
+    * Extract data to integrate with data warehouses
+
+    * Perform bulk actions
+
+    * Set up and administer Trust Protection Foundation
+
+    * Onboard teams
+
+    * Create custom, automated business logic and flows between internal systems
+
+
+    All these use cases can be accomplished using the Trust Protection Foundation REST…'
+  version: 26.1.1
+servers:
+- url: /
+  description: Current Host
+- url: https://REPLACEdnsnameME/
+  description: System
+- url: https://{dnsname}/
+  description: Configurable Hostname
+  variables:
+    dnsname:
+      default: localhost
+      description: Production API Hostname
+security:
+- AccessToken: []
+tags:
+- name: System Status APIs
+  description: The SystemStatus interface provides status and upgrade information about Trust Protection Foundation engines.
+paths:
+  /vedscim/{owner}/available:
+    parameters:
+    - name: owner
+      in: path
+      description: The friendly name of the SCIM provider
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - System Status APIs
+      summary: Get provider-specific SCIM endpoint status
+      description: '_Required scope: Any_'
+      operationId: Venafi_Scim_Server_Endpoints_GetCheckAvailable
+      responses:
+        '202':
+          description: The SCIM endpoint for the given owner is active
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IO_Stream'
+        '404':
+          description: The SCIM endpoint for the given owner is not active
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IO_Stream'
+      security:
+      - AccessToken: []
+  /vedscim/available:
+    get:
+      tags:
+      - System Status APIs
+      summary: Get SCIM Server endpoint status
+      description: '_Required scope: Any_'
+      operationId: Venafi_Scim_Server_Endpoints_GetCheckGlobalAvailable
+      responses:
+        '202':
+          description: The SCIM endpoint is active
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IO_Stream'
+      security:
+      - AccessToken: []
+  /vedsdk/SystemStatus/:
+    get:
+      tags:
+      - System Status APIs
+      summary: Get all engines
+      description: 'Returns a list of all engines with details
+
+
+        _Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_SystemStatusRest_Get
+      responses:
+        '200':
+          description: All engines returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    engineDN:
+                      type: string
+                      description: DN of the engine the data describes
+                    engineName:
+                      type: string
+                      description: Name of the engine
+                    services:
+                      type: object
+                      properties:
+                        iis:
+                          type: object
+                          properties:
+                            modules:
+                              type: array
+                              items:
+                                type: string
+                              description: A list of loaded components
+                            timeSinceFirstSeen:
+                              type: string
+                              description: First seen (ISO 8601 Format)
+                            timeSinceLastSeen:
+                              type: string
+                              description: Last seen (ISO 8601 format)
+                            status:
+                              type: string
+                              description: IIS Status
+                            configuredMode:
+                              type: string
+                              description: Configured standby mode
+                            currentMode:
+                              type: string
+                              description: Current standby mode
+                            configuredLatency:
+                              type:
+                              - integer
+                              - 'null'
+                              description: DB latency for entering standby
+                              format: int32
+                            currentLatency:
+                              type:
+                              - integer
+                              - 'null'
+                              description: Current DB latency
+                              format: int32
+                            configuredWork:
+                              type:
+                              - integer
+                              - 'null'
+                              description: The configured number of work items pending before service becomes active
+                              format: int32
+                            currentWork:
+                              type:
+                              - integer
+                              - 'null'
+                              description: The current number of work items applicable for the service
+                              format: int32
+                          description: "IIS Information  \nThe following table shows the module names used for IIS endpoints\n\n| Endpoint   | Module Name          |\n|------------|----------------------|\n| /aperture  | Venafi.Aperture.Core |\n| /vacme     | Acme.Server          |\n| /vedsdk    | WebSDK               |\n| /vedclient | ClientRest           |\n| /vedauth   | AuthServer           |\n| /vedhsm    | Hsm                  |\n| /vedadmin  | Venafi.Admin.Web     |\n| /timestamp | TimeStamp            |\n| /vedscep   | VScep                |\n| /certsrv   | VScep                |\n| /pks       | KeyServer            |"
+                        logServer:
+                          type: object
+                          properties:
+                            modules:
+                              type: array
+                              items:
+                                type: string
+                              description: A list of loaded components
+                            timeSinceFirstSeen:
+                              type: string
+                              description: First seen (ISO 8601 Format)
+                            timeSinceLastSeen:
+                              type: string
+                              description: Last seen (ISO 8601 format)
+                            status:
+                              type: string
+                              description: IIS Status
+                            configuredMode:
+                              type: string
+                              description: Configured standby mode
+                            currentMode:
+                              type: string
+                              description: Current standby mode
+                            configuredLatency:
+                              type:
+                              - integer
+                              - 'null'
+                              description: DB latency for entering standby
+                              format: int32
+                            currentLatency:
+                              type:
+                              - integer
+                              - 'null'
+                              description: Current DB latency
+                              format: int32
+                            configuredWork:
+                              type:
+                              - integer
+                              - 'null'
+                              description: The configured number of work items pending before service becomes active
+                              format: int32
+                            currentWork:
+                              type:
+                              - integer
+                              - 'null'
+                              description: The current number of work items applicable for the service
+                              format: int32
+                          description: LogServer Information
+                        vPlatform:
+                          type: object
+                          properties:
+                            modules:
+                              type: array
+                              items:
+                                type: string
+                              description: A list of loaded components
+                            timeSinceFirstSeen:
+                              type: string
+                              description: First seen (ISO 8601 Format)
+                            timeSinceLastSeen:
+                              type: string
+                              description: Last seen (ISO 8601 format)
+                            status:
+                              type: string
+                              description: IIS Status
+                            configuredMode:
+                              type: string
+                              description: Configured standby mode
+                            currentMode:
+                              type: string
+                              description: Current standby mode
+                            configuredLatency:
+                              type:
+                              - integer
+                              - 'null'
+                              description: DB latency for entering standby
+                              format: int32
+                            currentLatency:
+                              type:
+                              - integer
+                              - 'null'
+                              description: Current DB latency
+                              format: int32
+                            configuredWork:
+                              type:
+                              - integer
+                              - 'null'
+                              description: The configured number of work items pending before service becomes active
+                              format: int32
+                            currentWork:
+                              type:
+                              - integer
+                              - 'null'
+                              description: The current number of work items applicable for the service
+                              format: int32
+                          description: Platform Information
+                      description: Service status
+                    version:
+                      type: string
+                      description: Engine schema version
+                  description: Engine information
+      security:
+      - AccessToken: []
+  /vedsdk/SystemStatus/Version:
+    get:
+      tags:
+      - System Status APIs
+      summary: Get engine schema version
+      description: 'Returns the current schema version of the engine
+
+
+        _Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_SystemStatusRest_GetVersion
+      responses:
+        '200':
+          description: Engine schema version returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_Obsolete_VersionResponse'
+      security:
+      - AccessToken: []
+  /vedsdk/SystemStatus/Upgrade/Status:
+    get:
+      tags:
+      - System Status APIs
+      summary: Get upgrade status
+      description: '_Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_SystemStatusRest_IsAnUpgradeRunning
+      responses:
+        '200':
+          description: Status returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_Obsolete_UpgradeStatusResponse'
+        '403':
+          description: No permissions to check status
+        '500':
+          description: Internal error
+      security:
+      - AccessToken: []
+  /vedsdk/SystemStatus/Upgrade/Summary:
+    get:
+      tags:
+      - System Status APIs
+      summary: Get upgrade summary
+      description: 'Returns an upgrade summary. Based on rights, details may be omitted for some users
+
+
+        _Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_SystemStatusRest_UpgradeSummary
+      responses:
+        '200':
+          description: Status returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_Obsolete_UpgradeSummaryResponse'
+        '403':
+          description: No permissions to check status
+        '500':
+          description: Internal error
+      security:
+      - AccessToken: []
+  /vedsdk/SystemStatus/Upgrade/Engine:
+    get:
+      tags:
+      - System Status APIs
+      summary: Get the upgrade status of one engine
+      description: 'Gets the upgrade status of one engine. Pass either the engine guid or id, but NOT both.
+
+
+        _Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_SystemStatusRest_Engine
+      parameters:
+      - name: guid
+        in: query
+        description: Engine GUID
+        required: true
+        schema:
+          type: string
+      - name: idString
+        in: query
+        description: Engine ID
+        required: true
+        schema:
+          type: string
+      - name: groupingId
+        in: query
+        description: Upgrade Grouping ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_Obsolete_EngineUpgradeResponse_Upgrade_Engine'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/SystemStatus/Upgrade/Engines:
+    get:
+      tags:
+      - System Status APIs
+      summary: Get all engine upgrade statuses
+      description: '_Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_SystemStatusRest_Engines
+      parameters:
+      - name: groupingId
+        in: query
+        description: Upgrade Grouping ID (defaulted to current upgrade)
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_Obsolete_EngineUpgradeResponse_Upgrade_Engines'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/SystemStatus/Upgrade/History:
+    get:
+      tags:
+      - System Status APIs
+      summary: Get upgrade history
+      description: 'Gets a list of upgrade Ids and which upgrades happened together.
+
+
+        _Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_SystemStatusRest_History
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_Obsolete_GroupingIdsResposne'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+components:
+  schemas:
+    IO_Stream:
+      type: object
+    Core_WebSDK_Obsolete_GroupingIdsResposne:
+      type: object
+      properties:
+        UpgradeHistory:
+          type: array
+          items:
+            type: object
+            properties:
+              Id:
+                type: string
+                description: Upgrade Group
+              StartTime:
+                type: string
+                description: Start time of the upgrade group
+              Versions:
+                type: array
+                items:
+                  type: string
+                description: Upgrade Versions
+            description: ''
+          description: Upgrade Groups
+        Error:
+          type: string
+          description: Error if it exists
+      description: Grouping Ids Response
+    Core_WebSDK_Obsolete_UpgradeSummaryResponse:
+      type: object
+      properties:
+        UpgradeSummary:
+          type: object
+          properties:
+            Status:
+              type: string
+              description: Overall system upgrade status
+            StatusDetails:
+              type: string
+              description: Overall system upgrade status details
+            UpgradeStartTime:
+              type: string
+              description: System upgrade start time
+            UpgradeStopTime:
+              type: string
+              description: System upgrade stop time
+            RemainingTasks:
+              type:
+              - integer
+              - 'null'
+              description: Number of remaining tasks for the system upgrade
+              format: int32
+            CompletedTasks:
+              type:
+              - integer
+              - 'null'
+              description: Number of completed tasks for the system upgrade
+              format: int32
+            OriginVersion:
+              type: string
+              description: Product version prior to the most recent system upgrade
+            TargetVersion:
+              type: string
+              description: Target product version
+            EnginesComplete:
+              type:
+              - integer
+              - 'null'
+              description: Number of engines that have completed the upgrade
+              format: int32
+            EnginesRunning:
+              type:
+              - integer
+              - 'null'
+              description: Number of engines that are running the upgrade
+              format: int32
+            EnginesBlocked:
+              type:
+              - integer
+              - 'null'
+              description: Number of engines that are blocked
+              format: int32
+            EnginesInError:
+              type:
+              - integer
+              - 'null'
+              description: Number of engines that are in error
+              format: int32
+            EnginesPendingInstall:
+              type:
+              - integer
+              - 'null'
+              description: Number of engines that are pending installation of the new version
+              format: int32
+          description: ''
+        Error:
+          type: string
+          description: Error description
+      description: Status of an upgrade
+    Core_WebSDK_Obsolete_EngineUpgradeResponse_Upgrade_Engine:
+      type: object
+      properties:
+        EngineUpgrade:
+          type: object
+          properties:
+            Engine:
+              type: object
+              properties:
+                DN:
+                  type: string
+                  description: The engine DN
+                Guid:
+                  type: string
+                  description: The engine Guid
+                DisplayName:
+                  type: string
+                  description: The engine Display Name
+                Id:
+                  type: integer
+                  description: The engine Id
+                  format: int64
+                Name:
+                  type: string
+                  description: The engine Name
+              description: Engine Details
+            Status:
+              type: string
+              description: Engine upgrade status
+            StatusDetails:
+              type: string
+              description: Engine upgrade status details
+            UpgradeStartTime:
+              type: string
+              description: Engine upgrade start time
+            UpgradeStopTime:
+              type: string
+              description: Engine upgrade stop time
+            TaskRunning:
+              type: object
+              properties:
+                Name:
+                  type: string
+                  description: The task name
+                DisplayName:
+                  type: string
+                  description: The task display name
+                StartTime:
+                  type: string
+                  description: The task start time
+              description: The task the engine is currently working on
+            TasksPending:
+              type: array
+              items:
+                type: object
+                properties:
+                  Name:
+                    type: string
+                    description: The task name
+                  DisplayName:
+                    type: string
+                    description: The task display name
+                description: A pending task
+              description: Upgrade tasks pending for this engine, index 0 will be the next task to be run
+            TasksCompleted:
+              type: array
+              items:
+                type: object
+                properties:
+                  Name:
+                    type: string
+                    description: The task name
+                  DisplayName:
+                    type: string
+                    description: The task display name
+                  StartTime:
+                    type: string
+                    description: The task start time
+                  StopTime:
+                    type: string
+                    description: The task completion time
+                  WarningCount:
+                    type: integer
+                    description: The count of warning that occurred during execution of the task
+                    format: int64
+                description: A completed task
+              description: Upgrade tasks this engine has completed, index 0 was the first completed task
+          description: Engine Upgrade Information
+        Error:
+          type: string
+          description: Error if it exists
+    Core_WebSDK_Obsolete_VersionResponse:
+      type: object
+      properties:
+        Version:
+          type: string
+          description: Current engine version.
+      description: Class for platform version response.
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
+    Core_WebSDK_Obsolete_UpgradeStatusResponse:
+      type: object
+      properties:
+        UpgradeInProgress:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates if upgrade is in progress
+        Error:
+          type: string
+          description: Error description
+      description: Upgrade status response
+    Core_WebSDK_Obsolete_EngineUpgradeResponse_Upgrade_Engines:
+      type: object
+      properties:
+        Engines:
+          type: array
+          items:
+            type: object
+            properties:
+              Engine:
+                type: object
+                properties:
+                  DN:
+                    type: string
+                    description: The engine DN
+                  Guid:
+                    type: string
+                    description: The engine Guid
+                  DisplayName:
+                    type: string
+                    description: The engine Display Name
+                  Id:
+                    type: integer
+                    description: The engine Id
+                    format: int64
+                  Name:
+                    type: string
+                    description: The engine Name
+                description: Engine Details
+              Status:
+                type: string
+                description: Engine upgrade status
+              StatusDetails:
+                type: string
+                description: Engine upgrade status details
+              UpgradeStartTime:
+                type: string
+                description: Engine upgrade start time
+              UpgradeStopTime:
+                type: string
+                description: Engine upgrade stop time
+              TaskRunning:
+                type: object
+                properties:
+                  Name:
+                    type: string
+                    description: The task name
+                  DisplayName:
+                    type: string
+                    description: The task display name
+                  StartTime:
+                    type: string
+                    description: The task start time
+                description: The task the engine is currently working on
+              TasksPending:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Name:
+                      type: string
+                      description: The task name
+                    DisplayName:
+                      type: string
+                      description: The task display name
+                  description: A pending task
+                description: Upgrade tasks pending for this engine, index 0 will be the next task to be run
+              TasksCompleted:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Name:
+                      type: string
+                      description: The task name
+                    DisplayName:
+                      type: string
+                      description: The task display name
+                    StartTime:
+                      type: string
+                      description: The task start time
+                    StopTime:
+                      type: string
+                      description: The task completion time
+                    WarningCount:
+                      type: integer
+                      description: The count of warning that occurred during execution of the task
+                      format: int64
+                  description: A completed task
+                description: Upgrade tasks this engine has completed, index 0 was the first completed task
+            description: Provides detailed information about the upgrade status of an individual engine
+          description: The list of engine upgrade statuses
+        Error:
+          type: string
+          description: Error if it exists
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer

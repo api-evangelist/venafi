@@ -1,0 +1,4137 @@
+openapi: 3.2.0
+info:
+  title: Trust Protection Foundation WebSDK Certificate Management…
+  description: '# Introduction
+
+    The Trust Protection Foundation Web SDK is a subset of REST APIs that allow you to:
+
+    * Automate certificate management
+
+    * Integrate with DevOps processes
+
+    * Discover machine identities
+
+    * Extract data to integrate with data warehouses
+
+    * Perform bulk actions
+
+    * Set up and administer Trust Protection Foundation
+
+    * Onboard teams
+
+    * Create custom, automated business logic and flows between internal systems
+
+
+    All these use cases can be accomplished using the Trust Protection Foundation REST…'
+  version: 26.1.1
+servers:
+- url: /
+  description: Current Host
+- url: https://REPLACEdnsnameME/
+  description: System
+- url: https://{dnsname}/
+  description: Configurable Hostname
+  variables:
+    dnsname:
+      default: localhost
+      description: Production API Hostname
+security:
+- AccessToken: []
+tags:
+- name: Certificate Management APIs
+  description: The endpoints in this section manage TLS certificates.
+paths:
+  /vedsdk/certificates/Retrieve/{vaultId}:
+    parameters:
+    - name: vaultId
+      in: path
+      description: The certificate data Vault Id.
+      required: true
+      schema:
+        type: string
+    post:
+      tags:
+      - Certificate Management APIs
+      summary: Retrieve a certificate by vault ID
+      description: 'Returns the available certificate data and optional private key information for an enrolled or archived certificate by its Vault Id.
+
+        The format property of the request allows to choose the following formats of the returned certificate binary data:
+
+        * Base64
+
+        * Base64 (PKCS #8)
+
+        * DER
+
+        * JKS:
+
+        * PKCS #7
+
+        * PKCS #12
+
+
+        _Required scope: certificate:manage_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateRequestRest_CertificateRetrieveByVaultId
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebSDK_CertificateRequest_RetrieveByVaultIdRequest_Retrieve__vaultId_'
+        required: true
+      responses:
+        '200':
+          description: Certificate retrieved successfully. The response body contains the certificate data and optional private key information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_RetrieveResponse_Retrieve__vaultId_'
+        '400':
+          description: Invalid or missing request parameters. The Error property contains details about the failure.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_RetrieveResponse'
+      security:
+      - AccessToken: []
+    get:
+      tags:
+      - Certificate Management APIs
+      summary: Retrieve a certificate by vault ID (GET)
+      description: 'Returns the available certificate data and optional private key information for an enrolled or archived certificate by its Vault Id.
+
+        The format property of the request allows to choose the following formats for the returned data:
+
+
+        | Format | Response Content Type |
+
+        | ---------------- | -------------------------------- |
+
+        | Base64 | application/x-pem-file |
+
+        | Base64 (PKCS #8) | application/x-pem-file |
+
+        | DER | application/x-x509-ca-cert |
+
+        | JKS | application/octet-stream |
+
+        | PKCS #7 | application/x-pkcs7-certificates |
+
+        | PKCS #12 | application/x-pkcs12 |
+
+
+        _Required scope: certificate_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateRequestRest_CertificateRetrieveByVaultIdGet
+      parameters:
+      - name: Format
+        in: query
+        schema:
+          type: string
+      - name: Password
+        in: query
+        schema:
+          type: string
+      - name: IncludePrivateKey
+        in: query
+        schema:
+          type: string
+      - name: IncludeChain
+        in: query
+        schema:
+          type: string
+      - name: RootFirstOrder
+        in: query
+        schema:
+          type: string
+      - name: FriendlyName
+        in: query
+        schema:
+          type: string
+      - name: KeystorePassword
+        in: query
+        schema:
+          type: string
+      - name: EncryptionAlgorithm
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the certificate as a binary stream.
+          content:
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/IO_Stream'
+        '202':
+          description: The certificate issuance is still pending. Use the /certificate/retrieve endpoint to obtain the certificate after it is issued.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IO_Stream'
+        '500':
+          description: An internal error occurred during certificate retrieval processing. See the error message for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IO_Stream'
+        '400':
+          description: ' Invalid or missing request parameters. See the error message for details.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IO_Stream'
+      security:
+      - AccessToken: []
+  /vedsdk/certificates/{guid}/PreviousVersions:
+    parameters:
+    - name: guid
+      in: path
+      description: The certificate GUID
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Certificate Management APIs
+      summary: Get archived certificates
+      description: 'Retrieves the archived versions of a certificate identified by its GUID.
+
+        The request can include query parameters to exclude expired or revoked certificates from the results.
+
+        The response contains a list of previous certificate versions, each with detailed information about the certificate.
+
+
+        _Required scope: certificate_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateRequestRest_CertificatePreviousVersions
+      parameters:
+      - name: ExcludeExpired
+        in: query
+        description: Exclude expired certificates
+        required: true
+        schema:
+          type: string
+      - name: ExcludeRevoked
+        in: query
+        description: Exclude revoked certificates
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Previous certificate versions retrieved successfully. The response body contains the list of previous certificate versions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_PreviousVersionsResponse'
+        '400':
+          description: Invalid or missing request parameters. The Error property contains details about the failure.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_PreviousVersionsResponse'
+      security:
+      - AccessToken: []
+  /vedsdk/certificates/Validate:
+    post:
+      tags:
+      - Certificate Management APIs
+      summary: Validate a deployed certificate
+      description: 'Initiates SSL/TLS network validation for one or more certificates and any associated applications.
+
+
+        _Required scope: certificate:manage_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateRequestRest_CertificateValidate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebSDK_CertificateRequest_ValidateRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_ValidateResponse'
+        '400':
+          description: Validation failed due to invalid or missing request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_ValidateResponse'
+      security:
+      - AccessToken: []
+  /vedsdk/certificates/{guid}:
+    parameters:
+    - name: guid
+      in: path
+      description: The certificate GUID
+      required: true
+      schema:
+        type: string
+    put:
+      tags:
+      - Certificate Management APIs
+      summary: Set or update certificate attributes
+      description: 'Sets or updates the attributes of a certificate identified by its GUID.
+
+        The request must include the certificate GUID in the path and the attribute data in the body.
+
+        The response indicates whether the operation was successful and includes any warnings or errors encountered during the process.
+
+
+        _Required scope: certificate:manage_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateRequestRest_CertificatePut
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebSDK_CertificateRequest_PutRequest__guid_'
+        required: true
+      responses:
+        '200':
+          description: 'Certificate attributes set or updated successfully. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_PutResponse'
+        '400':
+          description: ' Invalid or missing request parameters. The Error property contains details about the failure.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_PutResponse'
+      security:
+      - AccessToken: []
+    get:
+      tags:
+      - Certificate Management APIs
+      summary: Get certificate details
+      description: 'Retrieves details and validation information about the certificate.
+
+
+        _Required scope: certificate_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateRequestRest_GetCertificateDetails
+      responses:
+        '200':
+          description: Retrieve Certificate Details Complete. The response body contains the detailed information about the certificate.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_DetailedCertificateResult'
+        '500':
+          description: An unexpected error occurred during the certificate details retrieval process. The Error property contains details about the failure.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_DetailedCertificateResult'
+        '400':
+          description: The request was invalid due to incorrect parameters (e.g., invalid GUID). The Error property contains details about the failure.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_DetailedCertificateResult'
+      security:
+      - AccessToken: []
+    delete:
+      tags:
+      - Certificate Management APIs
+      summary: Delete a certificate
+      description: 'Deletes a certificate object, all the associated objects including pending workflow tickets, and the corresponding vault information.
+
+
+        _Required scope: certificate:delete_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateRequestRest_CertificateDelete
+      responses:
+        '200':
+          description: The response body contains the result of the delete operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_DeleteResponse'
+        '400':
+          description: The request was invalid due to incorrect parameters (e.g., invalid GUID, insufficient permissions). The Error property contains details about the failure.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_DeleteResponse'
+      security:
+      - AccessToken: []
+  /vedsdk/certificates/CheckPolicy:
+    post:
+      tags:
+      - Certificate Management APIs
+      summary: Check policy compliance
+      description: 'Performs a policy compliance assessment of a Certificate Signing Request (CSR) against a policy Distinguished Name (DN)
+
+
+        _Required scope: certificate:manage_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateRequestRest_CheckPolicy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebSDK_CertificateRequest_CheckPolicyRequest'
+        required: true
+      responses:
+        '200':
+          description: Policy compliance check completed successfully. The response includes the policy and Certificate Signing Request (CSR) data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_CheckPolicyResponse'
+        '400':
+          description: Invalid or missing request parameters. The Error property will provide details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_CheckPolicyResponse'
+      security:
+      - AccessToken: []
+  /vedsdk/certificates/Request:
+    post:
+      tags:
+      - Certificate Management APIs
+      summary: Enroll or provision a certificate
+      description: 'Enrolls or provisions a new certificate.
+
+
+        If the certificate already exists, the current certificate archives to the History tab and the CA receives a new certificate request.
+
+
+        Based on Policy tree settings, you can use a single Certificates/Request call to enroll or provision.
+
+        The same request can also:
+
+
+        * Create one or more devices that will use the same certificate.
+
+        * Allow one or more applications that run on a device to use the same certificate.
+
+        * Create a certificate for an elastic instance. After the instance terminates, a tool, such as an Instance
+
+        Watcher, can automatically clean up the certificate(and associated objects).
+
+        * Set Custom Field values on a Certificate object. After a successful enrollment or provision,
+
+        the certificate appears in the Policy folder.However, if the
+
+        issuing CA overrode values in the CSR, for example Organization Unit(OU), some fields may be empty.
+
+
+        **NOTE:** Unless the _WorkToDoTimeout_ parameter is specified, this method will immediately return. If you want to wait for the certificate to be issued and returned in the response, specify how long you are willing to wait via _WorkToDoTimeout_.
+
+
+        **Result code:**
+
+
+        * 200 will be returned if the certificate request was accepted and the WorkToDoTimeout was not set.
+
+        * 200 will be returned if the WorkToDoTimeout was set and the certificate is included in the response.
+
+        * 202 will be returned if the certificate issuance is still pending. In this case, use the `/certificate/retrieve` endpoint to obtain the certificate after it is issued.
+
+
+        _Required scope: certificate:manage_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateRequestRest_CertificateRequest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebSDK_CertificateRequest_RequestRequest'
+        required: true
+      responses:
+        '200':
+          description: The certificate request was accepted and the WorkToDoTimeout was not set, OR WorkToDoTimeout was set and the certificate is included in the response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_RequestResponse_Request'
+        '202':
+          description: The certificate issuance is still pending. In this case, use the `/certificate/retrieve` endpoint to obtain the certificate after it is issued.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_RequestResponse'
+        '500':
+          description: Internal error occurred during certificate request processing. See error message for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_RequestResponse'
+        '400':
+          description: Invalid or missing request parameters. See error message for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_RequestResponse'
+      security:
+      - AccessToken: []
+  /vedsdk/certificates/Retrieve:
+    post:
+      tags:
+      - Certificate Management APIs
+      summary: Retrieve an issued certificate
+      description: 'Returns the available certificate data and optional private key information for an enrolled
+
+        certificate.
+
+
+        Available options for `Format`:
+
+
+        |Format | Content-Type |Description|
+
+        |----------------|----------------------------------|----------------------------------|
+
+        |Base64 | application/x-pem-file |Return the certificate in the traditional PEM format.|
+
+        |Base64 (PKCS #8)| application/x-pem-file |Return the certificate in the PEM format and include the PKCS#8 encoded private key.|
+
+        |DER | application/x-x509-ca-cert |Return the raw certificate. Use `IncludePrivateKey` and set the password.|
+
+        |JKS | application/octet-stream |Return the certificate in the Java Keystore (JKS) format.|
+
+        |PKCS #7 | application/x-pkcs7-certificates |Return the certificate with optional chain in the PKCS#7 format|
+
+        |PKCS #12 | application/x-pkcs12 |Return the certificate in the PKCS#12 format. Use `IncludePrivateKey` and set the password."
+
+
+        **Note:** This endpoint returns a JSON structure with the certificate data and other information. To download the raw certificate (in various formats), use the `GET /certificates/retrieve` endpoint.
+
+
+        _Required scope: certificate:manage_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateRequestRest_CertificateRetrieve
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebSDK_CertificateRequest_RetrieveRequest_Retrieve'
+        required: true
+      responses:
+        '200':
+          description: The certificate retrieval was successful, and the certificate data is included in the response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_RetrieveResponse'
+        '202':
+          description: The certificate issuance is still pending. Use the /certificate/retrieve endpoint to obtain the certificate after it is issued.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_RetrieveResponse'
+        '500':
+          description: An internal error occurred during certificate retrieval processing. See the error message for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_RetrieveResponse'
+        '400':
+          description: ' Invalid or missing request parameters. See the error message for details.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_RetrieveResponse'
+      security:
+      - AccessToken: []
+    get:
+      tags:
+      - Certificate Management APIs
+      summary: Retrieve an issued certificate (GET)
+      description: 'Returns the available certificate data and optional private key information for an enrolled certificate.
+
+
+        The response body contains the requested certificate in binary form.
+
+
+        Depending on the requested format, the Content-Type will be:
+
+
+        | Format | Content-Type |
+
+        |------------------|----------------------------------|
+
+        | BASE64 (pkcs #8) | application/x-pem-file |
+
+        | BASE64 | application/x-pem-file |
+
+        | DER | application/x-x509-ca-cert |
+
+        | PKCS #7 | application/x-pkcs7-certificates |
+
+        | PKCS #12 | application/x-pkcs12 |
+
+        | JKS | application/octet-stream |
+
+
+        **Note:** This API method matches `POST certificates/Retrieve`, except that all arguments are passed as part of the URL.
+
+
+        _Required scope: certificate:manage_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateRequestRest_CertificateRetrieveGet
+      parameters:
+      - name: CertificateDN
+        in: query
+        description: The Distinguished Name (DN) of the certificate to be retrieved.
+        required: true
+        schema:
+          type: string
+      - name: Format
+        in: query
+        description: The format in which to retrieve the certificate (e.g., Base64, DER).
+        required: true
+        schema:
+          type: string
+      - name: Password
+        in: query
+        description: The password to use if the certificate includes a private key. (Required if IncludePrivateKey is true)
+        required: true
+        schema:
+          type: string
+      - name: KeystorePassword
+        in: query
+        description: The password for the Java Keystore (JKS) format. (Required if Format is JKS)
+        required: true
+        schema:
+          type: string
+      - name: FriendlyName
+        in: query
+        description: The friendly name for the certificate. (Required if Format is JKS)
+        required: true
+        schema:
+          type: string
+      - name: IncludePrivateKey
+        in: query
+        description: Indicates whether to include the private key in the response.
+        required: true
+        schema:
+          type: string
+      - name: IncludeChain
+        in: query
+        description: Indicates whether to include the certificate chain in the response.
+        required: true
+        schema:
+          type: string
+      - name: RootFirstOrder
+        in: query
+        description: Indicates whether to include the root certificate first in the chain.
+        required: true
+        schema:
+          type: string
+      - name: EncryptionAlgorithm
+        in: query
+        description: The encryption algorithm to use for the certificate.
+        required: true
+        schema:
+          type: string
+      - name: WorkToDoTimeout
+        in: query
+        description: The time to wait for the certificate to be issued before returning a response.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the certificate as a binary stream.
+          content:
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/IO_Stream'
+        '202':
+          description: The certificate issuance is still pending. Use the /certificate/retrieve endpoint to obtain the certificate after it is issued.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IO_Stream'
+        '500':
+          description: An internal error occurred during certificate retrieval processing. See the error message for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IO_Stream'
+        '400':
+          description: ' Invalid or missing request parameters. See the error message for details.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IO_Stream'
+      security:
+      - AccessToken: []
+  /vedsdk/certificates/Renew:
+    post:
+      tags:
+      - Certificate Management APIs
+      summary: Renew a certificate
+      description: 'Requests immediate renewal for an existing certificate. A renewable certificate cannot be currently processing, in error,
+
+        or contain a ''Monitoring'' Management Type.
+
+
+        Optionally, this API call can renew a previously disabled certificate.
+
+
+        _The caller must have Write permission to the Certificate object that requires renewal._
+
+
+        **NOTE:** Unless the _WorkToDoTimeout_ parameter is specified, this method will immediately return. If you want to wait for the certificate to be issued and returned in the response, specify how long you are willing to wait via _WorkToDoTimeout_.
+
+
+        **Result code:**
+
+
+        * 200 will be returned if the certificate request was accepted and the WorkToDoTimeout was not set.
+
+        * 200 will be returned if the WorkToDoTimeout was set and the certificate is included in the response.
+
+        * 202 will be returned if the certificate issuance is still pending. In this case, use the `/certificate/retrieve` endpoint to obtain the certificate after it is issued.
+
+
+        _Required scope: certificate:manage_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateRequestRest_CertificateRenew
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebSDK_CertificateRequest_RenewRequest'
+        required: true
+      responses:
+        '200':
+          description: The response body contains the renewed certificate data and other information. Returned if the certificate request was accepted and the WorkToDoTimeout was not set, OR WorkToDoTimeout was set and the certificate is included in the response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_RenewResponse_Renew'
+        '202':
+          description: Returned if the certificate issuance is still pending. In this case, use the `/certificate/retrieve` endpoint to obtain the certificate after it is issued.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_RenewResponse'
+        '500':
+          description: An internal error occurred during certificate renewal processing.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_RenewResponse'
+        '400':
+          description: The request was invalid due to missing or incorrect parameters (e.g., certificate not found, no PKCS#10 provided for a User Provided CSR).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_RenewResponse'
+      security:
+      - AccessToken: []
+  /vedsdk/certificates/Revoke:
+    post:
+      tags:
+      - Certificate Management APIs
+      summary: Revoke a certificate
+      description: 'Revokes an existing certificate. The request can be made using either the certificate''s Distinguished Name (DN) or its Thumbprint.
+
+        If both are provided, the DN will be used. The revocation reason and comments are optional.
+
+        If the Disable parameter is set to true, the certificate will be disabled after revocation.
+
+        The WorkToDoTimeout parameter specifies the time to wait for the revocation process to complete before returning a response.
+
+
+        _Required scope: certificate:revoke_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateRequestRest_CertificateRevoke
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebSDK_CertificateRequest_RevokeRequest'
+        required: true
+      responses:
+        '200':
+          description: The certificate was successfully revoked. The Success property is true, and Revoked is true.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_RevokeResponse'
+        '202':
+          description: The revocation request has been submitted but is pending confirmation. The Success property is true, but Revoked remains false. A warning message may indicate the pending status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_RevokeResponse'
+        '500':
+          description: An unexpected error occurred during revocation processing. The Error property contains details about the failure.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_RevokeResponse'
+        '400':
+          description: The request was invalid due to missing or incorrect parameters (e.g., certificate not found, no revocation reason provided). The Error property contains details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_RevokeResponse'
+        '403':
+          description: The request was denied due to insufficient permissions to revoke the certificate. The Error property contains details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_RevokeResponse'
+      security:
+      - AccessToken: []
+  /vedsdk/certificates/:
+    get:
+      tags:
+      - Certificate Management APIs
+      summary: Search certificates
+      description: 'Returns certificate details and the total number of certificates that match the specified search filters.
+
+
+        _Required scope: certificate_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateRequestRest_GetCertificates
+      parameters:
+      - name: offset
+        in: query
+        description: Number of certificates to skip from the beginning.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Number of certificates to take.
+        schema:
+          type: string
+      - name: optionalfields
+        in: query
+        description: Comma separated list of optional fields.
+        schema:
+          type: string
+      - name: createdon
+        in: query
+        description: Certificates created on the date and time.
+        schema:
+          type: string
+      - name: createdongreater
+        in: query
+        description: Certificates created after the date and time.
+        schema:
+          type: string
+      - name: createdonless
+        in: query
+        description: Certificates created before the date and time.
+        schema:
+          type: string
+      - name: parentdn
+        in: query
+        description: Certificates in specific policies DN.
+        schema:
+          type: string
+      - name: parentdnrecursive
+        in: query
+        description: Certificates below specific policies DN.
+        schema:
+          type: string
+      - name: keysize
+        in: query
+        description: Certificates with the key size from the list.  See also ParameterSet
+        schema:
+          type: string
+      - name: keysizegreater
+        in: query
+        description: Certificates with the key size greater than the value.
+        schema:
+          type: string
+      - name: keysizeless
+        in: query
+        description: Certificates with the key size less than the value.
+        schema:
+          type: string
+      - name: stage
+        in: query
+        description: Certificates in any stage from the list.
+        schema:
+          type: string
+      - name: stagegreater
+        in: query
+        description: Certificates in stage greater than the value.
+        schema:
+          type: string
+      - name: stageless
+        in: query
+        description: Certificates in stage less than the value.
+        schema:
+          type: string
+      - name: validto
+        in: query
+        description: Certificates with valid to as the date and time.
+        schema:
+          type: string
+      - name: validtogreater
+        in: query
+        description: Certificates with valid to greater the date and time.
+        schema:
+          type: string
+      - name: validtoless
+        in: query
+        description: Certificates with valid to less the date and time.
+        schema:
+          type: string
+      - name: validfrom
+        in: query
+        description: Certificates with valid from as the date and time.
+        schema:
+          type: string
+      - name: validfromgreater
+        in: query
+        description: Certificates with valid from greater the date and time.
+        schema:
+          type: string
+      - name: validfromless
+        in: query
+        description: Certificates with valid from less the date and time.
+        schema:
+          type: string
+      - name: pendingworkflow
+        in: query
+        description: Certificates with pending workflow.
+        schema:
+          type: string
+      - name: validationstate
+        in: query
+        description: Certificates with specific validation state.
+        schema:
+          type: string
+      - name: inerror
+        in: query
+        description: Certificates in error if value equals 1 or not provided, otherwise not in error.
+        schema:
+          type: string
+      - name: disabled
+        in: query
+        description: Disabled certificates if value is 1 or not provided, otherwise enabled certificates.
+        schema:
+          type: string
+      - name: name
+        in: query
+        description: Certificates with name from the list.
+        schema:
+          type: string
+      - name: managementtype
+        in: query
+        description: Certificates with specific management type.
+        schema:
+          type: string
+      - name: validationdisabled
+        in: query
+        description: Certificates with specific validation disabled string value.
+        schema:
+          type: string
+      - name: networkvalidationdisabled
+        in: query
+        description: Certificates with specific network validation disabled string value.
+        schema:
+          type: string
+      - name: certificatetype
+        in: query
+        description: Certificates with type from the list.
+        schema:
+          type: string
+      - name: cn
+        in: query
+        description: Certificates with common name from the list.
+        schema:
+          type: string
+      - name: c
+        in: query
+        description: Certificates with country from the list.
+        schema:
+          type: string
+      - name: s
+        in: query
+        description: Certificates with state from the list.
+        schema:
+          type: string
+      - name: l
+        in: query
+        description: Certificates with locality from the list.
+        schema:
+          type: string
+      - name: o
+        in: query
+        description: Certificates with organization from the list.
+        schema:
+          type: string
+      - name: issuer
+        in: query
+        description: Certificates with issue from the list.
+        schema:
+          type: string
+      - name: serial
+        in: query
+        description: Certificates with serial from the list.
+        schema:
+          type: string
+      - name: keyalgorithm
+        in: query
+        description: Certificates with key algorithm from the list.
+        schema:
+          type: string
+      - name: signaturealgorithm
+        in: query
+        description: Certificates with signature algorithm from the list.
+        schema:
+          type: string
+      - name: pkixparameterset
+        in: query
+        description: Certificates with a pkix parameter set oid from the list.  (see 'PKIX Parameter Set' section under 'Certificate Management APIs')
+        schema:
+          type: string
+      - name: ou
+        in: query
+        description: Certificates with any organization unit from the list.
+        schema:
+          type: string
+      - name: san-dns
+        in: query
+        description: Certificates with any SAN DNS from the list.
+        schema:
+          type: string
+      - name: san-ip
+        in: query
+        description: Certificates with any SAN IP from the list.
+        schema:
+          type: string
+      - name: san-email
+        in: query
+        description: Certificates with any SAN email from the list.
+        schema:
+          type: string
+      - name: san-uri
+        in: query
+        description: Certificates with any SAN URI from the list.
+        schema:
+          type: string
+      - name: san-upn
+        in: query
+        description: Certificates with any SAN UPN from the list.
+        schema:
+          type: string
+      - name: thumbprint
+        in: query
+        description: Certificates with thumbprint from the list.
+        schema:
+          type: string
+      - name: contact
+        in: query
+        description: Certificates with any contact from the list.
+        schema:
+          type: string
+      - name: approver
+        in: query
+        description: Certificates with any approver from the list.
+        schema:
+          type: string
+      - name: isselfsigned
+        in: query
+        description: Self-signed certificates when the value is 1 or not provided; all certificates except self-signed when the value is 0.
+        schema:
+          type: string
+      - name: iswildcard
+        in: query
+        description: Certificates with CN or any SAN DNS started with wildcard (*.) when the value is 1 or not provided; all certificates except the wildcard, when the value is 0.
+        schema:
+          type: string
+      - name: ssltlsprotocol
+        in: query
+        description: Certificates with at least one consumer with validation protocol from the list.
+        schema:
+          type: string
+      - name: tlsvalidationfailure
+        in: query
+        description: Certificates with  at least one instance of the specified SSL/TLS Validation failure result from the list.
+        schema:
+          type: string
+      - name: chainvalidationfailure
+        in: query
+        description: Certificates with at least one instance of the specified Chain Validation failure result from the list.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The response body contains the list of certificates that match the specified search filters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_CertificateResults'
+        '500':
+          description: An unexpected error occurred during the certificate search process. The ErrorDetails property contains details about the failure.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_CertificateResults'
+        '400':
+          description: The request was invalid due to incorrect parameters (e.g., invalid parent DN). The ErrorDetails property contains details about the failure.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_CertificateResults'
+      security:
+      - AccessToken: []
+    head:
+      tags:
+      - Certificate Management APIs
+      summary: Get certificates count
+      description: 'Searches and returns the number of certificates that match the specified search filters.
+
+
+        _Required scope: certificate_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateRequestRest_GetCertificateCount
+      parameters:
+      - name: offset
+        in: query
+        description: Number of certificates to skip from the beginning.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Number of certificates to take.
+        schema:
+          type: string
+      - name: optionalfields
+        in: query
+        description: Comma separated list of optional fields.
+        schema:
+          type: string
+      - name: createdon
+        in: query
+        description: Certificates created on the date and time.
+        schema:
+          type: string
+      - name: createdongreater
+        in: query
+        description: Certificates created after the date and time.
+        schema:
+          type: string
+      - name: createdonless
+        in: query
+        description: Certificates created before the date and time.
+        schema:
+          type: string
+      - name: parentdn
+        in: query
+        description: Certificates in specific policies DN.
+        schema:
+          type: string
+      - name: parentdnrecursive
+        in: query
+        description: Certificates below specific policies DN.
+        schema:
+          type: string
+      - name: keysize
+        in: query
+        description: Certificates with the key size from the list.
+        schema:
+          type: string
+      - name: keysizegreater
+        in: query
+        description: Certificates with the key size greater than the value.
+        schema:
+          type: string
+      - name: keysizeless
+        in: query
+        description: Certificates with the key size less than the value.
+        schema:
+          type: string
+      - name: stage
+        in: query
+        description: Certificates in any stage from the list.
+        schema:
+          type: string
+      - name: stagegreater
+        in: query
+        description: Certificates in stage greater than the value.
+        schema:
+          type: string
+      - name: stageless
+        in: query
+        description: Certificates in stage less than the value.
+        schema:
+          type: string
+      - name: validto
+        in: query
+        description: Certificates with valid to as the date and time.
+        schema:
+          type: string
+      - name: validtogreater
+        in: query
+        description: Certificates with valid to greater the date and time.
+        schema:
+          type: string
+      - name: validtoless
+        in: query
+        description: Certificates with valid to less the date and time.
+        schema:
+          type: string
+      - name: validfrom
+        in: query
+        description: Certificates with valid from as the date and time.
+        schema:
+          type: string
+      - name: validfromgreater
+        in: query
+        description: Certificates with valid from greater the date and time.
+        schema:
+          type: string
+      - name: validfromless
+        in: query
+        description: Certificates with valid from less the date and time.
+        schema:
+          type: string
+      - name: pendingworkflow
+        in: query
+        description: Certificates with pending workflow.
+        schema:
+          type: string
+      - name: validationstate
+        in: query
+        description: Certificates with specific validation state.
+        schema:
+          type: string
+      - name: inerror
+        in: query
+        description: Certificates in error if value equals 1 or not provided, otherwise not in error.
+        schema:
+          type: string
+      - name: disabled
+        in: query
+        description: Disabled certificates if value is 1 or not provided, otherwise enabled certificates.
+        schema:
+          type: string
+      - name: name
+        in: query
+        description: Certificates with name from the list.
+        schema:
+          type: string
+      - name: managementtype
+        in: query
+        description: Certificates with specific management type.
+        schema:
+          type: string
+      - name: validationdisabled
+        in: query
+        description: Certificates with specific validation disabled string value.
+        schema:
+          type: string
+      - name: networkvalidationdisabled
+        in: query
+        description: Certificates with specific network validation disabled string value.
+        schema:
+          type: string
+      - name: certificatetype
+        in: query
+        description: Certificates with type from the list.
+        schema:
+          type: string
+      - name: cn
+        in: query
+        description: Certificates with common name from the list.
+        schema:
+          type: string
+      - name: c
+        in: query
+        description: Certificates with country from the list.
+        schema:
+          type: string
+      - name: s
+        in: query
+        description: Certificates with state from the list.
+        schema:
+          type: string
+      - name: l
+        in: query
+        description: Certificates with locality from the list.
+        schema:
+          type: string
+      - name: o
+        in: query
+        description: Certificates with organization from the list.
+        schema:
+          type: string
+      - name: issuer
+        in: query
+        description: Certificates with issue from the list.
+        schema:
+          type: string
+      - name: serial
+        in: query
+        description: Certificates with serial from the list.
+        schema:
+          type: string
+      - name: keyalgorithm
+        in: query
+        description: Certificates with key algorithm from the list.
+        schema:
+          type: string
+      - name: signaturealgorithm
+        in: query
+        description: Certificates with signature algorithm from the list.
+        schema:
+          type: string
+      - name: pkixparameterset
+        in: query
+        description: Certificates with parameter set oid from the list.
+        schema:
+          type: string
+      - name: ou
+        in: query
+        description: Certificates with any organization unit from the list.
+        schema:
+          type: string
+      - name: san-dns
+        in: query
+        description: Certificates with any SAN DNS from the list.
+        schema:
+          type: string
+      - name: san-ip
+        in: query
+        description: Certificates with any SAN IP from the list.
+        schema:
+          type: string
+      - name: san-email
+        in: query
+        description: Certificates with any SAN email from the list.
+        schema:
+          type: string
+      - name: san-uri
+        in: query
+        description: Certificates with any SAN URI from the list.
+        schema:
+          type: string
+      - name: san-upn
+        in: query
+        description: Certificates with any SAN UPN from the list.
+        schema:
+          type: string
+      - name: thumbprint
+        in: query
+        description: Certificates with thumbprint from the list.
+        schema:
+          type: string
+      - name: contact
+        in: query
+        description: Certificates with any contact from the list.
+        schema:
+          type: string
+      - name: approver
+        in: query
+        description: Certificates with any approver from the list.
+        schema:
+          type: string
+      - name: isselfsigned
+        in: query
+        description: Self-signed certificates when the value is 1 or not provided; all certificates except self-signed when the value is 0.
+        schema:
+          type: string
+      - name: iswildcard
+        in: query
+        description: Certificates with CN or any SAN DNS started with wildcard (*.) when the value is 1 or not provided; all certificates except the wildcard, when the value is 0.
+        schema:
+          type: string
+      - name: ssltlsprotocol
+        in: query
+        description: Certificates with at least one consumer with validation protocol from the list.
+        schema:
+          type: string
+      - name: tlsvalidationfailure
+        in: query
+        description: Certificates with  at least one instance of the specified SSL/TLS Validation failure result from the list.
+        schema:
+          type: string
+      - name: chainvalidationfailure
+        in: query
+        description: Certificates with at least one instance of the specified Chain Validation failure result from the list.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 'Success. The response header X-Record-Count contains the total number of matching certificates. '
+        '500':
+          description: An unexpected error occurred during the certificate count process.
+      security:
+      - AccessToken: []
+  /vedsdk/certificates/Associate:
+    post:
+      tags:
+      - Certificate Management APIs
+      summary: Associate an application
+      description: 'Allows one or more application objects to use an existing certificate
+
+
+        _Required scope: certificate:manage_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateRequestRest_CertificateAssociate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebSDK_CertificateRequest_AssociateRequest'
+        required: true
+      responses:
+        '200':
+          description: 'Certificate successfully associated with the specified application(s). The response includes Success: true, and the Warning field may contain additional messages related to the operation.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_AssociateResponse'
+        '400':
+          description: Invalid or missing request parameters. The Error property will provide details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_AssociateResponse'
+      security:
+      - AccessToken: []
+  /vedsdk/certificates/Dissociate:
+    post:
+      tags:
+      - Certificate Management APIs
+      summary: Dissociate an application
+      description: 'Detaches one or more application objects and corresponding device objects from an existing certificate.
+
+
+        _Required scope: certificate:manage_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateRequestRest_CertificateDissociate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebSDK_CertificateRequest_DissociateRequest'
+        required: true
+      responses:
+        '200':
+          description: 'Certificate successfully dissociated from the specified application(s). The response includes Success: true, and the Error field will be null.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_DissociateResponse'
+        '400':
+          description: Invalid or missing request parameters. The Error property will provide details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_DissociateResponse'
+      security:
+      - AccessToken: []
+  /vedsdk/certificates/Push:
+    post:
+      tags:
+      - Certificate Management APIs
+      summary: Initiate provisioning
+      description: 'Initiates the certificate provisioning to some or all certificate consumers.
+
+
+        _Required scope: certificate:manage_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateRequestRest_CertificatePush
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebSDK_CertificateRequest_PushRequest'
+        required: true
+      responses:
+        '200':
+          description: 'Certificate successfully pushed to the specified application(s). The response includes Success: true, and the Warning field may contain additional messages related to the operation.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_PushResponse'
+        '400':
+          description: Invalid or missing request parameters. The Error property will provide details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_PushResponse'
+      security:
+      - AccessToken: []
+  /vedsdk/certificates/Import:
+    post:
+      tags:
+      - Certificate Management APIs
+      summary: Import a certificate
+      description: 'Imports a certificate and performs reconciliation
+
+
+        _Required scope: certificate:discover_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateRequestRest_CertificateImport
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebSDK_CertificateRequest_ImportRequest'
+        required: true
+      responses:
+        '200':
+          description: The certificate was imported successfully. The response body contains the result of the import operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_ImportResponse'
+        '400':
+          description: Invalid or missing request parameters. The Error property contains details about the failure.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_ImportResponse'
+      security:
+      - AccessToken: []
+  /vedsdk/certificates/Reset:
+    post:
+      tags:
+      - Certificate Management APIs
+      summary: Reset processing state
+      description: 'Resets the processing state of a certificate object and any associated applications.
+
+
+        _Required scope: certificate:manage_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateRequestRest_Reset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebSDK_CertificateRequest_ResetRequest'
+        required: true
+      responses:
+        '200':
+          description: Certificate processing state reset successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_ResetResponse'
+        '400':
+          description: Invalid or missing request parameters. The Error property contains details about the failure.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_ResetResponse'
+      security:
+      - AccessToken: []
+  /vedsdk/certificates/Retry:
+    post:
+      tags:
+      - Certificate Management APIs
+      summary: Retry processing
+      description: 'Retries processing a certificate from its last unsuccessful lifecycle stage.
+
+
+        _Required scope: certificate:manage_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateRequestRest_Retry
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebSDK_CertificateRequest_RetryRequest'
+        required: true
+      responses:
+        '200':
+          description: Certificate processing retry successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_RetryResponse'
+        '400':
+          description: Invalid or missing request parameters. The Error property contains details about the failure.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_RetryResponse'
+      security:
+      - AccessToken: []
+  /vedsdk/certificates/{guid}/ValidationResults:
+    parameters:
+    - name: guid
+      in: path
+      description: Guid representing the certificate for which to get validation results.
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Certificate Management APIs
+      summary: Retrieve certificate validation results
+      description: 'Retrieves a list of validation results for the certificate.
+
+
+        _Required scope: certificate_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateRequestRest_GetValidationResults
+      responses:
+        '200':
+          description: Validation results retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_ValidationResultsResponse'
+        '400':
+          description: The guid is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_ValidationResultsResponse'
+        '403':
+          description: There are insufficient privileges to retrieve validation results.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_ValidationResultsResponse'
+        '500':
+          description: There is an internal server error while retrieving validation results.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_ValidationResultsResponse'
+        '204':
+          description: No validation results are found for the specified certificate.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_ValidationResultsResponse'
+      security:
+      - AccessToken: []
+components:
+  schemas:
+    WebSDK_CertificateRequest_RetryResponse:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: Contains an error message if the retry failed.
+        Success:
+          type: boolean
+          description: Indicates whether the retry was successful.
+      description: The class for certificate retry method response.
+    WebSDK_CertificateRequest_DeleteResponse:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: Contains an error message if the delete operation failed.
+        Warning:
+          type: string
+          description: Contains a warning message if there are any warnings during the delete operation.
+        Success:
+          type: boolean
+          description: Indicates whether the delete operation was successful.
+      description: The delete method response.
+    IO_Stream:
+      type: object
+    WebSDK_CertificateRequest_PreviousVersionsResponse:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: Contains an error message if the operation failed.
+        Warning:
+          type: string
+          description: Contains a warning message if there are any warnings during the operation.
+        Success:
+          type: boolean
+          description: Indicates whether the operation was successful.
+        PreviousVersions:
+          type: array
+          items:
+            type: object
+            properties:
+              VaultId:
+                type: integer
+                description: The vault ID of the previous certificate version.
+                format: int64
+              CertificateDetails:
+                type: object
+                properties:
+                  Subject:
+                    type: string
+                    description: The subject of the certificate.
+                  E:
+                    type: string
+                    description: The email address associated with the certificate.
+                  CN:
+                    type: string
+                    description: The common name of the certificate.
+                  C:
+                    type: string
+                    description: The country associated with the certificate.
+                  S:
+                    type: string
+                    description: The state associated with the certificate.
+                  L:
+                    type: string
+                    description: The locality associated with the certificate.
+                  O:
+                    type: string
+                    description: The organization associated with the certificate.
+                  OU:
+                    type: array
+                    items:
+                      type: string
+                    description: The organizational unit associated with the certificate.
+                  Serial:
+                    type: string
+                    description: The serial number of the certificate.
+                  Issuer:
+                    type: string
+                    description: The issuer of the certificate.
+                  KeySize:
+                    type: integer
+                    description: The key size of the certificate.
+                    format: int32
+                  ValidFrom:
+                    type: string
+                    description: The date and time when the certificate is valid from, in ISO 8601 format.
+                  ValidTo:
+                    type: string
+                    description: The date and time when the certificate is valid to, in ISO 8601 format.
+                  EnhancedKeyUsage:
+                    type: string
+                    description: The enhanced key usage of the certificate.
+                  PublicKeyHash:
+                    type: string
+                    description: The public key hash of the certificate.
+                  KeyAlgorithm:
+                    type: string
+                    description: The key algorithm of the certificate.
+                  KeyAlgorithmName:
+                    type: string
+                    description: The RFC name of the key algorithm for the certificate.
+                  KeyAlgorithmOid:
+                    type: string
+                    description: The OID of the key algorithm for the certificate.
+                  KeyUsage:
+                    type: string
+                    description: The key usage of the certificate.
+                  PkixParameterSet:
+                    type: string
+                    description: The PKIX parameter set of the key algorithm.
+                  SignatureAlgorithm:
+                    type: string
+                    description: The signature algorithm of the certificate.
+                  SignatureAlgorithmName:
+                    type: string
+                    description: The RFC name of the signature algorithm used to sign the certificate.
+                  SignatureAlgorithmOID:
+                    type: string
+                    description: The OID of the signature algorithm used to sign the certificate.
+                  SKIKeyIdentifier:
+                    type: string
+                    description: The subject key identifier of the certificate.
+                  StoreAdded:
+                    type: string
+                    description: The date the certificate was added to the store, in ISO 8601 format.
+                  RevocationStatus:
+                    type: string
+                    description: The revocation status of the certificate.
+                  RevocationDate:
+                    type: string
+                    description: The date and time when the certificate was revoked, in ISO 8601 format.
+                  RevocationInitiatedBy:
+                    type: string
+                    description: The entity that initiated the revocation of the certificate.
+                  SubjectAltNameDNS:
+                    type: array
+                    items:
+                      type: string
+                    description: The DNS names associated with the certificate.
+                  SubjectAltNameEmail:
+                    type: array
+                    items:
+                      type: string
+                    description: The email addresses associated with the certificate.
+                  SubjectAltNameIPAddress:
+                    type: array
+                    items:
+                      type: string
+                    description: The IP addresses associated with the certificate.
+                  SubjectAltNameURI:
+                    type: array
+                    items:
+                      type: string
+                    description: The URIs associated with the certificate.
+                  SubjectAltNameOtherNameUPN:
+                    type: array
+                    items:
+                      type: string
+                    description: The UPNs associated with the certificate.
+                  AIACAIssuerURL:
+                    type: array
+                    items:
+                      type: string
+                    description: The AIA CA Issuer URLs associated with the certificate.
+                  AIAKeyIdentifier:
+                    type: string
+                    description: The AIA Key Identifier associated with the certificate.
+                  CDPURI:
+                    type: string
+                    description: The CDP URI associated with the certificate.
+                  TemplateMajorVersion:
+                    type: string
+                    description: The template major version used to issue the certificate.
+                  TemplateMinorVersion:
+                    type: string
+                    description: The template minor version used to issue the certificate.
+                  TemplateOID:
+                    type: string
+                    description: The template OID used to issue the certificate.
+                  TemplateName:
+                    type: string
+                    description: The template name used to issue the certificate.
+                  Thumbprint:
+                    type: string
+                    description: The thumbprint (SHA1 Hash) of the certificate.
+                  EllipticCurve:
+                    type: string
+                    description: The elliptic curve of the certificate.
+                description: The details of the previous certificate version.
+            description: The class for certificate previous version data.
+          description: The list of previous certificate versions.
+      description: The class for GET certificate previous versions method response.
+    WebSDK_CertificateRequest_RequestRequest:
+      type: object
+      properties:
+        PolicyDN:
+          type: string
+          description: The Distinguished Name (DN) of the policy under which the certificate will be created.
+        CADN:
+          type: string
+          description: The Distinguished Name (DN) of the Certificate Authority (CA) to use for issuing the certificate.
+        ObjectName:
+          type: string
+          description: The name of the certificate object.
+        Subject:
+          type: string
+          description: The subject of the certificate.
+        OrganizationalUnit:
+          type: string
+          description: The organizational unit for the certificate.
+        Organization:
+          type: string
+          description: The organization for the certificate.
+        City:
+          type: string
+          description: The city/locality for the certificate.
+        State:
+          type: string
+          description: The state/province for the certificate.
+        Country:
+          type: string
+          description: The country for the certificate.
+        SubjectAltNames:
+          type: array
+          items:
+            type: object
+            properties:
+              Type:
+                $ref: '#/components/schemas/Nullable_1_Core_Cryptography_SubjectAltNameType_'
+              Name:
+                type: string
+                description: SAN name. Custom SAN _OtherName_ format is either "oid:value" or "friendlyname:value".
+              IsCustom:
+                type: boolean
+                description: 'True if the SAN is custom _OtherName_. Unknown (not registered) OIDs are rejected.
+
+                  This flag is ignored if the _TypeName_ is not _OtherName_.'
+              TypeName:
+                type: string
+                description: The type name.
+            description: The class for SAN item data.
+          description: The Subject Alternative Names (SANs) for the certificate.
+        Contacts:
+          type: array
+          items:
+            type: object
+            properties:
+              Prefix:
+                type: string
+                description: Gets the prefix of the identity provider owning the entry
+              PrefixedName:
+                type: string
+                description: The name of the prefixed.
+              PrefixedUniversal:
+                type: string
+                description: Gets the prefixed universal.
+              Name:
+                type: string
+                description: Gets the name of the entry
+              FullName:
+                type: string
+                description: Gets the full name of the entry
+              Universal:
+                type: string
+                description: Gets the universal (machine-readable) name of the entry
+              IsGroup:
+                type: boolean
+                description: True if the entry represents a group
+              Type:
+                $ref: '#/components/schemas/Core_IdentityType'
+              State:
+                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+            description: Describes an Identity
+          description: The contacts for the certificate.
+        Approvers:
+          type: array
+          items:
+            type: object
+            properties:
+              Prefix:
+                type: string
+                description: Gets the prefix of the identity provider owning the entry
+              PrefixedName:
+                type: string
+                description: The name of the prefixed.
+              PrefixedUniversal:
+                type: string
+                description: Gets the prefixed universal.
+              Name:
+                type: string
+                description: Gets the name of the entry
+              FullName:
+                type: string
+                description: Gets the full name of the entry
+              Universal:
+                type: string
+                description: Gets the universal (machine-readable) name of the entry
+              IsGroup:
+                type: boolean
+                description: True if the entry represents a group
+              Type:
+                $ref: '#/components/schemas/Core_IdentityType'
+              State:
+                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+            description: Describes an Identity
+          description: The approvers for the certificate.
+        CASpecificAttributes:
+          type: array
+          items:
+            type: object
+            properties:
+              Name:
+                type: string
+                description: The name.
+              Value:
+                type: string
+                description: The value.
+            description: Holds a string/object value pair
+          description: The Certificate Authority-specific attributes for the certificate request.
+        PKCS10:
+          type: string
+          description: The PKCS#10 certificate signing request (CSR) data.
+        DisableAutomaticRenewal:
+          type:
+          - boolean
+          - 'null'
+          description: A flag indicating whether automatic renewal should be disabled for the certificate.
+        ManagementType:
+          type: string
+          description: The management type for the certificate.
+        SetWorkToDo:
+          type:
+          - boolean
+          - 'null'
+          description: A flag indicating whether to set a work to do item for the certificate request.
+        WorkToDoTimeout:
+          type:
+          - integer
+          - 'null'
+          description: Number of seconds to wait for the certificate enrollment or renewal to finish before returning
+          format: int32
+        Devices:
+          type: array
+          items:
+            type: object
+            properties:
+              PolicyDN:
+                type: string
+                description: The policy DN.
+              ObjectName:
+                type: string
+                description: The object name.
+              Description:
+                type: string
+                description: The description.
+              Contacts:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Prefix:
+                      type: string
+                      description: Gets the prefix of the identity provider owning the entry
+                    PrefixedName:
+                      type: string
+                      description: The name of the prefixed.
+                    PrefixedUniversal:
+                      type: string
+                      description: Gets the prefixed universal.
+                    Name:
+                      type: string
+                      description: Gets the name of the entry
+                    FullName:
+                      type: string
+                      description: Gets the full name of the entry
+                    Universal:
+                      type: string
+                      description: Gets the universal (machine-readable) name of the entry
+                    IsGroup:
+                      type: boolean
+                      description: True if the entry represents a group
+                    Type:
+                      $ref: '#/components/schemas/Core_IdentityType'
+                    State:
+                      $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+                  description: Describes an Identity
+                description: The contacts.
+              Host:
+                type: string
+                description: The host.
+              Port:
+                type:
+                - integer
+                - 'null'
+                description: The port number.
+                format: int32
+              CredentialDN:
+                type: string
+                description: The credential DN.
+              TempDirectory:
+                type: string
+                description: The temp directory.
+              UseSudo:
+                type:
+                - boolean
+                - 'null'
+                description: The use SUDO flag.
+              SudoCredentialDN:
+                type: string
+                description: The sudo credential DN.
+              ConcurrentConnectionLimit:
+                type:
+                - integer
+                - 'null'
+                description: The concurrent connections limit.
+                format: int32
+              TrustedFingerprint:
+                type: string
+                description: The trusted fingerprint.
+              EnforceKnownHost:
+                type:
+                - boolean
+                - 'null'
+                description: The enforce known host flag.
+              CreatedBy:
+                type: string
+                description: The created by info.
+              Applications:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Description:
+                      type: string
+                      description: Description.
+                    ObjectName:
+                      type: string
+                      description: Object name.
+                    DriverName:
+                      type: string
+                      description: Driver name.
+                    Class:
+                      type: string
+                      description: Class name.
+                    Approvers:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          Prefix:
+                            type: string
+                            description: Gets the prefix of the identity provider owning the entry
+                          PrefixedName:
+                            type: string
+                            description: The name of the prefixed.
+                          PrefixedUniversal:
+                            type: string
+                            description: Gets the prefixed universal.
+                          Name:
+                            type: string
+                            description: Gets the name of the entry
+                          FullName:
+                            type: string
+                            description: Gets the full name of the entry
+                          Universal:
+                            type: string
+                            description: Gets the universal (machine-readable) name of the entry
+                          IsGroup:
+                            type: boolean
+                            description: True if the entry represents a group
+                          Type:
+                            $ref: '#/components/schemas/Core_IdentityType'
+                          State:
+                            $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+                        description: Describes an Identity
+                      description: List of approvers.
+                    Contacts:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          Prefix:
+                            type: string
+                            description: Gets the prefix of the identity provider owning the entry
+                          PrefixedName:
+                            type: string
+                            description: The name of the prefixed.
+                          PrefixedUniversal:
+                            type: string
+                            description: Gets the prefixed universal.
+                          Name:
+                            type: string
+                            description: Gets the name of the entry
+                          FullName:
+                            type: string
+                            description: Gets the full name of the entry
+                          Universal:
+                            type: string
+                            description: Gets the universal (machine-readable) name of the entry
+                          IsGroup:
+                            type: boolean
+                            description: True if the entry represents a group
+                          Type:
+                            $ref: '#/components/schemas/Core_IdentityType'
+                          State:
+                            $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+                        description: Describes an Identity
+                      description: List of contacts.
+                    CreatedBy:
+                      type: string
+                      description: Created by.
+                    PrivateKeyCredentialDN:
+                      type: string
+                      description: Private key credential DN.
+                    DisableValidation:
+                      type:
+                      - boolean
+                      - 'null'
+                      description: Disable validation flag.
+                    DisableNetworkValidation:
+                      type:
+                      - boolean
+                      - 'null'
+                      description: Disable network validation flag.
+                    ValidationHost:
+                      type: string
+                      description: Validation host.
+                    ValidationPort:
+                      type:
+                      - integer
+                      - 'null'
+                      description: Validation port.
+                      format: int32
+                    ClassSpecificAttributes:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          Name:
+                            type: string
+                            description: The name.
+                          Value:
+                            type: string
+                            description: The value.
+                        description: Holds a string/object value pair
+                      description: A list of specific attributes.
+                  description: Application data.
+                description: The applications.
+              CloudInstanceID:
+                type: string
+                description: The cloud instance ID.
+              CloudRegion:
+                type: string
+                description: The cloud region.
+              CloudService:
+                type: string
+                description: The cloud service.
+            description: The class for device data.
+          description: The devices associated with the certificate.
+        CreatedBy:
+          type: string
+          description: The user or system that created the certificate request.
+        PkixParameterSet:
+          type: string
+          description: The PKIX Parameter Set describing the desired key (see 'PKIX Parameter Set' section under 'Certificate Management APIs')
+        KeyAlgorithm:
+          type: string
+          description: DEPRECATED - use _PkixParameterSet_ instead
+        KeyBitSize:
+          type:
+          - integer
+          - 'null'
+          description: DEPRECATED - use _PkixParameterSet_ instead
+          format: int32
+        EllipticCurve:
+          type: string
+          description: DEPRECATED - use _PkixParameterSet_ instead
+        ParameterSet:
+          type: string
+          description: DEPRECATED - use _PkixParameterSet_ instead
+        Reenable:
+          type: boolean
+          description: A flag indicating whether to re-enable the certificate.
+        CertificateType:
+          type: string
+          description: The config class of the certificate to create (X509 Server Certificate, X509 Device Certificate, etc... ); if not specified Server cert will be created.
+        CustomFields:
+          type: array
+          items:
+            type: object
+            properties:
+              Name:
+                type: string
+                description: The custom field name.
+              Values:
+                type: array
+                items:
+                  type: string
+                description: A list of string values.
+            description: Contains custom field name and values.
+          description: The list of custom fields to set.
+        Origin:
+          type: string
+          description: The certificate origin to set.
+        Format:
+          type: string
+          description: The data format of the certificate to be returned
+        Password:
+          type: string
+          description: The password to set on the certificate private key (if it is requested)
+        IncludePrivateKey:
+          type: boolean
+          description: A flag indicating whether to include the private key in the response.
+        IncludeChain:
+          type: boolean
+          description: A flag indicating whether to include the certificate chain in the response.
+        FriendlyName:
+          type: string
+          description: The friendly name for the certificate.
+        RootFirstOrder:
+          type: boolean
+          description: A flag indicating whether to order the certificate chain with the root first.
+        KeystorePassword:
+          type: string
+          description: The keystore password.
+        SidExtensionIdentity:
+          type: string
+          description: The AD identity to resolve the AD Security Identifier (SID) value from.
+        SidExtensionValue:
+          type: string
+          description: The AD Security Identifier (SID) value. If _SidExtensionIdentity_ is provided, this value takes no effect.
+        EncryptionAlgorithm:
+          type: string
+          description: 'Possible encryption algorithm values:
+
+
+            | OID | Algorithm | Description |
+
+            |-----|-----------|-------------|
+
+            |1.2.840.113549.1.1.1|RSA|A widely-used asymmetric encryption algorithm that provides secure data transmission, suitable for a variety of security applications including secure communications and data integrity.|
+
+            |1.2.840.113549.1.1.7|RSA-OAEP|An asymmetric encryption algorithm that uses Optimal Asymmetric Encryption Padding (OAEP) to enhance security, suitable for encryption of sensitive information.|
+
+            |1.2.840.113549.1.5.1|PBE-MD2-DES|Outdated and insecure. Not recommended for use.|
+
+            |1.2.840.113549.1.5.3|PBE-MD5-DES|Outdated and insecure. Not recommended for use.|
+
+            |1.2.840.113549.1.5.4|PBE-MD2-RC2-64|Outdated and insecure. Not recommended for use.|
+
+            |1.2.840.113549.1.5.6|PBE-MD5-RC2-64|Outdated and insecure. Not recommended for use.|
+
+            |1.2.840.113549.1.5.10|PBE-SHA1-DES|Suitable for moderate security needs. Not recommended for high-security applications.|
+
+            |1.2.840.113549.1.5.11|PBE-SHA1-RC2-64|Provides moderate security. Not recommended for high-security applications.|
+
+            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA1|Weak security due to vulnerabilities. Not recommended for use..|
+
+            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA1-3DES|Weak security due to vulnerabilities. Suitable for moderate security needs but not recommended for high-security applications.|
+
+            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA256|Suitable for typical security needs. Recommended over SHA-1 but not ideal for high-security applications..|
+
+            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA384|Strong security, but limited adoption. Suitable for high-security encryption if supported by recipient.|
+
+            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA512|Strong security, suitable for high-security encryption.|
+
+            |1.2.840.113549.1.12.1.3|PBE-SHA1-3DES|Suitable for securing sensitive data with moderate security needs. Not recommended for high-security applications due to outdated components.|
+
+            |1.2.840.113549.1.12.1.4|PBE-SHA1-2DES|Suitable for moderate security needs. Not recommended for high-security applications.|
+
+            |1.2.840.113549.1.12.1.5|PBE-SHA1-RC2-128|Provides moderate security. Not recommended for high-security applications.|
+
+            |1.2.840.113549.1.12.1.6|PBE-SHA1-RC2-40|Offers low security. Not recommended for sensitive data.|
+
+            |1.2.840.113549.1.12.5.1.3|JCEKS-SHA1-3DES|Java variant of PBE-SHA1-3DES: Suitable for moderate security needs. Not recommended for high-security applications.|
+
+            |1.2.840.113549.3.7|DES-EDE3-CBC|112-bit security (effectively ~80-bit), suitable for legacy compatibility but not recommended for new secure applications.|
+
+            |2.16.840.1.101.3.4.1.2|AES128-CBC|128-bit security, suitable for moderate security data encryption.|
+
+            |2.16.840.1.101.3.4.1.6|AES128-GCM|128-bit security, ideal for secure communications.|
+
+            |2.16.840.1.101.3.4.1.22|AES192-CBC|192-bit security, suitable for higher security data encryption.|
+
+            |2.16.840.1.101.3.4.1.26|AES192-GCM|192-bit security, ideal for secure communications with higher security needs.|
+
+            |2.16.840.1.101.3.4.1.42|AES256-CBC|256-bit security, suitable for highly sensitive data encryption.|
+
+            |2.16.840.1.101.3.4.1.46|AES256-GCM|256-bit security, ideal for secure communications with the highest security needs.|'
+      description: The class for certificate request method response.
+    Nullable_1_Core_Revocation_RevocationReason_:
+      title: Enumeration for revocation status
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      type:
+      - integer
+      - 'null'
+      description: "\n\n**0**: **Unspecified**  \nNo reason given (RFC)\nnone\n\n**1**: **KeyCompromise**  \nThe key was compromised (RFC)\nAn issued certificate's private key was compromised\n\n**2**: **CACompromise**  \nThe Certificate Authority was compromised (RFC)\nThe CA's private key was compromised\n\n**3**: **AffiliationChanged**  \nThe certificates affiliation has changed (RFC)\nUser is no longer associated with the organization for which a certificate was issued\n\n**4**: **Superseded**  \nThe certificate has bee superseded (RFC)\nThe certificate has been superseded\n\n**5**: **CessationOfOperation**  \nThe certificate is no longer being used (RfC)\nThe certificate is no longer valid\n\n**6**: **CertificateHold**  \nThe certificate is being placed in stasis (RFC)\n\n**7**: **Reserved**  \nUnknown reason for the certificate to have been revoked (RFC)\n\n**8**: **RemoveFromCRL**  \nThe certificate is no long being held (RFC)\n\n**9**: **PrivilegeWithdrawn**  \nThe certificate's privilege has been withdrawn (RFC)\n\n**10**: **AACompromise**  \nThe AA of the certificate was compromised (RFC)\n"
+      format: int32
+    WebSDK_CertificateRequest_RevokeResponse:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: Contains an error message if the revocation request failed.
+        Warning:
+          type: string
+          description: A warning message if the revocation request is pending or partially completed.
+        Revoked:
+          type: boolean
+          description: A flag that is true if the certificate has been fully revoked and confirmed.
+        Requested:
+          type: boolean
+          description: A flag that is true if the revocation was requested but not yet confirmed.
+        Success:
+          type: boolean
+          description: A flag that is true if the revocation request was processed successfully.
+      description: The class for certificate revoke method response.
+    WebSDK_CertificateRequest_RevokeRequest:
+      type: object
+      properties:
+        CertificateDN:
+          type: string
+          description: The Distinguished Name (DN) of the certificate to be revoked.
+        Thumbprint:
+          type: string
+          description: The unique hash (SHA-1) of the certificate to be revoked.
+        Reason:
+          $ref: '#/components/schemas/Nullable_1_Core_Revocation_RevocationReason_'
+        Comments:
+          type: string
+          description: Optional comments providing additional details about the revocation request.
+        Disable:
+          type: boolean
+          description: If true, disables the certificate in addition to revocation. Defaults to false.
+        WorkToDoTimeout:
+          type:
+          - integer
+          - 'null'
+          description: The maximum time (in seconds) to wait for revocation processing before returning a response.
+          format: int32
+      description: The class for certificate revoke method request.
+    WebSDK_CertificateRequest_DetailedCertificateResult:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: Contains an error message if the certificate details retrieval failed.
+        CreatedOn:
+          type: string
+          description: The date the certificate was created.
+        CreatedBy:
+          type: array
+          items:
+            type: string
+          description: The list of users or entities that created the certificate.
+        DN:
+          type: string
+          description: The Distinguished Name (DN) of the certificate
+        Guid:
+          type: string
+          description: The unique identifier of the certificate.
+        Name:
+          type: string
+          description: The name of the certificate.
+        ParentDn:
+          type: string
+          description: The Parent Distinguished Name (DN) of the certificate.
+        SchemaClass:
+          type: string
+          description: The schema class of the certificate.
+        Description:
+          type: string
+          description: The description of the certificate.
+        Contact:
+          type: array
+          items:
+            type: string
+          description: The list of contacts associated with the certificate.
+        Approver:
+          type: array
+          items:
+            type: string
+          description: The list of approvers for the certificate.
+        ManagementType:
+          type: string
+          description: The management type of the certificate.
+        ManagedBy:
+          type: string
+          description: The entity managing the certificate.
+        CertificateAuthorityDN:
+          type: string
+          description: The Distinguished Name (DN) of the Certificate Authority (CA) that issued the certificate.
+        Consumers:
+          type: array
+          items:
+            type: string
+          description: The list of applications or entities that consume the certificate.
+        Disabled:
+          type: boolean
+          description: Indicates whether the certificate is disabled.
+        RenewalDetails:
+          type: object
+          properties:
+            Subject:
+              type: string
+              description: The subject of the certificate.
+            E:
+              type: string
+              description: The email address associated with the certificate.
+            City:
+              type: string
+              description: The city associated with the certificate.
+            State:
+              type: string
+              description: The state associated with the certificate.
+            Country:
+              type: string
+              description: The country associated with the certificate.
+            KeySize:
+              type: integer
+              description: DEPRECATED - Use PkixParameterSet instead
+              format: int32
+            PkixParameterSet:
+              type: string
+              description: The PKIX parameter set for the key algorithm.
+            Organization:
+              type: string
+              description: The organization associated with the certificate.
+            OrganizationalUnit:
+              type: array
+              items:
+                type: string
+              description: The organizational unit associated with the certificate.
+            SubjectAltNameDNS:
+              type: array
+              items:
+                type: string
+              description: The DNS names associated with the certificate.
+            SubjectAltNameEmail:
+              type: array
+              items:
+                type: string
+              description: The email addresses associated with the certificate.
+            SubjectAltNameIPAddress:
+              type: array
+              items:
+                type: string
+              description: The IP addresses associated with the certificate.
+            SubjectAltNameURI:
+              type: array
+              items:
+                type: string
+              description: The URIs associated with the certificate.
+            SubjectAltNameOtherNameUPN:
+              type: array
+              items:
+                type: string
+              description: The UPNs associated with the certificate.
+          description: Contains renewal details for the certificate.
+        ValidationDetails:
+          type: object
+          properties:
+            ValidationState:
+              type: string
+              description: The validation state of the certificate.
+            LastValidationStateUpdate:
+              type: string
+              description: The date and time when the certificate was last validated, in ISO 8601 format.
+            ValidationDisabled:
+              type: boolean
+              description: True if validation is disabled; otherwise, false.
+            NetworkValidationDisabled:
+              type: boolean
+              description: True if network validation is disabled; otherwise, false.
+          description: Contains validation details for the certificate.
+        CertificateDetails:
+          type: object
+          properties:
+            Subject:
+              type: string
+              description: The subject of the certificate.
+            E:
+              type: string
+              description: The email address associated with the certificate.
+            CN:
+              type: string
+              description: The common name of the certificate.
+            C:
+              type: string
+              description: The country associated with the certificate.
+            S:
+              type: string
+              description: The state associated with the certificate.
+            L:
+              type: string
+              description: The locality associated with the certificate.
+            O:
+              type: string
+              description: The organization associated with the certificate.
+            OU:
+              type: array
+              items:
+                type: string
+              description: The organizational unit associated with the certificate.
+            Serial:
+              type: string
+              description: The serial number of the certificate.
+            Issuer:
+              type: string
+              description: The issuer of the certificate.
+            KeySize:
+              type: integer
+              description: The key size of the certificate.
+              format: int32
+            ValidFrom:
+              type: string
+              description: The date and time when the certificate is valid from, in ISO 8601 format.
+            ValidTo:
+              type: string
+              description: The date and time when the certificate is valid to, in ISO 8601 format.
+            EnhancedKeyUsage:
+              type: string
+              description: The enhanced key usage of the certificate.
+            PublicKeyHash:
+              type: string
+              description: The public key hash of the certificate.
+            KeyAlgorithm:
+              type: string
+              description: The key algorithm of the certificate.
+            KeyAlgorithmName:
+              type: string
+              description: The RFC name of the key algorithm for the certificate.
+            KeyAlgorithmOid:
+              type: string
+              description: The OID of the key algorithm for the certificate.
+            KeyUsage:
+              type: string
+              description: The key usage of the certificate.
+            PkixParameterSet:
+              type: string
+              description: The PKIX parameter set of the key algorithm.
+            SignatureAlgorithm:
+              type: string
+              description: The signature algorithm of the certificate.
+            SignatureAlgorithmName:
+              type: string
+              description: The RFC name of the signature algorithm used to sign the certificate.
+            SignatureAlgorithmOID:
+              type: string
+              description: The OID of the signature algorithm used to sign the certificate.
+            SKIKeyIdentifier:
+              type: string
+              description: The subject key identifier of the certificate.
+            StoreAdded:
+              type: string
+              description: The date the certificate was added to the store, in ISO 8601 format.
+            RevocationStatus:
+              type: string
+              description: The revocation status of the certificate.
+            RevocationDate:
+              type: string
+              description: The date and time when the certificate was revoked, in ISO 8601 format.
+            RevocationInitiatedBy:
+              type: string
+              description: The entity that initiated the revocation of the certificate.
+            SubjectAltNameDNS:
+              type: array
+              items:
+                type: string
+              description: The DNS names associated with the certificate.
+            SubjectAltNameEmail:
+              type: array
+              items:
+                type: string
+              description: The email addresses associated with the certificate.
+            SubjectAltNameIPAddress:
+              type: array
+              items:
+                type: string
+              description: The IP addresses associated with the certificate.
+            SubjectAltNameURI:
+              type: array
+              items:
+                type: string
+              description: The URIs associated with the certificate.
+            SubjectAltNameOtherNameUPN:
+              type: array
+              items:
+                type: string
+              description: The UPNs associated with the certificate.
+            AIACAIssuerURL:
+              type: array
+              items:
+                type: string
+              description: The AIA CA Issuer URLs associated with the certificate.
+            AIAKeyIdentifier:
+              type: string
+              description: The AIA Key Identifier associated with the certificate.
+            CDPURI:
+              type: string
+              description: The CDP URI associated with the certificate.
+            TemplateMajorVersion:
+              type: string
+              description: The template major version used to issue the certificate.
+            TemplateMinorVersion:
+              type: string
+              description: The template minor version used to issue the certificate.
+            TemplateOID:
+              type: string
+              description: The template OID used to issue the certificate.
+            TemplateName:
+              type: string
+              description: The template name used to issue the certificate.
+            Thumbprint:
+              type: string
+              description: The thumbprint (SHA1 Hash) of the certificate.
+            EllipticCurve:
+              type: string
+              description: The elliptic curve of the certificate.
+          description: Contains detailed information about the certificate.
+        ProcessingDetails:
+          type: object
+          properties:
+            Stage:
+              type:
+              - integer
+              - 'null'
+              description: The processing stage of the certificate.
+              format: int32
+            Status:
+              type: string
+              description: The processing status of the certificate.
+            TicketDN:
+              type: string
+              description: The Ticket Distinguished Name (DN) of the certificate.
+            InError:
+              type:
+              - boolean
+              - 'null'
+              description: True if the certificate is in error; otherwise, false.
+            InProcess:
+              type:
+              - boolean
+              - 'null'
+              description: True if the certificate is in process; otherwise, false.
+          description: Contains processing details for the certificate.
+        CustomFields:
+          type: array
+          items:
+            type: object
+            properties:
+              Name:
+                type: string
+                description: Gets or sets the custom field name.
+              Type:
+                type: string
+                description: Gets or sets the custom field type.
+              Value:
+                type: array
+                items:
+                  type: string
+                description: Gets or sets a list of the custom field values.
+            description: Contains the custom field data.
+          description: The list of custom fields associated with the certificate.
+        Origin:
+          type: string
+          description: The origin of the certificate.
+      description: Detailed Certificate object containing all information for a certificate.
+    WebSDK_CertificateRequest_CheckPolicyRequest:
+      type: object
+      properties:
+        PolicyDN:
+          type: string
+          description: The Distinguished Name (DN) of the policy to be checked. This must reference a valid policy in the system.
+        PKCS10:
+          type: string
+          description: The PKCS#10 certificate signing request (CSR) to be checked against the policy.
+      description: Check policy request.
+    WebSDK_CertificateRequest_RetrieveResponse_Retrieve__vaultId_:
+      type: object
+      properties:
+        CertificateData:
+          type: string
+          description: The certificate data in the requested format.
+        Format:
+          type: string
+          description: The format of the retrieved certificate.
+        Filename:
+          type: string
+          description: The filename for the retrieved certificate.
+        Status:
+          type: string
+          description: The status of the certificate retrieval process.
+        Stage:
+          type:
+          - integer
+          - 'null'
+          description: The stage of the certificate retrieval process.
+          format: int32
+        Error:
+          type: string
+          description: Error message if the certificate retrieval process failed.
+    WebSDK_CertificateRequest_RetryRequest:
+      type: object
+      properties:
+        CertificateDN:
+          type: string
+          description: The Distinguished Name (DN) of the certificate to retry.
+        WorkToDoTimeout:
+          type:
+          - integer
+          - 'null'
+          description: Number of seconds to wait for the todo to finish before returning
+          format: int32
+      description: The class for certificate retry method request.
+    WebSDK_CertificateRequest_ValidateRequest:
+      type: object
+      properties:
+        CertificateDNs:
+          type: array
+          items:
+            type: string
+          description: The list of certificate Distinguished Names (DNs) to validate.
+        CertificateGUIDs:
+          type: array
+          items:
+            type: string
+          description: The list of certificate GUIDs to validate.
+      description: Request to validate certificates.
+    WebSDK_CertificateRequest_ValidationResultsResponse:
+      type: object
+      properties:
+        SslTls:
+          type: array
+          items:
+            type: object
+            properties:
+              Host:
+                type: string
+                description: The host associated with the validation result
+              IpAddress:
+                type: string
+                description: The IP associated with the validation result
+              Port:
+                type: integer
+                description: The port associated with the validation result
+                format: int32
+              Sources:
+                type: array
+                items:
+                  type: string
+                description: The source(s) of the host associated with the validation result
+              Result:
+                type: object
+                properties:
+                  ID:
+                    type: integer
+                    description: unique identifier for the result
+                    format: int32
+                  EndEntity:
+                    type: object
+                    properties:
+                      BitMask:
+                        type: integer
+                        description: The flags enum
+                        format: int32
+                      Values:
+                        type: array
+                        items:
+                          type: string
+                        description: The readable strings for bits set in the enum (excluding the 0 enum value)
+                    description: The result of the validation for the end-entity certificate
+                  Chain:
+                    type: object
+                    properties:
+                      BitMask:
+                        type: integer
+                        description: The flags enum
+                        format: int32
+                      Values:
+                        type: array
+                        items:
+                          type: string
+                        description: The readable strings for bits set in the enum (excluding the 0 enum value)
+                    description: The result of the validation for the certificate chain
+                  Protocols:
+                    type: object
+                    properties:
+                      BitMask:
+                        type: integer
+                        description: The flags enum
+                        format: int32
+                      Values:
+                        type: array
+                        items:
+                          type: string
+                        description: The readable strings for bits set in the enum (excluding the 0 enum value)
+                    description: The ssl/tls protocols supported by the validation endpoint
+                description: The various ssl/tls and chain results of the validation run
+            description: The class for an SSL/TLS validation result
+          description: Collection of ssl/tls validation results
+        File:
+          type: array
+          items:
+            type: object
+            properties:
+              PerformedOn:
+                type: string
+                description: Last validation date and time.
+              Installation:
+                type: string
+                description: DN of the application.
+              Result:
+                type: array
+                items:
+                  type: string
+                description: List of results.
+            description: Class for file validation data.
+          description: Collection of file validation results.
+      description: The class for certificate validation results retrieve method response
+    WebSDK_CertificateRequest_AssociateRequest:
+      type: object
+      properties:
+        CertificateDN:
+          type: string
+          description: The Distinguished Name (DN) of the certificate to be associated with an application. This must reference a valid certificate in the system.
+        PushToNew:
+          type: boolean
+          description: A flag indicating whether the certificate should be pushed to new applications.
+        ApplicationDN:
+          type: array
+          items:
+            type: string
+          description: The Distinguished Name (DN) of the application object(s) that will use the certificate. This must be a valid application object in the system.
+      description: Request to associate certificate and applications.
+    WebSDK_CertificateRequest_RetrieveByVaultIdRequest_Retrieve__vaultId_:
+      required:
+      - Format
+      - Password
+      - IncludePrivateKey
+      - IncludeChain
+      - RootFirstOrder
+      type: object
+      properties:
+        Format:
+          type: string
+          description: The data format of the retrieved certificate
+        Password:
+          type: string
+          description: 'The password is required if IncludePrivateKey is true and the format is pkcs #12 or JKS. It is used to protect the private key.'
+        IncludePrivateKey:
+          type: boolean
+          description: A flag indicating whether to include the private key.
+        IncludeChain:
+          type: boolean
+          description: A flag indicating whether to include the certificate chain.
+        FriendlyName:
+          type: string
+          description: The friendly name is required if the format is JKS. It is used to set the friendly name of the certificate in the keystore.
+        RootFirstOrder:
+          type: boolean
+          description: A flag indicating whether to order the certificate chain with the root first.
+        KeystorePassword:
+          type: string
+          description: The keystore password is required if the format is JKS. It is used to protect the keystore.
+        EncryptionAlgorithm:
+          type: string
+          description: 'Possible encryption algorithm values:
+
+
+            | OID | Algorithm | Description |
+
+            |-----|-----------|-------------|
+
+            |1.2.840.113549.1.1.1|RSA|A widely-used asymmetric encryption algorithm that provides secure data transmission, suitable for a variety of security applications including secure communications and data integrity.|
+
+            |1.2.840.113549.1.1.7|RSA-OAEP|An asymmetric encryption algorithm that uses Optimal Asymmetric Encryption Padding (OAEP) to enhance security, suitable for encryption of sensitive information.|
+
+            |1.2.840.113549.1.5.1|PBE-MD2-DES|Outdated and insecure. Not recommended for use.|
+
+            |1.2.840.113549.1.5.3|PBE-MD5-DES|Outdated and insecure. Not recommended for use.|
+
+            |1.2.840.113549.1.5.4|PBE-MD2-RC2-64|Outdated and insecure. Not recommended for use.|
+
+            |1.2.840.113549.1.5.6|PBE-MD5-RC2-64|Outdated and insecure. Not recommended for use.|
+
+            |1.2.840.113549.1.5.10|PBE-SHA1-DES|Suitable for moderate security needs. Not recommended for high-security applications.|
+
+            |1.2.840.113549.1.5.11|PBE-SHA1-RC2-64|Provides moderate security. Not recommended for high-security applications.|
+
+            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA1|Weak security due to vulnerabilities. Not recommended for use..|
+
+            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA1-3DES|Weak security due to vulnerabilities. Suitable for moderate security needs but not recommended for high-security applications.|
+
+            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA256|Suitable for typical security needs. Recommended over SHA-1 but not ideal for high-security applications..|
+
+            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA384|Strong security, but limited adoption. Suitable for high-security encryption if supported by recipient.|
+
+            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA512|Strong security, suitable for high-security encryption.|
+
+            |1.2.840.113549.1.12.1.3|PBE-SHA1-3DES|Suitable for securing sensitive data with moderate security needs. Not recommended for high-security applications due to outdated components.|
+
+            |1.2.840.113549.1.12.1.4|PBE-SHA1-2DES|Suitable for moderate security needs. Not recommended for high-security applications.|
+
+            |1.2.840.113549.1.12.1.5|PBE-SHA1-RC2-128|Provides moderate security. Not recommended for high-security applications.|
+
+            |1.2.840.113549.1.12.1.6|PBE-SHA1-RC2-40|Offers low security. Not recommended for sensitive data.|
+
+            |1.2.840.113549.1.12.5.1.3|JCEKS-SHA1-3DES|Java variant of PBE-SHA1-3DES: Suitable for moderate security needs. Not recommended for high-security applications.|
+
+            |1.2.840.113549.3.7|DES-EDE3-CBC|112-bit security (effectively ~80-bit), suitable for legacy compatibility but not recommended for new secure applications.|
+
+            |2.16.840.1.101.3.4.1.2|AES128-CBC|128-bit security, suitable for moderate security data encryption.|
+
+            |2.16.840.1.101.3.4.1.6|AES128-GCM|128-bit security, ideal for secure communications.|
+
+            |2.16.840.1.101.3.4.1.22|AES192-CBC|192-bit security, suitable for higher security data encryption.|
+
+            |2.16.840.1.101.3.4.1.26|AES192-GCM|192-bit security, ideal for secure communications with higher security needs.|
+
+            |2.16.840.1.101.3.4.1.42|AES256-CBC|256-bit security, suitable for highly sensitive data encryption.|
+
+            |2.16.840.1.101.3.4.1.46|AES256-GCM|256-bit security, ideal for secure communications with the highest security needs.|'
+    WebSDK_CertificateRequest_PushResponse:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: A detailed error message describing why the push request failed.
+        Warning:
+          type: string
+          description: A message providing additional information, such as potential issues encountered during the push process.
+        Success:
+          type: boolean
+          description: A flag indicating whether the certificate was successfully pushed to the application(s).
+      description: Certificate push response.
+    WebSDK_CertificateRequest_ValidateResponse:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: Error message if any validation process failed.
+        Warnings:
+          type: array
+          items:
+            type: string
+          description: A list of warning messages encountered during the validation process.
+        ValidatedCertificateGUIDs:
+          type: array
+          items:
+            type: string
+          description: A list of validated certificate GUIDs.
+        ValidatedCertificateDNs:
+          type: array
+          items:
+            type: string
+          description: A list of validated certificate DNs.
+        Success:
+          type: boolean
+          description: Indicates whether the validation process was successful.
+      description: Certificates validate response.
+    WebSDK_CertificateRequest_RenewResponse_Renew:
+      type: object
+      properties:
+        Format:
+          type: string
+          description: 'The format of the renewed certificate. Possible formats include: Base64, Base64 (PKCS #8), DER, PKCS #7, PKCS #12, JKS'
+        Filename:
+          type: string
+          description: The filename for the renewed certificate.
+        Status:
+          type: string
+          description: The status of the certificate renewal process.
+        Stage:
+          type:
+          - integer
+          - 'null'
+          description: 'The stage of the certificate renewal process. Stages include: 800 renewal started, 900 renewal completed.'
+          format: int32
+        Error:
+          type: string
+          description: The error message if any error occurred during the renewal process.
+    WebSDK_CertificateRequest_PutResponse:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: Contains an error message if the operation failed.
+        Warning:
+          type: string
+          description: Contains a warning message if there are any warnings during the operation.
+        Success:
+          type: boolean
+          description: Indicates whether the operation was successful.
+      description: The class for put certificate method response.
+    WebSDK_CertificateRequest_DissociateRequest:
+      type: object
+      properties:
+        CertificateDN:
+          type: string
+          description: The Distinguished Name (DN) of the certificate to be dissociated from the application(s). This must reference a valid certificate in the system.
+        ApplicationDN:
+          type: array
+          items:
+            type: string
+          description: The Distinguished Name (DN) of the application object(s) to be dissociated from the certificate. This must be a valid application object in the system.
+        DeleteOrphans:
+          type: boolean
+          description: A flag indicating whether the dissociated applications and devices should be deleted if they become orphans.
+      description: Request to dissociate certificate and applications.
+    WebSDK_CertificateRequest_CertificateResults:
+      type: object
+      properties:
+        TotalCount:
+          type: integer
+          description: The total number of certificates being returned.
+          format: int32
+        DataRange:
+          type: string
+          description: The data range for the current page, e.g., "20-50".
+        Certificates:
+          type: array
+          items:
+            type: object
+            properties:
+              _links:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Details:
+                      type: string
+                      description: A string containing the URL to the certificate details.
+                  description: Provides the functionality for creating a link to the details of a certificate.
+                description: A list of _CertificateDetailsLink_ objects containing links to the certificate details.
+              CreatedOn:
+                type: string
+                description: The creation date of the certificate in ISO 8601 format.
+              DN:
+                type: string
+                description: The Distinguished Name (DN) of the certificate.
+              Guid:
+                type: string
+                description: The unique identifier (GUID) of the certificate.
+              Name:
+                type: string
+                description: The name of the certificate.
+              ParentDn:
+                type: string
+                description: The Parent Distinguished Name (DN) of the certificate.
+              SchemaClass:
+                type: string
+                description: The schema class of the certificate.
+              X509:
+                type: object
+                properties:
+                  CN:
+                    type: string
+                    description: Certificate Common Name.
+                  SANS:
+                    type: object
+                    properties:
+                      DNS:
+                        type: array
+                        items:
+                          type: string
+                        description: DNS names.
+                      Email:
+                        type: array
+                        items:
+                          type: string
+                        description: Emails.
+                      IP:
+                        type: array
+                        items:
+                          type: string
+                        description: IPs.
+                      UPN:
+                        type: array
+                        items:
+                          type: string
+                        description: UPNs.
+                      URI:
+                        type: array
+                        items:
+                          type: string
+                        description: URIs.
+                    description: Certificate Subject alternative names.
+                  Serial:
+                    type: string
+                    description: Certificate serial number.
+                  Thumbprint:
+                    type: string
+                    description: Certificate thumbprint.
+                  ValidFrom:
+                    type: string
+                    description: Certificate start date and time.
+                  ValidTo:
+                    type: string
+                    description: Certificate end date and time.
+                  Subject:
+                    type: string
+                    description: Certificate Subject.
+                  KeyAlgorithm:
+                    type: string
+                    description: DEPRECATED - Use PkixParameterSet or KeyAlgorithmName
+                  KeySize:
+                    type:
+                    - integer
+                    - 'null'
+                    description: DEPRECATED - Use PkixParameterSet
+                    format: int32
+                  KeyAlgorithmName:
+                    type: string
+                    description: Certificate RFC name of the key algorithm.
+                  KeyAlgorithmOid:
+                    type: string
+                    description: Certificate dotted-string notation OID of the key algorithm.
+                  PkixParameterSet:
+                    type: string
+                    description: PKIX Parameter Set for the key algorithm.
+                  Issuer:
+                    type: string
+                    description: Certificate Issuer.
+                description: An _X509Details_ object containing detailed X509 information about the certificate.
+            description: Basic Certificate object containing the base properties for a certificate.
+          description: The list of certificates being returned.
+        _links:
+          type: array
+          items:
+            type: object
+            properties:
+              Previous:
+                type: string
+                description: A string containing the URL to the previous page of results.
+              Next:
+                type: string
+                description: A string containing the URL to the next page of results.
+            description: Paging class, used to build and return the pagination links.
+          description: The pagination links for navigating through the certificate results.
+        ErrorDetails:
+          type: string
+          description: The error details, if an error was encountered querying for the certificates.
+      description: Result class containing list of results as well as paging links and count information.
+    WebSDK_CertificateRequest_RetrieveRequest_Retrieve:
+      required:
+      - CertificateDN
+      - Format
+      type: object
+      properties:
+        CertificateDN:
+          type: string
+          description: The Distinguished Name (DN) of the certificate to be retrieved.
+        Format:
+          type: string
+          description: The format in which to retrieve the certificate (e.g., Base64, DER).
+        Password:
+          type: string
+          description: The password to use if the certificate includes a private key. (Required if IncludePrivateKey is true)
+        KeystorePassword:
+          type: string
+          description: The password for the Java Keystore (JKS) format. (Required if Format is JKS)
+        FriendlyName:
+          type: string
+          description: The friendly name for the certificate. (Required if Format is JKS)
+        IncludePrivateKey:
+          type: boolean
+          description: Indicates whether to include the private key in the response.
+        IncludeChain:
+          type: boolean
+          description: Indicates whether to include the certificate chain in the response.
+        RootFirstOrder:
+          type: boolean
+          description: Indicates whether to order the certificate chain with the root first.
+        EncryptionAlgorithm:
+          type: string
+          description: 'Possible encryption algorithm values:
+
+
+            | OID | Algorithm | Description |
+
+            |-----|-----------|-------------|
+
+            |1.2.840.113549.1.1.1|RSA|A widely-used asymmetric encryption algorithm that provides secure data transmission, suitable for a variety of security applications including secure communications and data integrity.|
+
+            |1.2.840.113549.1.1.7|RSA-OAEP|An asymmetric encryption algorithm that uses Optimal Asymmetric Encryption Padding (OAEP) to enhance security, suitable for encryption of sensitive information.|
+
+            |1.2.840.113549.1.5.1|PBE-MD2-DES|Outdated and insecure. Not recommended for use.|
+
+            |1.2.840.113549.1.5.3|PBE-MD5-DES|Outdated and insecure. Not recommended for use.|
+
+            |1.2.840.113549.1.5.4|PBE-MD2-RC2-64|Outdated and insecure. Not recommended for use.|
+
+            |1.2.840.113549.1.5.6|PBE-MD5-RC2-64|Outdated and insecure. Not recommended for use.|
+
+            |1.2.840.113549.1.5.10|PBE-SHA1-DES|Suitable for moderate security needs. Not recommended for high-security applications.|
+
+            |1.2.840.113549.1.5.11|PBE-SHA1-RC2-64|Provides moderate security. Not recommended for high-security applications.|
+
+            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA1|Weak security due to vulnerabilities. Not recommended for use..|
+
+            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA1-3DES|Weak security due to vulnerabilities. Suitable for moderate security needs but not recommended for high-security applications.|
+
+            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA256|Suitable for typical security needs. Recommended over SHA-1 but not ideal for high-security applications..|
+
+            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA384|Strong security, but limited adoption. Suitable for high-security encryption if supported by recipient.|
+
+            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA512|Strong security, suitable for high-security encryption.|
+
+            |1.2.840.113549.1.12.1.3|PBE-SHA1-3DES|Suitable for securing sensitive data with moderate security needs. Not recommended for high-security applications due to outdated components.|
+
+            |1.2.840.113549.1.12.1.4|PBE-SHA1-2DES|Suitable for moderate security needs. Not recommended for high-security applications.|
+
+            |1.2.840.113549.1.12.1.5|PBE-SHA1-RC2-128|Provides moderate security. Not recommended for high-security applications.|
+
+            |1.2.840.113549.1.12.1.6|PBE-SHA1-RC2-40|Offers low security. Not recommended for sensitive data.|
+
+            |1.2.840.113549.1.12.5.1.3|JCEKS-SHA1-3DES|Java variant of PBE-SHA1-3DES: Suitable for moderate security needs. Not recommended for high-security applications.|
+
+            |1.2.840.113549.3.7|DES-EDE3-CBC|112-bit security (effectively ~80-bit), suitable for legacy compatibility but not recommended for new secure applications.|
+
+            |2.16.840.1.101.3.4.1.2|AES128-CBC|128-bit security, suitable for moderate security data encryption.|
+
+            |2.16.840.1.101.3.4.1.6|AES128-GCM|128-bit security, ideal for secure communications.|
+
+            |2.16.840.1.101.3.4.1.22|AES192-CBC|192-bit security, suitable for higher security data encryption.|
+
+            |2.16.840.1.101.3.4.1.26|AES192-GCM|192-bit security, ideal for secure communications with higher security needs.|
+
+            |2.16.840.1.101.3.4.1.42|AES256-CBC|256-bit security, suitable for highly sensitive data encryption.|
+
+            |2.16.840.1.101.3.4.1.46|AES256-GCM|256-bit security, ideal for secure communications with the highest security needs.|'
+    WebSDK_CertificateRequest_RenewResponse:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: The error message if any error occurred during the renewal process.
+        Success:
+          type: boolean
+          description: Indicates whether the renewal was successful.
+        CertificateData:
+          type: string
+          description: The certificate data in the requested format.
+        Format:
+          type: string
+          description: 'The format of the renewed certificate. Possible formats include: Base64, Base64 (PKCS #8), DER, PKCS #7, PKCS #12, JKS'
+        Filename:
+          type: string
+          description: The filename for the renewed certificate.
+        Status:
+          type: string
+          description: The status of the certificate renewal process.
+        Stage:
+          type:
+          - integer
+          - 'null'
+          description: 'The stage of the certificate renewal process. Stages include: 800 renewal started, 900 renewal completed.'
+          format: int32
+      description: "The class for renew method\tresponse."
+    Nullable_1_Core_Cryptography_SubjectAltNameType_:
+      title: Enumeration of possible SAN types
+      enum:
+      - 2
+      - 1
+      - 1
+      - 7
+      - 6
+      - 0
+      type:
+      - integer
+      - 'null'
+      description: "\n\n**2**: **DNS**  \nSpecifies the SubjestAltName is a DNS entry\n\n**1**: **RFC822**  \nSpecifies the SubjestAltName is an Email address\n\n**1**: **Email**  \nSpecifies the SubjestAltName is an Email address\n\n**7**: **IPAddress**  \nSpecifies the SubjestAltName is an IP Address\n\n**6**: **URI**  \nSpecifies the SubjestAltName is a Uniform Resource Identifier\n\n**0**: **OtherName**  \nSpecifies the Subject AltName is an Other Name.\n"
+      format: int32
+    WebSDK_CertificateRequest_RequestResponse:
+      type: object
+      properties:
+        CertificateDN:
+          type: string
+          description: The Distinguished Name (DN) of the created certificate.
+        Guid:
+          type: string
+          description: The GUID of the created certificate.
+        Devices:
+          type: array
+          items:
+            type: object
+            properties:
+              DN:
+                type: string
+                description: The device DN.
+              Warning:
+                type: string
+                description: The warning message if any.
+              Applications:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    DN:
+                      type: string
+                      description: The application DN.
+                    Warning:
+                      type: string
+                      description: The warning message of any.
+                  description: The application response data.
+                description: The list of applications.
+            description: The class for device response data.
+          description: The devices associated with the certificate.
+        Error:
+          type: string
+          description: The error message if any.
+        Warning:
+          type: string
+          description: The warning message if any.
+        CertificateData:
+          type: string
+          description: The certificate data.
+        Format:
+          type: string
+          description: The data format.
+        Filename:
+          type: string
+          description: The filename of the certificate.
+        Status:
+          type: string
+          description: The certificate status.
+        Stage:
+          type:
+          - integer
+          - 'null'
+          description: The certificate processing stage.
+          format: int32
+      description: The class for certificate request method response.
+    WebSDK_CertificateRequest_CheckPolicyResponse:
+      type: object
+      properties:
+        Policy:
+          type: object
+          properties:
+            Subject:
+              type: object
+              properties:
+                Organization:
+                  type: object
+                  properties:
+                    Value:
+                      type: string
+                      description: The value.
+                    Locked:
+                      type: boolean
+                      description: The locked flag.
+                  description: The organization.
+                OrganizationalUnit:
+                  type: object
+                  properties:
+                    Values:
+                      type: array
+                      items:
+                        type: string
+                      description: The values as _List`1_.
+                    Locked:
+                      type: boolean
+                      description: The locked flag.
+                  description: The organization units.
+                City:
+                  type: object
+                  properties:
+                    Value:
+                      type: string
+                      description: The value.
+                    Locked:
+                      type: boolean
+                      description: The locked flag.
+                  description: The city.
+                State:
+                  type: object
+                  properties:
+                    Value:
+                      type: string
+                      description: The value.
+                    Locked:
+                      type: boolean
+                      description: The locked flag.
+                  description: The state.
+                Country:
+                  type: object
+                  properties:
+                    Value:
+                      type: string
+                      description: The value.
+                    Locked:
+                      type: boolean
+                      description: The locked flag.
+                  description: The country.
+              description: The subject.
+            KeyPair:
+              type: object
+              properties:
+                KeyAlgorithm:
+                  type: object
+                  properties:
+                    Value:
+                      type: string
+                      description: The value.
+                    Locked:
+                      type: boolean
+                      description: The locked flag.
+                  description: DEPRECATED - use PkixParameterSet instead
+                KeySize:
+                  type: object
+                  properties:
+                    Value:
+                      type: integer
+                      description: The value.
+                      format: int32
+                    Locked:
+                      type: boolean
+                      description: The locked flag.
+                  description: DEPRECATED - use PkixParameterSet instead
+                EllipticCurve:
+                  type: object
+                  properties:
+                    Value:
+                      type: string
+                      description: The value.
+                    Locked:
+                      type: boolean
+                      description: The locked flag.
+                  description: DEPRECATED - use PkixParameterSet instead
+                PkixParameterSet:
+                  type: object
+                  properties:
+                    Values:
+                      type: array
+                      items:
+                        type: string
+                      description: The values as _List`1_.
+                    Locked:
+                      type: boolean
+                      description: The locked flag.
+                  description: The list of PKIX Parameter Set describing all allowed key algorithms (see 'PKIX Parameter Set' section under 'Certificate Management APIs')
+                DefaultPkixParameterSet:
+                  type: object
+                  properties:
+                    Value:
+                      type: string
+                      description: The value.
+                    Locked:
+                      type: boolean
+                      description: The locked flag.
+                  description: The default PKIX Parameter Set describing the key algorithm used when not specifically specified in a request (see 'PKIX Parameter Set' section under 'Certificate Management APIs')
+              description: The key pair.
+            ManagementType:
+              type: object
+              properties:
+                Value:
+                  type: string
+                  description: The value.
+                Locked:
+                  type: boolean
+                  description: The locked flag.
+              description: The management type.
+            CertificateAuthority:
+              type: object
+              properties:
+                Value:
+                  type: string
+                  description: The value.
+                Locked:
+                  type: boolean
+                  description: The locked flag.
+              description: The certificate authority.
+            CsrGeneration:
+              type: object
+              properties:
+                Value:
+                  type: string
+                  description: The value.
+                Locked:
+                  type: boolean
+                  description: The locked flag.
+              description: The CSR generation.
+            KeyGeneration:
+              type: object
+              properties:
+                Value:
+                  type: string
+                  description: The value.
+                Locked:
+                  type: boolean
+                  description: The locked flag.
+              description: The key generation.
+            SidExtension:
+              type: object
+              properties:
+                IsAllowed:
+                  type: boolean
+                  description: The allowed flag.
+                IsSidOutsideOfConnectedIdentitiesAllowed:
+                  type: boolean
+                  description: If true, SID values (identities) outside of connected identities allowed.
+                UseRequesterIdentity:
+                  type: boolean
+                  description: Use requester identity flag.
+                ObjectSid:
+                  type: string
+                  description: The SID value.
+                Identity:
+                  type: object
+                  properties:
+                    Prefix:
+                      type: string
+                      description: Gets the prefix of the identity provider owning the entry
+                    PrefixedName:
+                      type: string
+                      description: The name of the prefixed.
+                    PrefixedUniversal:
+                      type: string
+                      description: Gets the prefixed universal.
+                    Name:
+                      type: string
+                      description: Gets the name of the entry
+                    FullName:
+                      type: string
+                      description: Gets the full name of the entry
+                    Universal:
+                      type: string
+                      description: Gets the universal (machine-readable) name of the entry
+                    IsGroup:
+                      type: boolean
+                      description: True if the entry represents a group
+                    Type:
+                      $ref: '#/components/schemas/Core_IdentityType'
+                    State:
+                      $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+                  description: The identity.
+                Locked:
+                  type: boolean
+                  description: The locked flag.
+              description: The SID extension value.
+            WhitelistedDomains:
+              type: array
+              items:
+                type: string
+              description: The list of white domains.
+            AllowedSanOtherNameOids:
+              type: array
+              items:
+                type: string
+              description: The list of allowed SAN OtherName Custom OIDs.
+            WildcardsAllowed:
+              type: boolean
+              description: The wildcards allowed flag.
+            UniqueSubjectEnforced:
+              type: boolean
+              description: Unique subject enforced flag.
+            SubjAltNameDnsAllowed:
+              type: boolean
+              description: SAN DNS allowed flag.
+            SubjAltNameIpAllowed:
+              type: boolean
+              description: SAN IP allowed flag.
+            SubjAltNameEmailAllowed:
+              type: boolean
+              description: SAN email allowed flag.
+            SubjAltNameUriAllowed:
+              type: boolean
+              description: SAN URI allowed flag.
+            SubjAltNameUpnAllowed:
+              type: boolean
+              description: SAN UPN allowed flag.
+            SubjAltNameCustomAllowed:
+              type: boolean
+              description: SAN OtherName Custom allowed flag.
+            PrivateKeyReuseAllowed:
+              type: boolean
+              description: Private key reuse allowed flag.
+          description: The policy data that was checked against the Certificate Signing Request (CSR).
+        CSR:
+          type: object
+          properties:
+            Details:
+              type: object
+              properties:
+                CommonName:
+                  type: object
+                  properties:
+                    Value:
+                      type: string
+                      description: The value.
+                    Compliant:
+                      type: boolean
+                      description: The compliant flag.
+                  description: The common name.
+                Organization:
+                  type: object
+                  properties:
+                    Value:
+                      type: string
+                      description: The value.
+                    Compliant:
+                      type: boolean
+                      description: The compliant flag.
+                  description: The organization.
+                OrganizationalUnit:
+                  type: object
+                  properties:
+                    Values:
+                      type: array
+                      items:
+                        type: string
+                      description: The values as _List`1_.
+                    Compliant:
+                      type: boolean
+                      description: The compliant flag.
+                  description: The organization units.
+                City:
+                  type: object
+                  properties:
+                    Value:
+                      type: string
+                      description: The value.
+                    Compliant:
+                      type: boolean
+                      description: The compliant flag.
+                  description: The city.
+                State:
+                  type: object
+                  properties:
+                    Value:
+                      type: string
+                      description: The value.
+                    Compliant:
+                      type: boolean
+                      description: The compliant flag.
+                  description: The state.
+                Country:
+                  type: object
+                  properties:
+                    Value:
+                      type: string
+                      description: The value.
+                    Compliant:
+                      type: boolean
+                      description: The compliant flag.
+                  description: The country.
+                SubjAltNameDns:
+                  type: object
+                  properties:
+                    Values:
+                      type: array
+                      items:
+                        type: string
+                      description: The values as _List`1_.
+                    Compliant:
+                      type: boolean
+                      description: The compliant flag.
+                  description: SAN DNS.
+                SubjAltNameIp:
+                  type: object
+                  properties:
+                    Values:
+                      type: array
+                      items:
+                        type: string
+                      description: The values as _List`1_.
+                    Compliant:
+                      type: boolean
+                      description: The compliant flag.
+                  description: SAN IP.
+                SubjAltNameEmail:
+                  type: object
+                  properties:
+                    Values:
+                      type: array
+                      items:
+                        type: string
+                      description: The values as _List`1_.
+                    Compliant:
+                      type: boolean
+                      description: The compliant flag.
+                  description: SAN email.
+                SubjAltNameUri:
+                  type: object
+                  properties:
+                    Values:
+                      type: array
+                      items:
+                        type: string
+                      description: The values as _List`1_.
+                    Compliant:
+                      type: boolean
+                      description: The compliant flag.
+                  description: SAN URI.
+                SubjAltNameUpn:
+                  type: object
+                  properties:
+                    Values:
+                      type: array
+                      items:
+                        type: string
+                      description: The values as _List`1_.
+                    Compliant:
+                      type: boolean
+                      description: The compliant flag.
+                  description: SAN UPN.
+                SubjAltNameOtherNameCustom:
+                  type: object
+                  properties:
+                    Values:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          Values:
+                            type: array
+                            items:
+                              type: string
+                            description: The values.
+                          Oid:
+                            type: string
+                            description: The custom SAN OtherName OID.
+                          Compliant:
+                            type: boolean
+                            description: True if the OID and values are compliant with the policy settings.
+                        description: Custom SAN OID definition.
+                      description: The SAN OtherName Custom values.
+                    Compliant:
+                      type: boolean
+                      description: True if all custom SAN OtherName values are compliant with the policy settings.
+                  description: SAN Custom OtherName.
+                KeyAlgorithm:
+                  type: object
+                  properties:
+                    Value:
+                      type: string
+                      description: The value.
+                    Compliant:
+                      type: boolean
+                      description: The compliant flag.
+                  description: DEPRECATED - use PkixParameterSet instead
+                KeySize:
+                  type: object
+                  properties:
+                    Value:
+                      type: integer
+                      description: The value.
+                      format: int32
+                    Compliant:
+                      type: boolean
+                      description: The compliant flag.
+                  description: DEPRECATED - use PkixParameterSet instead
+                EllipticCurve:
+                  type: object
+                  properties:
+                    Value:
+                      type: string
+                      description: The value.
+                    Compliant:
+                      type: boolean
+                      description: The compliant flag.
+                  description: DEPRECATED - use PkixParameterSet instead
+                PkixParameterSet:
+                  type: object
+                  properties:
+                    Value:
+                      type: string
+                      description: The value.
+                    Compliant:
+                      type: boolean
+                      description: The compliant flag.
+                  description: The PKIX Parameter Set describing the key algorithm (see 'PKIX Parameter Set' section under 'Certificate Management APIs')
+                PrivateKeyReused:
+                  type: object
+                  properties:
+                    Value:
+                      type: boolean
+                      description: The value.
+                    Compliant:
+                      type: boolean
+                      description: The compliant flag.
+                  description: The private key reuse.
+                SidExtension:
+                  type: object
+                  properties:
+                    ObjectSid:
+                      type: string
+                      description: The value.
+                    Identity:
+                      type: object
+                      properties:
+                        Prefix:
+                          type: string
+                          description: Gets the prefix of the identity provider owning the entry
+                        PrefixedName:
+                          type: string
+                          description: The name of the prefixed.
+                        PrefixedUniversal:
+                          type: string
+                          description: Gets the prefixed universal.
+                        Name:
+                          type: string
+                          description: Gets the name of the entry
+                        FullName:
+                          type: string
+                          description: Gets the full name of the entry
+                        Universal:
+                          type: string
+                          description: Gets the universal (machine-readable) name of the entry
+                        IsGroup:
+                          type: boolean
+                          description: True if the entry represents a group
+                        Type:
+                          $ref: '#/components/schemas/Core_IdentityType'
+                        State:
+                          $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+                      description: The value.
+                    Compliant:
+                      type: boolean
+                      description: The compliant flag.
+                  description: The common name.
+              description: The CSR details as _CSRDetails_.
+            Enrollable:
+              type: boolean
+              description: The enrollable flag.
+          description: "The CSR (Certificate Signing Request) data that was checked for compliance with the policy.\nThis includes detailed information about the CSR such as common name, organization, \norganizational units, city, state, country, and various Subject Alternative Names (SANs)."
+        Error:
+          type: string
+          description: A detailed error message describing why the check policy request failed, if applicable.
+      description: Check policy response.
+    WebSDK_CertificateRequest_AssociateResponse:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: A detailed error message describing why the association request failed.
+        Warning:
+          type: string
+          description: A message providing additional information, such as potential issues encountered during the association process.
+        Success:
+          type: boolean
+          description: A flag indicating whether the certificate was successfully associated with the application(s).
+      description: Certificate associate response.
+    WebSDK_CertificateRequest_RequestResponse_Request:
+      type: object
+      properties:
+        CertificateDN:
+          type: string
+          description: The Distinguished Name (DN) of the created certificate.
+        Guid:
+          type: string
+          description: The GUID of the created certificate.
+        Devices:
+          type: array
+          items:
+            type: object
+            properties:
+              DN:
+                type: string
+                description: The device DN.
+              Warning:
+                type: string
+                description: The warning message if any.
+              Applications:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    DN:
+                      type: string
+                      description: The application DN.
+                    Warning:
+                      type: string
+                      description: The warning message of any.
+                  description: The application response data.
+                description: The list of applications.
+            description: The class for device response data.
+          description: The devices associated with the certificate.
+        Warning:
+          type: string
+          description: The warning message if any.
+        CertificateData:
+          type: string
+          description: The certificate data.
+        Format:
+          type: string
+          description: The data format.
+        Filename:
+          type: string
+          description: The filename of the certificate.
+        Status:
+          type: string
+          description: The certificate status.
+        Stage:
+          type:
+          - integer
+          - 'null'
+          description: The certificate processing stage.
+          format: int32
+        Error:
+          type: string
+          description: The error message if any.
+    WebSDK_CertificateRequest_RetrieveResponse:
+      type: object
+      properties:
+        CertificateData:
+          type: string
+          description: The certificate data in the requested format.
+        Format:
+          type: string
+          description: The format of the retrieved certificate.
+        Filename:
+          type: string
+          description: The filename for the retrieved certificate.
+        Status:
+          type: string
+          description: The status of the certificate retrieval process.
+        Stage:
+          type:
+          - integer
+          - 'null'
+          description: The stage of the certificate retrieval process.
+          format: int32
+        Error:
+          type: string
+          description: Error message if the certificate retrieval process failed.
+      description: The class for certificate retrieve response.
+    WebSDK_CertificateRequest_ImportResponse:
+      type: object
+      properties:
+        CertificateDN:
+          type: string
+          description: The Distinguished Name (DN) of the imported certificate.
+        Guid:
+          type: string
+          description: The unique identifier of the imported certificate.
+        CertificateVaultId:
+          type: integer
+          description: The vault ID of the imported certificate.
+          format: int64
+        PrivateKeyVaultId:
+          type: integer
+          description: The vault ID of the imported private key.
+          format: int64
+        Error:
+          type: string
+          description: Contains an error message if the import operation failed.
+        Warning:
+          type: string
+          description: Contains a warning message if there are any warnings during the import operation.
+      description: The class for import method response.
+    WebSDK_CertificateRequest_DissociateResponse:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: A detailed error message describing why the dissociation request failed.
+        Success:
+          type: boolean
+          description: A flag indicating whether the certificate was successfully dissociated from the application(s).
+      description: Certificate dissociate response.
+    WebSDK_CertificateRequest_ImportRequest:
+      type: object
+      properties:
+        PolicyDN:
+          type: string
+          description: The policy Distinguished Name (DN) where the certificate will be imported.
+        ObjectName:
+          type: string
+          description: The name of the certificate object to be created.
+        CertificateData:
+          type: string
+          description: The certificate data to be imported.
+        PrivateKeyData:
+          type: string
+          description: The private key data associated with the certificate.
+        Password:
+          type: string
+          description: The password for the private key, if applicable.
+        CASpecificAttributes:
+          type: array
+          items:
+            type: object
+            properties:
+              Name:
+                type: string
+                description: The name.
+              Value:
+                type: string
+                description: The value.
+            description: Holds a string/object value pair
+          description: The list of Certificate Authority (CA) specific attributes.
+        Reconcile:
+          type: boolean
+          description: A flag indicating whether to reconcile the certificate with existing certificates.
+      description: The import method request.
+    WebSDK_CertificateRequest_PutRequest__guid_:
+      required:
+      - AttributeData
+      type: object
+      properties:
+        AttributeData:
+          type: object
+          description: List of attribute names and values.
+    WebSDK_CertificateRequest_ResetResponse:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: Contains an error message if the operation failed.
+        ProcessingResetCompleted:
+          type: boolean
+          description: Indicates whether the processing reset was completed.
+        PrivateKeyMismatchResetCompleted:
+          type: boolean
+          description: Indicates whether the private key mismatch reset was completed.
+        RevocationResetCompleted:
+          type: boolean
+          description: Indicates whether the revocation reset was completed.
+        RestartCompleted:
+          type: boolean
+          description: Indicates whether the restart was completed.
+      description: The class for certificate reset response.
+    WebSDK_CertificateRequest_ResetRequest:
+      type: object
+      properties:
+        CertificateDN:
+          type: string
+          description: The Distinguished Name (DN) of the certificate to reset.
+        Restart:
+          type: boolean
+          description: A flag indicating whether to restart the processing after reset.
+        ClearCSR:
+          type:
+          - boolean
+          - 'null'
+          description: When **true** will clear any CSR present as part of the reset.  Default is **false**.
+        WorkToDoTimeout:
+          type:
+          - integer
+          - 'null'
+          description: Number of seconds to wait for the todo to finish before returning
+          format: int32
+      description: The class for certificate reset method request.
+    Core_IdentityType:
+      title: Enumeration defining Identity type objects
+      enum:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      - 16
+      - 32
+      type: integer
+      description: "\n\n**0**: **Undefined**  \nUndefined\n\n**1**: **User**  \nUser object\n\n**2**: **Group**  \nGroup object\n\n**4**: **Container**  \nContainer of users and groups\n\n**8**: **DistributionList**  \nDistribution List\n\n**16**: **Machine**  \nMachine\n\n**32**: **Provider**  \nThe Identity Provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
+    WebSDK_CertificateRequest_RenewRequest:
+      type: object
+      properties:
+        CertificateDN:
+          type: string
+          description: The Distinguished Name (DN) of the certificate to be renewed.
+        PKCS10:
+          type: string
+          description: The PKCS#10 certificate signing request.
+        Reenable:
+          type: boolean
+          description: Indicates whether to re-enable a previously disabled certificate.
+        WorkToDoTimeout:
+          type:
+          - integer
+          - 'null'
+          description: Number of seconds to wait for the todo to finish before returning
+          format: int32
+        Format:
+          type: string
+          description: The format in which to retrieve the renewed certificate (e.g., Base64, DER)
+        Password:
+          type: string
+          description: The password to use if the certificate includes a private key.
+        IncludePrivateKey:
+          type: boolean
+          description: Indicates whether to include the private key in the response.
+        IncludeChain:
+          type: boolean
+          description: Indicates whether to include the certificate chain in the response.
+        FriendlyName:
+          type: string
+          description: The friendly name for the certificate.
+        RootFirstOrder:
+          type: boolean
+          description: Indicates whether to order the certificate chain with the root first.
+        KeystorePassword:
+          type: string
+          description: The password for the Java Keystore (JKS) format.
+      description: The class for renew method request.
+    Core_IdentityEntry_EntryState:
+      title: Enumeration indicating the state of an IdentityEntry
+      enum:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      type: integer
+      description: "\n\n**0**: **Normal**  \nNo special state associated with the entry\n\n**1**: **Disabled**  \nThe identity has been disabled\n\n**2**: **LockedOut**  \nThe identity has been locked out\n\n**4**: **Deleted**  \nThe identity has been deleted\n\n**8**: **Unverifiable**  \nThe identity could not be verified with a provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
+    WebSDK_CertificateRequest_PushRequest:
+      type: object
+      properties:
+        CertificateDN:
+          type: string
+          description: The Distinguished Name (DN) of the certificate to be pushed to the application(s). This must reference a valid certificate in the system.
+        ApplicationDN:
+          type: array
+          items:
+            type: string
+          description: List of Distinguished Names (DNs) of the application objects to which the certificate will be pushed. This must be a valid application object in the system.
+        PushToAll:
+          type: boolean
+          description: A flag indicating whether the certificate should be pushed to all consumers. If this flag is set, do not pass application DNs.
+      description: Request for certificate provisioning to some or all consumers which are valid application DNs for this certificate.
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer

@@ -1,0 +1,1062 @@
+openapi: 3.2.0
+info:
+  title: Trust Protection Foundation WebSDK Client Management APIs…
+  description: '# Introduction
+
+    The Trust Protection Foundation Web SDK is a subset of REST APIs that allow you to:
+
+    * Automate certificate management
+
+    * Integrate with DevOps processes
+
+    * Discover machine identities
+
+    * Extract data to integrate with data warehouses
+
+    * Perform bulk actions
+
+    * Set up and administer Trust Protection Foundation
+
+    * Onboard teams
+
+    * Create custom, automated business logic and flows between internal systems
+
+
+    All these use cases can be accomplished using the Trust Protection Foundation REST…'
+  version: 26.1.1
+servers:
+- url: /
+  description: Current Host
+- url: https://REPLACEdnsnameME/
+  description: System
+- url: https://{dnsname}/
+  description: Configurable Hostname
+  variables:
+    dnsname:
+      default: localhost
+      description: Production API Hostname
+security:
+- AccessToken: []
+tags:
+- name: Client Management APIs
+  description: '## OSName Definitions ##
+
+
+    * AIX
+
+    * Android
+
+    * BlackBerry
+
+    * BSD
+
+    * HPux
+
+    * iOS
+
+    * Linux
+
+    * MacOS
+
+    * Other
+
+    * Solaris
+
+    * Unknown
+
+    * Windows
+
+    * zOS
+
+
+    ## ClientType Definitions ##
+
+
+    |ClientType|Description|
+
+    |---|---|
+
+    |VenafiAgent|Return information about server agent clients|
+
+    |AgentJuniorMachine|Return information about Windows user agent clients running as system|
+
+    |AgentJuniorUser|Return information about Windows user agent clients running as user|
+
+    |Portal|Return information about end user portal…'
+paths:
+  /vedsdk/client/:
+    get:
+      tags:
+      - Client Management APIs
+      summary: Search client records
+      description: 'Returns clients matching the filter items
+
+
+        _Required scope: agent_'
+      operationId: ClientWebSDK_ClientSdkService_Get
+      parameters:
+      - name: ClientVersion
+        in: query
+        description: The exact Trust Protection Foundation agent version number
+        schema:
+          type: string
+      - name: ClientType
+        in: query
+        description: The exact registered client category
+        schema:
+          type: string
+      - name: HostName
+        in: query
+        description: The exact or partial hostname, Fully Qualified Domain Name (FQDN), or domain name where the registered client is installed
+        schema:
+          type: string
+      - name: IPAddress
+        in: query
+        description: The exact IPv4 or IPV6 address of the system where the registered client is installed
+        schema:
+          type: string
+      - name: LastSeenOn
+        in: query
+        description: The exact date of clients connecting to Trust Protection Foundation
+        schema:
+          type: string
+      - name: LastSeenOnGreater
+        in: query
+        description: Find information about clients connecting to Trust Protection Foundation after this exact UTC time in ISO 8601 format (YYYY-MM-DDTHH:MM:SS.mmmmmmmZ)
+        schema:
+          type: string
+      - name: LastSeenOnLess
+        in: query
+        description: Find information about all clients connecting to Trust Protection Foundation before this exact UTC time. For a time range, make sure the LastSeenOnGreater time is older than the LastSeenOnLess time in ISO 8601 format (YYYY-MM-DDTHH:MM:SS.mmmmmmmZ)
+        schema:
+          type: string
+      - name: MACAddress
+        in: query
+        description: The exact or partial MAC address where the registered client is installed
+        schema:
+          type: string
+      - name: OSName
+        in: query
+        description: The exact operating system name of the system where the registered client is installed
+        schema:
+          type: string
+      - name: OSVersion
+        in: query
+        description: The exact operating system version of the system where the registered client is installed
+        schema:
+          type: string
+      - name: Region
+        in: query
+        description: The set of clients for a particular geographic area, such as a state or territory
+        schema:
+          type: string
+      - name: SerialNumber
+        in: query
+        description: The exact or partial hardware serial number of the system where the registered client is installed
+        schema:
+          type: string
+      - name: SID
+        in: query
+        description: The exact Security Identifier (SID) that corresponds to the UserName that is registered with the client
+        schema:
+          type: string
+      - name: UserName
+        in: query
+        description: The exact or partial domain or local user name that runs the registered client
+        schema:
+          type: string
+      - name: VirtualMachineId
+        in: query
+        description: The virtual machine identifier from the UI
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The request was successful, and the response contains the requested client records.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    ClientId:
+                      type: string
+                      description: Client ID
+                    ClientType:
+                      type: string
+                      description: Client type
+                    ClientVersion:
+                      type: string
+                      description: Client Version
+                    TrustLevel:
+                      type: string
+                      description: Trust level
+                    Groups:
+                      type: array
+                      items:
+                        type: string
+                      description: Group DNs
+                    EffectiveWork:
+                      type: array
+                      items:
+                        type: string
+                      description: Applicable Work DNs
+                    CreatedOn:
+                      type: string
+                      description: Create On (ISO 8601)
+                    LastSeenOn:
+                      type: string
+                      description: Client last seen (ISO 8601)
+                    Username:
+                      type: string
+                      description: Username
+                    Hostname:
+                      type: string
+                      description: Hostname
+                    HostDomain:
+                      type: string
+                      description: Domain
+                    DnsName:
+                      type: string
+                      description: DNS Name
+                    FQDN:
+                      type: string
+                      description: Fully qualified domain name
+                    VirtualMachineId:
+                      type: string
+                      description: Virtual machine ID
+                    Region:
+                      type: string
+                      description: Region code
+                    Networks:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          IpAddress:
+                            type: string
+                            description: IP address
+                          MacAddress:
+                            type: string
+                            description: MAC address
+                        description: Holds information about client record that will be send to ClientWebSDK API consumers
+                      description: Networks
+                    OsBuild:
+                      type: string
+                      description: OS build version
+                    OsName:
+                      type: string
+                      description: OS name
+                    OsServicePack:
+                      type: string
+                      description: OS service pack version
+                    OsVersion:
+                      type: string
+                      description: Operating system version
+                    SerialNumber:
+                      type: string
+                      description: Serial number
+                    SystemArchitecture:
+                      type: string
+                      description: System architecture
+                    SystemChassis:
+                      type: string
+                      description: System chassis type
+                    SystemManufacturer:
+                      type: string
+                      description: System manufacturer
+                    SystemModel:
+                      type: string
+                      description: System model
+                    CertificateDevice:
+                      type: string
+                      description: Certificate device DN
+                    SshDevice:
+                      type: string
+                      description: Ssh device DN
+                  description: Client Detail
+        '204':
+          description: The request was successful, but no client records matched the provided filters. The response does not contain any content.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    ClientId:
+                      type: string
+                      description: Client ID
+                    ClientType:
+                      type: string
+                      description: Client type
+                    ClientVersion:
+                      type: string
+                      description: Client Version
+                    TrustLevel:
+                      type: string
+                      description: Trust level
+                    Groups:
+                      type: array
+                      items:
+                        type: string
+                      description: Group DNs
+                    EffectiveWork:
+                      type: array
+                      items:
+                        type: string
+                      description: Applicable Work DNs
+                    CreatedOn:
+                      type: string
+                      description: Create On (ISO 8601)
+                    LastSeenOn:
+                      type: string
+                      description: Client last seen (ISO 8601)
+                    Username:
+                      type: string
+                      description: Username
+                    Hostname:
+                      type: string
+                      description: Hostname
+                    HostDomain:
+                      type: string
+                      description: Domain
+                    DnsName:
+                      type: string
+                      description: DNS Name
+                    FQDN:
+                      type: string
+                      description: Fully qualified domain name
+                    VirtualMachineId:
+                      type: string
+                      description: Virtual machine ID
+                    Region:
+                      type: string
+                      description: Region code
+                    Networks:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          IpAddress:
+                            type: string
+                            description: IP address
+                          MacAddress:
+                            type: string
+                            description: MAC address
+                        description: Holds information about client record that will be send to ClientWebSDK API consumers
+                      description: Networks
+                    OsBuild:
+                      type: string
+                      description: OS build version
+                    OsName:
+                      type: string
+                      description: OS name
+                    OsServicePack:
+                      type: string
+                      description: OS service pack version
+                    OsVersion:
+                      type: string
+                      description: Operating system version
+                    SerialNumber:
+                      type: string
+                      description: Serial number
+                    SystemArchitecture:
+                      type: string
+                      description: System architecture
+                    SystemChassis:
+                      type: string
+                      description: System chassis type
+                    SystemManufacturer:
+                      type: string
+                      description: System manufacturer
+                    SystemModel:
+                      type: string
+                      description: System model
+                    CertificateDevice:
+                      type: string
+                      description: Certificate device DN
+                    SshDevice:
+                      type: string
+                      description: Ssh device DN
+                  description: Client Detail
+        '400':
+          description: The request was invalid.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    ClientId:
+                      type: string
+                      description: Client ID
+                    ClientType:
+                      type: string
+                      description: Client type
+                    ClientVersion:
+                      type: string
+                      description: Client Version
+                    TrustLevel:
+                      type: string
+                      description: Trust level
+                    Groups:
+                      type: array
+                      items:
+                        type: string
+                      description: Group DNs
+                    EffectiveWork:
+                      type: array
+                      items:
+                        type: string
+                      description: Applicable Work DNs
+                    CreatedOn:
+                      type: string
+                      description: Create On (ISO 8601)
+                    LastSeenOn:
+                      type: string
+                      description: Client last seen (ISO 8601)
+                    Username:
+                      type: string
+                      description: Username
+                    Hostname:
+                      type: string
+                      description: Hostname
+                    HostDomain:
+                      type: string
+                      description: Domain
+                    DnsName:
+                      type: string
+                      description: DNS Name
+                    FQDN:
+                      type: string
+                      description: Fully qualified domain name
+                    VirtualMachineId:
+                      type: string
+                      description: Virtual machine ID
+                    Region:
+                      type: string
+                      description: Region code
+                    Networks:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          IpAddress:
+                            type: string
+                            description: IP address
+                          MacAddress:
+                            type: string
+                            description: MAC address
+                        description: Holds information about client record that will be send to ClientWebSDK API consumers
+                      description: Networks
+                    OsBuild:
+                      type: string
+                      description: OS build version
+                    OsName:
+                      type: string
+                      description: OS name
+                    OsServicePack:
+                      type: string
+                      description: OS service pack version
+                    OsVersion:
+                      type: string
+                      description: Operating system version
+                    SerialNumber:
+                      type: string
+                      description: Serial number
+                    SystemArchitecture:
+                      type: string
+                      description: System architecture
+                    SystemChassis:
+                      type: string
+                      description: System chassis type
+                    SystemManufacturer:
+                      type: string
+                      description: System manufacturer
+                    SystemModel:
+                      type: string
+                      description: System model
+                    CertificateDevice:
+                      type: string
+                      description: Certificate device DN
+                    SshDevice:
+                      type: string
+                      description: Ssh device DN
+                  description: Client Detail
+      security:
+      - AccessToken: []
+  /vedsdk/client/details/:
+    get:
+      tags:
+      - Client Management APIs
+      summary: Search client records (details)
+      description: 'Returns clients, including details, matching the filter items
+
+
+        _Required scope: agent_'
+      operationId: ClientWebSDK_ClientSdkService_GetDetails
+      parameters:
+      - name: WorkType
+        in: query
+        description: The tasks that a group of agents can perform.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The request was successful, and the response contains the requested client records.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    ClientId:
+                      type: string
+                      description: Client ID
+                    ClientType:
+                      type: string
+                      description: Client type
+                    ClientVersion:
+                      type: string
+                      description: Client Version
+                    TrustLevel:
+                      type: string
+                      description: Trust level
+                    Groups:
+                      type: array
+                      items:
+                        type: string
+                      description: Group DNs
+                    EffectiveWork:
+                      type: array
+                      items:
+                        type: string
+                      description: Applicable Work DNs
+                    CreatedOn:
+                      type: string
+                      description: Create On (ISO 8601)
+                    LastSeenOn:
+                      type: string
+                      description: Client last seen (ISO 8601)
+                    Username:
+                      type: string
+                      description: Username
+                    Hostname:
+                      type: string
+                      description: Hostname
+                    HostDomain:
+                      type: string
+                      description: Domain
+                    DnsName:
+                      type: string
+                      description: DNS Name
+                    FQDN:
+                      type: string
+                      description: Fully qualified domain name
+                    VirtualMachineId:
+                      type: string
+                      description: Virtual machine ID
+                    Region:
+                      type: string
+                      description: Region code
+                    Networks:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          IpAddress:
+                            type: string
+                            description: IP address
+                          MacAddress:
+                            type: string
+                            description: MAC address
+                        description: Holds information about client record that will be send to ClientWebSDK API consumers
+                      description: Networks
+                    OsBuild:
+                      type: string
+                      description: OS build version
+                    OsName:
+                      type: string
+                      description: OS name
+                    OsServicePack:
+                      type: string
+                      description: OS service pack version
+                    OsVersion:
+                      type: string
+                      description: Operating system version
+                    SerialNumber:
+                      type: string
+                      description: Serial number
+                    SystemArchitecture:
+                      type: string
+                      description: System architecture
+                    SystemChassis:
+                      type: string
+                      description: System chassis type
+                    SystemManufacturer:
+                      type: string
+                      description: System manufacturer
+                    SystemModel:
+                      type: string
+                      description: System model
+                    CertificateDevice:
+                      type: string
+                      description: Certificate device DN
+                    SshDevice:
+                      type: string
+                      description: Ssh device DN
+                  description: Client Detail
+        '204':
+          description: The request was successful, but no client records matched the provided filters. The response does not contain any content.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    ClientId:
+                      type: string
+                      description: Client ID
+                    ClientType:
+                      type: string
+                      description: Client type
+                    ClientVersion:
+                      type: string
+                      description: Client Version
+                    TrustLevel:
+                      type: string
+                      description: Trust level
+                    Groups:
+                      type: array
+                      items:
+                        type: string
+                      description: Group DNs
+                    EffectiveWork:
+                      type: array
+                      items:
+                        type: string
+                      description: Applicable Work DNs
+                    CreatedOn:
+                      type: string
+                      description: Create On (ISO 8601)
+                    LastSeenOn:
+                      type: string
+                      description: Client last seen (ISO 8601)
+                    Username:
+                      type: string
+                      description: Username
+                    Hostname:
+                      type: string
+                      description: Hostname
+                    HostDomain:
+                      type: string
+                      description: Domain
+                    DnsName:
+                      type: string
+                      description: DNS Name
+                    FQDN:
+                      type: string
+                      description: Fully qualified domain name
+                    VirtualMachineId:
+                      type: string
+                      description: Virtual machine ID
+                    Region:
+                      type: string
+                      description: Region code
+                    Networks:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          IpAddress:
+                            type: string
+                            description: IP address
+                          MacAddress:
+                            type: string
+                            description: MAC address
+                        description: Holds information about client record that will be send to ClientWebSDK API consumers
+                      description: Networks
+                    OsBuild:
+                      type: string
+                      description: OS build version
+                    OsName:
+                      type: string
+                      description: OS name
+                    OsServicePack:
+                      type: string
+                      description: OS service pack version
+                    OsVersion:
+                      type: string
+                      description: Operating system version
+                    SerialNumber:
+                      type: string
+                      description: Serial number
+                    SystemArchitecture:
+                      type: string
+                      description: System architecture
+                    SystemChassis:
+                      type: string
+                      description: System chassis type
+                    SystemManufacturer:
+                      type: string
+                      description: System manufacturer
+                    SystemModel:
+                      type: string
+                      description: System model
+                    CertificateDevice:
+                      type: string
+                      description: Certificate device DN
+                    SshDevice:
+                      type: string
+                      description: Ssh device DN
+                  description: Client Detail
+        '400':
+          description: The request was invalid.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    ClientId:
+                      type: string
+                      description: Client ID
+                    ClientType:
+                      type: string
+                      description: Client type
+                    ClientVersion:
+                      type: string
+                      description: Client Version
+                    TrustLevel:
+                      type: string
+                      description: Trust level
+                    Groups:
+                      type: array
+                      items:
+                        type: string
+                      description: Group DNs
+                    EffectiveWork:
+                      type: array
+                      items:
+                        type: string
+                      description: Applicable Work DNs
+                    CreatedOn:
+                      type: string
+                      description: Create On (ISO 8601)
+                    LastSeenOn:
+                      type: string
+                      description: Client last seen (ISO 8601)
+                    Username:
+                      type: string
+                      description: Username
+                    Hostname:
+                      type: string
+                      description: Hostname
+                    HostDomain:
+                      type: string
+                      description: Domain
+                    DnsName:
+                      type: string
+                      description: DNS Name
+                    FQDN:
+                      type: string
+                      description: Fully qualified domain name
+                    VirtualMachineId:
+                      type: string
+                      description: Virtual machine ID
+                    Region:
+                      type: string
+                      description: Region code
+                    Networks:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          IpAddress:
+                            type: string
+                            description: IP address
+                          MacAddress:
+                            type: string
+                            description: MAC address
+                        description: Holds information about client record that will be send to ClientWebSDK API consumers
+                      description: Networks
+                    OsBuild:
+                      type: string
+                      description: OS build version
+                    OsName:
+                      type: string
+                      description: OS name
+                    OsServicePack:
+                      type: string
+                      description: OS service pack version
+                    OsVersion:
+                      type: string
+                      description: Operating system version
+                    SerialNumber:
+                      type: string
+                      description: Serial number
+                    SystemArchitecture:
+                      type: string
+                      description: System architecture
+                    SystemChassis:
+                      type: string
+                      description: System chassis type
+                    SystemManufacturer:
+                      type: string
+                      description: System manufacturer
+                    SystemModel:
+                      type: string
+                      description: System model
+                    CertificateDevice:
+                      type: string
+                      description: Certificate device DN
+                    SshDevice:
+                      type: string
+                      description: Ssh device DN
+                  description: Client Detail
+      security:
+      - AccessToken: []
+  /vedsdk/client/delete:
+    post:
+      tags:
+      - Client Management APIs
+      summary: Delete client records
+      description: 'Deletes client records in bulk based on the supplied list of clients.
+
+
+        _Required scope: agent:delete_'
+      operationId: ClientWebSDK_ClientSdkService_Delete
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientWebSDK_DataContracts_BulkRequest'
+        required: true
+      responses:
+        '200':
+          description: 'Client records deleted successfully. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientWebSDK_DataContracts_DeleteResponse_delete'
+      security:
+      - AccessToken: []
+  /vedsdk/client/work/:
+    get:
+      tags:
+      - Client Management APIs
+      summary: Get own work
+      description: 'Returns all work objects applicable to the caller.
+
+
+        _Required scope: agent_'
+      operationId: ClientWebSDK_ClientSdkService_GetUserWork
+      parameters:
+      - name: WorkType
+        in: query
+        description: The tasks that a group of agents can perform.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The request was successful, and the response contains the requested work objects applicable to the caller.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    WorkName:
+                      type: string
+                      description: Work name
+                    WorkDn:
+                      type: string
+                      description: Work DN
+                    WorkType:
+                      type: string
+                      description: Work Type
+                    AssociatedGroups:
+                      type: array
+                      items:
+                        type: string
+                      description: Associated groups
+                  description: Represents a work that applies user making request via WebSdk
+        '204':
+          description: The request was successful, but no work objects matched the provided filters. The response does not contain any content.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    WorkName:
+                      type: string
+                      description: Work name
+                    WorkDn:
+                      type: string
+                      description: Work DN
+                    WorkType:
+                      type: string
+                      description: Work Type
+                    AssociatedGroups:
+                      type: array
+                      items:
+                        type: string
+                      description: Associated groups
+                  description: Represents a work that applies user making request via WebSdk
+        '400':
+          description: Request was invalid due to session issues, unsupported query parameters, or failure to get user network details.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    WorkName:
+                      type: string
+                      description: Work name
+                    WorkDn:
+                      type: string
+                      description: Work DN
+                    WorkType:
+                      type: string
+                      description: Work Type
+                    AssociatedGroups:
+                      type: array
+                      items:
+                        type: string
+                      description: Associated groups
+                  description: Represents a work that applies user making request via WebSdk
+      security:
+      - AccessToken: []
+components:
+  schemas:
+    ClientWebSDK_DataContracts_DeleteResponse_delete:
+      type: object
+      properties:
+        DeletedCount:
+          type: integer
+          description: Number of deleted items
+          format: int32
+    ClientWebSDK_DataContracts_BulkRequest:
+      type: object
+      properties:
+        Clients:
+          type: array
+          items:
+            type: object
+            properties:
+              ClientId:
+                type: string
+                description: Client ID
+              ClientType:
+                type: string
+                description: Client type
+              ClientVersion:
+                type: string
+                description: Client Version
+              TrustLevel:
+                type: string
+                description: Trust level
+              Groups:
+                type: array
+                items:
+                  type: string
+                description: Group DNs
+              EffectiveWork:
+                type: array
+                items:
+                  type: string
+                description: Applicable Work DNs
+              CreatedOn:
+                type: string
+                description: Create On (ISO 8601)
+              LastSeenOn:
+                type: string
+                description: Client last seen (ISO 8601)
+              Username:
+                type: string
+                description: Username
+              Hostname:
+                type: string
+                description: Hostname
+              HostDomain:
+                type: string
+                description: Domain
+              DnsName:
+                type: string
+                description: DNS Name
+              FQDN:
+                type: string
+                description: Fully qualified domain name
+              VirtualMachineId:
+                type: string
+                description: Virtual machine ID
+              Region:
+                type: string
+                description: Region code
+              Networks:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    IpAddress:
+                      type: string
+                      description: IP address
+                    MacAddress:
+                      type: string
+                      description: MAC address
+                  description: Holds information about client record that will be send to ClientWebSDK API consumers
+                description: Networks
+              OsBuild:
+                type: string
+                description: OS build version
+              OsName:
+                type: string
+                description: OS name
+              OsServicePack:
+                type: string
+                description: OS service pack version
+              OsVersion:
+                type: string
+                description: Operating system version
+              SerialNumber:
+                type: string
+                description: Serial number
+              SystemArchitecture:
+                type: string
+                description: System architecture
+              SystemChassis:
+                type: string
+                description: System chassis type
+              SystemManufacturer:
+                type: string
+                description: System manufacturer
+              SystemModel:
+                type: string
+                description: System model
+              CertificateDevice:
+                type: string
+                description: Certificate device DN
+              SshDevice:
+                type: string
+                description: Ssh device DN
+            description: Client Detail
+          description: List of clients (5000 max)
+        DeleteAssociatedDevices:
+          type: boolean
+          description: Flag indicating, on delete, whether to also delete associated devices
+      description: Request to perform bulk operation
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer

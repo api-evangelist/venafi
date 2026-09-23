@@ -1,0 +1,1594 @@
+openapi: 3.2.0
+info:
+  title: Trust Protection Foundation WebSDK Identity APIs API
+  description: '# Introduction
+
+    The Trust Protection Foundation Web SDK is a subset of REST APIs that allow you to:
+
+    * Automate certificate management
+
+    * Integrate with DevOps processes
+
+    * Discover machine identities
+
+    * Extract data to integrate with data warehouses
+
+    * Perform bulk actions
+
+    * Set up and administer Trust Protection Foundation
+
+    * Onboard teams
+
+    * Create custom, automated business logic and flows between internal systems
+
+
+    All these use cases can be accomplished using the Trust Protection Foundation REST…'
+  version: 26.1.1
+servers:
+- url: /
+  description: Current Host
+- url: https://REPLACEdnsnameME/
+  description: System
+- url: https://{dnsname}/
+  description: Configurable Hostname
+  variables:
+    dnsname:
+      default: localhost
+      description: Production API Hostname
+security:
+- AccessToken: []
+tags:
+- name: Identity APIs
+  description: The Identity interface manages users and group access.
+paths:
+  /vedsdk/identity/browse:
+    post:
+      tags:
+      - Identity APIs
+      summary: Search Identity Entries
+      description: 'Returns information about individual identity, group identity, or distribution groups from a local or non-local
+
+        provider such as Active Directory. This method only searches for identities that are
+
+        contained in the identity provider of the authenticated user.
+
+
+        For AD or LDAP, use both the Filter and Limit parameters. As a best practice, if you expect one
+
+        result, specify Limit=2 to detect extraneous information. Default, when you omit this parameter:
+
+
+        |Type|Recommendation|
+
+        |---|---|
+
+        |Active Directory|250 individual identities, group identities, or distribution groups|
+
+        |LDAP|500 individual identities, group identities, or distribution groups|
+
+        |Local|50 individual identities, group identities, or distribution groups|
+
+
+        _Required scope: configuration_'
+      operationId: Venafi_Core_WebSDK_IdentityRest_Browse
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_IdentityWebRequest_browse'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_IdentityWebResponse_browse'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/identity/getassociatedentries:
+    post:
+      tags:
+      - Identity APIs
+      summary: Get Associated Identity Entries
+      description: 'Returns all associated identity groups and folders for a given identity entry.
+
+
+        _Required scope: configuration_'
+      operationId: Venafi_Core_WebSDK_IdentityRest_GetAssociatedEntries
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_IdentityWebRequest_getassociatedentries'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_IdentityWebResponse_getassociatedentries'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/identity/getmembers:
+    post:
+      tags:
+      - Identity APIs
+      summary: Get Group Members
+      description: 'Returns information about the members of an identity group. Members include owners. If you want group information about just one user, call POST Identity/GetMemberships.
+
+
+        _Required scope: configuration_'
+      operationId: Venafi_Core_WebSDK_IdentityRest_GetMembers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_IdentityWebRequest_getmembers'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_IdentityWebResponse_getmembers'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/identity/getmemberships:
+    post:
+      tags:
+      - Identity APIs
+      summary: Get Groups
+      description: 'Returns information about a user''s membership in an identity provider.
+
+
+        _Required scope: configuration_'
+      operationId: Venafi_Core_WebSDK_IdentityRest_GetMemberships
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_IdentityWebRequest_getmemberships'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_IdentityWebResponse_getmemberships'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/identity/readattribute:
+    post:
+      tags:
+      - Identity APIs
+      summary: Read Attribute
+      description: 'Returns an array of attributes for the requested person or group''s identity. The caller is not required to have any special permissions.
+
+
+        _Required scope: configuration_'
+      operationId: Venafi_Core_WebSDK_IdentityRest_ReadAttribute
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_IdentityWebRequest_readattribute'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_IdentityWebResponse_readattribute'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/identity/validate:
+    post:
+      tags:
+      - Identity APIs
+      summary: Verify Identity Entry
+      description: 'Validates and returns missing information about an identity.
+
+
+        _Required scope: configuration_'
+      operationId: Venafi_Core_WebSDK_IdentityRest_Validate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_IdentityWebRequest_validate'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_IdentityWebResponse_validate'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/identity/self:
+    get:
+      tags:
+      - Identity APIs
+      summary: Who Am I
+      description: 'Returns the Web SDK caller''s self identity and all identities associated with the authenticated identity.
+
+
+        _Required scope: configuration_'
+      operationId: Venafi_Core_WebSDK_IdentityRest_Self
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_IdentityWebResponse_self'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/identity/SetPassword:
+    post:
+      tags:
+      - Identity APIs
+      summary: Change Password
+      description: 'Rotates a password for an identity. Password rotation for a group account is not supported. Password rotation
+
+        for any account that is managed by an external identity provider, such as Active Directory (AD) or
+
+        Lightweight Directory Access Protocol (LDAP) is not supported.
+
+
+        _Required scope: security:manage_'
+      operationId: Venafi_Core_WebSDK_IdentityRest_SetIdentityPassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_IdentityWebRequest_SetPassword'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_IdentityWebResponse_SetPassword'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/identity/addgroup:
+    post:
+      tags:
+      - Identity APIs
+      summary: Add Group
+      description: 'Adds a group to an identity provider. The group or team resides in the local provider.
+
+        However, members, which are Trust Protection Foundation users or groups, can originate
+
+        from a local, AD, or LDAP provider.
+
+
+        _Required scope: configuration:manage_'
+      operationId: Venafi_Core_WebSDK_IdentityRest_AddGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_IdentityWebRequest_addgroup'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_IdentityWebResponse_addgroup'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/identity/renamegroup:
+    put:
+      tags:
+      - Identity APIs
+      summary: Rename Group
+      description: 'Renames a group in an identity provider.
+
+
+        _Required scope: configuration:manage_'
+      operationId: Venafi_Core_WebSDK_IdentityRest_RenameGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_IdentityWebRequest_renamegroup'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_IdentityWebResponse_renamegroup'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/identity/group/{prefix}/{principal}:
+    parameters:
+    - name: prefix
+      in: path
+      description: The identity provider prefix
+      required: true
+      schema:
+        type: string
+    - name: principal
+      in: path
+      description: The universal identifier of the identity
+      required: true
+      schema:
+        type: string
+    delete:
+      tags:
+      - Identity APIs
+      summary: Delete Group
+      description: 'Deletes a group from an identity provider. The local group or team can contain users
+
+        or other groups from local, AD, or LDAP identity providers. During deletion, Trust
+
+        Protection Platform removes the local group and retains the identities.
+
+
+        _Required scope: configuration:delete_'
+      operationId: Venafi_Core_WebSDK_IdentityRest_DeleteGroup
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_IdentityWebResponse_group__prefix___principal_'
+        '400':
+          description: Error Occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_IdentityWebResponse_group__prefix___principal_'
+      security:
+      - AccessToken: []
+  /vedsdk/identity/addgroupmembers:
+    put:
+      tags:
+      - Identity APIs
+      summary: Add Group Members
+      description: 'Assigns members to a group in an identity provider. The group resides in the local provider. However, members,
+
+        which are Trust Protection Foundation users or groups, can originate from a local, AD, or LDAP provider.
+
+
+        _Required scope: configuration:manage_'
+      operationId: Venafi_Core_WebSDK_IdentityRest_AddGroupMembers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_IdentityWebRequest_addgroupmembers'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_IdentityWebResponse_addgroupmembers'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/identity/removegroupmembers:
+    put:
+      tags:
+      - Identity APIs
+      summary: Remove Group Members
+      description: 'Removes a member from a group in an identity provider. Even though the user or group is removed from the local group, Trust Protection Platform retains the identities.
+
+
+        _Required scope: configuration:manage_'
+      operationId: Venafi_Core_WebSDK_IdentityRest_RemoveGroupMembers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_IdentityWebRequest_removegroupmembers'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_IdentityWebResponse_removegroupmembers'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+components:
+  schemas:
+    Core_WebSDK_IdentityWebResponse_renamegroup:
+      type: object
+      properties:
+        ID:
+          type: object
+          properties:
+            Prefix:
+              type: string
+              description: Gets the prefix of the identity provider owning the entry
+            PrefixedName:
+              type: string
+              description: The name of the prefixed.
+            PrefixedUniversal:
+              type: string
+              description: Gets the prefixed universal.
+            Name:
+              type: string
+              description: Gets the name of the entry
+            FullName:
+              type: string
+              description: Gets the full name of the entry
+            Universal:
+              type: string
+              description: Gets the universal (machine-readable) name of the entry
+            IsGroup:
+              type: boolean
+              description: True if the entry represents a group
+            Type:
+              $ref: '#/components/schemas/Core_IdentityType'
+            State:
+              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+          description: The ID.
+    Core_WebSDK_IdentityWebRequest_getmembers:
+      type: object
+      properties:
+        ID:
+          type: object
+          properties:
+            Prefix:
+              type: string
+              description: Gets the prefix of the identity provider owning the entry
+            PrefixedName:
+              type: string
+              description: The name of the prefixed.
+            PrefixedUniversal:
+              type: string
+              description: Gets the prefixed universal.
+            Name:
+              type: string
+              description: Gets the name of the entry
+            FullName:
+              type: string
+              description: Gets the full name of the entry
+            Universal:
+              type: string
+              description: Gets the universal (machine-readable) name of the entry
+            IsGroup:
+              type: boolean
+              description: True if the entry represents a group
+            Type:
+              $ref: '#/components/schemas/Core_IdentityType'
+            State:
+              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+          description: The identity.
+    Core_WebSDK_IdentityWebRequest_SetPassword:
+      type: object
+      properties:
+        ID:
+          type: object
+          properties:
+            Prefix:
+              type: string
+              description: Gets the prefix of the identity provider owning the entry
+            PrefixedName:
+              type: string
+              description: The name of the prefixed.
+            PrefixedUniversal:
+              type: string
+              description: Gets the prefixed universal.
+            Name:
+              type: string
+              description: Gets the name of the entry
+            FullName:
+              type: string
+              description: Gets the full name of the entry
+            Universal:
+              type: string
+              description: Gets the universal (machine-readable) name of the entry
+            IsGroup:
+              type: boolean
+              description: True if the entry represents a group
+            Type:
+              $ref: '#/components/schemas/Core_IdentityType'
+            State:
+              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+          description: The identity.
+        Password:
+          type: string
+          description: The new identity password.
+        OldPassword:
+          type: string
+          description: The old identity password.
+    Core_WebSDK_IdentityWebResponse_group__prefix___principal_:
+      type: object
+      properties:
+        Message:
+          type: string
+          description: The error.
+    Core_WebSDK_IdentityWebResponse_browse:
+      type: object
+      properties:
+        Identities:
+          type: array
+          items:
+            type: object
+            properties:
+              Prefix:
+                type: string
+                description: Gets the prefix of the identity provider owning the entry
+              PrefixedName:
+                type: string
+                description: The name of the prefixed.
+              PrefixedUniversal:
+                type: string
+                description: Gets the prefixed universal.
+              Name:
+                type: string
+                description: Gets the name of the entry
+              FullName:
+                type: string
+                description: Gets the full name of the entry
+              Universal:
+                type: string
+                description: Gets the universal (machine-readable) name of the entry
+              IsGroup:
+                type: boolean
+                description: True if the entry represents a group
+              Type:
+                $ref: '#/components/schemas/Core_IdentityType'
+              State:
+                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+            description: Describes an Identity
+          description: The identities.
+    Core_WebSDK_IdentityWebResponse_addgroup:
+      type: object
+      properties:
+        ID:
+          type: object
+          properties:
+            Prefix:
+              type: string
+              description: Gets the prefix of the identity provider owning the entry
+            PrefixedName:
+              type: string
+              description: The name of the prefixed.
+            PrefixedUniversal:
+              type: string
+              description: Gets the prefixed universal.
+            Name:
+              type: string
+              description: Gets the name of the entry
+            FullName:
+              type: string
+              description: Gets the full name of the entry
+            Universal:
+              type: string
+              description: Gets the universal (machine-readable) name of the entry
+            IsGroup:
+              type: boolean
+              description: True if the entry represents a group
+            Type:
+              $ref: '#/components/schemas/Core_IdentityType'
+            State:
+              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+          description: The ID.
+        InvalidMembers:
+          type: array
+          items:
+            type: object
+            properties:
+              Prefix:
+                type: string
+                description: Gets the prefix of the identity provider owning the entry
+              PrefixedName:
+                type: string
+                description: The name of the prefixed.
+              PrefixedUniversal:
+                type: string
+                description: Gets the prefixed universal.
+              Name:
+                type: string
+                description: Gets the name of the entry
+              FullName:
+                type: string
+                description: Gets the full name of the entry
+              Universal:
+                type: string
+                description: Gets the universal (machine-readable) name of the entry
+              IsGroup:
+                type: boolean
+                description: True if the entry represents a group
+              Type:
+                $ref: '#/components/schemas/Core_IdentityType'
+              State:
+                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+            description: Describes an Identity
+          description: The invalid members.
+    Core_WebSDK_IdentityWebRequest_readattribute:
+      type: object
+      properties:
+        ID:
+          type: object
+          properties:
+            Prefix:
+              type: string
+              description: Gets the prefix of the identity provider owning the entry
+            PrefixedName:
+              type: string
+              description: The name of the prefixed.
+            PrefixedUniversal:
+              type: string
+              description: Gets the prefixed universal.
+            Name:
+              type: string
+              description: Gets the name of the entry
+            FullName:
+              type: string
+              description: Gets the full name of the entry
+            Universal:
+              type: string
+              description: Gets the universal (machine-readable) name of the entry
+            IsGroup:
+              type: boolean
+              description: True if the entry represents a group
+            Type:
+              $ref: '#/components/schemas/Core_IdentityType'
+            State:
+              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+          description: The identity.
+    Core_WebSDK_IdentityWebRequest_renamegroup:
+      type: object
+      properties:
+        Group:
+          type: object
+          properties:
+            Prefix:
+              type: string
+              description: Gets the prefix of the identity provider owning the entry
+            PrefixedName:
+              type: string
+              description: The name of the prefixed.
+            PrefixedUniversal:
+              type: string
+              description: Gets the prefixed universal.
+            Name:
+              type: string
+              description: Gets the name of the entry
+            FullName:
+              type: string
+              description: Gets the full name of the entry
+            Universal:
+              type: string
+              description: Gets the universal (machine-readable) name of the entry
+            IsGroup:
+              type: boolean
+              description: True if the entry represents a group
+            Type:
+              $ref: '#/components/schemas/Core_IdentityType'
+            State:
+              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+          description: The name or prefixed universal of a group
+        NewGroupName:
+          type: string
+          description: The new group name
+    Core_WebSDK_IdentityWebResponse_validate:
+      type: object
+      properties:
+        ID:
+          type: object
+          properties:
+            Prefix:
+              type: string
+              description: Gets the prefix of the identity provider owning the entry
+            PrefixedName:
+              type: string
+              description: The name of the prefixed.
+            PrefixedUniversal:
+              type: string
+              description: Gets the prefixed universal.
+            Name:
+              type: string
+              description: Gets the name of the entry
+            FullName:
+              type: string
+              description: Gets the full name of the entry
+            Universal:
+              type: string
+              description: Gets the universal (machine-readable) name of the entry
+            IsGroup:
+              type: boolean
+              description: True if the entry represents a group
+            Type:
+              $ref: '#/components/schemas/Core_IdentityType'
+            State:
+              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+          description: The ID.
+    Core_WebSDK_IdentityWebRequest_validate:
+      type: object
+      properties:
+        ID:
+          type: object
+          properties:
+            Prefix:
+              type: string
+              description: Gets the prefix of the identity provider owning the entry
+            PrefixedName:
+              type: string
+              description: The name of the prefixed.
+            PrefixedUniversal:
+              type: string
+              description: Gets the prefixed universal.
+            Name:
+              type: string
+              description: Gets the name of the entry
+            FullName:
+              type: string
+              description: Gets the full name of the entry
+            Universal:
+              type: string
+              description: Gets the universal (machine-readable) name of the entry
+            IsGroup:
+              type: boolean
+              description: True if the entry represents a group
+            Type:
+              $ref: '#/components/schemas/Core_IdentityType'
+            State:
+              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+          description: The identity.
+    Core_WebSDK_IdentityWebRequest_addgroup:
+      type: object
+      properties:
+        Name:
+          type: object
+          properties:
+            Prefix:
+              type: string
+              description: Gets the prefix of the identity provider owning the entry
+            PrefixedName:
+              type: string
+              description: The name of the prefixed.
+            PrefixedUniversal:
+              type: string
+              description: Gets the prefixed universal.
+            Name:
+              type: string
+              description: Gets the name of the entry
+            FullName:
+              type: string
+              description: Gets the full name of the entry
+            Universal:
+              type: string
+              description: Gets the universal (machine-readable) name of the entry
+            IsGroup:
+              type: boolean
+              description: True if the entry represents a group
+            Type:
+              $ref: '#/components/schemas/Core_IdentityType'
+            State:
+              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+          description: The identity name.
+        Members:
+          type: array
+          items:
+            type: object
+            properties:
+              Prefix:
+                type: string
+                description: Gets the prefix of the identity provider owning the entry
+              PrefixedName:
+                type: string
+                description: The name of the prefixed.
+              PrefixedUniversal:
+                type: string
+                description: Gets the prefixed universal.
+              Name:
+                type: string
+                description: Gets the name of the entry
+              FullName:
+                type: string
+                description: Gets the full name of the entry
+              Universal:
+                type: string
+                description: Gets the universal (machine-readable) name of the entry
+              IsGroup:
+                type: boolean
+                description: True if the entry represents a group
+              Type:
+                $ref: '#/components/schemas/Core_IdentityType'
+              State:
+                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+            description: Describes an Identity
+          description: The members
+        OldPassword:
+          type: string
+          description: The old identity password.
+    Core_WebSDK_IdentityWebRequest_getassociatedentries:
+      type: object
+      properties:
+        ID:
+          type: object
+          properties:
+            Prefix:
+              type: string
+              description: Gets the prefix of the identity provider owning the entry
+            PrefixedName:
+              type: string
+              description: The name of the prefixed.
+            PrefixedUniversal:
+              type: string
+              description: Gets the prefixed universal.
+            Name:
+              type: string
+              description: Gets the name of the entry
+            FullName:
+              type: string
+              description: Gets the full name of the entry
+            Universal:
+              type: string
+              description: Gets the universal (machine-readable) name of the entry
+            IsGroup:
+              type: boolean
+              description: True if the entry represents a group
+            Type:
+              $ref: '#/components/schemas/Core_IdentityType'
+            State:
+              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+          description: The identity.
+    Core_WebSDK_IdentityWebRequest_browse:
+      type: object
+      properties:
+        Container:
+          type: object
+          properties:
+            Prefix:
+              type: string
+              description: Gets the prefix of the identity provider owning the entry
+            PrefixedName:
+              type: string
+              description: The name of the prefixed.
+            PrefixedUniversal:
+              type: string
+              description: Gets the prefixed universal.
+            Name:
+              type: string
+              description: Gets the name of the entry
+            FullName:
+              type: string
+              description: Gets the full name of the entry
+            Universal:
+              type: string
+              description: Gets the universal (machine-readable) name of the entry
+            IsGroup:
+              type: boolean
+              description: True if the entry represents a group
+            Type:
+              $ref: '#/components/schemas/Core_IdentityType'
+            State:
+              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+          description: The container
+        Filter:
+          type: string
+          description: "The individual identity, group identity, or distribution group name to search for in the provider. \nFor AD or LDAP providers, use both the Filter and Limit parameters. For AD, Identity/Browse searches \nthe Ambiguous Name Resolution (ANR) attributes in the AD provider. The attributes, which are included \nin ANR lookups, can be controlled by the AD administrator or from the default set that is \navailable from Microsoft."
+        Limit:
+          type: integer
+          description: The maximum number of items to return
+          format: int32
+        IdentityType:
+          $ref: '#/components/schemas/Core_IdentityType'
+    Core_WebSDK_IdentityWebRequest_addgroupmembers:
+      type: object
+      properties:
+        Group:
+          type: object
+          properties:
+            Prefix:
+              type: string
+              description: Gets the prefix of the identity provider owning the entry
+            PrefixedName:
+              type: string
+              description: The name of the prefixed.
+            PrefixedUniversal:
+              type: string
+              description: Gets the prefixed universal.
+            Name:
+              type: string
+              description: Gets the name of the entry
+            FullName:
+              type: string
+              description: Gets the full name of the entry
+            Universal:
+              type: string
+              description: Gets the universal (machine-readable) name of the entry
+            IsGroup:
+              type: boolean
+              description: True if the entry represents a group
+            Type:
+              $ref: '#/components/schemas/Core_IdentityType'
+            State:
+              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+          description: The name or prefixed universal of a group
+        Members:
+          type: array
+          items:
+            type: object
+            properties:
+              Prefix:
+                type: string
+                description: Gets the prefix of the identity provider owning the entry
+              PrefixedName:
+                type: string
+                description: The name of the prefixed.
+              PrefixedUniversal:
+                type: string
+                description: Gets the prefixed universal.
+              Name:
+                type: string
+                description: Gets the name of the entry
+              FullName:
+                type: string
+                description: Gets the full name of the entry
+              Universal:
+                type: string
+                description: Gets the universal (machine-readable) name of the entry
+              IsGroup:
+                type: boolean
+                description: True if the entry represents a group
+              Type:
+                $ref: '#/components/schemas/Core_IdentityType'
+              State:
+                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+            description: Describes an Identity
+          description: The members
+    Core_WebSDK_IdentityWebRequest_removegroupmembers:
+      type: object
+      properties:
+        Group:
+          type: object
+          properties:
+            Prefix:
+              type: string
+              description: Gets the prefix of the identity provider owning the entry
+            PrefixedName:
+              type: string
+              description: The name of the prefixed.
+            PrefixedUniversal:
+              type: string
+              description: Gets the prefixed universal.
+            Name:
+              type: string
+              description: Gets the name of the entry
+            FullName:
+              type: string
+              description: Gets the full name of the entry
+            Universal:
+              type: string
+              description: Gets the universal (machine-readable) name of the entry
+            IsGroup:
+              type: boolean
+              description: True if the entry represents a group
+            Type:
+              $ref: '#/components/schemas/Core_IdentityType'
+            State:
+              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+          description: The name or prefixed universal of a group
+        Members:
+          type: array
+          items:
+            type: object
+            properties:
+              Prefix:
+                type: string
+                description: Gets the prefix of the identity provider owning the entry
+              PrefixedName:
+                type: string
+                description: The name of the prefixed.
+              PrefixedUniversal:
+                type: string
+                description: Gets the prefixed universal.
+              Name:
+                type: string
+                description: Gets the name of the entry
+              FullName:
+                type: string
+                description: Gets the full name of the entry
+              Universal:
+                type: string
+                description: Gets the universal (machine-readable) name of the entry
+              IsGroup:
+                type: boolean
+                description: True if the entry represents a group
+              Type:
+                $ref: '#/components/schemas/Core_IdentityType'
+              State:
+                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+            description: Describes an Identity
+          description: The members
+        ShowMembers:
+          type: boolean
+          description: '**true** if to be returned; otherwise, **false**.'
+    Core_WebSDK_IdentityWebResponse_SetPassword:
+      type: object
+      properties:
+        ID:
+          type: object
+          properties:
+            Prefix:
+              type: string
+              description: Gets the prefix of the identity provider owning the entry
+            PrefixedName:
+              type: string
+              description: The name of the prefixed.
+            PrefixedUniversal:
+              type: string
+              description: Gets the prefixed universal.
+            Name:
+              type: string
+              description: Gets the name of the entry
+            FullName:
+              type: string
+              description: Gets the full name of the entry
+            Universal:
+              type: string
+              description: Gets the universal (machine-readable) name of the entry
+            IsGroup:
+              type: boolean
+              description: True if the entry represents a group
+            Type:
+              $ref: '#/components/schemas/Core_IdentityType'
+            State:
+              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+          description: The ID.
+    Core_WebSDK_IdentityWebResponse_removegroupmembers:
+      type: object
+      properties:
+        InvalidMembers:
+          type: array
+          items:
+            type: object
+            properties:
+              Prefix:
+                type: string
+                description: Gets the prefix of the identity provider owning the entry
+              PrefixedName:
+                type: string
+                description: The name of the prefixed.
+              PrefixedUniversal:
+                type: string
+                description: Gets the prefixed universal.
+              Name:
+                type: string
+                description: Gets the name of the entry
+              FullName:
+                type: string
+                description: Gets the full name of the entry
+              Universal:
+                type: string
+                description: Gets the universal (machine-readable) name of the entry
+              IsGroup:
+                type: boolean
+                description: True if the entry represents a group
+              Type:
+                $ref: '#/components/schemas/Core_IdentityType'
+              State:
+                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+            description: Describes an Identity
+          description: The invalid members.
+        Members:
+          type: array
+          items:
+            type: object
+            properties:
+              Prefix:
+                type: string
+                description: Gets the prefix of the identity provider owning the entry
+              PrefixedName:
+                type: string
+                description: The name of the prefixed.
+              PrefixedUniversal:
+                type: string
+                description: Gets the prefixed universal.
+              Name:
+                type: string
+                description: Gets the name of the entry
+              FullName:
+                type: string
+                description: Gets the full name of the entry
+              Universal:
+                type: string
+                description: Gets the universal (machine-readable) name of the entry
+              IsGroup:
+                type: boolean
+                description: True if the entry represents a group
+              Type:
+                $ref: '#/components/schemas/Core_IdentityType'
+              State:
+                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+            description: Describes an Identity
+          description: The members.
+        Message:
+          type: string
+          description: The error.
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
+    Core_WebSDK_IdentityWebResponse_getassociatedentries:
+      type: object
+      properties:
+        Identities:
+          type: array
+          items:
+            type: object
+            properties:
+              Prefix:
+                type: string
+                description: Gets the prefix of the identity provider owning the entry
+              PrefixedName:
+                type: string
+                description: The name of the prefixed.
+              PrefixedUniversal:
+                type: string
+                description: Gets the prefixed universal.
+              Name:
+                type: string
+                description: Gets the name of the entry
+              FullName:
+                type: string
+                description: Gets the full name of the entry
+              Universal:
+                type: string
+                description: Gets the universal (machine-readable) name of the entry
+              IsGroup:
+                type: boolean
+                description: True if the entry represents a group
+              Type:
+                $ref: '#/components/schemas/Core_IdentityType'
+              State:
+                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+            description: Describes an Identity
+          description: The identities.
+    Core_WebSDK_IdentityWebResponse_self:
+      type: object
+      properties:
+        Identities:
+          type: array
+          items:
+            type: object
+            properties:
+              Prefix:
+                type: string
+                description: Gets the prefix of the identity provider owning the entry
+              PrefixedName:
+                type: string
+                description: The name of the prefixed.
+              PrefixedUniversal:
+                type: string
+                description: Gets the prefixed universal.
+              Name:
+                type: string
+                description: Gets the name of the entry
+              FullName:
+                type: string
+                description: Gets the full name of the entry
+              Universal:
+                type: string
+                description: Gets the universal (machine-readable) name of the entry
+              IsGroup:
+                type: boolean
+                description: True if the entry represents a group
+              Type:
+                $ref: '#/components/schemas/Core_IdentityType'
+              State:
+                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+            description: Describes an Identity
+          description: The identities.
+    Core_WebSDK_IdentityWebResponse_getmembers:
+      type: object
+      properties:
+        Identities:
+          type: array
+          items:
+            type: object
+            properties:
+              Prefix:
+                type: string
+                description: Gets the prefix of the identity provider owning the entry
+              PrefixedName:
+                type: string
+                description: The name of the prefixed.
+              PrefixedUniversal:
+                type: string
+                description: Gets the prefixed universal.
+              Name:
+                type: string
+                description: Gets the name of the entry
+              FullName:
+                type: string
+                description: Gets the full name of the entry
+              Universal:
+                type: string
+                description: Gets the universal (machine-readable) name of the entry
+              IsGroup:
+                type: boolean
+                description: True if the entry represents a group
+              Type:
+                $ref: '#/components/schemas/Core_IdentityType'
+              State:
+                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+            description: Describes an Identity
+          description: The identities.
+    Core_WebSDK_IdentityWebResponse_getmemberships:
+      type: object
+      properties:
+        Identities:
+          type: array
+          items:
+            type: object
+            properties:
+              Prefix:
+                type: string
+                description: Gets the prefix of the identity provider owning the entry
+              PrefixedName:
+                type: string
+                description: The name of the prefixed.
+              PrefixedUniversal:
+                type: string
+                description: Gets the prefixed universal.
+              Name:
+                type: string
+                description: Gets the name of the entry
+              FullName:
+                type: string
+                description: Gets the full name of the entry
+              Universal:
+                type: string
+                description: Gets the universal (machine-readable) name of the entry
+              IsGroup:
+                type: boolean
+                description: True if the entry represents a group
+              Type:
+                $ref: '#/components/schemas/Core_IdentityType'
+              State:
+                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+            description: Describes an Identity
+          description: The identities.
+    Core_IdentityType:
+      title: Enumeration defining Identity type objects
+      enum:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      - 16
+      - 32
+      type: integer
+      description: "\n\n**0**: **Undefined**  \nUndefined\n\n**1**: **User**  \nUser object\n\n**2**: **Group**  \nGroup object\n\n**4**: **Container**  \nContainer of users and groups\n\n**8**: **DistributionList**  \nDistribution List\n\n**16**: **Machine**  \nMachine\n\n**32**: **Provider**  \nThe Identity Provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
+    Core_WebSDK_IdentityWebRequest_getmemberships:
+      type: object
+      properties:
+        ID:
+          type: object
+          properties:
+            Prefix:
+              type: string
+              description: Gets the prefix of the identity provider owning the entry
+            PrefixedName:
+              type: string
+              description: The name of the prefixed.
+            PrefixedUniversal:
+              type: string
+              description: Gets the prefixed universal.
+            Name:
+              type: string
+              description: Gets the name of the entry
+            FullName:
+              type: string
+              description: Gets the full name of the entry
+            Universal:
+              type: string
+              description: Gets the universal (machine-readable) name of the entry
+            IsGroup:
+              type: boolean
+              description: True if the entry represents a group
+            Type:
+              $ref: '#/components/schemas/Core_IdentityType'
+            State:
+              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+          description: The identity.
+    Core_WebSDK_IdentityWebResponse_addgroupmembers:
+      type: object
+      properties:
+        InvalidMembers:
+          type: array
+          items:
+            type: object
+            properties:
+              Prefix:
+                type: string
+                description: Gets the prefix of the identity provider owning the entry
+              PrefixedName:
+                type: string
+                description: The name of the prefixed.
+              PrefixedUniversal:
+                type: string
+                description: Gets the prefixed universal.
+              Name:
+                type: string
+                description: Gets the name of the entry
+              FullName:
+                type: string
+                description: Gets the full name of the entry
+              Universal:
+                type: string
+                description: Gets the universal (machine-readable) name of the entry
+              IsGroup:
+                type: boolean
+                description: True if the entry represents a group
+              Type:
+                $ref: '#/components/schemas/Core_IdentityType'
+              State:
+                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+            description: Describes an Identity
+          description: The invalid members.
+        Message:
+          type: string
+          description: The error.
+    Core_IdentityEntry_EntryState:
+      title: Enumeration indicating the state of an IdentityEntry
+      enum:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      type: integer
+      description: "\n\n**0**: **Normal**  \nNo special state associated with the entry\n\n**1**: **Disabled**  \nThe identity has been disabled\n\n**2**: **LockedOut**  \nThe identity has been locked out\n\n**4**: **Deleted**  \nThe identity has been deleted\n\n**8**: **Unverifiable**  \nThe identity could not be verified with a provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
+    Core_WebSDK_IdentityWebResponse_readattribute:
+      type: object
+      properties:
+        Attributes:
+          type: array
+          items:
+            type: string
+          description: The attributes.
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer

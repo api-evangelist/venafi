@@ -1,0 +1,1609 @@
+openapi: 3.2.0
+info:
+  title: Certificate Manager - SaaS Certificate Request API
+  version: '1.0'
+servers:
+- description: US Region
+  url: https://api.venafi.cloud
+- description: EU Region
+  url: https://api.eu.venafi.cloud
+- description: AU Region
+  url: https://api.au.venafi.cloud
+- description: UK Region
+  url: https://api.uk.venafi.cloud
+- description: SG Region
+  url: https://api.sg.venafi.cloud
+- description: CA Region
+  url: https://api.ca.venafi.cloud
+tags:
+- name: Certificate Request
+paths:
+  /outagedetection/v1/certificaterequests:
+    get:
+      description: Retrieves the details of all certificate requests.
+      operationId: certificaterequests_getAll
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                All certificate requests details response:
+                  description: All certificate requests details response
+                  summary: All certificate requests details
+                  value:
+                    certificateRequests:
+                    - applicationId: eff7cb30-cff3-11ed-977d-f9a657c2c463
+                      caOrderId: 41:29:e5:3f:44:4d:59:1a:58:f6:8f:a7:ab:39:5d:56:ae:8f:e3:37
+                      certificateIds:
+                      - a7a0ea50-d279-11ed-861a-5154a94578eb
+                      - 602cec00-cff4-11ed-b7e2-bb3d5adf81ba
+                      - 602794d0-cff4-11ed-b7e2-bb3d5adf81ba
+                      certificateIssuingTemplateId: e47ea120-cff3-11ed-9ece-cf965f609bfb
+                      certificateOwnerUserId: b29cec90-cff1-11ed-97d2-21317ab83359
+                      companyId: b11fc270-cff1-11ed-97d2-21317ab83359
+                      creationDate: '2023-04-03T23:45:46.278+00:00'
+                      id: a78e25a0-d279-11ed-b5e4-151222cdc24b
+                      keyLength: 4096
+                      keyType: RSA
+                      modificationDate: '2023-04-03T23:45:46.423+00:00'
+                      status: ISSUED
+                      subjectAlternativeNamesByType:
+                        dNSName:
+                        - venafi.com
+                      subjectCN: venafi.com
+                      subjectDN: cn=venafi.com,ou=dev,o=Venafi,c=US,st=Utah,l=Salt Lake City
+                      validityPeriod: P2M19D
+                    - applicationId: eff7cb30-cff3-11ed-977d-f9a657c2c463
+                      caOrderId: 5b:f7:ff:02:86:d0:1f:ed:90:81:02:bb:5a:6b:8b:23:b8:0d:f7:e9
+                      certificateIds:
+                      - c6e89340-d279-11ed-861a-5154a94578eb
+                      - 602cec00-cff4-11ed-b7e2-bb3d5adf81ba
+                      - 602794d0-cff4-11ed-b7e2-bb3d5adf81ba
+                      certificateIssuingTemplateId: e47ea120-cff3-11ed-9ece-cf965f609bfb
+                      certificateOwnerUserId: b29cec90-cff1-11ed-97d2-21317ab83359
+                      companyId: b11fc270-cff1-11ed-97d2-21317ab83359
+                      creationDate: '2023-04-03T23:46:38.771+00:00'
+                      id: c6d8dbd0-d279-11ed-b5e4-151222cdc24b
+                      keyLength: 4096
+                      keyType: RSA
+                      modificationDate: '2023-04-03T23:46:38.890+00:00'
+                      status: ISSUED
+                      subjectAlternativeNamesByType:
+                        dNSName:
+                        - venafi.com
+                      subjectCN: localhost
+                      subjectDN: cn=localhost,ou=dev,o=Venafi,c=US,st=Utah,l=Salt Lake City
+                      validityPeriod: P2M19D
+                    numFound: 2
+              schema:
+                $ref: '#/components/schemas/CertificateRequestResponse'
+          description: The response body contains the details of the certificate requests
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: Incomplete or malformed request.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Get the details of all certificate requests
+      tags:
+      - Certificate Request
+    post:
+      description: Creates a certificate request for the specified `applicationId` and using the specified `certificateIssuingTemplateId`. Indicate a renewal by specifying `existingCertificateId`. Set `isVaaSGenerated` to true, specify `csrAttributes` to request a certificate using *Automated Secure Keypair*. The `validityPeriod` value must be in the ISO8601 format for time duration. Examples of ISO8601 format time duration include _P1Y_ for one year, _P10D_ for ten days, and _PT12H_ for twelve hours.
+      operationId: certificaterequests_create
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Certificate request's request:
+                description: Certificate request's request
+                summary: Certificate request details
+                value:
+                  apiClientInformation:
+                    identifier: 192.168.1.68
+                    type: Venafi VCert CLI
+                  applicationId: b00701b0-886f-11ed-9f39-3d586ab80cf2
+                  certificateIssuingTemplateId: a305d810-886f-11ed-9ccf-dbf748eb1ae0
+                  certificateSigningRequest: '-----BEGIN CERTIFICATE REQUEST-----
+
+                    MIIE2TCCAsECAQAwbDELMAkGA1UEBhMCVVMxDTALBgNVBAgTBFV0YWgxFzAVBgNV
+
+                    BAcTDlNhbHQgTGFrZSBDaXR5MQ8wDQYDVQQKEwZWZW5hZmkxDzANBgNVBAsTBmRl
+
+                    dm9wczETMBEGA1UEAxMKdmVuYWZpLmNvbTCCAiIwDQYJKoZIhvcNAQEBBQADggIP
+
+                    ADCCAgoCggIBAKSzq7hSn7on+YhRmt+4ojhfMzd/NVCIXaq+UG4wjyh5QqkZsGAK
+
+                    1u82gLvuZXc8i1iKStj5DnVEVBNAydynGztz+ZLaAGuIhx75yl36YrqIV3LyLjxc
+
+                    qZMsaJuZi2f0Lxy3bA8Huw/puNZwTBhJNcj2ov00FgGt7DTHdhl0z4nL5keADBMD
+
+                    IcYWcH+o2pHBEvDfjmE0yS9MYLQBcek1gKMPMGAjqj8VtbdwKdTQ6LYzkU34Vbp1
+
+                    HGD6lhwfkr5wlMnlNOoX658UnXNhgkulcZv3jS2hOhrJzhX6bEK8XvKQevv5d3Tu
+
+                    sdk74zyumoe4edwM6wkphjWtXGE4CVBWongzpG08zvDbzdkN31g/u+Isp2mJHfi/
+
+                    7rPySj6NzV14GOHnR16zwQB6cpEwzwPigl1lSL0Qv/xjysV0yFaRycZceT0TNj3b
+
+                    0ezgV+sSHXwI84IO+9hH5JXOn+llY3gniVxNbgdb8yK3tOPfT9ig3pW3Vcdh02XF
+
+                    ocmP1/eM6/WYh+ipKqNXpvhW9jf56CEmVSg9sWzyqZ2rCj4i+JC/IxwxANy4vGuX
+
+                    y+XHkWJOMt7sSZaiOAel/TVEcA3XA0HV/hEPkakZK5blls2d5IyJUhvOZB1QxpDE
+
+                    ECemCZ/ZsJR3Bao0JQNABhmnammMRQolfBE5z659+E4pXPIJP+a/UaRtAgMBAAGg
+
+                    KDAmBgkqhkiG9w0BCQ4xGTAXMBUGA1UdEQQOMAyCCnZlbmFmaS5jb20wDQYJKoZI
+
+                    hvcNAQELBQADggIBAH2oEcLdtRay+EPAky0ly/UM7pEFG9RCs1RoLqGMGeLurxqH
+
+                    PvzA7BayOp1TfkxxaLnGzTREFhnEJQhDMyOn52RDrOkHYEBj/hfqi2bKO+mXpJS8
+
+                    3n1Hn7H0+aqJXOguG9/L6jmEmEBDCBir8FJuSeHBnG+5A//pXWdivkyjjlY0XlZj
+
+                    JI4GqoFAFqDAY/8WFe5A7bEsiLu+vEVEgzhFyDXUYBkZ6DutpOA2cgMN0J+wDP2X
+
+                    Asd7KJY1QUB/JX/zUIW57aCHAyntfv+hQ0oDgQV4+p+gNHHrZNLrk9eYyHrqcQA+
+
+                    7bEfgbUWUMJjYw0YPwTM801rt/8wHBdOjFgpve6pnC1Xk3hY6i/RKRXCKnEgkloO
+
+                    yOc1/WQLVT5sq0hJSJ6JKHY0Z4ZhieiPpUM+CuQu7KBrxkp9DwV23Ttu7pA4FOz4
+
+                    AroLuwvVEdi16Hu61kR/BW5WDNvIUox4pttCx77+laTxjJZ+1owNRFtzyMBWi07d
+
+                    4p6Xp3WTPSp+rYEJwX3Z4bLKCZUCUkbBFEXMDheK4detAW0qHpE7YvJu0/FiTzVV
+
+                    76l+z9p1cI5l0+vKp2lx5pAp7mkiCvrUuBMl78eGE4UtNo1Aa3Y8ccUlC+wYr0+b
+
+                    rn7e5SYFU3hTt4nsGurfV5+YyQn0x0kjiS0g7zGGGchFGcVBaeZIDZijA54i
+
+                    -----END CERTIFICATE REQUEST-----
+
+                    '
+                  csrAttributes:
+                    commonName: venafi.com
+                    country: US
+                    keyTypeParameters:
+                      keyCurve: P256
+                      keyLength: 4096
+                      keyType: RSA
+                    locality: Salt Lake City
+                    organization: Venafi
+                    organizationalUnits:
+                    - devops
+                    state: Utah
+                    subjectAlternativeNamesByType:
+                      dnsNames:
+                      - venafi.com
+                  existingCertificateId: b305d810-886f-11ed-9ccf-dbf748eb1ae0
+                  isVaaSGenerated: false
+                  validityPeriod: PT2880H
+            schema:
+              $ref: '#/components/schemas/CertificateRequestRequest'
+      responses:
+        '201':
+          content:
+            application/json:
+              examples:
+                Certificate request response:
+                  description: Certificate request response
+                  summary: Certificate request details
+                  value:
+                    certificateRequests:
+                    - apiClientInformation:
+                        identifier: 192.168.1.68
+                        type: Venafi VCert CLI
+                      applicationId: eff7cb30-cff3-11ed-977d-f9a657c2c463
+                      certificateIds:
+                      - 4cfbcf80-d26e-11ed-861a-5154a94578eb
+                      - 602794d0-cff4-11ed-b7e2-bb3d5adf81ba
+                      certificateIssuingTemplateId: e47ea120-cff3-11ed-9ece-cf965f609bfb
+                      certificateOwnerUserId: b29cec90-cff1-11ed-97d2-21317ab83359
+                      certificateSigningRequest: '-----BEGIN CERTIFICATE REQUEST-----
+
+                        MIIE2TCCAsECAQAwbDELMAkGA1UEBhMCVVMxDTALBgNVBAgTBFV0YWgxFzAVBgNV
+
+                        BAcTDlNhbHQgTGFrZSBDaXR5MQ8wDQYDVQQKEwZWZW5hZmkxDzANBgNVBAsTBmRl
+
+                        dm9wczETMBEGA1UEAxMKdmVuYWZpLmNvbTCCAiIwDQYJKoZIhvcNAQEBBQADggIP
+
+                        ADCCAgoCggIBAKSzq7hSn7on+YhRmt+4ojhfMzd/NVCIXaq+UG4wjyh5QqkZsGAK
+
+                        1u82gLvuZXc8i1iKStj5DnVEVBNAydynGztz+ZLaAGuIhx75yl36YrqIV3LyLjxc
+
+                        qZMsaJuZi2f0Lxy3bA8Huw/puNZwTBhJNcj2ov00FgGt7DTHdhl0z4nL5keADBMD
+
+                        IcYWcH+o2pHBEvDfjmE0yS9MYLQBcek1gKMPMGAjqj8VtbdwKdTQ6LYzkU34Vbp1
+
+                        HGD6lhwfkr5wlMnlNOoX658UnXNhgkulcZv3jS2hOhrJzhX6bEK8XvKQevv5d3Tu
+
+                        sdk74zyumoe4edwM6wkphjWtXGE4CVBWongzpG08zvDbzdkN31g/u+Isp2mJHfi/
+
+                        7rPySj6NzV14GOHnR16zwQB6cpEwzwPigl1lSL0Qv/xjysV0yFaRycZceT0TNj3b
+
+                        0ezgV+sSHXwI84IO+9hH5JXOn+llY3gniVxNbgdb8yK3tOPfT9ig3pW3Vcdh02XF
+
+                        ocmP1/eM6/WYh+ipKqNXpvhW9jf56CEmVSg9sWzyqZ2rCj4i+JC/IxwxANy4vGuX
+
+                        y+XHkWJOMt7sSZaiOAel/TVEcA3XA0HV/hEPkakZK5blls2d5IyJUhvOZB1QxpDE
+
+                        ECemCZ/ZsJR3Bao0JQNABhmnammMRQolfBE5z659+E4pXPIJP+a/UaRtAgMBAAGg
+
+                        KDAmBgkqhkiG9w0BCQ4xGTAXMBUGA1UdEQQOMAyCCnZlbmFmaS5jb20wDQYJKoZI
+
+                        hvcNAQELBQADggIBAH2oEcLdtRay+EPAky0ly/UM7pEFG9RCs1RoLqGMGeLurxqH
+
+                        PvzA7BayOp1TfkxxaLnGzTREFhnEJQhDMyOn52RDrOkHYEBj/hfqi2bKO+mXpJS8
+
+                        3n1Hn7H0+aqJXOguG9/L6jmEmEBDCBir8FJuSeHBnG+5A//pXWdivkyjjlY0XlZj
+
+                        JI4GqoFAFqDAY/8WFe5A7bEsiLu+vEVEgzhFyDXUYBkZ6DutpOA2cgMN0J+wDP2X
+
+                        Asd7KJY1QUB/JX/zUIW57aCHAyntfv+hQ0oDgQV4+p+gNHHrZNLrk9eYyHrqcQA+
+
+                        7bEfgbUWUMJjYw0YPwTM801rt/8wHBdOjFgpve6pnC1Xk3hY6i/RKRXCKnEgkloO
+
+                        yOc1/WQLVT5sq0hJSJ6JKHY0Z4ZhieiPpUM+CuQu7KBrxkp9DwV23Ttu7pA4FOz4
+
+                        AroLuwvVEdi16Hu61kR/BW5WDNvIUox4pttCx77+laTxjJZ+1owNRFtzyMBWi07d
+
+                        4p6Xp3WTPSp+rYEJwX3Z4bLKCZUCUkbBFEXMDheK4detAW0qHpE7YvJu0/FiTzVV
+
+                        76l+z9p1cI5l0+vKp2lx5pAp7mkiCvrUuBMl78eGE4UtNo1Aa3Y8ccUlC+wYr0+b
+
+                        rn7e5SYFU3hTt4nsGurfV5+YyQn0x0kjiS0g7zGGGchFGcVBaeZIDZijA54i
+
+                        -----END CERTIFICATE REQUEST-----
+
+                        '
+                      companyId: b11fc270-cff1-11ed-97d2-21317ab83359
+                      creationDate: '2023-04-03T22:24:29.739+00:00'
+                      id: 4ce82070-d26e-11ed-b5e4-151222cdc24b
+                      keyCurve: P256
+                      keyLength: 4096
+                      keyType: RSA
+                      modificationDate: '2023-04-03T22:24:29.874+00:00'
+                      status: ISSUED
+                      subjectAlternativeNamesByType:
+                        dNSName:
+                        - venafi.com
+                      subjectDN: cn=venafi.com,ou=devops,o=Venafi,c=US,st=Utah,l=Salt Lake City
+                      validityPeriod: PT1920H
+              schema:
+                $ref: '#/components/schemas/CertificateRequestResponse'
+          description: A certificate request has been created, and its details can be found in the response body.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: The request is either incomplete or malformed.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: The request is either incomplete or malformed.
+      security:
+      - tppl-api-key: []
+      summary: Create a certificate request
+      tags:
+      - Certificate Request
+  /outagedetection/v1/certificaterequests/{id}:
+    get:
+      description: Retrieves the details of the certificate request with the specified `id`.
+      operationId: certificaterequests_getById
+      parameters:
+      - description: UUID of a Certificate Request
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a Certificate Request
+          format: uuid
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Certificate request details response:
+                  description: Certificate request details response
+                  summary: Certificate request details
+                  value:
+                    apiClientInformation:
+                      identifier: 192.168.1.68
+                      type: Venafi VCert CLI
+                    applicationId: eff7cb30-cff3-11ed-977d-f9a657c2c463
+                    certificateIds:
+                    - 602fab20-cff4-11ed-b7e2-bb3d5adf81ba
+                    - 602794d0-cff4-11ed-b7e2-bb3d5adf81ba
+                    certificateIssuingTemplateId: e47ea120-cff3-11ed-9ece-cf965f609bfb
+                    certificateOwnerUserId: b29cec90-cff1-11ed-97d2-21317ab83359
+                    certificateSigningRequest: '-----BEGIN CERTIFICATE REQUEST-----
+
+                      MIIE1DCCArwCAQAwZzELMAkGA1UEBhMCTVgxEDAOBgNVBAgTB1l1Y2F0YW4xDzAN
+
+                      BgNVBAcTBk1lcmlkYTEPMA0GA1UEChMGdmVuYWZpMQ8wDQYDVQQLEwZkZXZvcHMx
+
+                      EzARBgNVBAMTCnZlbmFmaS5jb20wggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIK
+
+                      AoICAQC74YXA0Wj9xR6qjd46t/9Zt2KJj63hiZdIHhFKdnOweJ1JLL8EWihuC2kt
+
+                      SS6Fa6gU7kig7ktKTX70hmtsrh18h5a6zPWcne+pxnFlcYpmvJFp6loO8SWuvBIh
+
+                      HCSUMV+3Miak3xZi7cmgH1RFYJpwwZBQclGnJgyJeqCmqPu5TgA2wpvRFCmL5h10
+
+                      uXBBZI2b1Ia7F9J8t7dp6+k3cpm6st93WsEY/212rDF1S1eM3paUKGxhE2bk7jx+
+
+                      6LgqqzgRE0AoUUoNEC8Dc9tABQNPckDHETl8kg30Udur9KAPeMhoMfQ4pfK2kGx9
+
+                      kf5JmzO5LS/wALZydey03Sa+Ie4oeQG2i980rXmBkXLHNZkRoLZAbk7UQKF/n2Dz
+
+                      8CGBD3dYVjxn8czj+7iNrdBllloiJgQUjupBZF82IYUO6ghfxzPZRMl4E3ezT9AD
+
+                      ndM8bGolZVYqzwcVRaSKlsva8HL9c6S5jfhFTxl+Uxn84GyPS1fh73c+cV9/NWFE
+
+                      uQF80iQ0I0XB9BKf2haYa5e0KOeM0gOIn/3oQPvIDy5wEVrV8LMOwGYWSSM87l9B
+
+                      EWEo2cjSQetQpjxtmY3WmZ0ghYVzLveUd3wbOmfBn6ahcW9pdVl0M/lcqcZM1UyT
+
+                      bxyL8eeUcG9eWHHXteJv6iIRyjBDM8jiXm9gdVKKL3sw9xIwXQIDAQABoCgwJgYJ
+
+                      KoZIhvcNAQkOMRkwFzAVBgNVHREEDjAMggp2ZW5hZmkuY29tMA0GCSqGSIb3DQEB
+
+                      CwUAA4ICAQB5jyiR+nzULt77rye33E6q7rAj8TwXl9yuFELT6YgigrAAAerUU2IU
+
+                      0hHZdc2WYfTT5sPc+WkZGXqbGZUOckkBpl++Ch4gpigj45ccoMZCdiMay8Xdbjte
+
+                      z+ixY4Jr1XTcjO67BG2xrKxFIOJh9nRMN1sdsowCGBUUeEMCuqudX5hs7eQNupcr
+
+                      yiNzyWyn/vWtsFVTdXmr9i40LBmcS/d2GYk+0/sHYQysO46Ff2xW7UXbNMnN2O4s
+
+                      8MN9vYmuGpEzXpUZZwU1UaE/bOSlwruLSRaoSh3PvXMEQeDrChklKgEiFb/wnQ2/
+
+                      sHI94QT1K63jW+vjfRDeRDTiF2+77P6dPQCTl+SaVcQ+76sLpyDE9P2SxCTv+TLS
+
+                      YVWy4DEBilf7Vu3NqAElclBVPLQNNsYALS79E1CPSp5McEWeAignL66ti/itSq7L
+
+                      m1YfIfSNdyJGyhxoZjL/qRjjYBzCwIHFvl3Qg8VzF3SIgSRyiTsrP9fcsfFQXrBB
+
+                      UMhhjWNTPaIf+v2/fgNYOU4G7dic+DyaNjNUB4FHwtD1f7rZ9cUhp103QVvm4vT6
+
+                      sjOjjJ1neovhvtnkekflZ/tYDimSLhFCeaQV0ioc2lk+08XuTZyJ9OyteL4lbCIT
+
+                      mVoJFSIz0mTgwv71K76+Jk+VX8je3szfF9aPsd1seTrMyaMtf+NJeA==
+
+                      -----END CERTIFICATE REQUEST-----
+
+                      '
+                    companyId: b11fc270-cff1-11ed-97d2-21317ab83359
+                    creationDate: '2023-03-31T18:46:41.039+00:00'
+                    id: 601e9420-cff4-11ed-9ece-cf965f609bfb
+                    keyLength: 4096
+                    keyType: RSA
+                    modificationDate: '2023-03-31T18:46:41.160+00:00'
+                    status: ISSUED
+                    subjectAlternativeNamesByType:
+                      dNSName:
+                      - venafi.com
+                    subjectDN: cn=venafi.com,ou=devops,o=venafi,c=MX,st=Yucatan,l=Merida
+                    validityPeriod: PT288H
+              schema:
+                $ref: '#/components/schemas/CertificateRequestInformation1'
+          description: A certificate request has been found, and its details are in the response body.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: The request is either incomplete or malformed.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: The certificate request was not found.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: The request is either incomplete or malformed.
+      security:
+      - tppl-api-key: []
+      summary: Get a certificate request's details
+      tags:
+      - Certificate Request
+  /outagedetection/v1/certificaterequests/{id}/resubmission:
+    post:
+      description: Resubmits the certificate request that has the specified `id`.
+      operationId: certificaterequests_resubmitById
+      parameters:
+      - description: UUID of a Certificate Request
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a Certificate Request
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CertificateRequestResubmissionRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateRequestResponse'
+          description: Certificate Request was resubmitted; details in response body.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: Incomplete or malformed request.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: Certificate Request not found.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Resubmit a certificate request
+      tags:
+      - Certificate Request
+  /outagedetection/v1/certificaterequests/validation:
+    post:
+      description: This operation validates a proposed certificate request without actually submitting it.Checks for compliance with the specified issuing template and verifies all other references are valid (e.g., `existingCertificateId` is the UUID of an inventory certificate).
+      operationId: certificaterequests_validation
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Certificate request validation request:
+                description: Certificate request validation request
+                summary: Certificate request validation
+                value:
+                  apiClientInformation:
+                    identifier: 192.168.1.68
+                    type: Venafi VCert CLI
+                  applicationId: b00701b0-886f-11ed-9f39-3d586ab80ce2
+                  certificateIssuingTemplateId: a305d810-886f-11ed-9ccf-dbf748eb1aa9
+                  certificateSigningRequest: '-----BEGIN CERTIFICATE REQUEST-----
+
+                    MIIE2TCCAsECAQAwbDELMAkGA1UEBhMCVVMxDTALBgNVBAgTBFV0YWgxFzAVBgNV
+
+                    BAcTDlNhbHQgTGFrZSBDaXR5MQ8wDQYDVQQKEwZWZW5hZmkxDzANBgNVBAsTBmRl
+
+                    dm9wczETMBEGA1UEAxMKdmVuYWZpLmNvbTCCAiIwDQYJKoZIhvcNAQEBBQADggIP
+
+                    ADCCAgoCggIBAKSzq7hSn7on+YhRmt+4ojhfMzd/NVCIXaq+UG4wjyh5QqkZsGAK
+
+                    1u82gLvuZXc8i1iKStj5DnVEVBNAydynGztz+ZLaAGuIhx75yl36YrqIV3LyLjxc
+
+                    qZMsaJuZi2f0Lxy3bA8Huw/puNZwTBhJNcj2ov00FgGt7DTHdhl0z4nL5keADBMD
+
+                    IcYWcH+o2pHBEvDfjmE0yS9MYLQBcek1gKMPMGAjqj8VtbdwKdTQ6LYzkU34Vbp1
+
+                    HGD6lhwfkr5wlMnlNOoX658UnXNhgkulcZv3jS2hOhrJzhX6bEK8XvKQevv5d3Tu
+
+                    sdk74zyumoe4edwM6wkphjWtXGE4CVBWongzpG08zvDbzdkN31g/u+Isp2mJHfi/
+
+                    7rPySj6NzV14GOHnR16zwQB6cpEwzwPigl1lSL0Qv/xjysV0yFaRycZceT0TNj3b
+
+                    0ezgV+sSHXwI84IO+9hH5JXOn+llY3gniVxNbgdb8yK3tOPfT9ig3pW3Vcdh02XF
+
+                    ocmP1/eM6/WYh+ipKqNXpvhW9jf56CEmVSg9sWzyqZ2rCj4i+JC/IxwxANy4vGuX
+
+                    y+XHkWJOMt7sSZaiOAel/TVEcA3XA0HV/hEPkakZK5blls2d5IyJUhvOZB1QxpDE
+
+                    ECemCZ/ZsJR3Bao0JQNABhmnammMRQolfBE5z659+E4pXPIJP+a/UaRtAgMBAAGg
+
+                    KDAmBgkqhkiG9w0BCQ4xGTAXMBUGA1UdEQQOMAyCCnZlbmFmaS5jb20wDQYJKoZI
+
+                    hvcNAQELBQADggIBAH2oEcLdtRay+EPAky0ly/UM7pEFG9RCs1RoLqGMGeLurxqH
+
+                    PvzA7BayOp1TfkxxaLnGzTREFhnEJQhDMyOn52RDrOkHYEBj/hfqi2bKO+mXpJS8
+
+                    3n1Hn7H0+aqJXOguG9/L6jmEmEBDCBir8FJuSeHBnG+5A//pXWdivkyjjlY0XlZj
+
+                    JI4GqoFAFqDAY/8WFe5A7bEsiLu+vEVEgzhFyDXUYBkZ6DutpOA2cgMN0J+wDP2X
+
+                    Asd7KJY1QUB/JX/zUIW57aCHAyntfv+hQ0oDgQV4+p+gNHHrZNLrk9eYyHrqcQA+
+
+                    7bEfgbUWUMJjYw0YPwTM801rt/8wHBdOjFgpve6pnC1Xk3hY6i/RKRXCKnEgkloO
+
+                    yOc1/WQLVT5sq0hJSJ6JKHY0Z4ZhieiPpUM+CuQu7KBrxkp9DwV23Ttu7pA4FOz4
+
+                    AroLuwvVEdi16Hu61kR/BW5WDNvIUox4pttCx77+laTxjJZ+1owNRFtzyMBWi07d
+
+                    4p6Xp3WTPSp+rYEJwX3Z4bLKCZUCUkbBFEXMDheK4detAW0qHpE7YvJu0/FiTzVV
+
+                    76l+z9p1cI5l0+vKp2lx5pAp7mkiCvrUuBMl78eGE4UtNo1Aa3Y8ccUlC+wYr0+b
+
+                    rn7e5SYFU3hTt4nsGurfV5+YyQn0x0kjiS0g7zGGGchFGcVBaeZIDZijA54i
+
+                    -----END CERTIFICATE REQUEST-----
+
+                    '
+                  csrAttributes:
+                    commonName: Venafi.com
+                    country: MX
+                    keyTypeParameters:
+                      keyCurve: P256
+                      keyLength: 2048
+                      keyType: RSA
+                    locality: Merida
+                    organization: venafi
+                    organizationalUnits:
+                    - devops
+                    state: Yucatan
+                    subjectAlternativeNamesByType:
+                      dnsNames:
+                      - localhost
+                  existingCertificateId: a14c9ea0-c370-11ed-8b33-b3654a9c754f
+                  isVaaSGenerated: false
+            schema:
+              $ref: '#/components/schemas/CertificateRequestRequest'
+      responses:
+        '201':
+          content:
+            application/json:
+              examples:
+                Certificate request validation details response:
+                  description: Certificate request validation details response
+                  summary: Certificate request validation details
+                  value:
+                    keyLength: 2048
+                    keyType: RSA
+                    subjectAlternativeNamesByType:
+                      dNSName:
+                      - localhost
+                    subjectDN: C=MX,ST=Yucatan,L=Merida,O=venafi,OU=devops,CN=Venafi.com
+              schema:
+                $ref: '#/components/schemas/CertificationRequestInformation'
+          description: Certificate Request was validated.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: Incomplete or malformed request.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Validate a certificate request
+      tags:
+      - Certificate Request
+  /outagedetection/v1/certificaterequestssearch:
+    post:
+      description: Retrieves the details of certificate requests that match the specified search expression.
+      operationId: getCertificateRequestsByExpression
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Certificate request search request by expression:
+                description: Certificate request search request by expression
+                summary: Certificate request search by expression
+                value:
+                  expression:
+                    operands:
+                    - field: subjectCN
+                      operator: EQ
+                      value: venafi.cloud
+                    - field: subjectCN
+                      operator: EQ
+                      value: localhost
+                    operator: OR
+                  ordering:
+                    orders:
+                    - direction: ASC
+                      field: subjectCN
+                  paging:
+                    pageNumber: 0
+                    pageSize: 10
+            schema:
+              $ref: '#/components/schemas/Filter2'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Certificate request details response:
+                  description: Certificate request details response
+                  summary: Certificate request details
+                  value:
+                    certificateRequests:
+                    - applicationId: eff7cb30-cff3-11ed-977d-f9a657c2c463
+                      caOrderId: 5b:f7:ff:02:86:d0:1f:ed:90:81:02:bb:5a:6b:8b:23:b8:0d:f7:e9
+                      certificateIds:
+                      - c6e89340-d279-11ed-861a-5154a94578eb
+                      - 602cec00-cff4-11ed-b7e2-bb3d5adf81ba
+                      - 602794d0-cff4-11ed-b7e2-bb3d5adf81ba
+                      certificateIssuingTemplateId: e47ea120-cff3-11ed-9ece-cf965f609bfb
+                      certificateOwnerUserId: b29cec90-cff1-11ed-97d2-21317ab83359
+                      companyId: b11fc270-cff1-11ed-97d2-21317ab83359
+                      creationDate: '2023-04-03T23:46:38.771+00:00'
+                      id: c6d8dbd0-d279-11ed-b5e4-151222cdc24b
+                      keyLength: 4096
+                      keyType: RSA
+                      modificationDate: '2023-04-03T23:46:38.890+00:00'
+                      status: ISSUED
+                      subjectAlternativeNamesByType:
+                        dNSName:
+                        - venafi.com
+                      subjectCN: localhost
+                      subjectDN: cn=localhost,ou=dev,o=Venafi,c=US,st=Utah,l=Salt Lake City
+                      validityPeriod: P2M19D
+                    - applicationId: eff7cb30-cff3-11ed-977d-f9a657c2c463
+                      caOrderId: 20:04:49:dc:de:54:2a:99:90:8f:d7:04:97:e2:69:39:2f:1a:04:7a
+                      certificateIds:
+                      - 254bac00-d27b-11ed-861a-5154a94578eb
+                      - 602cec00-cff4-11ed-b7e2-bb3d5adf81ba
+                      - 602794d0-cff4-11ed-b7e2-bb3d5adf81ba
+                      certificateIssuingTemplateId: e47ea120-cff3-11ed-9ece-cf965f609bfb
+                      certificateOwnerUserId: b29cec90-cff1-11ed-97d2-21317ab83359
+                      companyId: b11fc270-cff1-11ed-97d2-21317ab83359
+                      creationDate: '2023-04-03T23:56:26.630+00:00'
+                      id: 253ae320-d27b-11ed-b5e4-151222cdc24b
+                      keyLength: 4096
+                      keyType: RSA
+                      modificationDate: '2023-04-03T23:56:26.748+00:00'
+                      status: ISSUED
+                      subjectAlternativeNamesByType:
+                        dNSName:
+                        - venafi.com
+                      subjectCN: venafi.cloud
+                      subjectDN: cn=venafi.cloud,ou=dev,o=Venafi,c=US,st=Utah,l=Salt Lake City
+                      validityPeriod: P2M19D
+                    numFound: 2
+              schema:
+                $ref: '#/components/schemas/CertificateRequestDocumentResponse'
+          description: The response body contains the details of the certificate requests.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: The request is either incomplete or malformed.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse4'
+          description: The request is either incomplete or malformed.
+      summary: Get the details of certificate requests matching custom search criteria
+      tags:
+      - Certificate Request
+components:
+  schemas:
+    CertificateRequestResubmissionRequest:
+      properties:
+        certificateIssuingTemplateId:
+          description: Certificate issuing template UUID
+          example: a305d810-886f-11ed-9ccf-dbf748eb1ae0
+          format: uuid
+          type: string
+        certificateOwnerUserId:
+          description: Certificate owner UUID
+          example: a305d810-886f-11ed-4bbe-dbf748eb1ae0
+          format: uuid
+          type: string
+        certificateUsageMetadata:
+          description: A collection of certificate request metadata
+          example:
+          - appName: venafi app1
+            automationMetadata: automation data 008
+            nodeName: venafi node 007
+          - appName: venafi app2
+            automationMetadata: automation data 0013
+            nodeName: venafi node 005
+          items:
+            $ref: '#/components/schemas/CertificateUsageMetadata'
+          type: array
+        validityPeriod:
+          description: ISO8601 Period Format
+          example: P10M
+          type: string
+      type: object
+    CustomAttributesInformation:
+      description: Represents custom attributes for certificate requests
+      example: "        {\n            \"dnsNames\": [venafi.com, venafi.eu],\n            \"overwriteSans\": true,\n        }\n"
+      properties:
+        dnsNames:
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        overwriteSans:
+          description: Defines if the csr sans should be overwritten by the custom attributes dns sans
+          type: boolean
+      required:
+      - dnsNames
+      type: object
+    FilterOperands:
+      properties:
+        operands:
+          description: A list of conditions that will be used for filtering
+          example:
+          - field: certificateStatus
+            operator: EQ
+            value: ACTIVE
+          - field: certificateName
+            operator: EQ
+            value: venafi.com
+          items:
+            $ref: '#/components/schemas/BaseFilter'
+          type: array
+        operator:
+          description: An operator for filtering
+          enum:
+          - AND
+          - OR
+          example: OR
+          type: string
+      type: object
+    Condition:
+      description: A Condition for filtering
+      properties:
+        field:
+          description: Represents a field for filtering
+          example: certificateName
+          type: string
+        operator:
+          description: An operator for filtering
+          enum:
+          - EQ
+          - LT
+          - LTE
+          - GT
+          - GTE
+          - MATCH
+          - FIND
+          - IN
+          example: EQ
+          type: string
+        value:
+          description: represents a field's value
+          example: venafi.com
+          type: string
+        values:
+          description: represents a field's values
+          example:
+          - venafi.com
+          - www.venafi.com
+          items:
+            type: string
+          type: array
+      type: object
+    SubjectAlternativeNamesByType:
+      properties:
+        dnsNames:
+          items:
+            type: string
+          type: array
+        ipAddresses:
+          items:
+            type: string
+          type: array
+        rfc822Names:
+          items:
+            type: string
+          type: array
+        uniformResourceIdentifiers:
+          items:
+            type: string
+          type: array
+      type: object
+    Order:
+      properties:
+        direction:
+          description: An ordering direction
+          enum:
+          - ASC
+          - DESC
+          example: DESC
+          type: string
+        field:
+          description: A field, that will be used for ordering
+          example: modificationDate
+          type: string
+      type: object
+    CustomAttributes1:
+      description: Certificate request custom attributes
+      example:
+        dnsNames:
+        - www.venafi.com
+        - venafi.com
+      properties:
+        dnsNames:
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        overwriteSans:
+          type: boolean
+      type: object
+    GeneralNamesData1:
+      description: A certificate subject alternative name by type
+      example:
+        dNSName:
+        - www.venafi.com
+        - venafi.com
+      properties:
+        dNSName:
+          items:
+            type: string
+          type: array
+        directoryName:
+          items:
+            type: string
+          type: array
+        ediPartyName:
+          items:
+            type: string
+          type: array
+        iPAddress:
+          items:
+            type: string
+          type: array
+        otherName:
+          items:
+            type: string
+          type: array
+        registeredID:
+          items:
+            type: string
+          type: array
+        rfc822Name:
+          items:
+            type: string
+          type: array
+        uniformResourceIdentifier:
+          items:
+            type: string
+          type: array
+        x400Address:
+          items:
+            type: string
+          type: array
+      type: object
+    Page2:
+      description: Specify pagination on the search request
+      properties:
+        pageNumber:
+          description: page number
+          example: 0
+          format: int32
+          type: integer
+        pageSize:
+          description: page size
+          example: 10
+          format: int32
+          type: integer
+      type: object
+    CertificateRequestResponse:
+      properties:
+        certificateRequests:
+          description: A collection of certificate information
+          example:
+          - applicationId: 813700b0-c357-11ed-aea1-99c5a9067cde
+            caOrderId: 3a:5f:7e:9f:8c:e4:b6:f7:25:a7:81:0d:f0:ac:28:ec:fe:05:9b:30
+            certificateIds:
+            - a27dfc10-c357-11ed-946f-7db55f9ae03e
+            - a275beb0-c357-11ed-946f-7db55f9ae03e
+            - a24c16a0-c357-11ed-946f-7db55f9ae03e
+            certificateIssuingTemplateId: 73a22290-c357-11ed-a00c-e3953fcf04eb
+            certificateOwnerUserId: 9bf1e760-b797-11ed-a508-c13aa0641666
+            companyId: 98996d90-b797-11ed-a508-c13aa0641666
+            creationDate: '2023-03-15T17:34:26.466+00:00'
+            id: a1c0c690-c357-11ed-a00c-e3953fcf04eb
+            keyLength: 4096
+            keyType: RSA
+            modificationDate: '2023-03-15T17:34:27.479+00:00'
+            status: ISSUED
+            subjectAlternativeNamesByType:
+              dNSName:
+              - localhost
+            subjectCN: localhost
+            subjectDN: cn=localhost,ou=devops,o=venafi,c=MX,st=Yucatan,l=Merida
+            validityPeriod: P10D
+          - applicationId: 813700b0-c357-11ed-aea1-99c5a9067cde
+            caOrderId: 6f:b7:27:c8:2c:bd:1a:b0:6f:43:fb:8a:6b:5b:a3:a6:c2:52:38:85
+            certificateIds:
+            - b767aef0-c357-11ed-946f-7db55f9ae03e
+            - a275beb0-c357-11ed-946f-7db55f9ae03e
+            - a24c16a0-c357-11ed-946f-7db55f9ae03e
+            certificateIssuingTemplateId: 73a22290-c357-11ed-a00c-e3953fcf04eb
+            certificateOwnerUserId: 9bf1e760-b797-11ed-a508-c13aa0641666
+            companyId: 98996d90-b797-11ed-a508-c13aa0641666
+            creationDate: '2023-03-15T17:35:02.384+00:00'
+            id: b7502f50-c357-11ed-a00c-e3953fcf04eb
+            keyLength: 4096
+            keyType: RSA
+            modificationDate: '2023-03-15T17:35:02.544+00:00'
+            status: ISSUED
+            subjectAlternativeNamesByType:
+              dNSName:
+              - venafi.com
+            subjectCN: venafi.com
+            subjectDN: cn=venafi.com,ou=devops,o=venafi,c=MX,st=Yucatan,l=Merida
+            validityPeriod: P12D
+          items:
+            $ref: '#/components/schemas/CertificateRequestInformation1'
+          type: array
+      type: object
+    BaseOrdering:
+      description: Specify the ordering of a search result
+      properties:
+        orders:
+          items:
+            $ref: '#/components/schemas/Order'
+          type: array
+      type: object
+    CertificationRequestInformation:
+      properties:
+        hashAlgorithm:
+          description: A certificate request signature hash algorithm
+          enum:
+          - MD5
+          - SHA1
+          - MD2
+          - SHA224
+          - SHA256
+          - SHA384
+          - SHA512
+          - UNKNOWN
+          - GOSTR3411_94
+          example: SHA256
+          type: string
+        keyCurve:
+          description: Certificate request key length
+          enum:
+          - P256
+          - P384
+          - P521
+          - ED25519
+          - UNKNOWN
+          example: P256
+          type: string
+        keyLength:
+          description: Certificate request key length
+          example: 2048
+          format: int32
+          type: integer
+        keyType:
+          description: Certificate request key type
+          enum:
+          - RSA
+          - DSA
+          - EC
+          - GOST3410
+          - ECGOST3410
+          - RESERVED3
+          - UNKNOWN
+          example: RSA
+          type: string
+        publicKeyHash:
+          description: A certificate request public hash key
+          example: 0048AA1D7E2F0017F9CA2E687D8776A1A340553D
+          type: string
+        signatureAlgorithm:
+          description: A certificate request signature algorithm
+          enum:
+          - MD2_WITH_RSA_ENCRYPTION
+          - MD5_WITH_RSA_ENCRYPTION
+          - SHA1_WITH_RSA_ENCRYPTION
+          - SHA1_WITH_RSA_ENCRYPTION2
+          - SHA256_WITH_RSA_ENCRYPTION
+          - SHA384_WITH_RSA_ENCRYPTION
+          - SHA512_WITH_RSA_ENCRYPTION
+          - ID_DSA_WITH_SHA1
+          - dsaWithSHA1
+          - EC_DSA_WITH_SHA1
+          - EC_DSA_WITH_SHA224
+          - EC_DSA_WITH_SHA256
+          - EC_DSA_WITH_SHA384
+          - EC_DSA_WITH_SHA512
+          - UNKNOWN
+          - SHA1_WITH_RSAandMGF1
+          - GOST_R3411_94_WITH_GOST_R3410_2001
+          - GOST_R3411_94_WITH_GOST_R3410_94
+          example: SHA256_WITH_RSA_ENCRYPTION
+          type: string
+        subjectAlternativeNamesByType:
+          $ref: '#/components/schemas/GeneralNamesData1'
+        subjectDN:
+          description: A certificate request subject DN
+          example: cn=www.venafi.com,o=Venafi, Inc.,c=US,st=Utah,l=Salt Lake City
+          type: string
+      type: object
+    ApiClientInformation:
+      description: Represents the information of the client that is calling the API
+      example:
+        identifier: 192.168.1.63
+        type: Venafi VCert CLI
+      properties:
+        identifier:
+          description: Client identifier
+          example: 199.121.8.74
+          type: string
+        type:
+          description: Client type
+          example: Venafi VCert CLI
+          type: string
+      type: object
+    AnyValue3:
+      description: Can be any value - string, number, boolean, array or object.
+    CertificateUsageMetadata:
+      properties:
+        appName:
+          type: string
+        automationMetadata:
+          type: string
+        nodeName:
+          type: string
+      type: object
+    CertificateRequestRequest:
+      properties:
+        apiClientInformation:
+          $ref: '#/components/schemas/ApiClientInformation'
+        applicationId:
+          description: Application UUID
+          example: b00701b0-886f-11ed-9f39-3d586ab80cf2
+          format: uuid
+          type: string
+        certificateIssuingTemplateId:
+          description: Certificate issuing template UUID
+          example: a305d810-886f-11ed-9ccf-0dbf748eb1ae
+          format: uuid
+          type: string
+        certificateOwnerUserId:
+          description: Certificate owner UUID
+          example: a305d810-886f-11ed-9ccf-0dbf748eb1ae
+          format: uuid
+          type: string
+        certificateSigningRequest:
+          description: A certificate signing request(CSR) in PEM format. Required when reuseCSR and isVaaSGenerated are set to false.
+          type: string
+        certificateUsageMetadata:
+          description: A collection of certificate request metadata
+          example:
+          - appName: venafi app1
+            automationMetadata: automation data 008
+            nodeName: venafi node 007
+          - appName: venafi app2
+            automationMetadata: automation data 0013
+            nodeName: venafi node 005
+          items:
+            $ref: '#/components/schemas/CertificateUsageMetadata'
+          type: array
+        csrAttributes:
+          $ref: '#/components/schemas/CSRAttributesInformation'
+        customAttributes:
+          $ref: '#/components/schemas/CustomAttributesInformation'
+        existingCertificateId:
+          description: Existing certificate UUID. Required when reuseCSR is set to true.
+          example: b505d810-886f-11ed-9ccf-0dbf748eb1ae
+          format: uuid
+          type: string
+        isVaaSGenerated:
+          description: Specify whether VaaS should generate the request.
+          example: true
+          type: boolean
+        reuseCSR:
+          description: Specifies whether an existing CSR is reused
+          example: true
+          type: boolean
+        tags:
+          description: A collection of tags
+          example:
+          - test
+          - category:security
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        validityPeriod:
+          description: ISO8601 Period Format
+          example: P10M
+          type: string
+      required:
+      - applicationId
+      - certificateIssuingTemplateId
+      - isVaaSGenerated
+      type: object
+    CertificateRequestDocumentInformation:
+      properties:
+        applicationId:
+          description: UUID of an application ID
+          example: dc6eb020-9131-11ed-9ce4-1d9554d648cd
+          format: uuid
+          type: string
+        approvedIds:
+          description: A collection of IDs of all users that have already approved
+          example: '[f196eb0-71cb-11ed-9749-93c174f3c18d, f196eb0-81av-11ed-9749-93c174f3c18d]'
+          items:
+            format: uuid
+            type: string
+          type: array
+        approverTeamIds:
+          description: A collection of all team IDs that are configured as approvers
+          example: '[f196eb0-71cb-11ed-9749-93c174f3c18d, f196eb0-81av-11ed-9749-93c174f3c18d]'
+          items:
+            format: uuid
+            type: string
+          type: array
+        approverUserIds:
+          description: A collection of all user IDs that are configured as approvers
+          example: '[f196eb0-71cb-11ed-9749-93c174f3c18d, f196eb0-81av-11ed-9749-93c174f3c18d]'
+          items:
+            format: uuid
+            type: string
+          type: array
+        caOrderId:
+          description: A CA order ID
+          example: '63364861'
+          type: string
+        certificateIds:
+          description: A collection of certificate ids
+          example:
+          - 1441c6f0-9136-11ed-bd65-ed926a033704
+          - 12257370-9132-11ed-bd65-ed926a033704
+          items:
+            format: uuid
+            type: string
+          type: array
+        certificateIssuingTemplateId:
+          description: UUID of certificate issuing template
+          example: ce9c2cc0-9131-11ed-a8f1-bf0e7991f912
+          format: uuid
+          type: string
+        certificateOwnerUserId:
+          description: UUID of the certificate request's owner
+          example: 88932c30-8e14-11ed-87e3-755db050f29d
+          format: uuid
+          type: string
+        companyId:
+          description: UUID of a company
+          example: 85595df0-8e14-11ed-87e3-755db050f29d
+          format: uuid
+          type: string
+        creationDate:
+          description: The date a certificate request was created
+          example: '2022-01-20T09:12:28Z'
+          format: date-time
+          type: string
+        customAttributes:
+          $ref: '#/components/schemas/CustomAttributes1'
+        errorInformation:
+          $ref: '#/components/schemas/ErrorInformation3'
+        finalApproverId:
+          description: UUID of the final approver if configured
+          example: dc6eb020-9131-11ed-9ce4-1d9554d648cd
+          format: uuid
+          type: string
+        id:
+          description: UUID of a certificate request
+          example: fa4a2210-9135-11ed-a8f1-bf0e7991f912
+          format: uuid
+          type: string
+        keyCurve:
+          description: Certificate request key curve
+          enum:
+          - P256
+          - P384
+          - P521
+          - ED25519
+          - UNKNOWN
+          example: P521
+          type: string
+        keyLength:
+          description: Certificate request key length
+          example: 2048
+          format: int32
+          type: integer
+        keyType:
+          description: Certificate request key type
+          enum:
+          - RSA
+          - DSA
+          - EC
+          - GOST3410
+          - ECGOST3410
+          - RESERVED3
+          - UNKNOWN
+          example: RSA
+          type: string
+        modificationDate:
+          description: The date a certificate request was modified
+          example: '2023-01-24T09:12:28Z'
+          format: date-time
+          type: string
+        status:
+          description: The status of the certificate request
+          enum:
+          - NEW
+          - PENDING
+          - PENDING_APPROVAL
+          - PENDING_FINAL_APPROVAL
+          - REJECTED_APPROVAL
+          - REQUESTED
+          - ISSUED
+          - REJECTED
+          - CANCELLED
+          - REVOKED
+          - FAILED
+          - DELETED
+          example: ISSUED
+          type: string
+        subjectAlternativeNamesByType:
+          $ref: '#/components/schemas/GeneralNamesData1'
+        subjectCN:
+          description: Certificate request subject CN
+          example: venafi.com
+          type: string
+        subjectDN:
+          description: Certificate request subject DN
+          example: cn=venafi.com,ou=devops,o=venafi,c=US,st=Utah,l=Salt Lake City
+          type: string
+        tags:
+          description: A collection of tags
+          example:
+          - test
+          - category:security
+          items:
+            type: string
+          type: array
+        validityPeriod:
+          description: ISO8601 Period Format
+          example: P10M
+          type: string
+      type: object
+    CSRAttributesInformation:
+      description: Represents CSR attributes for certificate requests. Required when isVaaSGenerated is set to true and reuseCSR to false.
+      example:
+        commonName: localhost
+        country: MX
+        keyTypeParameters:
+          keyCurve: P256
+          keyLength: 4096
+          keyType: RSA
+        locality: Merida
+        organization: venafi
+        organizationalUnits:
+        - devops
+        state: Yucatan
+        subjectAlternativeNamesByType:
+          dnsNames:
+          - localhost
+      properties:
+        commonName:
+          type: string
+        country:
+          type: string
+        keyTypeParameters:
+          $ref: '#/components/schemas/KeyTypeParameters1'
+        locality:
+          type: string
+        organization:
+          type: string
+        organizationalUnits:
+          items:
+            type: string
+          type: array
+        state:
+          type: string
+        subjectAlternativeNamesByType:
+          $ref: '#/components/schemas/SubjectAlternativeNamesByType'
+      type: object
+    FilterOperand:
+      properties:
+        operand:
+          $ref: '#/components/schemas/Condition'
+        operator:
+          description: An operator for filtering
+          enum:
+          - NOT
+          example: NOT
+          type: string
+      type: object
+    ErrorInformation3:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue3'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+    CertificateRequestDocumentResponse:
+      properties:
+        certificateRequests:
+          description: A collection of certificate request information
+          example:
+          - applicationId: 813700b0-c357-11ed-aea1-99c5a9067cde
+            caOrderId: 3a:5f:7e:9f:8c:e4:b6:f7:25:a7:81:0d:f0:ac:28:ec:fe:05:9b:30
+            certificateIds:
+            - a27dfc10-c357-11ed-946f-7db55f9ae03e
+            - a275beb0-c357-11ed-946f-7db55f9ae03e
+            - a24c16a0-c357-11ed-946f-7db55f9ae03e
+            certificateIssuingTemplateId: 73a22290-c357-11ed-a00c-e3953fcf04eb
+            certificateOwnerUserId: 9bf1e760-b797-11ed-a508-c13aa0641666
+            companyId: 98996d90-b797-11ed-a508-c13aa0641666
+            creationDate: '2023-03-15T17:34:26.466+00:00'
+            id: a1c0c690-c357-11ed-a00c-e3953fcf04eb
+            keyLength: 4096
+            keyType: RSA
+            modificationDate: '2023-03-15T17:34:27.479+00:00'
+            status: ISSUED
+            subjectAlternativeNamesByType:
+              dNSName:
+              - localhost
+            subjectCN: localhost
+            subjectDN: cn=localhost,ou=devops,o=venafi,c=MX,st=Yucatan,l=Merida
+            validityPeriod: P10D
+          items:
+            $ref: '#/components/schemas/CertificateRequestDocumentInformation'
+          type: array
+        numFound:
+          description: The number of certificate requests that were found
+          example: 10
+          format: int64
+          type: integer
+      type: object
+    ErrorResponse4:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation3'
+          type: array
+      type: object
+    CertificateRequestInformation1:
+      properties:
+        apiClientInformation:
+          $ref: '#/components/schemas/ApiClientInformation'
+        applicationId:
+          description: UUID of an application ID
+          example: dc6eb020-9131-11ed-9ce4-1d9554d648cd
+          format: uuid
+          type: string
+        approvedIds:
+          description: A collection of IDs of all users that have already approved
+          example: '[f196eb0-71cb-11ed-9749-93c174f3c18d, f196eb0-81av-11ed-9749-93c174f3c18d]'
+          items:
+            format: uuid
+            type: string
+          type: array
+          uniqueItems: true
+        approverTeamIds:
+          description: A collection of all team IDs that are configured as approvers
+          example: '[f196eb0-71cb-11ed-9749-93c174f3c18d, f196eb0-81av-11ed-9749-93c174f3c18d]'
+          items:
+            format: uuid
+            type: string
+          type: array
+          uniqueItems: true
+        approverUserIds:
+          description: A collection of all user IDs that are configured as approvers
+          example: '[f196eb0-71cb-11ed-9749-93c174f3c18d, f196eb0-81av-11ed-9749-93c174f3c18d]'
+          items:
+            format: uuid
+            type: string
+          type: array
+          uniqueItems: true
+        caOrderId:
+          description: A CA order ID
+          example: '63364861'
+          type: string
+        certificateIds:
+          description: A collection of certificate IDs
+          example:
+          - 1441c6f0-9136-11ed-bd65-ed926a033704
+          - 12257370-9132-11ed-bd65-ed926a033704
+          items:
+            format: uuid
+            type: string
+          type: array
+        certificateIssuingTemplateId:
+          description: UUID of a certificate issuing template
+          example: ce9c2cc0-9131-11ed-a8f1-bf0e7991f912
+          format: uuid
+          type: string
+        certificateOwnerUserId:
+          description: UUID of the certificate request's owner
+          example: 88932c30-8e14-11ed-87e3-755db050f29d
+          format: uuid
+          type: string
+        certificateSigningRequest:
+          description: A certificate signing request (CSR) in PEM format
+          type: string
+        certificateUsageMetadata:
+          description: A collection of certificate request metadata
+          example:
+          - appName: venafi app1
+            automationMetadata: automation data 008
+            nodeName: venafi node 007
+          - appName: venafi app2
+            automationMetadata: automation data 0013
+            nodeName: venafi node 005
+          items:
+            $ref: '#/components/schemas/CertificateUsageMetadata'
+          type: array
+        companyId:
+          description: UUID of a company
+          example: 85595df0-8e14-11ed-87e3-755db050f29d
+          format: uuid
+          type: string
+        creationDate:
+          description: The date a certificate request was created
+          example: '2023-01-10T09:12:28Z'
+          format: date-time
+          type: string
+        customAttributesInformation:
+          $ref: '#/components/schemas/CustomAttributesInformation'
+        errorInformation:
+          $ref: '#/components/schemas/ErrorInformation3'
+        finalApproverId:
+          description: UUID of the final approver if configured
+          example: dc6eb020-9131-11ed-9ce4-1d9554d648cd
+          format: uuid
+          type: string
+        id:
+          description: UUID of a certificate request
+          example: fa4a2210-9135-11ed-a8f1-bf0e7991f912
+          format: uuid
+          type: string
+        keyCurve:
+          description: Certificate request key curve
+          enum:
+          - P256
+          - P384
+          - P521
+          - ED25519
+          - UNKNOWN
+          example: P521
+          type: string
+        keyLength:
+          description: Certificate request key length
+          example: 2048
+          format: int32
+          type: integer
+        keyType:
+          description: Certificate request key type
+          enum:
+          - RSA
+          - DSA
+          - EC
+          - GOST3410
+          - ECGOST3410
+          - RESERVED3
+          - UNKNOWN
+          example: RSA
+          type: string
+        modificationDate:
+          description: The date a certificate request was modified
+          example: '2023-01-11T09:12:28Z'
+          format: date-time
+          type: string
+        status:
+          description: The status of a certificate request
+          enum:
+          - NEW
+          - PENDING
+          - PENDING_APPROVAL
+          - PENDING_FINAL_APPROVAL
+          - REJECTED_APPROVAL
+          - REQUESTED
+          - ISSUED
+          - REJECTED
+          - CANCELLED
+          - REVOKED
+          - FAILED
+          - DELETED
+          example: ISSUED
+          type: string
+        subjectAlternativeNamesByType:
+          $ref: '#/components/schemas/GeneralNamesData1'
+        subjectDN:
+          description: Certificate request subject DN
+          example: cn=venafi.com,ou=devops,o=venafi,c=US,st=Utah,l=Salt Lake City
+          type: string
+        tags:
+          description: A collection of tags
+          example:
+          - test
+          - category:security
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        validityPeriod:
+          description: ISO8601 Period Format
+          example: P10M
+          type: string
+      type: object
+    KeyTypeParameters1:
+      properties:
+        keyCurve:
+          enum:
+          - P256
+          - P384
+          - P521
+          - ED25519
+          - UNKNOWN
+          type: string
+        keyLength:
+          format: int32
+          type: integer
+        keyType:
+          enum:
+          - RSA
+          - EC
+          type: string
+      required:
+      - keyCurve
+      - keyLength
+      - keyType
+      type: object
+    BaseFilter:
+      description: Root expression for filtering
+      oneOf:
+      - $ref: '#/components/schemas/FilterOperands'
+      - $ref: '#/components/schemas/FilterOperand'
+      - $ref: '#/components/schemas/Condition'
+      type: object
+    Filter2:
+      properties:
+        expression:
+          $ref: '#/components/schemas/BaseFilter'
+        ordering:
+          $ref: '#/components/schemas/BaseOrdering'
+        paging:
+          $ref: '#/components/schemas/Page2'
+      type: object
+  securitySchemes:
+    service-account:
+      in: header
+      name: service-account
+      type: apiKey
+    tppl-api-key:
+      in: header
+      name: tppl-api-key
+      type: apiKey
+x-readme:
+  samples-languages:
+  - curl
+  - go
+  - java
+  - javascript
+  - node
+  - python

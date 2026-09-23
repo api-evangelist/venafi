@@ -1,0 +1,245 @@
+openapi: 3.2.0
+info:
+  title: Trust Protection Foundation WebSDK Log APIs API
+  description: '# Introduction
+
+    The Trust Protection Foundation Web SDK is a subset of REST APIs that allow you to:
+
+    * Automate certificate management
+
+    * Integrate with DevOps processes
+
+    * Discover machine identities
+
+    * Extract data to integrate with data warehouses
+
+    * Perform bulk actions
+
+    * Set up and administer Trust Protection Foundation
+
+    * Onboard teams
+
+    * Create custom, automated business logic and flows between internal systems
+
+
+    All these use cases can be accomplished using the Trust Protection Foundation REST…'
+  version: 26.1.1
+servers:
+- url: /
+  description: Current Host
+- url: https://REPLACEdnsnameME/
+  description: System
+- url: https://{dnsname}/
+  description: Configurable Hostname
+  variables:
+    dnsname:
+      default: localhost
+      description: Production API Hostname
+security:
+- AccessToken: []
+tags:
+- name: Log APIs
+  description: The Log APIs allow to manage CyberArk application event logs.
+paths:
+  /vedsdk/log/evaluatemacro:
+    post:
+      tags:
+      - Log APIs
+      summary: Perform a macro translation
+      description: '_Required scope: configuration_'
+      operationId: Venafi_WebSDK_Log_LogRest_EvaluateMacro
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_LogWebRequest_evaluatemacro'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_LogWebResponse_evaluatemacro'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/log/adaptableinfo:
+    get:
+      tags:
+      - Log APIs
+      summary: Retrieve information about available Log Adaptable scripts
+      description: '_Required scope: configuration:manage_'
+      operationId: Venafi_WebSDK_Log_LogRest_AdaptableInformation
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_Log_LogAdaptableResponse'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+components:
+  schemas:
+    Core_WebSDK_LogWebResponse_evaluatemacro:
+      type: object
+      properties:
+        MacroResult:
+          type: string
+          description: The translated macro output
+        LogResult:
+          $ref: '#/components/schemas/Core_LogResult'
+        Error:
+          type: string
+          description: Error description if the request was not successful
+    Core_Severity:
+      title: Severity of the event being logged
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      type: integer
+      description: "\n\n**1**: **Emergency**  \nEmergency, the system is unusable.\n\n**2**: **Alert**  \nAction must be taken immediately.\n\n**3**: **Critical**  \nCritical conditions are occurring.\n\n**4**: **Error**  \nAn error occurred and was handled; action may need to be taken.\n\n**5**: **Warning**  \nAn error occurred and was handled.\n\n**6**: **Notice**  \nNormal but significant condition has occurred.\n\n**7**: **Info**  \nPositive event, for information only\n\n**8**: **Debug**  \nDebugging information only\n"
+      format: int32
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
+    Core_WebSDK_LogWebRequest_evaluatemacro:
+      required:
+      - MacroSource
+      - ID
+      type: object
+      properties:
+        MacroSource:
+          type: string
+          description: The macro text to translate
+        ID:
+          type: integer
+          description: The event ID of the event to simulate
+          format: int32
+        Severity:
+          $ref: '#/components/schemas/Core_Severity'
+        Component:
+          type: string
+          description: The component value for the simulated event
+        Text1:
+          type: string
+          description: The Text1 value for the simulated event
+        Text2:
+          type: string
+          description: The Text2 value for the simulated event
+        Value1:
+          type: integer
+          description: The Value1 value for the simulated event
+          format: int32
+        Value2:
+          type: integer
+          description: The Value2 value for the simulated event
+          format: int32
+    Core_LogResult:
+      title: Result codes for logging
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      type: integer
+      description: "\n\n**0**: **Success**  \nSuccess\n\n**1**: **Failure**  \nGeneral error\n\n**2**: **StringTooLong**  \nA provided string was too long\n\n**3**: **DataToLarge**  \nThe data blob was too long\n\n**4**: **ComponentTooLong**  \nThe component string was too long\n\n**5**: **BufferTooSmall**  \nAn internal buffer was not large enough to process the event\n\n**6**: **Text1TooLong**  \nThe Text1 string was too long\n\n**7**: **Text2TooLong**  \nThe Text2 string was too long\n\n**8**: **NullArgument**  \nA field in the event was null even though it is not allowed to be\n\n**9**: **LogServerLost**  \nA field in the event was null even though it is not allowed to be\n\n**10**: **BadArguments**  \nBad arguments were passed to the method\n"
+      format: int32
+    WebSDK_Log_LogAdaptableResponse:
+      type: object
+      properties:
+        Scripts:
+          type: array
+          items:
+            type: object
+            properties:
+              Name:
+                type: string
+                description: Name of the script
+              Hash:
+                type: string
+                description: Hash of the script content
+              Fields:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Name:
+                      type: string
+                      description: Field name
+                    Label:
+                      type: string
+                      description: Label to display for field
+                    Required:
+                      type: boolean
+                      description: '**true** if the field must be provided'
+                  description: Describes a entry field for a script
+                description: The input fields associated with the script
+            description: Record describing a Log Adaptable PowerShell script
+          description: List of available Log Adaptable PowerShell scripts
+        ScriptErrors:
+          type: array
+          items:
+            type: string
+          description: Error information about stored unusable scripts
+      description: Response for AdaptableInformation endpoint.
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer

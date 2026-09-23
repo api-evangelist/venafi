@@ -1,0 +1,832 @@
+openapi: 3.2.0
+info:
+  title: Trust Protection Foundation WebSDK Statistics APIs API
+  description: '# Introduction
+
+    The Trust Protection Foundation Web SDK is a subset of REST APIs that allow you to:
+
+    * Automate certificate management
+
+    * Integrate with DevOps processes
+
+    * Discover machine identities
+
+    * Extract data to integrate with data warehouses
+
+    * Perform bulk actions
+
+    * Set up and administer Trust Protection Foundation
+
+    * Onboard teams
+
+    * Create custom, automated business logic and flows between internal systems
+
+
+    All these use cases can be accomplished using the Trust Protection Foundation REST…'
+  version: 26.1.1
+servers:
+- url: /
+  description: Current Host
+- url: https://REPLACEdnsnameME/
+  description: System
+- url: https://{dnsname}/
+  description: Configurable Hostname
+  variables:
+    dnsname:
+      default: localhost
+      description: Production API Hostname
+security:
+- AccessToken: []
+tags:
+- name: Statistics APIs
+  description: The Statistics APIs provide metrics about Trust Protection Foundation operations. You can query, group, and filter data and then use it in your own reporting applications.
+paths:
+  /vedsdk/stats/createcounter:
+    post:
+      tags:
+      - Statistics APIs
+      summary: Create a counter
+      description: 'Creates a new statistics counter
+
+
+        _Required scope: statistics:manage_'
+      operationId: Venafi_Core_WebSDK_StatsRest_CreateCounter
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_StatsWebRequest_createcounter'
+        required: true
+      responses:
+        '200':
+          description: Counter created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_StatsWebResponse_createcounter'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/stats/deletecounter:
+    post:
+      tags:
+      - Statistics APIs
+      summary: Delete a counter
+      description: 'Delete a statistics counter
+
+
+        _Required scope: statistics:delete_'
+      operationId: Venafi_Core_WebSDK_StatsRest_DeleteCounter
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_StatsWebRequest_deletecounter'
+        required: true
+      responses:
+        '200':
+          description: Counter deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_StatsWebResponse_deletecounter'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/stats/renamecounter:
+    post:
+      tags:
+      - Statistics APIs
+      summary: Rename a counter
+      description: 'Renames a statistics counter
+
+
+        _Required scope: statistics:manage_'
+      operationId: Venafi_Core_WebSDK_StatsRest_RenameCounter
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_StatsWebRequest_renamecounter'
+        required: true
+      responses:
+        '200':
+          description: Counter renamed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_StatsWebResponse_renamecounter'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/stats/updatecounter:
+    post:
+      tags:
+      - Statistics APIs
+      summary: Update a counter
+      description: 'Updates a new statistics counter
+
+
+        _Required scope: statistics:manage_'
+      operationId: Venafi_Core_WebSDK_StatsRest_UpdateCounter
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_StatsWebRequest_updatecounter'
+        required: true
+      responses:
+        '200':
+          description: Counter updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_StatsWebResponse_updatecounter'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/stats/getcounter:
+    post:
+      tags:
+      - Statistics APIs
+      summary: Get a counter
+      description: 'Retrieves a statistics counter
+
+
+        _Required scope: statistics_'
+      operationId: Venafi_Core_WebSDK_StatsRest_GetCounter
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_StatsWebRequest_getcounter'
+        required: true
+      responses:
+        '200':
+          description: Counter returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_StatsWebResponse_getcounter'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/stats/getcounters:
+    post:
+      tags:
+      - Statistics APIs
+      summary: Get all counters
+      description: 'Retrieves all statistics counters.
+
+
+        Use _StatsCode_ to only return counters of a particular family
+
+
+        _Required scope: statistics_'
+      operationId: Venafi_Core_WebSDK_StatsRest_GetCounters
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_StatsWebRequest_getcounters'
+        required: true
+      responses:
+        '200':
+          description: Counters returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_StatsWebResponse_getcounters'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/stats/countercontainers:
+    post:
+      tags:
+      - Statistics APIs
+      summary: Get containers
+      description: 'Returns all containters
+
+
+        _Required scope: statistics_'
+      operationId: Venafi_Core_WebSDK_StatsRest_GetCounterContainers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type:
+              - object
+              - 'null'
+      responses:
+        '200':
+          description: Containers created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_StatsWebResponse_countercontainers'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/stats/query:
+    post:
+      tags:
+      - Statistics APIs
+      summary: Get values
+      description: 'Retrieves statistics values for a counter
+
+
+        _Required scope: statistics_'
+      operationId: Venafi_Core_WebSDK_StatsRest_Query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_StatsWebRequest_query'
+        required: true
+      responses:
+        '200':
+          description: Statistics returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_StatsWebResponse_query'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/stats/querytags:
+    post:
+      tags:
+      - Statistics APIs
+      summary: Search tags
+      description: 'Searches all tags that match the provided criteria
+
+
+        _Required scope: statistics_'
+      operationId: Venafi_Core_WebSDK_StatsRest_QueryTags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_StatsWebRequest_querytags'
+        required: true
+      responses:
+        '200':
+          description: Tags returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_StatsWebResponse_querytags'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+components:
+  schemas:
+    Core_WebSDK_StatsWebResponse_query:
+      type: object
+      properties:
+        Results:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: object
+              properties:
+                TimeFrame:
+                  type: string
+                  description: The date value.
+                Type:
+                  type: integer
+                  description: The type of statistic
+                  format: int32
+                TagA:
+                  type: string
+                  description: The optional first tag for this set
+                TagB:
+                  type: string
+                  description: The optional second tag for this set
+                TagC:
+                  type: string
+                  description: The optonal third tag for this set
+                Count:
+                  type: integer
+                  description: The count of times this counter occurred in the time frame
+                  format: int64
+                SumValue:
+                  type: integer
+                  description: The aggregated sum of the value associated with the point
+                  format: int64
+              description: A single statistics counter
+            description: Statistics points belonging to the group
+          description: 'Dictionary of statistics values. The key for each value list is in the form of AName|BName|CName
+
+
+            **Key**: Tag identifier for the values'
+        Success:
+          type: boolean
+          description: '**true** or **false**'
+        Error:
+          type: string
+          description: The error
+    Core_WebSDK_StatsWebResponse_updatecounter:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: '**true** or **false**'
+        Error:
+          type: string
+          description: The error
+    Core_WebSDK_StatsWebResponse_querytags:
+      type: object
+      properties:
+        TagAValues:
+          type: array
+          items:
+            type: string
+          description: Contains unique tag values for Tag A
+        TagBValues:
+          type: array
+          items:
+            type: string
+          description: Contains unique tag values for Tag B
+        TagCValues:
+          type: array
+          items:
+            type: string
+          description: Contains unique tag values for Tag C
+        Success:
+          type: boolean
+          description: '**true** or **false**'
+        Error:
+          type: string
+          description: The error
+    Core_WebSDK_StatsWebResponse_deletecounter:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: '**true** or **false**'
+        Error:
+          type: string
+          description: The error
+    Core_WebSDK_StatsWebResponse_renamecounter:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: '**true** or **false**'
+        Error:
+          type: string
+          description: The error
+    Core_WebSDK_StatsWebResponse_createcounter:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: '**true** or **false**'
+        Error:
+          type: string
+          description: The error
+    Core_WebSDK_StatsWebRequest_renamecounter:
+      required:
+      - StatsType
+      - Name
+      type: object
+      properties:
+        StatsType:
+          type: integer
+          description: The ID of the counter
+          format: int32
+        Name:
+          type: string
+          description: The name of the counter
+    Core_WebSDK_StatsWebRequest_getcounters:
+      type: object
+      properties:
+        StatsCode:
+          type: integer
+          description: The family of the counter
+          format: int32
+    Core_WebSDK_StatsWebRequest_deletecounter:
+      required:
+      - StatsType
+      type: object
+      properties:
+        StatsType:
+          type: integer
+          description: The ID of the counter
+          format: int32
+    Core_WebSDK_StatsWebRequest_updatecounter:
+      required:
+      - StatsType
+      type: object
+      properties:
+        StatsType:
+          type: integer
+          description: The ID of the counter
+          format: int32
+        Description:
+          type: string
+          description: The description of the counter
+        MetadataAName:
+          type: string
+          description: The name for Tag A
+        MetadataBName:
+          type: string
+          description: The name for Tag B
+        MetadataCName:
+          type: string
+          description: The name for Tag C
+        ValueDescription:
+          type: string
+          description: The description for the counter value
+        Sensitive:
+          type: boolean
+          description: '**true** or **false**; Indicates if the counter can only be viewed by authorized users'
+    Core_WebSDK_StatsWebRequest_query:
+      required:
+      - StatsType
+      type: object
+      properties:
+        StatsType:
+          type: integer
+          description: The ID of the counter
+          format: int32
+        Tier:
+          $ref: '#/components/schemas/Core_StatsTier'
+        MaxPoints:
+          type: integer
+          description: The maximum number of data points
+          format: int32
+        GroupByA:
+          type: boolean
+          description: '**true** or **false**'
+        GroupByB:
+          type: boolean
+          description: '**true** or **false**'
+        GroupByC:
+          type: boolean
+          description: '**true** or **false**'
+        FilterA:
+          type: string
+          description: The filter value
+        FilterB:
+          type: string
+          description: The filter value
+        FilterC:
+          type: string
+          description: The filter value
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
+    Core_WebSDK_StatsWebResponse_getcounters:
+      type: object
+      properties:
+        Counters:
+          type: array
+          items:
+            type: object
+            properties:
+              Error:
+                type: string
+                description: Gets the last error for this _StatsCounter_ instance
+              StatsType:
+                type: integer
+                description: Gets the identifier of this statistics counter
+                format: int32
+              Name:
+                type: string
+                description: Gets the name of this counter
+              Description:
+                type: string
+                description: Gets the description of this counter
+              Disabled:
+                type: boolean
+                description: Gets a value indication the current counter is not recording counts
+              ValueDescription:
+                type: string
+                description: Gets the description of the value if the counter utilizes it
+              AName:
+                type: string
+                description: Gets the descriptive name of the first metadata field
+              BName:
+                type: string
+                description: Gets the descriptive name of the second metadata field
+              CName:
+                type: string
+                description: Gets the descriptive name of the third metadata field
+              Sensitive:
+                type: boolean
+                description: Gets a value indicating this counter contains sensitive information
+              IgnoreCount:
+                type: boolean
+                description: Gets a value indicating this counter only conveys useful information in the value (e.g. if the counter is triggered on an interval)
+            description: Counts occurrences of statistics data
+          description: The list of counters
+        Success:
+          type: boolean
+          description: '**true** or **false**'
+        Error:
+          type: string
+          description: The error
+    Core_WebSDK_StatsWebResponse_getcounter:
+      type: object
+      properties:
+        Counter:
+          type: object
+          properties:
+            Error:
+              type: string
+              description: Gets the last error for this _StatsCounter_ instance
+            StatsType:
+              type: integer
+              description: Gets the identifier of this statistics counter
+              format: int32
+            Name:
+              type: string
+              description: Gets the name of this counter
+            Description:
+              type: string
+              description: Gets the description of this counter
+            Disabled:
+              type: boolean
+              description: Gets a value indication the current counter is not recording counts
+            ValueDescription:
+              type: string
+              description: Gets the description of the value if the counter utilizes it
+            AName:
+              type: string
+              description: Gets the descriptive name of the first metadata field
+            BName:
+              type: string
+              description: Gets the descriptive name of the second metadata field
+            CName:
+              type: string
+              description: Gets the descriptive name of the third metadata field
+            Sensitive:
+              type: boolean
+              description: Gets a value indicating this counter contains sensitive information
+            IgnoreCount:
+              type: boolean
+              description: Gets a value indicating this counter only conveys useful information in the value (e.g. if the counter is triggered on an interval)
+          description: The counter
+        Success:
+          type: boolean
+          description: '**true** or **false**'
+        Error:
+          type: string
+          description: The error
+    Core_WebSDK_StatsWebRequest_querytags:
+      required:
+      - StatsType
+      type: object
+      properties:
+        StatsType:
+          type: integer
+          description: The ID of the counter
+          format: int32
+        Filter:
+          type: string
+          description: The filter value
+        TagNumber:
+          type: integer
+          description: If negative then all tag values will be returned
+          format: int32
+    Core_WebSDK_StatsWebRequest_getcounter:
+      required:
+      - StatsType
+      type: object
+      properties:
+        StatsType:
+          type: integer
+          description: The ID of the counter
+          format: int32
+    Core_WebSDK_StatsWebRequest_createcounter:
+      required:
+      - StatsType
+      - Name
+      type: object
+      properties:
+        StatsType:
+          type: integer
+          description: The ID of the counter
+          format: int32
+        Name:
+          type: string
+          description: The name of the counter
+        Description:
+          type: string
+          description: The description of the counter
+        MetadataAName:
+          type: string
+          description: The name for Tag A
+        MetadataBName:
+          type: string
+          description: The name for Tag B
+        MetadataCName:
+          type: string
+          description: The name for Tag C
+        ValueDescription:
+          type: string
+          description: The description for the counter value
+        Sensitive:
+          type: boolean
+          description: '**true** or **false**; Indicates if the counter can only be viewed by authorized users'
+    Core_WebSDK_StatsWebResponse_countercontainers:
+      type: object
+      properties:
+        CounterContainers:
+          type: array
+          items:
+            type: object
+            properties:
+              Name:
+                type: string
+                description: Stats counter name
+              StatsCode:
+                type: integer
+                description: Stats counter family
+                format: int32
+            description: Represents containers
+          description: The list of counter components and their descriptions
+        Success:
+          type: boolean
+          description: '**true** or **false**'
+        Error:
+          type: string
+          description: The error
+    Core_StatsTier:
+      title: References a statistics tier
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      type: integer
+      description: "\n\n**0**: **Live**  \nThe live data tier, where data is currently being modified\n\n**1**: **Hour**  \nThe hourly tier. Aggregate data for previous hours is kept\n\n**2**: **Day**  \nThe daily tier. Aggregate data for previous days is kept\n\n**3**: **Month**  \nThe monthly tier. Aggregate data for previous months is kept\n\n**4**: **Year**  \nThe yearly tier. Aggregate data for previous years is kept\n"
+      format: int32
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer

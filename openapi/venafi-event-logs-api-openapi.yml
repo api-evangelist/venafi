@@ -1,0 +1,463 @@
+openapi: 3.2.0
+info:
+  title: Certificate Manager - SaaS Event Logs API
+  version: '1.0'
+servers:
+- description: US Region
+  url: https://api.venafi.cloud
+- description: EU Region
+  url: https://api.eu.venafi.cloud
+- description: AU Region
+  url: https://api.au.venafi.cloud
+- description: UK Region
+  url: https://api.uk.venafi.cloud
+- description: SG Region
+  url: https://api.sg.venafi.cloud
+- description: CA Region
+  url: https://api.ca.venafi.cloud
+tags:
+- name: Event Logs
+paths:
+  /v1/activitylogsearch:
+    post:
+      description: Request specific event log data that matches your filter criteria and include a total count of entries in the response.
+      operationId: activitylogs_getByExpression
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Activity log search request by expression:
+                description: Activity log search request by expression
+                summary: Activity log search by expression
+                value:
+                  expression:
+                    operands:
+                    - field: activityType
+                      operator: EQ
+                      value: Authentication
+                    - field: activityName
+                      operator: EQ
+                      value: Login Succeeded
+                    operator: AND
+                  ordering:
+                    orders:
+                    - direction: DESC
+                      field: activityDate
+                  paging:
+                    pageNumber: 0
+                    pageSize: 10
+            schema:
+              $ref: '#/components/schemas/ActivityLogFilter'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityLogEntriesResponse'
+          description: Total count and list of matching log entries.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse6'
+          description: Incomplete or malformed request.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse6'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Retrieve count and activity log entries matching search criteria
+      tags:
+      - Event Logs
+      x-rbac:
+        permissions:
+          access_type: read
+          description: Ability to read activity logs
+          name: ngts.activitylog.get
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+  /v1/activitylogsearch/export:
+    post:
+      description: Request specific event log data that matches your filter criteria. You can even specify the format in the header as either JSON or CSV.
+      operationId: activitylogs_getAllByExpression
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Activity log search request by expression:
+                description: Activity log search request by expression
+                summary: Activity log search by expression
+                value:
+                  expression:
+                    operands:
+                    - field: activityType
+                      operator: EQ
+                      value: Authentication
+                    - field: activityName
+                      operator: EQ
+                      value: Login Succeeded
+                    operator: AND
+                  ordering:
+                    orders:
+                    - direction: DESC
+                      field: activityDate
+            schema:
+              $ref: '#/components/schemas/ActivityLogFilter'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ExportedActivityLogEntryInformation'
+                type: array
+            text/csv:
+              schema:
+                type: string
+          description: List of matching log entries.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse6'
+            text/csv:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse6'
+          description: Incomplete or malformed request.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse6'
+            text/csv:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse6'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Export filtered event log data to JSON or CSV formats
+      tags:
+      - Event Logs
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: read
+          description: Ability to read activity logs
+          name: ngts.activitylog.get
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+  /v1/activitytypes:
+    get:
+      description: Retrieve types of activities used for event logging, such as failed login attempts or events that are critical. Learn more about event logging.
+      operationId: activitylogtypes_get
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ActivityLogType'
+                type: array
+          description: Types of activities in event logging; details in response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse6'
+          description: Incomplete or malformed request.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse6'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Retrieve types of activities used for event logging
+      tags:
+      - Event Logs
+      x-rbac:
+        permissions:
+          access_type: read
+          description: Ability to read activity types
+          name: ngts.activity_type.get
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+components:
+  schemas:
+    ActivityLogFilterOperand:
+      properties:
+        operand:
+          $ref: '#/components/schemas/ActivityLogCondition'
+        operator:
+          $ref: '#/components/schemas/UnaryOperator'
+      type: object
+    BaseActivityLogOrdering:
+      description: Specify the ordering of a search result
+      properties:
+        orders:
+          items:
+            $ref: '#/components/schemas/ActivityLogOrder'
+          type: array
+      type: object
+    ActivityLogName:
+      properties:
+        key:
+          type: string
+        readableName:
+          type: string
+      type: object
+    ActivityLogFilterOperands:
+      properties:
+        operands:
+          description: A list of conditions that will be used for filtering
+          example:
+          - field: activityType
+            operator: EQ
+            value: Authentication
+          - field: activityName
+            operator: EQ
+            value: Login Succeeded
+          items:
+            $ref: '#/components/schemas/BaseActivityLogFilter'
+          type: array
+        operator:
+          $ref: '#/components/schemas/NaryOperator'
+      type: object
+    ActivityLogFilter:
+      properties:
+        expression:
+          $ref: '#/components/schemas/BaseActivityLogFilter'
+        ordering:
+          $ref: '#/components/schemas/BaseActivityLogOrdering'
+        paging:
+          $ref: '#/components/schemas/Page1'
+      type: object
+    ActivityLogOrder:
+      properties:
+        direction:
+          $ref: '#/components/schemas/Direction'
+        field:
+          description: A field, that will be used for ordering
+          example: activityDate
+          type: string
+      type: object
+    ErrorInformation4:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue4'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+    Direction:
+      description: An ordering direction
+      enum:
+      - ASC
+      - DESC
+      example: DESC
+      type: string
+    ActivityLogType:
+      properties:
+        key:
+          type: string
+        readableName:
+          type: string
+        values:
+          items:
+            $ref: '#/components/schemas/ActivityLogName'
+          type: array
+      type: object
+    ErrorResponse6:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation4'
+          type: array
+      type: object
+    BaseActivityLogFilter:
+      description: Root expression for filtering
+      oneOf:
+      - $ref: '#/components/schemas/ActivityLogFilterOperands'
+      - $ref: '#/components/schemas/ActivityLogFilterOperand'
+      - $ref: '#/components/schemas/ActivityLogCondition'
+      type: object
+    UnaryOperator:
+      description: An operator for filtering
+      enum:
+      - NOT
+      example: NOT
+      type: string
+    ActivityLogCondition:
+      description: A Condition for filtering
+      properties:
+        field:
+          description: Represents a field for filtering
+          example: activityType
+          type: string
+        operator:
+          $ref: '#/components/schemas/ActivityLogFilterOperator'
+        value:
+          description: represents a field's value
+          example: Authentication
+          type: string
+        values:
+          description: represents a field's values
+          example:
+          - Authentication
+          - Users
+          items:
+            type: string
+          type: array
+      type: object
+    ExportedActivityLogEntryInformation:
+      properties:
+        activityDate:
+          description: The date when a log entry was produced
+          example: '2023-01-24T09:12:28Z'
+          format: date-time
+          type: string
+        activityName:
+          description: An activity name
+          example: Login Succeeded
+          type: string
+        activityType:
+          description: An activity type
+          example: Authentication
+          type: string
+        criticality:
+          description: An activity criticality
+          example: 0
+          format: int32
+          type: integer
+        id:
+          description: UUID of a log entry
+          example: 2eb29780-9046-11ed-8e50-b994b27d2ece
+          format: uuid
+          type: string
+        message:
+          description: An activity log message
+          example: user logged in
+          type: string
+        payload:
+          additionalProperties:
+            type: string
+          type: object
+      type: object
+    AnyValue4:
+      description: Can be any value - string, number, boolean, array or object.
+    ActivityLogEntryInformation:
+      properties:
+        activityDate:
+          description: The date when a log entry was produced
+          example: '2023-01-24T09:12:28Z'
+          format: date-time
+          type: string
+        activityName:
+          description: An activity name
+          example: Login Succeeded
+          type: string
+        activityType:
+          description: An activity type
+          example: Authentication
+          type: string
+        companyId:
+          description: UUID of a company
+          example: 85595df0-8e14-11ed-87e3-755db050f29d
+          format: uuid
+          type: string
+        criticality:
+          description: An activity criticality
+          example: 0
+          format: int32
+          type: integer
+        id:
+          description: UUID of a log entry
+          example: 2eb29780-9046-11ed-8e50-b994b27d2ece
+          format: uuid
+          type: string
+        message:
+          description: An activity log message
+          example: user logged in
+          type: string
+        payload:
+          additionalProperties:
+            type: string
+          type: object
+        tsgId:
+          description: TSG ID of a company
+          example: '1234567890'
+          type: string
+      type: object
+    Page1:
+      description: Specify pagination on the search request
+      properties:
+        pageNumber:
+          description: page number
+          example: 0
+          format: int32
+          type: integer
+        pageSize:
+          description: page size
+          example: 10
+          format: int32
+          type: integer
+      type: object
+    ActivityLogEntriesResponse:
+      properties:
+        activityLogEntries:
+          description: A collection of activity log entries
+          items:
+            $ref: '#/components/schemas/ActivityLogEntryInformation'
+          type: array
+        count:
+          description: The number of activity log entries.
+          example: 2
+          format: int64
+          type: integer
+      type: object
+    ActivityLogFilterOperator:
+      description: An operator for filtering
+      enum:
+      - EQ
+      - LT
+      - LTE
+      - GT
+      - GTE
+      - IN
+      example: EQ
+      type: string
+    NaryOperator:
+      description: An operator for filtering
+      enum:
+      - AND
+      - OR
+      example: OR
+      type: string
+  securitySchemes:
+    service-account:
+      in: header
+      name: service-account
+      type: apiKey
+    tppl-api-key:
+      in: header
+      name: tppl-api-key
+      type: apiKey
+x-readme:
+  samples-languages:
+  - curl
+  - go
+  - java
+  - javascript
+  - node
+  - python

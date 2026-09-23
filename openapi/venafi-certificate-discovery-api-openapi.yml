@@ -1,0 +1,734 @@
+openapi: 3.2.0
+info:
+  title: Certificate Manager - SaaS Certificate Discovery API
+  version: '1.0'
+servers:
+- description: US Region
+  url: https://api.venafi.cloud
+- description: EU Region
+  url: https://api.eu.venafi.cloud
+- description: AU Region
+  url: https://api.au.venafi.cloud
+- description: UK Region
+  url: https://api.uk.venafi.cloud
+- description: SG Region
+  url: https://api.sg.venafi.cloud
+- description: CA Region
+  url: https://api.ca.venafi.cloud
+tags:
+- name: Certificate Discovery
+paths:
+  /v1/integrationservices:
+    get:
+      description: 'Retrieves the details of all services (Ex: Discovery services and Automated key pair services).'
+      operationId: integrationsservices_getAll
+      parameters:
+      - description: Total number of services.
+        in: query
+        name: totalCount
+        schema:
+          default: false
+          type: boolean
+      - description: UUID of VSatellite instance associated to the service if any.
+        in: query
+        name: edgeInstanceId
+        schema:
+          format: uuid
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Integration service details response:
+                  description: Integration service details response
+                  summary: Service details
+                  value:
+                    integrationsServices:
+                    - companyId: fcaa8020-77e2-11ed-9ae5-7dc1d0872a47
+                      edgeInstancesIds: []
+                      environmentId: fea69e40-77e2-11ed-9dcf-e14a50e3b9c8
+                      id: fea6c550-77e2-11ed-9dcf-e14a50e3b9c8
+                      name: Internet discovery service
+                      operationsCount: 0
+                      schedulePattern:
+                        daysOfWeek:
+                        - MONDAY
+                        - TUESDAY
+                        - FRIDAY
+                        - WEDNESDAY
+                        - SUNDAY
+                        - THURSDAY
+                        - SATURDAY
+                        recurrenceTime: 03:00:00
+                        recurrenceType: DAY_OF_WEEK
+                      schedulerEnabled: false
+                      serviceType: INTERNET_DISCOVERY
+                      status: ACTIVE
+                      systemGenerated: true
+                      targets:
+                        domains:
+                        - venafi.com
+                        fqdns: []
+                        ipRanges: []
+                        ports:
+                        - '443'
+                        serviceType: INTERNET_DISCOVERY
+                      workTypes:
+                      - DISCOVER
+                    - companyId: fcaa8020-77e2-11ed-9ae5-7dc1d0872a47
+                      edgeInstancesIds: []
+                      environmentId: fea69e40-77e2-11ed-9dcf-e14a50e3b9c8
+                      id: 91770300-77e7-11ed-9dcf-e14a50e3b9c8
+                      name: basic discovery sample
+                      operationsCount: 0
+                      schedulerEnabled: false
+                      serviceType: BASIC_DISCOVERY
+                      status: ACTIVE
+                      systemGenerated: false
+                      targets:
+                        fqdns:
+                        - venafi.com
+                        ipRanges: []
+                        ports:
+                        - '443'
+                        - 8080-8090
+                        serviceType: BASIC_DISCOVERY
+                      workTypes:
+                      - DISCOVER
+                    totalCount: 6
+              schema:
+                $ref: '#/components/schemas/IntegrationServiceDetailsResponse'
+          description: Details of all services in response body.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse9'
+          description: Incomplete or malformed request.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse9'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Get a list of services
+      tags:
+      - Certificate Discovery
+      x-rbac:
+        permissions:
+          access_type: read
+          description: Ability to get integration services
+          name: ngts.integration_service.get
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+    post:
+      description: Create a new service
+      operationId: integrationsservices_create
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Basic discovery request:
+                description: Basic discovery request
+                summary: Basic discovery
+                value:
+                  edgeInstancesIds: []
+                  environmentId: fea69e40-77e2-11ed-9dcf-e14a50e3b9c8
+                  name: basic discovery
+                  serviceType: BASIC_DISCOVERY
+                  targets:
+                    fqdns:
+                    - venafi.com
+                    - venafi.cloud
+                    ipRanges:
+                    - 13.35.125.13
+                    - 13.35.125.34
+                    ports:
+                    - '443'
+                    - 8080-8090
+                    serviceType: BASIC_DISCOVERY
+                  workTypes:
+                  - DISCOVER
+              Enhanced discovery request:
+                description: Enhanced discovery request
+                summary: Enhanced discovery
+                value:
+                  edgeInstancesIds:
+                  - 83c57850-77eb-11ed-be65-1766f96f7b01
+                  environmentId: fea69e40-77e2-11ed-9dcf-e14a50e3b9c8
+                  name: enhanced discovery
+                  scheduleEnabled: true
+                  schedulePattern:
+                    cronExpression: 0 00 18 ? * * *
+                    recurrenceType: CRON
+                  serviceType: ENHANCED_DISCOVERY
+                  targets:
+                    fqdns:
+                    - venafi.com
+                    - venafi.cloud
+                    ipRanges:
+                    - 13.35.125.34
+                    - 13.35.125.43
+                    ports:
+                    - '443'
+                    - 8080-8090
+                    serviceType: ENHANCED_DISCOVERY
+                  workTypes:
+                  - DISCOVER
+            schema:
+              $ref: '#/components/schemas/IntegrationServiceCreationRequest'
+        description: Details of the service to be created
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              examples:
+                Integration service information:
+                  description: Integration service information
+                  summary: Service details
+                  value:
+                    companyId: fcaa8020-77e2-11ed-9ae5-7dc1d0872a47
+                    edgeInstancesIds:
+                    - 83c57850-77eb-11ed-be65-1766f96f7b01
+                    environmentId: fea69e40-77e2-11ed-9dcf-e14a50e3b9c8
+                    id: a5d3c5e0-77ec-11ed-9dcf-e14a50e3b9c8
+                    name: enhanced discovery sample
+                    operationsCount: 0
+                    schedulePattern:
+                      cronExpression: 0 00 18 ? * * *
+                      recurrenceType: CRON
+                    schedulerEnabled: true
+                    serviceType: ENHANCED_DISCOVERY
+                    status: ACTIVE
+                    systemGenerated: false
+                    targets:
+                      fqdns:
+                      - venafi.cloud
+                      - venafi.com
+                      ipRanges:
+                      - 13.35.125.34
+                      - 13.35.125.43
+                      ports:
+                      - '443'
+                      - 8080-8090
+                      serviceType: ENHANCED_DISCOVERY
+                    workTypes:
+                    - DISCOVER
+              schema:
+                $ref: '#/components/schemas/IntegrationServiceInformation'
+          description: A service created.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse9'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Add a service
+      tags:
+      - Certificate Discovery
+      x-rbac:
+        permissions:
+          access_type: write
+          description: Ability to create a integration service
+          name: ngts.integration_service.create
+        roles:
+        - PKIAdmin
+  /v1/integrationservices/{id}:
+    get:
+      description: Retrieves the details of the service that has the specified `id`.
+      operationId: integrationsservices_getById
+      parameters:
+      - description: UUID of a service
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a service
+          format: uuid
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Integration service information response:
+                  description: Integration service information response
+                  summary: Service details
+                  value:
+                    companyId: fcaa8020-77e2-11ed-9ae5-7dc1d0872a47
+                    edgeInstancesIds:
+                    - 83c57850-77eb-11ed-be65-1766f96f7b01
+                    environmentId: fea69e40-77e2-11ed-9dcf-e14a50e3b9c8
+                    id: a5d3c5e0-77ec-11ed-9dcf-e14a50e3b9c8
+                    name: enhanced discovery sample
+                    operationsCount: 0
+                    schedulePattern:
+                      cronExpression: 0 00 18 ? * * *
+                      recurrenceType: CRON
+                    schedulerEnabled: true
+                    serviceType: ENHANCED_DISCOVERY
+                    status: ACTIVE
+                    systemGenerated: false
+                    targets:
+                      fqdns:
+                      - venafi.cloud
+                      ipRanges:
+                      - 13.35.125.34
+                      ports:
+                      - '443'
+                      serviceType: ENHANCED_DISCOVERY
+                    workTypes:
+                    - DISCOVER
+              schema:
+                $ref: '#/components/schemas/IntegrationServiceInformation'
+          description: Service was found; details in response body.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse9'
+          description: Incomplete or malformed request.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse9'
+          description: Service not found.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse9'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Get service details
+      tags:
+      - Certificate Discovery
+      x-rbac:
+        permissions:
+          access_type: read
+          description: Ability to get integration services
+          name: ngts.integration_service.get
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+    delete:
+      description: Deletes the service that has the specified `id`.
+      operationId: integrationsservices_delete
+      parameters:
+      - description: UUID of a  service
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a  service
+          format: uuid
+          type: string
+      - description: 'retireCertificates" (boolean): Number of certificates associated to the service that were retired when the service was deleted.'
+        in: query
+        name: retireCertificates
+        schema:
+          default: false
+          type: boolean
+      responses:
+        '204':
+          description: Integration Service Deleted
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse9'
+          description: Incomplete or malformed request.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse9'
+          description: Service not found.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse9'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Remove a service
+      tags:
+      - Certificate Discovery
+      x-rbac:
+        permissions:
+          access_type: write
+          description: Ability to delete integration service
+          name: ngts.integration_service.delete
+        roles:
+        - PKIAdmin
+    patch:
+      description: Can be used to update specific fields. Only fields specified in the request will be updated. An empty set of edgeInstancesIds value will clear the set.
+      operationId: integrationsservices_update
+      parameters:
+      - description: Integration Service ID
+        in: path
+        name: id
+        required: true
+        schema:
+          description: Integration Service ID
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Service update request:
+                description: Service update request
+                summary: Service update
+                value:
+                  name: enhanced discovery update-example
+                  scheduleEnabled: true
+                  targets:
+                    fqdns:
+                    - venafi.cloud
+                    - venafi.com
+                    - docs.venafi.com
+                    ipRanges:
+                    - 13.35.125.34
+                    - 13.35.125.43
+                    ports:
+                    - '443'
+                    - 8080-8092
+                    retireCertificates: false
+                    serviceType: ENHANCED_DISCOVERY
+                  workTypes:
+                  - DISCOVER
+            schema:
+              $ref: '#/components/schemas/IntegrationServiceUpdateRequest'
+        description: Details of the service to be updated
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Service update response:
+                  description: Service update response
+                  summary: Service details
+                  value:
+                    companyId: fcaa8020-77e2-11ed-9ae5-7dc1d0872a47
+                    edgeInstancesIds:
+                    - 83c57850-77eb-11ed-be65-1766f96f7b01
+                    environmentId: fea69e40-77e2-11ed-9dcf-e14a50e3b9c8
+                    id: a5d3c5e0-77ec-11ed-9dcf-e14a50e3b9c8
+                    name: enhanced discovery update-example
+                    operationsCount: 0
+                    schedulePattern:
+                      cronExpression: 0 00 18 ? * * *
+                      recurrenceType: CRON
+                    schedulerEnabled: true
+                    serviceType: ENHANCED_DISCOVERY
+                    status: ACTIVE
+                    systemGenerated: false
+                    targets:
+                      fqdns:
+                      - venafi.cloud
+                      - venafi.com
+                      - docs.venafi.com
+                      ipRanges:
+                      - 13.35.125.43
+                      - 13.35.125.34
+                      ports:
+                      - '443'
+                      - 8080-8092
+                      serviceType: ENHANCED_DISCOVERY
+                    workTypes:
+                    - DISCOVER
+              schema:
+                $ref: '#/components/schemas/IntegrationServiceInformation'
+          description: Integration Service information
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse9'
+          description: Request Conditions Failed
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse9'
+          description: Integration Service Not Found
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse9'
+          description: Request Conditions Failed
+      security:
+      - tppl-api-key: []
+      summary: Update Service properties
+      tags:
+      - Certificate Discovery
+      x-rbac:
+        permissions:
+          access_type: write
+          description: Ability to update integration service
+          name: ngts.integration_service.update
+        roles:
+        - PKIAdmin
+components:
+  schemas:
+    IntegrationServiceCreationRequest:
+      properties:
+        edgeInstancesIds:
+          description: A collection of Vsatellite instance IDs
+          example: '[f196eb0-71cb-11ed-9749-93c174f3c18d, f196eb0-81av-11ed-9749-93c174f3c18d]'
+          items:
+            format: uuid
+            type: string
+          type: array
+          uniqueItems: true
+        environmentId:
+          description: UUID of an environment
+          example: 2e8cfc70-74ce-11ed-9051-cfa579eae364
+          format: uuid
+          type: string
+        name:
+          description: Integration service name
+          example: Internet discovery
+          minLength: 1
+          type: string
+        scheduleEnabled:
+          description: If a integration service is scheduled for execution
+          example: true
+          type: boolean
+        schedulePattern:
+          $ref: '#/components/schemas/SchedulerPatternInformation2'
+        serviceType:
+          description: The type of an integration service
+          enum:
+          - BASIC_DISCOVERY
+          - ENHANCED_DISCOVERY
+          - EXTERNAL_SCAN
+          - INTERNET_DISCOVERY
+          - SMART_DISCOVERY_EXTERNAL
+          - KEY_GENERATION
+          - MSCA
+          - ACME
+          example: ENHANCED_DISCOVERY
+          type: string
+        targets:
+          $ref: '#/components/schemas/TargetsInformation'
+        workTypes:
+          description: A collection of work types
+          example: DISCOVER
+          items:
+            enum:
+            - DISCOVER
+            - MANAGE
+            type: string
+          minItems: 1
+          type: array
+          uniqueItems: true
+      required:
+      - environmentId
+      - name
+      - serviceType
+      - workTypes
+      type: object
+    TargetsInformation:
+      discriminator:
+        propertyName: serviceType
+      properties:
+        serviceType:
+          type: string
+      required:
+      - serviceType
+      type: object
+    SchedulerPatternInformation2:
+      discriminator:
+        propertyName: recurrenceType
+      properties:
+        recurrenceType:
+          type: string
+      required:
+      - recurrenceType
+      type: object
+    ErrorResponse9:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation7'
+          type: array
+      type: object
+    AnyValue7:
+      description: Can be any value - string, number, boolean, array or object.
+    IntegrationServiceInformation:
+      properties:
+        companyId:
+          description: UUID of a company
+          example: 2b391680-74ce-11ed-bf7a-a3d5ccdf275c
+          format: uuid
+          type: string
+        edgeInstancesIds:
+          description: A collection of Vsatellite instance IDs
+          example: '[f196eb0-71cb-11ed-9749-93c174f3c18d, f196eb0-81av-11ed-9749-93c174f3c18d]'
+          items:
+            format: uuid
+            type: string
+          type: array
+          uniqueItems: true
+        encryptionKeyId:
+          description: Encryption key UUID
+          example: 41bb5280-7193-11ed-a059-a7f274bd0b5b
+          format: uuid
+          type: string
+        environmentId:
+          description: UUID of an environment
+          example: 2e8cfc70-74ce-11ed-9051-cfa579eae364
+          format: uuid
+          type: string
+        id:
+          description: UUID of an integration service
+          example: 2e8d71a0-74ce-11ed-9051-cfa579eae364
+          format: uuid
+          type: string
+        name:
+          description: Integration service name
+          example: Internet discovery
+          type: string
+        schedulePattern:
+          $ref: '#/components/schemas/SchedulerPatternInformation2'
+        schedulerEnabled:
+          description: If a integration service is scheduled for execution
+          example: true
+          type: boolean
+        serviceType:
+          description: The type of an integration service
+          enum:
+          - BASIC_DISCOVERY
+          - ENHANCED_DISCOVERY
+          - EXTERNAL_SCAN
+          - INTERNET_DISCOVERY
+          - SMART_DISCOVERY_EXTERNAL
+          - KEY_GENERATION
+          - MSCA
+          - ACME
+          example: ENHANCED_DISCOVERY
+          type: string
+        status:
+          description: Integration service status
+          enum:
+          - ACTIVE
+          - DISABLED
+          - RUNNING
+          - WARNING
+          - DRAFT
+          - ERROR
+          example: DISABLED
+          type: string
+        statusMessage:
+          description: Integration service status message
+          example: Integration service is disable
+          type: string
+        systemGenerated:
+          description: If an integration service was generated automatically
+          example: true
+          type: boolean
+        targets:
+          $ref: '#/components/schemas/TargetsInformation'
+        workTypes:
+          description: A collection of work types
+          example: DISCOVER
+          items:
+            enum:
+            - DISCOVER
+            - MANAGE
+            type: string
+          type: array
+          uniqueItems: true
+      type: object
+    IntegrationServiceDetailsResponse:
+      properties:
+        integrationsServices:
+          items:
+            $ref: '#/components/schemas/IntegrationServiceInformation'
+          type: array
+        totalCount:
+          description: The total number of integration services returned
+          example: 10
+          format: int64
+          type: integer
+      type: object
+    IntegrationServiceUpdateRequest:
+      properties:
+        edgeInstancesIds:
+          description: A collection of Vsatellite instance IDs
+          example: '[f196eb0-71cb-11ed-9749-93c174f3c18d, f196eb0-81av-11ed-9749-93c174f3c18d]'
+          items:
+            format: uuid
+            type: string
+          type: array
+          uniqueItems: true
+        name:
+          description: Integration service name
+          example: Internet discovery
+          type: string
+        scheduleEnabled:
+          description: If a integration service is scheduled for execution
+          example: true
+          type: boolean
+        schedulePattern:
+          $ref: '#/components/schemas/SchedulerPatternInformation2'
+        targets:
+          $ref: '#/components/schemas/TargetsInformation'
+        workTypes:
+          description: A collection of work types
+          example: DISCOVER
+          items:
+            enum:
+            - DISCOVER
+            - MANAGE
+            type: string
+          maxItems: 2147483647
+          minItems: 1
+          type: array
+          uniqueItems: true
+      type: object
+    ErrorInformation7:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue7'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+  securitySchemes:
+    service-account:
+      in: header
+      name: service-account
+      type: apiKey
+    tppl-api-key:
+      in: header
+      name: tppl-api-key
+      type: apiKey
+x-readme:
+  samples-languages:
+  - curl
+  - go
+  - java
+  - javascript
+  - node
+  - python

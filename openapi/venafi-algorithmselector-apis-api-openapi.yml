@@ -1,0 +1,815 @@
+openapi: 3.2.0
+info:
+  title: Trust Protection Foundation WebSDK AlgorithmSelector APIs…
+  description: '# Introduction
+
+    The Trust Protection Foundation Web SDK is a subset of REST APIs that allow you to:
+
+    * Automate certificate management
+
+    * Integrate with DevOps processes
+
+    * Discover machine identities
+
+    * Extract data to integrate with data warehouses
+
+    * Perform bulk actions
+
+    * Set up and administer Trust Protection Foundation
+
+    * Onboard teams
+
+    * Create custom, automated business logic and flows between internal systems
+
+
+    All these use cases can be accomplished using the Trust Protection Foundation REST…'
+  version: 26.1.1
+servers:
+- url: /
+  description: Current Host
+- url: https://REPLACEdnsnameME/
+  description: System
+- url: https://{dnsname}/
+  description: Configurable Hostname
+  variables:
+    dnsname:
+      default: localhost
+      description: Production API Hostname
+security:
+- AccessToken: []
+tags:
+- name: AlgorithmSelector APIs
+  description: The AlgorithmSelector interface provides the ability to retrieve and configure allowed Key Algorithms for policy, key and certificate objects
+paths:
+  /vedsdk/algorithmselector/get:
+    post:
+      tags:
+      - AlgorithmSelector APIs
+      summary: Get the algorithm configured for an object
+      description: 'Returns the currently configured algorithm selector for the specified object
+
+
+        _Required scope: configuration_'
+      operationId: Venafi_Core_WebSDK_AlgorithmSelectorRest_Get
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_AlgorithmSelectorWebRequest_get'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_AlgorithmSelectorWebResponse_get'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/algorithmselector/commit:
+    post:
+      tags:
+      - AlgorithmSelector APIs
+      summary: Set the algorithm configured for an object
+      description: 'Configures the specified object to use the provided algorithm
+
+
+        _Required scope: configuration:manage_'
+      operationId: Venafi_Core_WebSDK_AlgorithmSelectorRest_Commit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_AlgorithmSelectorWebRequest_commit'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_AlgorithmSelectorWebResponse_commit'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/algorithmselector/find:
+    post:
+      tags:
+      - AlgorithmSelector APIs
+      summary: Find algorithm selectors for a specific security strength
+      description: 'Returns the list of algorithms that match the provided strength category
+
+
+        _Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_AlgorithmSelectorRest_Find
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_AlgorithmSelectorWebRequest_find'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_AlgorithmSelectorWebResponse_find'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/algorithmselector/getpolicy:
+    post:
+      tags:
+      - AlgorithmSelector APIs
+      summary: Get the allowed algorithms for a container
+      description: 'Returns the algorithm selectors that are allowed for objects of the specified class that are children of this container
+
+
+        _Required scope: configuration_'
+      operationId: Venafi_Core_WebSDK_AlgorithmSelectorRest_GetPolicy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_AlgorithmSelectorWebRequest_getpolicy'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_AlgorithmSelectorWebResponse_getpolicy'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/algorithmselector/commitpolicy:
+    post:
+      tags:
+      - AlgorithmSelector APIs
+      summary: Set the allowed algorithms for a container
+      description: 'Configures the specified container to limit use of algorithms to the provided algorithm list
+
+
+        _Required scope: configuration:manage_'
+      operationId: Venafi_Core_WebSDK_AlgorithmSelectorRest_CommitPolicy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_AlgorithmSelectorWebRequest_commitpolicy'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_AlgorithmSelectorWebResponse_commitpolicy'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/algorithmselector/getselector:
+    post:
+      tags:
+      - AlgorithmSelector APIs
+      summary: Get details about an algorithm
+      description: 'Returns the algorithm matching the provided PKIX Parameter Set Oid
+
+
+        _Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_AlgorithmSelectorRest_GetOid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_AlgorithmSelectorWebRequest_getselector'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_AlgorithmSelectorWebResponse_getselector'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/algorithmselector/getallselectors:
+    post:
+      tags:
+      - AlgorithmSelector APIs
+      summary: Get all algorithms
+      description: 'Retrieve all known algorithm definitions
+
+
+        _Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_AlgorithmSelectorRest_GetAllAlgorithms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type:
+              - object
+              - 'null'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_AlgorithmSelectorWebResponse_getallselectors'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/algorithmselector/getallowedalgorithms:
+    post:
+      tags:
+      - AlgorithmSelector APIs
+      summary: Get allowed algorithms for an object
+      description: 'Retrieve the list of algorithms available for use. If **SchemaClass** is provided,
+
+        gets the algorithms allowed for use by children of the specified object matching the
+
+        class. Otherwise gets the allowed algorithms for use by the specified object itself.
+
+
+        _Required scope: configuration_'
+      operationId: Venafi_Core_WebSDK_AlgorithmSelectorRest_GetAllowedAlgorithms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_AlgorithmSelectorWebRequest_getallowedalgorithms'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_AlgorithmSelectorWebResponse_getallowedalgorithms'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/algorithmselector/getglobalalgorithms:
+    post:
+      tags:
+      - AlgorithmSelector APIs
+      summary: Get the globally allowed algorithms
+      description: 'Returns the globally allowed algorithms ordered by priority
+
+
+        _Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_AlgorithmSelectorRest_GetGlobalAlgorithms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type:
+              - object
+              - 'null'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_AlgorithmSelectorWebResponse_getglobalalgorithms'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/algorithmselector/setglobalalgorithms:
+    post:
+      tags:
+      - AlgorithmSelector APIs
+      summary: Set the globally allowed algorithms
+      description: 'Algorithm priority is set based on the order of the oids provided
+
+
+        _Required scope: admin:algorithms_'
+      operationId: Venafi_Core_WebSDK_AlgorithmSelectorRest_SetGlobalAlgorithms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_AlgorithmSelectorWebRequest_setglobalalgorithms'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_AlgorithmSelectorWebResponse_setglobalalgorithms'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+components:
+  schemas:
+    Core_WebSDK_AlgorithmSelectorWebResponse_getselector:
+      type: object
+      properties:
+        Selector:
+          type: object
+          properties:
+            Algorithm:
+              type: string
+              description: Gets the display name for the selected algorithm
+            PkixParameterSetOid:
+              type: string
+              description: Gets the Venafi Pkix Parameter Set Oid for the selected algorithm
+            Description:
+              type: string
+              description: Gets the description text for the selected algorithm
+            StrengthCategory:
+              $ref: '#/components/schemas/Core_PkixNISTStrengthCategory'
+          description: The Algorithm Selector
+        Success:
+          type: boolean
+          description: True if the request was successful
+        Error:
+          type: string
+          description: The error associated with the request
+    Core_WebSDK_AlgorithmSelectorWebRequest_commit:
+      required:
+      - ObjectDN
+      - PKIXParameterSet
+      type: object
+      properties:
+        ObjectDN:
+          type: string
+          description: The distinguished name of the requested object
+        PKIXParameterSet:
+          type: string
+          description: The Venafi PKIX Parameter Set Oid identifying an algorithm
+    Core_WebSDK_AlgorithmSelectorWebResponse_get:
+      type: object
+      properties:
+        Selector:
+          type: object
+          properties:
+            Algorithm:
+              type: string
+              description: Gets the display name for the selected algorithm
+            PkixParameterSetOid:
+              type: string
+              description: Gets the Venafi Pkix Parameter Set Oid for the selected algorithm
+            Description:
+              type: string
+              description: Gets the description text for the selected algorithm
+            StrengthCategory:
+              $ref: '#/components/schemas/Core_PkixNISTStrengthCategory'
+          description: The Algorithm Selector
+        Success:
+          type: boolean
+          description: True if the request was successful
+        Error:
+          type: string
+          description: The error associated with the request
+    Core_WebSDK_AlgorithmSelectorWebResponse_find:
+      type: object
+      properties:
+        Selectors:
+          type: array
+          items:
+            type: object
+            properties:
+              Algorithm:
+                type: string
+                description: Gets the display name for the selected algorithm
+              PkixParameterSetOid:
+                type: string
+                description: Gets the Venafi Pkix Parameter Set Oid for the selected algorithm
+              Description:
+                type: string
+                description: Gets the description text for the selected algorithm
+              StrengthCategory:
+                $ref: '#/components/schemas/Core_PkixNISTStrengthCategory'
+            description: ''
+          description: The Algorithm Selectors
+        Success:
+          type: boolean
+          description: True if the request was successful
+        Error:
+          type: string
+          description: The error associated with the request
+    Core_WebSDK_AlgorithmSelectorWebRequest_getallowedalgorithms:
+      required:
+      - ObjectDN
+      type: object
+      properties:
+        ObjectDN:
+          type: string
+          description: The distinguished name of the requested object
+        SchemaClass:
+          type: string
+          description: The schema class where algorithm selector policy is applied
+    Core_WebSDK_AlgorithmSelectorWebRequest_get:
+      required:
+      - ObjectDN
+      type: object
+      properties:
+        ObjectDN:
+          type: string
+          description: The distinguished name of the requested object
+    Core_WebSDK_AlgorithmSelectorWebRequest_getselector:
+      required:
+      - PKIXParameterSet
+      type: object
+      properties:
+        PKIXParameterSet:
+          type: string
+          description: The Venafi PKIX Parameter Set Oid identifying an algorithm
+    Core_WebSDK_AlgorithmSelectorWebRequest_commitpolicy:
+      required:
+      - ObjectDN
+      - SchemaClass
+      - PKIXParameterSets
+      type: object
+      properties:
+        ObjectDN:
+          type: string
+          description: The distinguished name of the requested object
+        SchemaClass:
+          type: string
+          description: The schema class where algorithm selector policy is applied
+        PKIXParameterSets:
+          type: array
+          items:
+            type: string
+          description: A list of Venafi PKIX Parameter Set Oid identifying an algorithm
+    Core_WebSDK_AlgorithmSelectorWebResponse_getpolicy:
+      type: object
+      properties:
+        Selectors:
+          type: array
+          items:
+            type: object
+            properties:
+              Algorithm:
+                type: string
+                description: Gets the display name for the selected algorithm
+              PkixParameterSetOid:
+                type: string
+                description: Gets the Venafi Pkix Parameter Set Oid for the selected algorithm
+              Description:
+                type: string
+                description: Gets the description text for the selected algorithm
+              StrengthCategory:
+                $ref: '#/components/schemas/Core_PkixNISTStrengthCategory'
+            description: ''
+          description: The Algorithm Selectors
+        Success:
+          type: boolean
+          description: True if the request was successful
+        Error:
+          type: string
+          description: The error associated with the request
+    Core_WebSDK_AlgorithmSelectorWebResponse_getallselectors:
+      type: object
+      properties:
+        Selectors:
+          type: array
+          items:
+            type: object
+            properties:
+              Algorithm:
+                type: string
+                description: Gets the display name for the selected algorithm
+              PkixParameterSetOid:
+                type: string
+                description: Gets the Venafi Pkix Parameter Set Oid for the selected algorithm
+              Description:
+                type: string
+                description: Gets the description text for the selected algorithm
+              StrengthCategory:
+                $ref: '#/components/schemas/Core_PkixNISTStrengthCategory'
+            description: ''
+          description: The Algorithm Selectors
+        Success:
+          type: boolean
+          description: True if the request was successful
+        Error:
+          type: string
+          description: The error associated with the request
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
+    Core_WebSDK_AlgorithmSelectorWebResponse_getallowedalgorithms:
+      type: object
+      properties:
+        Selectors:
+          type: array
+          items:
+            type: object
+            properties:
+              Algorithm:
+                type: string
+                description: Gets the display name for the selected algorithm
+              PkixParameterSetOid:
+                type: string
+                description: Gets the Venafi Pkix Parameter Set Oid for the selected algorithm
+              Description:
+                type: string
+                description: Gets the description text for the selected algorithm
+              StrengthCategory:
+                $ref: '#/components/schemas/Core_PkixNISTStrengthCategory'
+            description: ''
+          description: The Algorithm Selectors
+        Success:
+          type: boolean
+          description: True if the request was successful
+        Error:
+          type: string
+          description: The error associated with the request
+    Core_WebSDK_AlgorithmSelectorWebResponse_setglobalalgorithms:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: True if the request was successful
+        Error:
+          type: string
+          description: The error associated with the request
+    Core_WebSDK_AlgorithmSelectorWebResponse_commit:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: True if the request was successful
+        Error:
+          type: string
+          description: The error associated with the request
+    Core_WebSDK_AlgorithmSelectorWebResponse_getglobalalgorithms:
+      type: object
+      properties:
+        Selectors:
+          type: array
+          items:
+            type: object
+            properties:
+              Algorithm:
+                type: string
+                description: Gets the display name for the selected algorithm
+              PkixParameterSetOid:
+                type: string
+                description: Gets the Venafi Pkix Parameter Set Oid for the selected algorithm
+              Description:
+                type: string
+                description: Gets the description text for the selected algorithm
+              StrengthCategory:
+                $ref: '#/components/schemas/Core_PkixNISTStrengthCategory'
+            description: ''
+          description: The Algorithm Selectors
+        Success:
+          type: boolean
+          description: True if the request was successful
+        Error:
+          type: string
+          description: The error associated with the request
+    Core_WebSDK_AlgorithmSelectorWebResponse_commitpolicy:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: True if the request was successful
+        Error:
+          type: string
+          description: The error associated with the request
+    Core_WebSDK_AlgorithmSelectorWebRequest_setglobalalgorithms:
+      required:
+      - PKIXParameterSets
+      type: object
+      properties:
+        PKIXParameterSets:
+          type: array
+          items:
+            type: string
+          description: A list of Venafi PKIX Parameter Set Oid identifying an algorithm
+    Core_WebSDK_AlgorithmSelectorWebRequest_find:
+      required:
+      - AlgorithmStrength
+      type: object
+      properties:
+        AlgorithmStrength:
+          type:
+          - integer
+          - 'null'
+          description: The strength of algorithms to be returned. Algorithms not matching the strength will be filtered out
+          format: int32
+        IncludeStronger:
+          type: boolean
+          description: 'If **true** algorithms with a strength greater than _AlgorithmStrength_,
+
+            or a category greater than _AlgorithmCategory_, will also be returned'
+    Core_PkixNISTStrengthCategory:
+      title: The NIST defined strength of an algorithm
+      enum:
+      - 0
+      - 65536
+      - 131072
+      - 196608
+      - 262144
+      - 327680
+      - 65535
+      - 2147418112
+      - 0
+      type: integer
+      description: "\n\n**0**: **Uncategorized**  \nThe algorithm has not yet received a NIST security level categorization\n\n**65536**: **NISTSecurityCategory1**  \nNIST Security Category 1\n\n**131072**: **NISTSecurityCategory2**  \nNIST Security Category 2\n\n**196608**: **NISTSecurityCategory3**  \nNIST Security Category 3\n\n**262144**: **NISTSecurityCategory4**  \nNIST Security Category 4\n\n**327680**: **NISTSecurityCategory5**  \nNIST Security Category 5\n\n**65535**: **NISTSecurityStrength**  \nMask for NIST Security Bit Strength values\n\n**2147418112**: **NISTSecurityCategory**  \nMask for all NIST Security Category values\n\n**2147483648**: **Stronger**  \nInclude algorithms stronger than the specified flag, while searching\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
+    Core_WebSDK_AlgorithmSelectorWebRequest_getpolicy:
+      required:
+      - ObjectDN
+      - SchemaClass
+      type: object
+      properties:
+        ObjectDN:
+          type: string
+          description: The distinguished name of the requested object
+        SchemaClass:
+          type: string
+          description: The schema class where algorithm selector policy is applied
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer

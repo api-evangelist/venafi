@@ -1,0 +1,63 @@
+openapi: 3.2.0
+info:
+  title: Certificate Manager - SaaS Machine Types API
+  version: '1.0'
+servers:
+- description: US Region
+  url: https://api.venafi.cloud
+- description: EU Region
+  url: https://api.eu.venafi.cloud
+- description: AU Region
+  url: https://api.au.venafi.cloud
+- description: UK Region
+  url: https://api.uk.venafi.cloud
+- description: SG Region
+  url: https://api.sg.venafi.cloud
+- description: CA Region
+  url: https://api.ca.venafi.cloud
+tags:
+- name: Machine Types
+paths:
+  /v1/machinetypes:
+    get:
+      deprecated: true
+      description: Deprecated. This functionality is no longer supported. Use the Plugins API set instead.
+      operationId: machineTypes_getAll
+      responses:
+        default:
+          content:
+            application/json: {}
+          description: default response
+      security:
+      - tppl-api-key: []
+      summary: Deprecated.
+      tags:
+      - Machine Types
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: read
+          description: Ability to get machine type
+          name: ngts.machine_type.get
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+components:
+  securitySchemes:
+    service-account:
+      in: header
+      name: service-account
+      type: apiKey
+    tppl-api-key:
+      in: header
+      name: tppl-api-key
+      type: apiKey
+x-readme:
+  samples-languages:
+  - curl
+  - go
+  - java
+  - javascript
+  - node
+  - python

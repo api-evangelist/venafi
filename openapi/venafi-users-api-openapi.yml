@@ -1,0 +1,580 @@
+openapi: 3.2.0
+info:
+  title: Certificate Manager - SaaS Users API
+  version: '1.0'
+servers:
+- description: US Region
+  url: https://api.venafi.cloud
+- description: EU Region
+  url: https://api.eu.venafi.cloud
+- description: AU Region
+  url: https://api.au.venafi.cloud
+- description: UK Region
+  url: https://api.uk.venafi.cloud
+- description: SG Region
+  url: https://api.sg.venafi.cloud
+- description: CA Region
+  url: https://api.ca.venafi.cloud
+tags:
+- name: Users
+paths:
+  /v1/users:
+    get:
+      description: Retrieve list of users matching the criteria. Note that this operation might result in a larger-than-expected dataset.operation can potentially be expensive as resulting dataset may be large
+      operationId: get-v1-users
+      parameters:
+      - description: Current user status.
+        in: query
+        name: userStatus
+        schema:
+          items:
+            $ref: '#/components/schemas/UserStatus'
+          type: array
+      - description: Username string; Accepts regex
+        in: query
+        name: username
+        schema:
+          maxLength: 128
+          type: string
+      - description: Optional disabled user filter flag; true will return disabled users; false will return non-disabled users; default will return all users
+        in: query
+        name: disabled
+        schema:
+          type: boolean
+      - description: Optional soft-deleted user filter flag; true will return soft-deleted users; false will return non-soft-deleted users; default will return all users
+        in: query
+        name: deleted
+        schema:
+          type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+          description: All users
+      security:
+      - tppl-api-key: []
+      summary: Retrieve users matching specified criteria
+      tags:
+      - Users
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: read
+          description: Ability to read users
+          name: ngts.user.get
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+        - Guest
+  /v1/users/{id}:
+    get:
+      description: Retrieve user with 'id' attribute matching specified value.
+      operationId: get-v1-users-byId
+      parameters:
+      - description: UUID of a user
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a user
+          format: uuid
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInformation2'
+          description: User matching specified userId
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Request conditions failed
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: User not found
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Request conditions failed
+      security:
+      - tppl-api-key: []
+      summary: Retrieve user details by user ID
+      tags:
+      - Users
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: read
+          description: Ability to read users
+          name: ngts.user.get
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+        - Guest
+  /v1/users/{id}/accounttype:
+    put:
+      description: Update account type for user with 'id' attribute matching specified value.
+      operationId: put-v1-users-byId-accounttype
+      parameters:
+      - description: UUID of a user
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a user
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserAccountTypeRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInformation2'
+          description: User account type was updated. Updated user details in response.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: User was not found.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Update user account type
+      tags:
+      - Users
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: write
+          description: Ability to update user account type
+          name: ngts.user_accounttype.update
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+        - Guest
+  /v1/users/{id}/locallogin:
+    put:
+      description: Enable/disable local login for specified user.
+      operationId: put-v1-users-byId-locallogin
+      parameters:
+      - description: UUID of a user.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a user.
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocalLoginRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInformation2'
+          description: Local login property for the user was updated. Updated user details in response.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: User not found.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Enable/disable local login for user
+      tags:
+      - Users
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: write
+          description: Ability to update user local login
+          name: ngts.user_locallogin.update
+  /v1/users/{id}/roles:
+    put:
+      description: Update a user's currently assigned user role to limit or expand permissions. Learn more about user roles
+      operationId: put-v1-users-byId-roles
+      parameters:
+      - description: UUID of a user.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a user.
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RolesRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInformation2'
+          description: User roles were updated. The newly assigned user role is given in the response.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: User not found.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Update user roles
+      tags:
+      - Users
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: write
+          description: Ability to update user roles
+          name: ngts.user_role.update
+        roles:
+        - PKIAdmin
+  /v1/users/username/{username}:
+    get:
+      description: Lets you use the 'username' attribute to get the details of the associated user; specified value should be an email address.
+      operationId: get-v1-users-username-byUsername
+      parameters:
+      - in: path
+        name: username
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+          description: Details of the user matching specified username.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: User not found.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Retrieve user details by username
+      tags:
+      - Users
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: read
+          description: Ability to read users
+          name: ngts.user.get
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+        - Guest
+  /v1/users/{id}/passwordexpiration:
+    put:
+      description: Update if a user's password should be forced into an expired state for user with 'id' attribute matching specified value.
+      operationId: put-v1-users-byId-passwordexpiration
+      parameters:
+      - description: UUID of a user
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a user
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserForceLocalPasswordExpirationRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInformation2'
+          description: User forceLocalPasswordExpiration value was updated. Updated user details in response.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: User was not found.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Update if a user must change their password at next login
+      tags:
+      - Users
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: write
+          description: Ability to update user force local password expiration
+          name: ngts.user_forcelocalpasswordexpiration.update
+components:
+  schemas:
+    UserInformation2:
+      properties:
+        companyId:
+          format: uuid
+          type: string
+        creationDate:
+          format: date-time
+          type: string
+        deleted:
+          type: boolean
+        disabled:
+          type: boolean
+        emailAddress:
+          type: string
+        firstLoginDate:
+          format: date-time
+          type: string
+        firstname:
+          type: string
+        forceLocalPasswordExpiration:
+          type: boolean
+        hasPassword:
+          type: boolean
+        id:
+          format: uuid
+          type: string
+        lastname:
+          type: string
+        localLoginDisabled:
+          type: boolean
+        memberedTeams:
+          items:
+            format: uuid
+            type: string
+          type: array
+          uniqueItems: true
+        ownedTeams:
+          items:
+            format: uuid
+            type: string
+          type: array
+          uniqueItems: true
+        productRoles:
+          additionalProperties:
+            items:
+              $ref: '#/components/schemas/Role2'
+            type: array
+            uniqueItems: true
+          type: object
+        signupAttributes:
+          additionalProperties:
+            type: string
+          type: object
+        ssoStatus:
+          $ref: '#/components/schemas/SSOStatus'
+        systemRoles:
+          items:
+            $ref: '#/components/schemas/SystemRole'
+          type: array
+          uniqueItems: true
+        userAccountType:
+          $ref: '#/components/schemas/UserAccountType'
+        userStatus:
+          $ref: '#/components/schemas/UserStatus'
+        userType:
+          $ref: '#/components/schemas/UserType'
+        username:
+          type: string
+      type: object
+    SSOStatus:
+      enum:
+      - ACTIVE
+      - INACTIVE
+      type: string
+    UserResponse:
+      properties:
+        users:
+          items:
+            $ref: '#/components/schemas/UserInformation2'
+          type: array
+      type: object
+    AnyValue6:
+      description: Can be any value - string, number, boolean, array or object.
+    UserStatus:
+      enum:
+      - PENDING_ACTIVATION
+      - ACTIVE
+      - INACTIVE
+      type: string
+    ErrorResponse8:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation6'
+          type: array
+      type: object
+    UserType:
+      enum:
+      - EXTERNAL
+      - INTERNAL
+      type: string
+    SystemRole:
+      enum:
+      - SYSTEM_ADMIN
+      - CONDOR_METRICS
+      type: string
+    Role2:
+      enum:
+      - SECURITY_ADMIN
+      - DEVOPS_LEAD
+      - DEVOPS_USER
+      - OUTAGEDETECTION_ADMIN
+      - RESOURCE_OWNER
+      - PKI_ADMIN
+      - GUEST
+      - PLATFORM_ADMIN
+      type: string
+    UserAccountTypeRequest:
+      properties:
+        accountType:
+          $ref: '#/components/schemas/UserAccountType'
+      required:
+      - accountType
+      type: object
+    UserForceLocalPasswordExpirationRequest:
+      properties:
+        forceLocalPasswordExpiration:
+          type: boolean
+      required:
+      - forceLocalPasswordExpiration
+      type: object
+    LocalLoginRequest:
+      properties:
+        localLoginDisabled:
+          type: boolean
+      type: object
+    ErrorInformation6:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue6'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+    UserAccountType:
+      enum:
+      - WEB_UI
+      - API
+      type: string
+    RolesRequest:
+      properties:
+        roles:
+          additionalProperties:
+            $ref: '#/components/schemas/Role2'
+          type: object
+        systemAdmin:
+          type: boolean
+      type: object
+  securitySchemes:
+    service-account:
+      in: header
+      name: service-account
+      type: apiKey
+    tppl-api-key:
+      in: header
+      name: tppl-api-key
+      type: apiKey
+x-readme:
+  samples-languages:
+  - curl
+  - go
+  - java
+  - javascript
+  - node
+  - python

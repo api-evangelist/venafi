@@ -1,0 +1,715 @@
+openapi: 3.2.0
+info:
+  title: Trust Protection Foundation WebSDK SSH Certificate APIs API
+  description: '# Introduction
+
+    The Trust Protection Foundation Web SDK is a subset of REST APIs that allow you to:
+
+    * Automate certificate management
+
+    * Integrate with DevOps processes
+
+    * Discover machine identities
+
+    * Extract data to integrate with data warehouses
+
+    * Perform bulk actions
+
+    * Set up and administer Trust Protection Foundation
+
+    * Onboard teams
+
+    * Create custom, automated business logic and flows between internal systems
+
+
+    All these use cases can be accomplished using the Trust Protection Foundation REST…'
+  version: 26.1.1
+servers:
+- url: /
+  description: Current Host
+- url: https://REPLACEdnsnameME/
+  description: System
+- url: https://{dnsname}/
+  description: Configurable Hostname
+  variables:
+    dnsname:
+      default: localhost
+      description: Production API Hostname
+security:
+- AccessToken: []
+tags:
+- name: SSH Certificate APIs
+  description: The SSH Certificate APIs allow to manage the issuance of special certificates for SSH devices. These endpoints are valid only if you purchased SSH Manager for Machines.
+paths:
+  /vedsdk/sshcertificates/request:
+    post:
+      tags:
+      - SSH Certificate APIs
+      summary: Requests a new SSH certificate
+      description: 'This endpoint can be used to request an SSH certificate based on the supplied parameters.
+
+
+        Prerequisites:
+
+        Requires setup. A master administrator or security team creates a SSH Certificate Issuance Template.
+
+        To see defaults and options, open the template from Configuration. For more information, see the SSH Key Discovery and Remediation Guide.
+
+
+        Permissions:
+
+        - The caller must have View and Create permission to the CA template (CADN).
+
+        - If the caller is passing CADN and PolicyDN: The caller must have View and Create permission to both the Certificate Issuance Template (CADN) and the Policy folder (PolicyDN) for the SSH certificate.
+
+
+        _Required scope: Any_'
+      operationId: Venafi_SshCertificate_WebSDK_SshCertificateRestService_RequestCertificate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SshCertificate_WebSDK_DataContract_Requests_RequestNewCertificateWebRequest'
+        required: true
+      responses:
+        '200':
+          description: SSH certificate has been successfully requested
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SshCertificate_WebSDK_DataContract_RequestCertificateResponse'
+        '400':
+          description: Invalid request
+        '401':
+          description: Unauthorized
+      security:
+      - AccessToken: []
+  /vedsdk/sshcertificates/retrieve:
+    post:
+      tags:
+      - SSH Certificate APIs
+      summary: Returns the available certificate data and optional private key information for…
+      description: '_Required scope: Any_'
+      operationId: Venafi_SshCertificate_WebSDK_SshCertificateRestService_RetrieveCertificate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SshCertificate_WebSDK_DataContract_Requests_RetrieveCertificateWebRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SshCertificate_WebSDK_DataContract_RetrieveCertificateResponse'
+  /vedsdk/sshcertificates/template/available:
+    get:
+      tags:
+      - SSH Certificate APIs
+      summary: Returns a list of SSH CA templates the current user can request certificates…
+      description: '_Required scope: Any_'
+      operationId: Venafi_SshCertificate_WebSDK_SshCertificateRestService_GetAvailableTemplates
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/List_1_SshCertificate_WebSDK_DataContract_AvailableTemplateResponse_'
+  /vedsdk/sshcertificates/template/retrieve:
+    post:
+      tags:
+      - SSH Certificate APIs
+      summary: Returns information about an SSH CA template
+      description: '_Required scope: Any_'
+      operationId: Venafi_SshCertificate_WebSDK_SshCertificateRestService_RetrieveTemplate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SshCertificate_WebSDK_DataContract_Requests_RetrieveTemplateWebRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SshCertificate_WebSDK_DataContract_RetrieveTemplateResponse'
+  /vedsdk/sshcertificates/CaKeyPair/create:
+    post:
+      tags:
+      - SSH Certificate APIs
+      summary: Create new CA Keypair
+      description: '_Required scope: Any_'
+      operationId: Venafi_SshCertificate_WebSDK_SshCertificateRestService_CreateNewCAKeypair
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SshCertificate_WebSDK_DataContract_Requests_CreateNewCAKeypairWebRequest'
+        required: true
+      responses:
+        '200':
+          description: SSH certificate has been successfully requested
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SshCertificate_WebSDK_DataContract_CreateCaKeyPairResponse'
+        '400':
+          description: Invalid request
+        '401':
+          description: Unauthorized
+      security:
+      - AccessToken: []
+components:
+  schemas:
+    SshCertificate_WebSDK_DataContract_Requests_CreateNewCAKeypairWebRequest:
+      type: object
+      properties:
+        Name:
+          type: string
+          description: The friendly name of the CA key.
+        ParentDN:
+          type: string
+          description: The DN of the parent container.
+        KeyAlgorithm:
+          type: string
+          description: DEPRECATED - use PkixParameterSet instead
+        PkixParameterSet:
+          type: string
+          description: The PKIX Parameter Set describing the key algorithm which will be used to generate new key material.
+        KeyStorage:
+          type: string
+          description: The location where the key will be generated and stored.
+        PrivateKeyData:
+          type: string
+          description: The private key material which will be imported.
+        PrivateKeyPassphrase:
+          type: string
+          description: The passphrase which will be used to decrypt the PrivateKeyData.
+      description: The class for new CA keypair.
+    SshCertificate_WebSDK_DataContract_RetrieveTemplateResponse:
+      type: object
+      properties:
+        DN:
+          type: string
+          description: The DN of the template.
+        Guid:
+          type: string
+          description: The unique identifier of the template.
+        Name:
+          type: string
+          description: The name of the template.
+        Contacts:
+          type: array
+          items:
+            type: string
+          description: List identities for users or groups who receive notifications about events pertaining to the object.
+        CertificateObjectNamingPattern:
+          type: string
+          description: Pattern used to name the certificate objects dinamically
+        UseCertificateObjectNamingPattern:
+          type: boolean
+          description: Specify if the certificate object's name will be supplied on the request or if it will be built using a naming pattern
+        CreatedOn:
+          type: string
+          description: The creation date of the template.
+        CAKeyPairDN:
+          type: string
+          description: The CA key pair dn of the template.
+        CAKeyPairGuid:
+          type: string
+          description: The CA key pair guid of the template.
+        CAKeyPair:
+          type: object
+          properties:
+            DN:
+              type: string
+              description: The DN of the CA key pair.
+            Guid:
+              type: string
+              description: The unique identifier of the CA key pair.
+            Name:
+              type: string
+              description: The name of the CA key pair
+            PublicKeyData:
+              type: string
+              description: The CA public key of the requested template in a format which can be directly consumed by OpenSSH daemon.
+            FingerprintSHA256:
+              type: string
+              description: Base64 encoded SHA256 hash of the CA public key.
+            KeyAlgorithm:
+              type: string
+              description: DEPRECATED - use PkixParameterSet instead
+            PkixParameterSet:
+              type: string
+              description: The PKIX Parameter Set describing the algorithm and size/curve of the CA key.
+            CreatedOn:
+              type: string
+              description: The creation date of the CA key.
+          description: CAKeyPair section for the template.
+        Certificate:
+          type: object
+          properties:
+            CertificateDestinationDn:
+              type: string
+              description: The DN of the policy folder where issued certificates will be stored by default.
+            Type:
+              type: string
+              description: The type ("client" or "host") of certificates that this template issues.
+            ValidityPeriod:
+              type: string
+              description: The maximum certificate validity period.
+            AllowedPrivateKeyAlgorithms:
+              type: array
+              items:
+                type: string
+              description: The algorithms of the keys that can be sent for signing.
+            DefaultPrivateKeyAlgorithm:
+              type: string
+              description: The key algorithm and size/curve that will be used when a keys need to be generated by the service.
+            SignatureHashingAlgorithm:
+              type: string
+              description: The hashing algorithm which is used when signing certificates.
+            AllowPrivateKeyReuse:
+              type: boolean
+              description: Allow the reuse of the private key.
+          description: Certificate for the template.
+        AccessControl:
+          type: object
+          properties:
+            DefaultPrincipals:
+              type: array
+              items:
+                type: string
+              description: The default principals set on the certificate template
+            AllowedPrincipalsPatterns:
+              type: array
+              items:
+                type: string
+              description: The patterns which will be used to validate the requested principals.
+            AllowedExtensions:
+              type: array
+              items:
+                type: string
+              description: Includes standard and custom extensions allowed to be requested.
+            DefaultExtensions:
+              type: array
+              items:
+                type: string
+              description: DefaultExtensions
+            AllowedSourceAddresses:
+              type: array
+              items:
+                type: string
+              description: AllowedSourceAddresses
+            DefaultSourceAddresses:
+              type: array
+              items:
+                type: string
+              description: DefaultSourceAddresses
+            AllowedCertificateIdentifierPatterns:
+              type: array
+              items:
+                type: string
+              description: AllowedCertificateIdentifierPatterns
+            DefaultCertificateIdentifier:
+              type: string
+              description: DefaultCertificateIdentifier
+            AllowedForceCommandPatterns:
+              type: array
+              items:
+                type: string
+              description: AllowedForceCommandPatterns
+            DefaultForceCommand:
+              type: string
+              description: DefaultForceCommand
+          description: AccessControl section for the template.
+        APIClient:
+          type: object
+          properties:
+            AllowedToRequestPrincipals:
+              type: boolean
+              description: Enable or disable API clients to specify Principals
+            AllowedToRequestExtensions:
+              type: boolean
+              description: Enable or disable API clients to specify Extensions
+            AllowedToRequestForceCommand:
+              type: boolean
+              description: Allow API clients to specify Force Command
+            AllowedToRequestSourceAddresses:
+              type: boolean
+              description: Enable or disable API clients to specify Source Addresses
+            AllowedToRequestCertificateIdentifier:
+              type: boolean
+              description: Enable or disable API clients to specify Certificate Identifier
+            IncludeIssuedCertificateInRequest:
+              type: boolean
+              description: Enable or disable API clients to receive issued certificates in response to their enrollment requests
+          description: APIClient section for the template.
+        Response:
+          type: object
+          properties:
+            Success:
+              type: boolean
+              description: 'true: The operation succeeded
+
+                false: The operation failed.'
+            ErrorCode:
+              type: integer
+              description: Omitted if Success is true. The code that describes the error if any.
+              format: int32
+            ErrorMessage:
+              type: string
+              description: Omitted if Success is true.The corresponding error message if any.
+          description: SshWebResponse object with result of the operation.
+      description: The class for retrieving ssh certificate template response
+    SshCertificate_WebSDK_DataContract_CreateCaKeyPairResponse:
+      type: object
+      properties:
+        DN:
+          type: string
+          description: The DN of the object.
+        Guid:
+          type: string
+          description: A value that uniquely identifies the object.
+        Name:
+          type: string
+          description: The name of the CaKeyPair.
+        FingerprintSHA256:
+          type: string
+          description: The SHA256 fingerprint of the public key.
+        KeyAlgorithm:
+          type: string
+          description: DEPRECATED - use PkixParameterSet instead
+        PkixParameterSet:
+          type: string
+          description: The PKIX Parameter Set describing the key algorithm.
+        PublicKeyData:
+          type: string
+          description: The public key data.
+        CreatedOn:
+          type: string
+          description: The creation date of the CaKeyPair object.
+        ProcessingDetails:
+          type: object
+          properties:
+            Status:
+              type: string
+              description: The status.
+            StatusDescription:
+              type: string
+              description: The status description.
+          description: The processing details.
+        KeyStorage:
+          type: string
+          description: The key storage.
+        Response:
+          type: object
+          properties:
+            Success:
+              type: boolean
+              description: 'true: The operation succeeded
+
+                false: The operation failed.'
+            ErrorCode:
+              type: integer
+              description: Omitted if Success is true. The code that describes the error if any.
+              format: int32
+            ErrorMessage:
+              type: string
+              description: Omitted if Success is true.The corresponding error message if any.
+          description: SshWebResponse object with result of the operation.
+      description: The class for requesting new CaKeyPair response.
+    List_1_SshCertificate_WebSDK_DataContract_AvailableTemplateResponse_:
+      type: array
+      items:
+        type: object
+        properties:
+          DN:
+            type: string
+            description: The DN of the template.
+          Guid:
+            type: string
+            description: The unique identifier of the template.
+        description: The class defining details of an available for user template.
+    SshCertificate_WebSDK_DataContract_Requests_RetrieveCertificateWebRequest:
+      type: object
+      properties:
+        PrivateKeyPassphrase:
+          type: string
+          description: The passphrase which will be used to wrap the generated private key before it is returned in the API response.
+        IncludePrivateKeyData:
+          type: boolean
+          description: Whether or not to include the private key material.
+        IncludeCertificateDetails:
+          type: boolean
+          description: Whether or not to include the certificate details in the response.
+        DN:
+          type: string
+          description: The DN of the requested object.
+        Guid:
+          type: string
+          description: A value that uniquely identifies the object.
+      description: The class for retrieve certificate request.
+    SshCertificate_WebSDK_DataContract_RetrieveCertificateResponse:
+      type: object
+      properties:
+        Guid:
+          type: string
+          description: A value that uniquely identifies the certificate request.
+        DN:
+          type: string
+          description: The DN of the created SSH certificate object.
+        CertificateData:
+          type: string
+          description: Base-64 encoded string of the issued certificate.
+        PrivateKeyData:
+          type: string
+          description: The private key in base-64 encoded PEM/OpenSSH format which can be directly consumed by SSH clients.
+        PublicKeyData:
+          type: string
+          description: The public key in base-64 encoded OpenSSH format which can be directly consumed by SSH clients.
+        CAGuid:
+          type: string
+          description: Unique identifier of the CA used to sign the requested certificate.
+        ProcessingDetails:
+          type: object
+          properties:
+            Status:
+              type: string
+              description: The current status of the certificate.
+            StatusDescription:
+              type: string
+              description: Description of the current certificate status
+        RequestDetails:
+          type: object
+          properties:
+            DestinationAddress:
+              type: string
+              description: The class for the processing details response.
+            RequestedBy:
+              type: string
+              description: The class for the processing details response.
+            OriginatingIP:
+              type: string
+              description: The class for the processing details response.
+        CADN:
+          type: string
+          description: The DN of the CA used to sign the requested certificate.
+        CertificateDetails:
+          type: object
+          properties:
+            KeyType:
+              type: string
+              description: The type of the key.
+            CertificateType:
+              type: string
+              description: Indicates whether the issued certificate is for client or host authentication.
+            CertificateFingerprintSHA256:
+              type: string
+              description: Base-64 encoded SHA256 hash of the base-64 part of the issued certificate.
+            CAFingerprintSHA256:
+              type: string
+              description: Base-64 encoded SHA256 hash of the public key of the CA used for signing the requested certificate.
+            PublicKeyFingerprintSHA256:
+              type: string
+              description: Base-64 encoded SHA256 hash of the public key that was signed.
+            KeyID:
+              type: string
+              description: The identifier of the issued certificate.
+            SerialNumber:
+              type: string
+              description: The serial number of the certificate.
+            Principals:
+              type: array
+              items:
+                type: string
+              description: The principals of the issued certificate.
+            ValidFrom:
+              type: integer
+              description: A time in second since 1970-01-01 00:00:00 after the certificate is valid.
+              format: int64
+            ValidTo:
+              type: integer
+              description: A time in second since 1970-01-01 00:00:00 before the certificate is valid.
+              format: int64
+            ForceCommand:
+              type: string
+              description: The Force Command of the issued certificate.
+            SourceAddresses:
+              type: array
+              items:
+                type: string
+              description: The Source Addresses of the issued certificate.
+            Extensions:
+              type: object
+              additionalProperties:
+                type: string
+                description: The extensions of the issued certificate.
+              description: "_This property is a dictionary._  \nkey1: value1  \nkey2: value2  \n..."
+          description: The details of the issued certificate.
+        Response:
+          type: object
+          properties:
+            Success:
+              type: boolean
+              description: 'true: The operation succeeded
+
+                false: The operation failed.'
+            ErrorCode:
+              type: integer
+              description: Omitted if Success is true. The code that describes the error if any.
+              format: int32
+            ErrorMessage:
+              type: string
+              description: Omitted if Success is true.The corresponding error message if any.
+          description: SshWebResponse object with result of the operation.
+      description: The class for retrieving certificate response.
+    SshCertificate_WebSDK_DataContract_Requests_RetrieveTemplateWebRequest:
+      type: object
+      properties:
+        IncludeCAKeyPairDetails:
+          type: boolean
+          description: Whether or not to include the CA key pair details in the response.
+        DN:
+          type: string
+          description: The DN of the requested object.
+        Guid:
+          type: string
+          description: A value that uniquely identifies the object.
+      description: The class for retrieve template request.
+    SshCertificate_WebSDK_DataContract_RequestCertificateResponse:
+      type: object
+      properties:
+        DN:
+          type: string
+          description: The DN of the created SSH certificate object.
+        Guid:
+          type: string
+          description: A value that uniquely identifies the certificate object.
+        ProcessingDetails:
+          type: object
+          properties:
+            Status:
+              type: string
+              description: The current status of the certificate.
+            StatusDescription:
+              type: string
+              description: Description of the current certificate status
+          description: Provide the processing details of the certificate.
+        Response:
+          type: object
+          properties:
+            Success:
+              type: boolean
+              description: 'true: The operation succeeded
+
+                false: The operation failed.'
+            ErrorCode:
+              type: integer
+              description: Omitted if Success is true. The code that describes the error if any.
+              format: int32
+            ErrorMessage:
+              type: string
+              description: Omitted if Success is true.The corresponding error message if any.
+          description: SshWebResponse object with result of the operation.
+      description: The class for requesting new certificate response.
+    SshCertificate_WebSDK_DataContract_Requests_RequestNewCertificateWebRequest:
+      type: object
+      properties:
+        CADN:
+          type: string
+          description: The Distinguished Name (DN) of the issuing certificate template which will be used for signing.
+        PolicyDN:
+          type: string
+          description: (Optional) The DN of the policy folder where the certificate object will be created. Omit this parameter if you want the default from the SSH Certificate Issuance Template.
+        ObjectName:
+          type: string
+          description: '(Optional) The friendly name for the certificate object. If not specified, KeyId will be used as friendly name.
+
+            If certificate object with the same name is already present in the Policy folder (PolicyDN), then the old certificate is archived, and the CA issues a new certificate.'
+        DestinationAddress:
+          type: string
+          description: '(Optional) The destination host where the certificate will authenticate. Specify a Fully Qualified Domain name (FQDN) or IP address.
+
+            Only applies to client certificates for reporting or auditing.'
+        Origin:
+          type: string
+          description: (Optional) Additional information, such as the name and version of the calling application (Origin)
+        RequestedBy:
+          type: string
+          description: Prefixed universal ID of the user which requested the certificate.
+        OriginatingIP:
+          type: string
+          description: The IP of the client which requested the certificate.
+        KeyId:
+          type: string
+          description: The certificate identifier (Key ID) of the requested certificate (usually used to determine ownership).
+        Principals:
+          type: array
+          items:
+            type: string
+          description: (Optional) An array of names for which the requested certificate will be valid. Omit this parameter if you want the template defaults to be used.
+        ValidityPeriod:
+          type: string
+          description: '(Optional) The requested certificate expiration time. Cannot be greater than the maximum certificate validity configured on template.
+
+            If not provided, the maximum certificate validity configured on template will be used.
+
+
+            One of the following formats:
+
+            - Relative time: The format is space delimited in w (weeks) d (days) h (hours), m (minutes), s (seconds) Example: 1w 2d 3h 4m 50s.
+
+            - Universal Time Coordinated (UTC): One of these formats:
+
+            - Calendar date: Use the yyyyMMdd format. For example, 20251217.
+
+            - Both date and time: Use the yyyyMMddHHmmss format. For example, 20211217235900.'
+        PublicKeyData:
+          type: string
+          description: '(Optional) The Base-64 encoded public key in OpenSSH format which will be signed. Omit this parameter if you want the service
+
+            to generate a new key pair. The key algorithm must be allowed on the policy.
+
+            The Comment section at the end of the public key is optional.'
+        Extensions:
+          type: object
+          additionalProperties:
+            type: string
+            description: '(Optional) A case sensitive set of key-value pairs that contain certificate extensions. Omit this parameter
+
+              if you want the default from the SSH Certificate Issuance Template. Valid only for client certificates.'
+          description: "_This property is a dictionary._  \nkey1: value1  \nkey2: value2  \n..."
+        ForceCommand:
+          type: string
+          description: (Optional) The command to execute after a successful login. Valid only for client certificates.
+        SourceAddresses:
+          type: array
+          items:
+            type: string
+          description: (Optional) An array of one or more valid Classless Inter-Domain Routing (CIDR) addresses that the certificate should be signed for. Valid only for client certificates.
+        PrivateKeyPassphrase:
+          type: string
+          description: The passphrase which will be used to wrap the generated private key before it is returned in the API response.
+        IncludePrivateKeyData:
+          type: boolean
+          description: Whether or not to include the private key material.
+        IncludeCertificateDetails:
+          type: boolean
+          description: Whether or not to include the certificate details in the response.
+        ProcessingTimeout:
+          type:
+          - integer
+          - 'null'
+          description: How much time the server will hold the connection waiting for certificate issuance before a Pending response is returned.
+          format: int32
+      description: The class for new certificate request.
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer

@@ -1,0 +1,192 @@
+openapi: 3.2.0
+info:
+  title: Trust Protection Foundation WebSDK Discovery Management…
+  description: '# Introduction
+
+    The Trust Protection Foundation Web SDK is a subset of REST APIs that allow you to:
+
+    * Automate certificate management
+
+    * Integrate with DevOps processes
+
+    * Discover machine identities
+
+    * Extract data to integrate with data warehouses
+
+    * Perform bulk actions
+
+    * Set up and administer Trust Protection Foundation
+
+    * Onboard teams
+
+    * Create custom, automated business logic and flows between internal systems
+
+
+    All these use cases can be accomplished using the Trust Protection Foundation REST…'
+  version: 26.1.1
+servers:
+- url: /
+  description: Current Host
+- url: https://REPLACEdnsnameME/
+  description: System
+- url: https://{dnsname}/
+  description: Configurable Hostname
+  variables:
+    dnsname:
+      default: localhost
+      description: Production API Hostname
+security:
+- AccessToken: []
+tags:
+- name: Discovery Management APIs
+  description: The Discovery interface manages certificate, device, and application information from your network.
+paths:
+  /vedsdk/discovery/Import:
+    post:
+      tags:
+      - Discovery Management APIs
+      summary: Import certificates
+      description: 'Adds or updates a set of network certificates into the Policy tree.
+
+
+        _Required scope: certificate:discover_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateDiscoveryRest_PostDiscoveryResults
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebSDK_CertificateRequest_DiscoveryImportRequest'
+        required: true
+      responses:
+        '200':
+          description: Discovery and import completed successfully. The response includes details on newly created and updated certificates. If warnings exist (e.g., some endpoints had no certificates), they are returned in the Warnings field.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_DiscoveryImportResponse'
+        '400':
+          description: Invalid or missing request parameters. The Error property provides more details on why the request was rejected.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_DiscoveryImportResponse'
+      security:
+      - AccessToken: []
+  /vedsdk/discovery/{guid}:
+    parameters:
+    - name: guid
+      in: path
+      description: The Globally Unique Identifier (GUID) of the Network Discovery job to be deleted. This must be a valid GUID in the correct format, and the job must exist in the system.
+      required: true
+      schema:
+        type: string
+    delete:
+      tags:
+      - Discovery Management APIs
+      summary: Delete a discovery job
+      description: 'Deletes a Network Discovery job including all stored results.
+
+
+        _Required scope: certificate:delete_'
+      operationId: Venafi_WebSDK_CertificateRequest_CertificateDiscoveryRest_DiscoveryDelete
+      responses:
+        '200':
+          description: 'Network Discovery job deletion successful. The specified discovery job and all associated scan results were removed from the system. The response includes Success: true.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_DiscoveryDeleteResponse'
+        '400':
+          description: Invalid or missing request parameters. The Error property will contain additional details on the failure reason.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSDK_CertificateRequest_DiscoveryDeleteResponse'
+      security:
+      - AccessToken: []
+components:
+  schemas:
+    WebSDK_CertificateRequest_DiscoveryImportRequest:
+      type: object
+      properties:
+        endpoints:
+          type: array
+          items:
+            type: object
+            properties:
+              ip:
+                type: string
+                description: The device IP.
+              host:
+                type: string
+                description: The device hostname.
+              port:
+                type:
+                - integer
+                - 'null'
+                description: The device port.
+                format: int32
+              certificates:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    certificate:
+                      type: string
+                      description: The certificate data.
+                    fingerprint:
+                      type: string
+                      description: The certificate fingerprint.
+                  description: Discovered certificates data.
+                description: The list of discovered certificates.
+            description: Discovered endpoint.
+          description: A list of network endpoints where certificates should be discovered and imported.
+        zoneName:
+          type: string
+          description: The Distinguished Name (DN) of the policy where discovered certificates should be stored.
+      description: Request to import discovery results.
+    WebSDK_CertificateRequest_DiscoveryImportResponse:
+      type: object
+      properties:
+        zoneName:
+          type: string
+          description: The Distinguished Name (DN) of the policy where the certificates were imported.
+        createdCertificates:
+          type: integer
+          description: A list of certificates that were newly created in the system.
+          format: int32
+        createdInstances:
+          type: integer
+          description: A count of newly created application instances, representing discovered applications that were added to the policy structure.
+          format: int32
+        updatedCertificates:
+          type: integer
+          description: A list of existing certificates that were already present in the policy and updated with new discovery data.
+          format: int32
+        updatedInstances:
+          type: integer
+          description: A count of application instances that were found and updated with new configuration details.
+          format: int32
+        Error:
+          type: string
+          description: A detailed error message if the import process failed. If an error occurs, no certificates or applications will be imported or updated.
+        warnings:
+          type: array
+          items:
+            type: string
+          description: A list of non-critical warnings, such as applications that failed to be created, skipped endpoints due to missing certificate data, or naming conflicts resolved automatically.
+      description: Discovery import response.
+    WebSDK_CertificateRequest_DiscoveryDeleteResponse:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: A detailed error message explaining why the deletion failed (if applicable).
+        Success:
+          type: boolean
+          description: A flag indicating whether the discovery job was successfully deleted.
+      description: The Network Discovery delete method response.
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer

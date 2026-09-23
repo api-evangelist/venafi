@@ -1,0 +1,527 @@
+openapi: 3.2.0
+info:
+  title: Certificate Manager - SaaS Certificate Revocation Approvals…
+  version: '1.0'
+servers:
+- description: US Region
+  url: https://api.venafi.cloud
+- description: EU Region
+  url: https://api.eu.venafi.cloud
+- description: AU Region
+  url: https://api.au.venafi.cloud
+- description: UK Region
+  url: https://api.uk.venafi.cloud
+- description: SG Region
+  url: https://api.sg.venafi.cloud
+- description: CA Region
+  url: https://api.ca.venafi.cloud
+tags:
+- name: Certificate Revocation Approvals
+paths:
+  /v1/certificates/revocations/approvalrules:
+    post:
+      description: Create certificate revocation workflow approval rule
+      operationId: certificaterevocations_approval_rule_create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CertificateRevocationApprovalRulesRequest'
+        description: Properties of the new approval rule.
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateRevocationApprovalRuleOpenApi'
+          description: Approval rule is created. Details in response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse10'
+          description: Incomplete or malformed request.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse10'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Create an approval rule for certificate revocation
+      tags:
+      - Certificate Revocation Approvals
+      x-rbac:
+        permissions:
+          access_type: write
+          description: Ability to create revocation approval rule
+          name: ngts.revocation_approval_rule.create
+        roles:
+        - PKIAdmin
+    get:
+      description: Retrieve all certificate revocation workflow approval rules for the current company.
+      operationId: certificaterevocations_approval_rules_getAll
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Retrieves the details of all certificate revocation workflow approval rules for the company.:
+                  description: Retrieves the details of all certificate revocation workflow approval rules for the company.
+                  summary: Retrieves the details of all certificate revocation workflow approval rules for the company.
+                  value: "    {\n             \"approvalRules\": [\n                  {\n                     \"id\": \"bf628350-1b1d-11ee-8f4b-c3a1fbe3bf93\",\n                     \"name\": \"rule1\",\n                     \"approvalType\": \"ALL\",\n                     \"conditions\": {\n                         \"certificateAuthorityAccountIds\" : [\n                              \"32dbc6a0-1b1b-11ee-ae18-df3505892888\"\n                         ]\n                     },\n                     \"exceptions\" : [\n                        \"applicationIds\": [\n                             \"1abf51c0-1b1b-11ee-bdc6-11a9c83564a3\"\n                         ],\n                         \"requestors\" : [\n                           {\n                               \"id\": \"acdbc6a0-1b1b-11ee-ae18-df3505892890\",\n                               \"type\": \"TEAM\"\n                           }\n                         ]\n                     ]\n                     \"priority\": 1,\n                     \"approvers\": [\n                         {\n                             \"id\": \"ebdbc6a0-1b1b-11ee-ae18-df3505892890\",\n                             \"type\": \"TEAM\"\n                         },\n                         {\n                             \"id\": \"abdbc6a0-1b1b-11ee-ae18-df3505892890\",\n                             \"type\": \"USER\"\n                         }\n                     ],\n                     \"autoRejectionThreshold\": 5,\n                     \"continueProcessingOnException\": false\n                 },\n                 {\n                     \"id\": \"bf628350-1b1d-11ee-8f4b-c3a1fbe3bf93\",\n                     \"name\": \"rule2\",\n                     \"approvalType\": \"ALL\",\n                     \"conditions\": {\n                         \"certificateAuthorityAccountIds\": [\n                             \"44bf51c0-1b1b-11ee-bdc6-11a9c83564a3\"\n                         ]\n                     },\n                     \"priority\": 3,\n                     \"approvers\": [\n                         {\n                             \"id\": \"ebdbc6a0-1b1b-11ee-ae18-df3505892890\",\n                             \"type\": \"TEAM\"\n                         }\n                     ]\n                 },\n                 {\n                     \"id\": \"af628350-1b1d-11ee-8f4b-c3a1fbe3bf93\",\n                     \"name\": \"rule4\",\n                     \"approvalType\": \"ALL\",\n                     \"conditions\": {\n                         \"certificateAuthorityAccountIds\": [\n                             \"44bf51c0-1b1b-11ee-bdc6-11a9c83564a3\"\n                         ]\n                     },\n                     \"priority\": 4,\n                     \"approvers\": [\n                         {\n                             \"id\": \"abdbc6a0-1b1b-11ee-ae18-df3505892890\",\n                             \"type\": \"USER\"\n                         }\n                     ],\n                     \"autoRejectionThreshold\": 5,\n                 }\n             ]\n         }\n"
+              schema:
+                $ref: '#/components/schemas/CertificateRevocationApprovalRulesResponseOpenApi'
+          description: All approval rules for the current company; details in response body.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse10'
+          description: Incomplete or malformed request.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse10'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Get all certificate revocation approval rules
+      tags:
+      - Certificate Revocation Approvals
+      x-rbac:
+        permissions:
+          access_type: read
+          description: Ability to get revocation approval rule
+          name: ngts.revocation_approval_rule.get
+        roles:
+        - PKIAdmin
+  /v1/certificates/revocations/approvalrules/{id}:
+    get:
+      description: Retrieve certificate revocation workflow approval rule with 'id' attribute matching specified value; specified value should be uuid not numeric
+      operationId: certificaterevocations_approval_rule_getById
+      parameters:
+      - description: UUID of an approval rule.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of an approval rule.
+          format: uuid
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Retrieve certificate revocation workflow approval rule with 'id' attribute matching specified value:
+                  description: Retrieve certificate revocation workflow approval rule with 'id' attribute matching specified value
+                  value: "    {\n       \"id\": \"bf628350-1b1d-11ee-8f4b-c3a1fbe3bf93\",\n       \"name\": \"rule1\",\n       \"approvalType\": \"ALL\",\n       \"conditions\": {\n           \"certificateAuthorityAccountIds\" : [\n                \"32dbc6a0-1b1b-11ee-ae18-df3505892888\"\n           ]\n       },\n       \"exceptions\" : [\n          \"applicationIds\": [\n               \"1abf51c0-1b1b-11ee-bdc6-11a9c83564a3\"\n           ],\n           \"requestors\" : [\n             {\n                 \"id\": \"acdbc6a0-1b1b-11ee-ae18-df3505892890\",\n                 \"type\": \"TEAM\"\n             }\n           ]\n       ]\n       \"priority\": 1,\n       \"approvers\": [\n           {\n               \"id\": \"ebdbc6a0-1b1b-11ee-ae18-df3505892890\",\n               \"type\": \"TEAM\"\n           },\n           {\n               \"id\": \"abdbc6a0-1b1b-11ee-ae18-df3505892890\",\n               \"type\": \"USER\"\n           }\n       ],\n       \"autoRejectionThreshold\": 5,\n       \"continueProcessingOnException\": false\n   }\n"
+              schema:
+                $ref: '#/components/schemas/CertificateRevocationApprovalRuleOpenApi'
+          description: Approval rule matching specified id
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse10'
+          description: Request Conditions Failed
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse10'
+          description: Approval rule not found
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse10'
+          description: Request Conditions Failed
+      security:
+      - tppl-api-key: []
+      summary: Retrieve certificate revocation approval rule by id
+      tags:
+      - Certificate Revocation Approvals
+      x-rbac:
+        permissions:
+          access_type: read
+          description: Ability to get revocation approval rule
+          name: ngts.revocation_approval_rule.get
+        roles:
+        - PKIAdmin
+    put:
+      description: Can be used to update specific fields of the approval rule that has the specified `id`
+      operationId: certificaterevocations_approval_rule_update
+      parameters:
+      - description: UUID of an approval rule.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of an approval rule.
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CertificateRevocationApprovalRulesUpdateRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateRevocationApprovalRuleOpenApi'
+          description: Approval rule updated
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse10'
+          description: Request Conditions Failed
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse10'
+          description: Approval rule Not Found
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse10'
+          description: Request Conditions Failed
+      security:
+      - tppl-api-key: []
+      summary: Update certificate revocation workflow approval rule
+      tags:
+      - Certificate Revocation Approvals
+      x-rbac:
+        permissions:
+          access_type: write
+          description: Ability to update revocation approval rule
+          name: ngts.revocation_approval_rule.update
+        roles:
+        - PKIAdmin
+    delete:
+      description: Delete certificate revocation workflow approval rule with 'id' attribute matching specified value; specified value should be uuid not numeric
+      operationId: certificaterevocations_approval_rule_delete
+      parameters:
+      - description: UUID of an approval rule.
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateRevocationApprovalRuleDeleteResponseOpenApi'
+          description: Specified approval rule was deleted
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse10'
+          description: Incomplete or malformed request.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse10'
+          description: Specified approval rule was not found.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse10'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Delete certificate revocation workflow approval rule
+      tags:
+      - Certificate Revocation Approvals
+      x-rbac:
+        permissions:
+          access_type: write
+          description: Ability to delete revocation approval rule
+          name: ngts.revocation_approval_rule.delete
+        roles:
+        - PKIAdmin
+components:
+  schemas:
+    CertificateRevocationApprovalConditionsFilterRuleInformation:
+      properties:
+        certificateAuthorityAccountIds:
+          description: A collection of certificate authority account ids the rule will be applicable to
+          example: 4ece3180-b1e0-11ed-862d-ad36b18e787a
+          format: uuid
+          items:
+            format: uuid
+            type: string
+          minItems: 1
+          type: array
+      required:
+      - certificateAuthorityAccountIds
+      type: object
+    ApproverPropertyOpenApi:
+      description: Approver with id that can be only user type
+      properties:
+        id:
+          description: UUID specific to the approver user/team
+          example: 8268d820-a08d-11ed-bbc0-252385d6d389
+          format: uuid
+          type: string
+        type:
+          description: Approver type
+          example: USER
+          type: string
+      type: object
+    CertificateRevocationApprovalRulesUpdateRequest:
+      properties:
+        approvers:
+          description: A collection of approvers specified by type and id
+          items:
+            $ref: '#/components/schemas/ApproverProperty'
+          minItems: 1
+          type: array
+          uniqueItems: true
+        atLeast:
+          description: If the type of the approval is AT_LEAST then specify how many people have to approve
+          example: 2
+          format: int32
+          minimum: 1
+          type: integer
+        autoRejectionThreshold:
+          description: Auto rejection threshold. After the defined number of days since revocation request creation, the request is automatically rejected, if it is not approved
+          example: 5
+          maximum: 99
+          minimum: 1
+          type: number
+        conditions:
+          $ref: '#/components/schemas/CertificateRevocationApprovalConditionsFilterRuleInformation'
+        continueProcessingOnException:
+          default: false
+          description: Continue with next approval rules when match an approval rule exception condition
+          type: boolean
+        exceptions:
+          $ref: '#/components/schemas/CertificateRevocationApprovalExceptionsFilterRuleInformation'
+        finalApprover:
+          description: UUID of the final approver
+          example: 8268d820-a08d-11ed-bbc0-252385d6d390
+          format: uuid
+          type: string
+        name:
+          description: Approval rule name
+          example: Approval rule for built in CA
+          maxLength: 64
+          type: string
+        priority:
+          description: Rule priority. The order in which the rules will be executed. Starts from 1 (highest priority).
+          example: 5
+          minimum: 1
+          type: number
+        type:
+          description: The type of the approval rule
+          enum:
+          - ALL
+          - AT_LEAST
+          example: AT_LEAST
+          type: string
+      required:
+      - approvers
+      - conditions
+      - name
+      - type
+      type: object
+    CertificateRevocationApprovalRuleDeleteResponseOpenApi:
+      properties:
+        id:
+          description: Approval rule `id`
+          format: uuid
+          type: string
+        name:
+          description: Approval rule name
+          type: string
+      type: object
+    CertificateRevocationApprovalRulesRequest:
+      properties:
+        approvers:
+          description: A collection of approvers specified by type and id
+          items:
+            $ref: '#/components/schemas/ApproverProperty'
+          minItems: 1
+          type: array
+          uniqueItems: true
+        atLeast:
+          description: If the type of the approval is AT_LEAST then specify how many people have to approve
+          example: 2
+          format: int32
+          minimum: 1
+          type: integer
+        autoRejectionThreshold:
+          description: Auto rejection threshold. After the defined number of days since revocation request creation, the request is automatically rejected, if it is not approved
+          example: 5
+          maximum: 99
+          minimum: 1
+          type: number
+        conditions:
+          $ref: '#/components/schemas/CertificateRevocationApprovalConditionsFilterRuleInformation'
+        continueProcessingOnException:
+          default: false
+          description: Continue with next approval rules when match an approval rule exception condition
+          type: boolean
+        exceptions:
+          $ref: '#/components/schemas/CertificateRevocationApprovalExceptionsFilterRuleInformation'
+        finalApprover:
+          description: UUID of the final approver
+          example: 8268d820-a08d-11ed-bbc0-252385d6d390
+          format: uuid
+          type: string
+        name:
+          description: Approval rule name
+          example: Approval rule for built in CA
+          maxLength: 64
+          type: string
+        type:
+          description: The type of the approval rule
+          enum:
+          - ALL
+          - AT_LEAST
+          example: AT_LEAST
+          type: string
+      required:
+      - approvers
+      - conditions
+      - name
+      - type
+      type: object
+    CertificateRevocationApprovalExceptionsFilterRuleInformation:
+      properties:
+        applicationIds:
+          description: A collection of application ids the rule won't be applied to
+          example: 5ece3180-b1e0-11ed-862d-ad36b18e787a
+          format: uuid
+          items:
+            format: uuid
+            type: string
+          type: array
+        requestors:
+          description: A collection of approvers, specified by type and id, for which the rule won't be applied
+          items:
+            $ref: '#/components/schemas/ApproverProperty'
+          type: array
+          uniqueItems: true
+      type: object
+    ErrorInformation8:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue8'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+    ErrorResponse10:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation8'
+          type: array
+      type: object
+    CertificateRevocationApprovalRuleOpenApi:
+      properties:
+        approvers:
+          description: A collection of approvers specified by type and id
+          items:
+            $ref: '#/components/schemas/ApproverProperty'
+          type: array
+          uniqueItems: true
+        atLeast:
+          description: If the type of the approval is AT_LEAST then specify how many people have to approve
+          format: int32
+          type: integer
+        autoRejectionThreshold:
+          description: Auto rejection threshold. After the defined number of days since revoke request creation, the request is automatically rejected, if it is not approved
+          example: 5
+          maximum: 99
+          minimum: 1
+          type: number
+        conditions:
+          $ref: '#/components/schemas/CertificateRevocationApprovalConditionsFilterRuleInformation'
+        creationDate:
+          description: The date a approval rule was created
+          example: '2023-01-10T09:12:28Z'
+          format: date-time
+          type: string
+        exceptions:
+          $ref: '#/components/schemas/CertificateRevocationApprovalExceptionsFilterRuleInformation'
+        finalApprover:
+          $ref: '#/components/schemas/ApproverPropertyOpenApi'
+        id:
+          description: Approval rule `id`
+          format: uuid
+          type: string
+        modificationDate:
+          description: The date a approval rule was modified
+          example: '2023-01-11T09:12:28Z'
+          format: date-time
+          type: string
+        name:
+          description: Approval rule name
+          type: string
+        priority:
+          description: Priority of the rule
+          format: int32
+          type: integer
+        type:
+          description: The type of the approval rule
+          type: string
+      type: object
+    ApproverProperty:
+      properties:
+        id:
+          format: uuid
+          type: string
+        type:
+          enum:
+          - USER
+          - TEAM
+          type: string
+      type: object
+    AnyValue8:
+      description: Can be any value - string, number, boolean, array or object.
+    CertificateRevocationApprovalRulesResponseOpenApi:
+      properties:
+        approvalRules:
+          items:
+            $ref: '#/components/schemas/CertificateRevocationApprovalRuleOpenApi'
+          type: array
+      type: object
+  securitySchemes:
+    service-account:
+      in: header
+      name: service-account
+      type: apiKey
+    tppl-api-key:
+      in: header
+      name: tppl-api-key
+      type: apiKey
+x-readme:
+  samples-languages:
+  - curl
+  - go
+  - java
+  - javascript
+  - node
+  - python

@@ -1,0 +1,585 @@
+openapi: 3.2.0
+info:
+  title: Certificate Manager - SaaS Machine Identities API
+  version: '1.0'
+servers:
+- description: US Region
+  url: https://api.venafi.cloud
+- description: EU Region
+  url: https://api.eu.venafi.cloud
+- description: AU Region
+  url: https://api.au.venafi.cloud
+- description: UK Region
+  url: https://api.uk.venafi.cloud
+- description: SG Region
+  url: https://api.sg.venafi.cloud
+- description: CA Region
+  url: https://api.ca.venafi.cloud
+tags:
+- name: Machine Identities
+paths:
+  /v1/machineidentities:
+    get:
+      description: Retrieves the details of all machine identities..
+      operationId: machineidentities_getAll
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineIdentityResponse'
+          description: All Machine Identities for the company.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Incomplete or malformed request.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Get the details of all machine identities
+      tags:
+      - Machine Identities
+      x-rbac:
+        permissions:
+          access_type: read
+          description: Ability to get machine identity
+          name: ngts.machine_identity.get
+        roles:
+        - Guest
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+    post:
+      description: Creates a machine identity for a machine.
+      operationId: machineidentities_create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MachineIdentityCreationRequest'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineIdentityInformation'
+          description: Machine Identity was created; details in response body.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Add a machine identity to a machine
+      tags:
+      - Machine Identities
+      x-rbac:
+        permissions:
+          access_type: write
+          description: Ability to create a machine identity
+          name: ngts.machine_identity.create
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+  /v1/machineidentities/{id}:
+    get:
+      description: Retrieves the machine identity that has the specified `id`.
+      operationId: machineidentities_getById
+      parameters:
+      - description: UUID of a Machine Identity.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a Machine Identity.
+          format: uuid
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineIdentityInformation'
+          description: Machine Identity matching specified id
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Request Conditions Failed
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Machine Identity not found
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Request Conditions Failed
+      security:
+      - tppl-api-key: []
+      summary: Get a machine identity's details
+      tags:
+      - Machine Identities
+      x-rbac:
+        permissions:
+          access_type: read
+          description: Ability to get machine identity
+          name: ngts.machine_identity.get
+        roles:
+        - Guest
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+    delete:
+      description: Deletes the machine identity that has the specified `id`.
+      operationId: machineidentities_delete
+      parameters:
+      - description: UUID of a Machine Identity.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a Machine Identity.
+          format: uuid
+          type: string
+      responses:
+        '204':
+          description: Machine Identity was deleted.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Incomplete or malformed request.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Machine Identity not found.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Remove a machine identity
+      tags:
+      - Machine Identities
+      x-rbac:
+        permissions:
+          access_type: write
+          description: Ability to delete machine identity
+          name: ngts.machine_identity.delete
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+    patch:
+      description: CUpdates specific details of the machine identity that has the specified `id`.
+      operationId: machineidentities_update
+      parameters:
+      - description: UUID of a Machine Identity.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a Machine Identity.
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MachineIdentityUpdateRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineIdentityInformation'
+          description: Machine Identity was updated; details in response body.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Incomplete or malformed request.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Machine Identity not found.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Update a machine identity's details
+      tags:
+      - Machine Identities
+      x-rbac:
+        permissions:
+          access_type: write
+          description: Ability to update machine identity
+          name: ngts.machine_identity.update
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+  /v1/machineidentities/{id}/workflows:
+    post:
+      description: Used to initiate a workflow like 'testConnection' for the machine that has the specified `id`.
+      operationId: machineidentities_initiateWorkflow
+      parameters:
+      - description: UUID of a Machine Identity.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a Machine Identity.
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MachineIdentityWorkflowRequest'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineIdentityWorkflowInformation'
+          description: Workflow was initiated; details in response body.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Incomplete or malformed request.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Machine identity not found.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Initiate a machine workflow
+      tags:
+      - Machine Identities
+      x-rbac:
+        permissions:
+          access_type: write
+          description: Ability to create a machine identity workflow
+          name: ngts.machine_identity_workflow.create
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+  /v1/machineidentitysearch:
+    post:
+      description: Retrieves the details of machine identities that match the specified search expression.
+      operationId: getMachineIdentitiesByExpression
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MachineIdentitySearchRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineIdentityDocumentResponse'
+          description: Details of Machine Identities in response body.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Incomplete or malformed request.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Incomplete or malformed request.
+      summary: Get the details of machine identities matching search criteria
+      tags:
+      - Machine Identities
+      x-rbac:
+        permissions:
+          access_type: read
+          description: Ability to search for machine identity
+          name: ngts.machine_identity.search
+        roles:
+        - Guest
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+components:
+  schemas:
+    MachineIdentityWorkflowInformation:
+      properties:
+        workflowId:
+          type: string
+        workflowName:
+          type: string
+      type: object
+    OrderObject:
+      properties:
+        direction:
+          enum:
+          - ASC
+          - DESC
+          type: string
+        field:
+          type: string
+      type: object
+    MachineIdentityDocumentResponse:
+      properties:
+        machineIdentities:
+          items:
+            $ref: '#/components/schemas/MachineIdentityDocumentInformation'
+          type: array
+        totalCount:
+          format: int64
+          type: integer
+      type: object
+    Ordering:
+      properties:
+        orders:
+          items:
+            $ref: '#/components/schemas/OrderObject'
+          type: array
+      type: object
+    MachineIdentityInformation:
+      properties:
+        binding:
+          $ref: '#/components/schemas/AnyValue2'
+        certificateId:
+          format: uuid
+          type: string
+        companyId:
+          format: uuid
+          type: string
+        creationDate:
+          format: date-time
+          type: string
+        id:
+          format: uuid
+          type: string
+        keystore:
+          $ref: '#/components/schemas/AnyValue2'
+        lastSeenOn:
+          format: date-time
+          type: string
+        machineId:
+          format: uuid
+          type: string
+        metadata:
+          $ref: '#/components/schemas/AnyValue2'
+        modificationDate:
+          format: date-time
+          type: string
+        status:
+          enum:
+          - NEW
+          - PENDING
+          - INSTALLED
+          - DISCOVERED
+          - VALIDATED
+          - MISSING
+          - FAILED
+          type: string
+        tsgId:
+          type: string
+      type: object
+    MachineIdentityWorkflowRequest:
+      properties:
+        workflowInput:
+          $ref: '#/components/schemas/ProvisionCertificateWorkflowInputInformation'
+        workflowName:
+          type: string
+      required:
+      - workflowName
+      type: object
+    MachineIdentityCreationRequest:
+      properties:
+        binding:
+          $ref: '#/components/schemas/AnyValue2'
+        certificateId:
+          format: uuid
+          type: string
+        keystore:
+          $ref: '#/components/schemas/AnyValue2'
+        machineId:
+          format: uuid
+          type: string
+      required:
+      - certificateId
+      - machineId
+      type: object
+    ErrorResponse2:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation2'
+          type: array
+      type: object
+    ProvisionCertificateWorkflowInputInformation:
+      properties:
+        wsClientId:
+          minLength: 1
+          type: string
+      required:
+      - wsClientId
+      type: object
+    MachineIdentitySearchRequest:
+      properties:
+        expression:
+          $ref: '#/components/schemas/AnyValue2'
+        ordering:
+          $ref: '#/components/schemas/Ordering'
+        paging:
+          $ref: '#/components/schemas/Paging'
+      type: object
+    ErrorInformation2:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue2'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+    MachineIdentityDocumentInformation:
+      properties:
+        applicationIds:
+          items:
+            format: uuid
+            type: string
+          type: array
+        binding:
+          $ref: '#/components/schemas/AnyValue2'
+        certificateFingerprint:
+          type: string
+        certificateId:
+          format: uuid
+          type: string
+        certificateName:
+          type: string
+        certificateValidityEnd:
+          format: date-time
+          type: string
+        companyId:
+          format: uuid
+          type: string
+        creationDate:
+          format: date-time
+          type: string
+        id:
+          format: uuid
+          type: string
+        keystore:
+          $ref: '#/components/schemas/AnyValue2'
+        lastSeenOn:
+          format: date-time
+          type: string
+        machineId:
+          format: uuid
+          type: string
+        machineName:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/AnyValue2'
+        modificationDate:
+          format: date-time
+          type: string
+        status:
+          enum:
+          - NEW
+          - PENDING
+          - INSTALLED
+          - DISCOVERED
+          - VALIDATED
+          - MISSING
+          - FAILED
+          type: string
+      type: object
+    MachineIdentityUpdateRequest:
+      properties:
+        binding:
+          $ref: '#/components/schemas/AnyValue2'
+        certificateId:
+          format: uuid
+          type: string
+        keystore:
+          $ref: '#/components/schemas/AnyValue2'
+      type: object
+    MachineIdentityResponse:
+      properties:
+        machineIdentities:
+          items:
+            $ref: '#/components/schemas/MachineIdentityInformation'
+          type: array
+      type: object
+    AnyValue2:
+      description: Can be any value - string, number, boolean, array or object.
+    Paging:
+      properties:
+        pageNumber:
+          format: int32
+          type: integer
+        pageSize:
+          format: int32
+          type: integer
+      type: object
+  securitySchemes:
+    service-account:
+      in: header
+      name: service-account
+      type: apiKey
+    tppl-api-key:
+      in: header
+      name: tppl-api-key
+      type: apiKey
+x-readme:
+  samples-languages:
+  - curl
+  - go
+  - java
+  - javascript
+  - node
+  - python

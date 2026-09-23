@@ -1,0 +1,27 @@
+# Front Door AI Index — venafi — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: venafi
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: venafi.com
+  final_host: www.paloaltonetworks.com
+  ownership: own
+  owner: venafi
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 6
+  host_score: 6
+  density: 6.58
+  words: 912
+  tiers:
+    agentic: 1
+    core: 5
+    model: 0
+  ambiguous: 3
+  top_terms:
+    AI: 5
+    automation: 3
+    agentic: 1

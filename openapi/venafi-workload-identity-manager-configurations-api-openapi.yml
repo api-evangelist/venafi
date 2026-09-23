@@ -1,0 +1,1147 @@
+openapi: 3.2.0
+info:
+  title: Certificate Manager - SaaS Workload Identity Manager…
+  version: '1.0'
+servers:
+- description: US Region
+  url: https://api.venafi.cloud
+- description: EU Region
+  url: https://api.eu.venafi.cloud
+- description: AU Region
+  url: https://api.au.venafi.cloud
+- description: UK Region
+  url: https://api.uk.venafi.cloud
+- description: SG Region
+  url: https://api.sg.venafi.cloud
+- description: CA Region
+  url: https://api.ca.venafi.cloud
+tags:
+- name: Workload Identity Manager Configurations
+paths:
+  /v1/distributedissuers/configurations:
+    post:
+      deprecated: true
+      description: 'Adds a new Issuer Configuration, which links the following together - Sub CA Provider, Policies used to determine which certificates can be issued, and the IdP (Identity Provider) the Issuer should trust when receiving signed JWTs from its clients.
+
+
+        Deprecated: use `POST /v1/distributedissuers/configurations/DISTRIBUTED_ISSUER` instead. This alias creates a `DISTRIBUTED_ISSUER` configuration and behaves identically.'
+      operationId: configurations_create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfigurationCreateRequest'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtendedConfigurationGetResponse'
+          description: Issuer configuration successfully created; details in response body.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse3'
+          description: "The request was rejected. Possible causes, by error code:\n- 10006: Malformed JSON body or an unknown/unrecognized field;\n  `minTlsVersion` is not TLS12 or TLS13; `clientAuthentication.type` is\n  missing or unknown; or a cloud-provider `regions` value is not a\n  recognized AWS or Google region.\n- 50200: `name` is empty.\n- 50201: `subCaProviderId` is missing.\n- 50202: The `policyIds` list is empty.\n- 50205: A configuration with the same `name` already exists.\n- 50207: JWT_JWKS `urls` list is empty.\n- 50208: JWT_OIDC `baseUrl` is empty.\n- 50209: JWT_OIDC `audience` is empty.\n- 50212: AWS `accountIds` contains a value that is not a 12-digit string.\n- 50213: AWS `accountIds` list is empty.\n- 50214: AWS `regions` is missing.\n- 50216: Azure `subscriptionIds` list is empty.\n- 50218: Google `projectIdentifiers` contains an invalid identifier.\n- 50219: Google `projectIdentifiers` list is empty.\n- 50220: Google `regions` is missing.\n- 50221: `name` is longer than 64 characters.\n- 50222: A JWT_JWKS URL is not a valid HTTPS URL of at most 2048 characters.\n- 50223: JWT_OIDC `baseUrl` is longer than 2048 characters.\n- 50224: JWT_OIDC `audience` is longer than 256 characters.\n- 50225: `clientAuthorization` configuration custom-claim alias exceeds 128 characters.\n- 50226: `clientAuthorization` allow-all-policies custom-claim alias exceeds 128 characters.\n- 50227: `clientAuthorization` allowed-policies custom-claim alias exceeds 128 characters.\n- 50228: `advancedSettings` is invalid (e.g. `includeRawCertDataInAuditLog`\n  is true while `enableIssuanceAuditLog` is disabled).\n- 50229: JWT_STANDARD_CLAIMS `clients` list is empty.\n- 50230: Two JWT_STANDARD_CLAIMS clients share the same issuer/JWKS-URI pair.\n- 50231: A JWT_STANDARD_CLAIMS client issuer is not a valid HTTPS URL while `jwksUri` is absent.\n- 50232: JWT_STANDARD_CLAIMS `audience` is empty.\n- 50233: JWT_STANDARD_CLAIMS `audience` is longer than 256 characters.\n- 50234: A JWT_STANDARD_CLAIMS client `name` is empty.\n- 50235: A JWT_STANDARD_CLAIMS client `name` is longer than 64 characters.\n- 50236: A JWT_STANDARD_CLAIMS client `issuer` is empty.\n- 50237: A JWT_STANDARD_CLAIMS client `issuer` is longer than 2048 characters.\n- 50238: A JWT_STANDARD_CLAIMS client `jwksUri` is longer than 2048 characters.\n- 50239: A JWT_STANDARD_CLAIMS client `jwksUri` is invalid.\n- 50240: A JWT_STANDARD_CLAIMS client `subjects` list is empty.\n- 50241: A JWT_STANDARD_CLAIMS client `allowedPolicyIds` list is empty.\n- 50242: JWT_OIDC `baseUrl` is not a valid HTTPS URL."
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse3'
+          description: 'The referenced entity was not found. Possible causes, by error code:
+
+            - 50203: The referenced Sub CA provider does not exist in this tenant.
+
+            - 50204: One or more of the referenced policies do not exist in this tenant.'
+      security:
+      - tppl-api-key: []
+      summary: Create a new Issuer configuration
+      tags:
+      - Workload Identity Manager Configurations
+      x-rbac:
+        permissions:
+          access_type: write
+          description: Ability to create issuer configuration
+          name: ngts.issuer_configuration.create
+        roles:
+        - PKIAdmin
+    get:
+      description: Retrieves a list of all Issuer Configurations. Configurations link together Sub CA Providers, Workload Issuance Policies and Identity Provider information. Together these allow an instance of an Issuer to obtain a Sub CA certificate and use it to issue certificates.
+      operationId: configurations_getAll
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigurationListResponse'
+          description: All Issuer configurations.
+      security:
+      - tppl-api-key: []
+      summary: Get the details of all Issuer configurations
+      tags:
+      - Workload Identity Manager Configurations
+      x-rbac:
+        permissions:
+          access_type: read
+          description: Ability to get issuer configuration
+          name: ngts.issuer_configuration.get
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+        - Guest
+  /v1/distributedissuers/configurations/{id}:
+    get:
+      description: Retrieves the details of the existing Issuer configuration for the specified `id`.
+      operationId: configurations_getById
+      parameters:
+      - description: Issuer configuration UUID
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtendedConfigurationGetResponse'
+          description: Specified Issuer configuration found; details in response body.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse3'
+          description: 'The request was rejected. Possible causes, by error code:
+
+            - 10055: The `id` path parameter is not a valid UUID.'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse3'
+          description: 'The referenced entity was not found. Possible causes, by error code:
+
+            - 10051: No Issuer configuration with the given `id` exists in this tenant.'
+      security:
+      - tppl-api-key: []
+      summary: Get configurations details for a specific Issuer configuration
+      tags:
+      - Workload Identity Manager Configurations
+      x-rbac:
+        permissions:
+          access_type: read
+          description: Ability to get issuer configuration
+          name: ngts.issuer_configuration.get
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+        - Guest
+    patch:
+      deprecated: true
+      description: 'Updates (replaces) fields on an Issuer configuration that has the specified `id`. Only fields specified in the request will be updated. Fields not specified in the request are not modified.
+
+
+        Deprecated: use `PATCH /v1/distributedissuers/configurations/DISTRIBUTED_ISSUER/{id}` instead. This alias updates a `DISTRIBUTED_ISSUER` configuration and behaves identically; it returns not-found for a configuration of any other kind.'
+      operationId: configurations_update
+      parameters:
+      - description: Issuer configuration UUID
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              An example for updating some details of an Issuer configuration.:
+                description: An example for updating some details of an Issuer configuration.
+                value:
+                  clientAuthentication:
+                    type: JWT_JWKS
+                    urls:
+                    - https://test.com
+                  name: New configuration name
+            schema:
+              $ref: '#/components/schemas/ConfigurationUpdateRequest'
+        description: Issuer configuration's details to update.
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Updated Issuer configuration.:
+                  description: Updated Issuer configuration.
+                  summary: Updated Issuer configuration.
+                  value:
+                    clientAuthentication:
+                      type: JWT_JWKS
+                      urls:
+                      - https://test.com
+                    companyId: 03eb6e61-9806-11ed-84f2-c747fb71e467
+                    creationDate: '2022-10-10T14:50:41.71Z'
+                    id: 7268d820-a08d-11ed-bbc0-252385d6d389
+                    modificationDate: '2023-12-12T20:00:10.5Z'
+                    name: New configuration name
+                    policyIds:
+                    - 8ae92800-b1e0-11ed-859d-b39255f965ee
+              schema:
+                $ref: '#/components/schemas/ExtendedConfigurationGetResponse'
+          description: Specified Issuer configuration updated; details in response body.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse3'
+          description: "The request was rejected. Supplied fields are validated with the same\nrules as on create. Possible causes, by error code:\n- 10006: Malformed JSON body or an unknown/immutable field (e.g.\n  `companyId`, `subTsgId`); `minTlsVersion` is not TLS12 or TLS13;\n  `clientAuthentication.type` is missing or unknown; or a cloud-provider\n  `regions` value is not a recognized AWS or Google region.\n- 10055: The `id` path parameter is not a valid UUID.\n- 50200: `name` is empty.\n- 50205: A different configuration with the same `name` already exists.\n- 50207: JWT_JWKS `urls` list is empty.\n- 50208: JWT_OIDC `baseUrl` is empty.\n- 50209: JWT_OIDC `audience` is empty.\n- 50212: AWS `accountIds` contains a value that is not a 12-digit string.\n- 50213: AWS `accountIds` list is empty.\n- 50214: AWS `regions` is missing.\n- 50216: Azure `subscriptionIds` list is empty.\n- 50218: Google `projectIdentifiers` contains an invalid identifier.\n- 50219: Google `projectIdentifiers` list is empty.\n- 50220: Google `regions` is missing.\n- 50221: `name` is longer than 64 characters.\n- 50222: A JWT_JWKS URL is not a valid HTTPS URL of at most 2048 characters.\n- 50223: JWT_OIDC `baseUrl` is longer than 2048 characters.\n- 50224: JWT_OIDC `audience` is longer than 256 characters.\n- 50225: `clientAuthorization` configuration custom-claim alias exceeds 128 characters.\n- 50226: `clientAuthorization` allow-all-policies custom-claim alias exceeds 128 characters.\n- 50227: `clientAuthorization` allowed-policies custom-claim alias exceeds 128 characters.\n- 50228: `advancedSettings` is invalid.\n- 50229: JWT_STANDARD_CLAIMS `clients` list is empty.\n- 50230: Two JWT_STANDARD_CLAIMS clients share the same issuer/JWKS-URI pair.\n- 50231: A JWT_STANDARD_CLAIMS client issuer is not a valid HTTPS URL while `jwksUri` is absent.\n- 50232: JWT_STANDARD_CLAIMS `audience` is empty.\n- 50233: JWT_STANDARD_CLAIMS `audience` is longer than 256 characters.\n- 50234: A JWT_STANDARD_CLAIMS client `name` is empty.\n- 50235: A JWT_STANDARD_CLAIMS client `name` is longer than 64 characters.\n- 50236: A JWT_STANDARD_CLAIMS client `issuer` is empty.\n- 50237: A JWT_STANDARD_CLAIMS client `issuer` is longer than 2048 characters.\n- 50238: A JWT_STANDARD_CLAIMS client `jwksUri` is longer than 2048 characters.\n- 50239: A JWT_STANDARD_CLAIMS client `jwksUri` is invalid.\n- 50240: A JWT_STANDARD_CLAIMS client `subjects` list is empty.\n- 50241: A JWT_STANDARD_CLAIMS client `allowedPolicyIds` list is empty.\n- 50242: JWT_OIDC `baseUrl` is not a valid HTTPS URL."
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse3'
+          description: 'The referenced entity was not found. Possible causes, by error code:
+
+            - 10051: No Issuer configuration with the given `id` exists in this tenant.
+
+            - 50203: A newly referenced Sub CA provider does not exist in this tenant.
+
+            - 50204: One or more newly referenced policies do not exist in this tenant.'
+      security:
+      - tppl-api-key: []
+      summary: Update an Issuer configuration's details
+      tags:
+      - Workload Identity Manager Configurations
+      x-rbac:
+        permissions:
+          access_type: write
+          description: Ability to update issuer configuration
+          name: ngts.issuer_configuration.update
+        roles:
+        - PKIAdmin
+    delete:
+      description: Deletes the Issuer configuration for the specified `id`. Before deleting a configuration, be sure no Issuer instances use that configuration, or they will no longer function.
+      operationId: configurations_delete
+      parameters:
+      - description: Issuer configuration UUID
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigurationDeleteResponse'
+          description: Specified Issuer configuration was deleted.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse3'
+          description: 'The request was rejected. Possible causes, by error code:
+
+            - 10055: The `id` path parameter is not a valid UUID.'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse3'
+          description: 'The referenced entity was not found. Possible causes, by error code:
+
+            - 10051: No Issuer configuration with the given `id` exists in this tenant.'
+      security:
+      - tppl-api-key: []
+      summary: Remove an Issuer configuration
+      tags:
+      - Workload Identity Manager Configurations
+      x-rbac:
+        permissions:
+          access_type: write
+          description: Ability to delete issuer configuration
+          name: ngts.issuer_configuration.delete
+        roles:
+        - PKIAdmin
+components:
+  schemas:
+    ConfigurationListResponse:
+      properties:
+        configurations:
+          items:
+            $ref: '#/components/schemas/ExtendedConfigurationGetResponse'
+          type: array
+      type: object
+    ConfigurationGetResponse:
+      discriminator:
+        mapping:
+          DISTRIBUTED_ISSUER: '#/components/schemas/DistributedIssuerConfigurationGetResponse'
+          FORWARD_TRUST_PROXY: '#/components/schemas/ForwardTrustProxyConfigurationGetResponse'
+        propertyName: issuerKind
+      oneOf:
+      - $ref: '#/components/schemas/DistributedIssuerConfigurationGetResponse'
+      - $ref: '#/components/schemas/ForwardTrustProxyConfigurationGetResponse'
+      properties:
+        companyId:
+          description: UUID specific to your company
+          example: 03eb6e61-9806-11ed-84f2-c747fb71e467
+          format: uuid
+          type: string
+        creationDate:
+          description: When the configuration was initially created
+          example: '2022-10-10T14:50:41.71Z'
+          format: date-time
+          type: string
+        id:
+          description: UUID of the configuration
+          example: 7268d820-a08d-11ed-bbc0-252385d6d389
+          format: uuid
+          type: string
+        issuerKind:
+          description: The kind of issuer this configuration represents
+          enum:
+          - DISTRIBUTED_ISSUER
+          - FORWARD_TRUST_PROXY
+          type: string
+        modificationDate:
+          description: When the configuration was last modified
+          example: '2023-12-12T20:00:10.5Z'
+          format: date-time
+          type: string
+        name:
+          description: Name of the configuration
+          example: Some configuration
+          type: string
+        subTsgId:
+          description: Sub-TSG ID that owns this configuration (null for Primary TSG)
+          example: a007d406bf
+          type: string
+      required:
+      - issuerKind
+      type: object
+    DistributedIssuerConfigurationGetResponse:
+      properties:
+        advancedSettings:
+          $ref: '#/components/schemas/AdvancedSettings'
+        clientAuthentication:
+          $ref: '#/components/schemas/ClientAuthentication'
+        clientAuthorization:
+          $ref: '#/components/schemas/ClientAuthorization'
+        cloudProviders:
+          $ref: '#/components/schemas/CloudProviders'
+        controllerAllowedPolicyIds:
+          description: Array of UUIDs of policies that the kubernetes controller is permitted to use
+          example:
+          - 8ae92800-b1e0-11ed-859d-b39255f965ee
+          items:
+            format: uuid
+            type: string
+          type: array
+        issuerKind:
+          description: The kind of issuer this configuration represents
+          enum:
+          - DISTRIBUTED_ISSUER
+          type: string
+        longLivedCertCount:
+          description: Number of long lived certificates
+          example: 2
+          format: int64
+          type: integer
+        minTlsVersion:
+          $ref: '#/components/schemas/MinTLSVersion'
+        policyIds:
+          description: Array of UUIDs of policies to associate with the configuration
+          example:
+          - 8ae92800-b1e0-11ed-859d-b39255f965ee
+          items:
+            format: uuid
+            type: string
+          type: array
+        serviceAccountIds:
+          items:
+            format: uuid
+            type: string
+          type: array
+        shortLivedCertCount:
+          description: Number of short lived certificates
+          example: 20
+          format: int64
+          type: integer
+        totalCertCount:
+          description: Total number of certificates — the sum of `longLivedCertCount`, `shortLivedCertCount` and `ultraShortLivedCertCount`. Derived, read-only.
+          example: 222
+          format: int64
+          type: integer
+        ultraShortLivedCertCount:
+          description: Number of ultra short lived certificates
+          example: 200
+          format: int64
+          type: integer
+        unixSocketAllowedPolicyIds:
+          description: Array of UUIDs of policies that are permitted to be used when using the unix socket
+          example:
+          - 8ae92800-b1e0-11ed-859d-b39255f965ee
+          items:
+            format: uuid
+            type: string
+          type: array
+      required:
+      - issuerKind
+      type: object
+    KeyAlgorithm1:
+      description: Key algorithm type
+      enum:
+      - RSA_2048
+      - RSA_3072
+      - RSA_4096
+      - EC_P256
+      - EC_P384
+      - EC_P521
+      - EC_ED25519
+      example: EC_P256
+      type: string
+    ClientAuthentication:
+      discriminator:
+        mapping:
+          JWT_JWKS: '#/components/schemas/JWTJWKSAuthentication'
+          JWT_OIDC: '#/components/schemas/JWTOIDCAuthentication'
+          JWT_STANDARD_CLAIMS: '#/components/schemas/JWTStandardClaimsAuthentication'
+        propertyName: type
+      oneOf:
+      - $ref: '#/components/schemas/JWTStandardClaimsAuthentication'
+      - $ref: '#/components/schemas/JWTJWKSAuthentication'
+      - $ref: '#/components/schemas/JWTOIDCAuthentication'
+      properties:
+        type:
+          type: string
+      required:
+      - type
+      type: object
+    AdvancedSettings:
+      properties:
+        enableIssuanceAuditLog:
+          description: Whether audit log entries must be generated for each issued certificate
+          example: false
+          type: boolean
+        includeRawCertDataInAuditLog:
+          description: Whether the raw certificate data must be included in the audit log entry
+          example: false
+          type: boolean
+        requireFIPSCompliantBuild:
+          description: Whether FIPS-compliant build is required
+          example: false
+          type: boolean
+      type: object
+    SubCAProviderGetResponse:
+      properties:
+        caAccountId:
+          description: UUID of the CA account used by this Sub CA provider
+          example: 4ece3180-b1e0-11ed-862d-ad36b18e787a
+          format: uuid
+          type: string
+        caProductOptionId:
+          description: UUID of the CA product option used by this Sub CA provider
+          example: 6b3d8d20-b1e0-11ed-9c2f-953e35982bbd
+          format: uuid
+          type: string
+        caType:
+          $ref: '#/components/schemas/CAType'
+        commonName:
+          description: Common name
+          example: example.com
+          type: string
+        companyId:
+          description: UUID specific to your company
+          example: 03eb6e61-9806-11ed-84f2-c747fb71e467
+          format: uuid
+          type: string
+        country:
+          description: Country
+          example: US
+          type: string
+        creationDate:
+          description: When the Sub CA provider was initially created
+          example: '2022-10-10T14:50:41.71Z'
+          format: date-time
+          type: string
+        id:
+          description: UUID of the Sub CA provider
+          example: 2f3c6030-b1e0-11ed-a3ed-e3dbaf56a746
+          format: uuid
+          type: string
+        keyAlgorithm:
+          $ref: '#/components/schemas/KeyAlgorithm1'
+        locality:
+          description: Locality
+          example: San Antonio
+          type: string
+        modificationDate:
+          description: When the Sub CA provider was last modified
+          example: '2023-12-12T20:00:10.5Z'
+          format: date-time
+          type: string
+        name:
+          description: Name of the Sub CA provider
+          example: Some Sub CA provider
+          type: string
+        organization:
+          description: Organization
+          example: Some organization
+          type: string
+        organizationalUnit:
+          description: Organizational unit
+          example: Some organizational unit
+          type: string
+        pkcs11:
+          $ref: '#/components/schemas/SubCAProviderPKCS11Configuration'
+        shareWithAll:
+          description: Shared with all sub-TSGs
+          example: false
+          type: boolean
+        sharedWithSubTsgIds:
+          items:
+            description: Sub-TSG IDs this SubCA provider is shared with
+            type: string
+          type: array
+          uniqueItems: true
+        stateOrProvince:
+          description: State or province
+          example: Texas
+          type: string
+        validityPeriod:
+          description: ISO8601 Period Format
+          example: P30D
+          format: PnYnMnDTnHnMnS
+          type: string
+      type: object
+    AzureCloudProvider:
+      properties:
+        subscriptionIds:
+          description: Array of Azure subscription IDs each of which should be UUID
+          example:
+          - 8d10da13-8125-4ba9-a717-bf7490507b3d
+          items:
+            format: uuid
+            type: string
+          minItems: 1
+          type: array
+      required:
+      - subscriptionIds
+      type: object
+    ExtendedConfigurationGetResponse:
+      allOf:
+      - $ref: '#/components/schemas/ConfigurationGetResponse'
+      - properties:
+          policies:
+            description: The subset of `policyDefinitions` whose id also appears in `policyIds` — i.e. the policies the configuration itself considers active, excluding those referenced only by a JWT client's `allowedPolicyIds`.
+            items:
+              $ref: '#/components/schemas/PolicyGetResponse'
+            type: array
+          policyDefinitions:
+            description: Every policy this configuration references — the union of `policyIds` and every JWT_STANDARD_CLAIMS client's per-client `allowedPolicyIds`. Equal to `policies` when no JWT client grants a policy outside `policyIds`; otherwise a strict superset.
+            items:
+              $ref: '#/components/schemas/PolicyGetResponse'
+            type: array
+          subCaProvider:
+            $ref: '#/components/schemas/SubCAProviderGetResponse'
+        type: object
+    JWTClient:
+      properties:
+        allowedPolicyIds:
+          description: Array of UUIDs of policies that the client is permitted to use
+          example:
+          - 8ae92800-b1e0-11ed-859d-b39255f965ee
+          items:
+            format: uuid
+            type: string
+          minItems: 1
+          type: array
+        issuer:
+          description: Issuer of the JWT
+          example: https://kubernetes.default.svc
+          maxLength: 2048
+          type: string
+        jwksUri:
+          description: URL used to pull the trusted signing keys used for validation
+          example: https://www.example.com:6443/jwks
+          maxLength: 2048
+          type: string
+        name:
+          description: Name of the client
+          example: Some client
+          maxLength: 64
+          type: string
+        subjects:
+          description: Array of subjects of the JWT
+          example:
+          - system:serviceaccount:venafi:application-team-1
+          items:
+            type: string
+          minItems: 1
+          type: array
+      required:
+      - allowedPolicyIds
+      - issuer
+      - name
+      - subjects
+      type: object
+    JWTOIDCAuthentication:
+      properties:
+        allowedPolicyIds:
+          description: Array of UUIDs of policies that the client is permitted to use. Server-populated on responses from the parent configuration's policyIds; ignored on requests.
+          example:
+          - 8ae92800-b1e0-11ed-859d-b39255f965ee
+          items:
+            format: uuid
+            type: string
+          readOnly: true
+          type: array
+        audience:
+          description: OpenId audience
+          example: Client1
+          maxLength: 256
+          type: string
+        baseUrl:
+          description: JWT OpenId base URL
+          example: https://openid.example.com
+          maxLength: 2048
+          type: string
+        type:
+          description: Discriminator for the client authentication method
+          enum:
+          - JWT_OIDC
+          type: string
+      required:
+      - type
+      - audience
+      - baseUrl
+      type: object
+    ClientAuthorization:
+      properties:
+        customClaimsAliases:
+          $ref: '#/components/schemas/CustomClaimsAliases'
+      type: object
+    Property:
+      properties:
+        allowedValues:
+          items:
+            type: string
+          type: array
+        defaultValues:
+          items:
+            type: string
+          type: array
+        maxOccurrences:
+          format: int32
+          type: integer
+        minOccurrences:
+          format: int32
+          type: integer
+        type:
+          enum:
+          - IGNORED
+          - FORBIDDEN
+          - OPTIONAL
+          - REQUIRED
+          - LOCKED
+          type: string
+      type: object
+    SubCAProviderPKCS11Configuration:
+      properties:
+        allowedClientLibraries:
+          description: A collection of strings each of which represents SHA256 hash of an allowed HSM client library
+          example:
+          - c34d199f2e30bb679cd9b8533b99975465aefe8b023be1b37972f1ab43ab7b2d
+          items:
+            type: string
+          type: array
+        partitionLabel:
+          description: HSM Partition Label
+          example: workload-identity-manager-hsm-partition
+          type: string
+        partitionSerialNumber:
+          description: HSM Partition Serial Number
+          example: '1444210958933'
+          pattern: ^[A-Fa-fx0-9]{0,18}$
+          type: string
+        pin:
+          description: HSM PIN
+          example: '1234'
+          type: string
+          writeOnly: true
+        signingEnabled:
+          description: Indicates whether HSM signing is enabled or not
+          example: true
+          type: boolean
+      type: object
+    CAType:
+      description: Type of CA this Sub CA provider works with
+      enum:
+      - MOCKCA
+      - DIGICERT
+      - GLOBALSIGN
+      - BUILTIN
+      - ENTRUST
+      - MICROSOFT
+      - ACME
+      - ZTPKI
+      - GLOBALSIGNMSSL
+      - TPP
+      example: BUILTIN
+      type: string
+    ConfigurationDeleteResponse:
+      properties:
+        id:
+          description: UUID of the configuration
+          example: 7268d820-a08d-11ed-bbc0-252385d6d389
+          format: uuid
+          type: string
+        name:
+          description: Name of the configuration
+          example: Some configuration
+          type: string
+      type: object
+    ErrorResponse3:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/Error1'
+          type: array
+      type: object
+    AWSCloudProvider:
+      properties:
+        accountIds:
+          description: Array of AWS account IDs each of which should be a 12-digit identifier
+          example:
+          - '123456789012'
+          items:
+            type: string
+          minItems: 1
+          type: array
+        regions:
+          description: Array of AWS regions
+          example:
+          - us-west-1
+          items:
+            enum:
+            - us-east-1
+            - us-east-2
+            - us-west-1
+            - us-west-2
+            - af-south-1
+            - ap-east-1
+            - ap-south-2
+            - ap-southeast-3
+            - ap-southeast-4
+            - ap-south-1
+            - ap-northeast-3
+            - ap-northeast-2
+            - ap-southeast-1
+            - ap-southeast-2
+            - ap-northeast-1
+            - ca-central-1
+            - eu-central-1
+            - eu-west-1
+            - eu-west-2
+            - eu-south-1
+            - eu-west-3
+            - eu-south-2
+            - eu-north-1
+            - eu-central-2
+            - me-south-1
+            - me-central-1
+            - sa-east-1
+            - us-gov-east-1
+            - us-gov-west-1
+            type: string
+          type: array
+      required:
+      - accountIds
+      - regions
+      type: object
+    MinTLSVersion:
+      description: Minimum required TLS protocol version
+      enum:
+      - TLS12
+      - TLS13
+      type: string
+    ExtendedKeyUsage:
+      description: Extended key usage
+      enum:
+      - ANY
+      - SERVER_AUTH
+      - CLIENT_AUTH
+      - CODE_SIGNING
+      - EMAIL_PROTECTION
+      - IPSEC_ENDSYSTEM
+      - IPSEC_TUNNEL
+      - IPSEC_USER
+      - TIME_STAMPING
+      - OCSP_SIGNING
+      - DVCS
+      - SBGP_CERT_AA_SERVER_AUTH
+      - SCVP_RESPONDER
+      - EAP_OVER_PPP
+      - EAP_OVER_LAN
+      - SCVP_SERVER
+      - SCVP_CLIENT
+      - IPSEC_IKE
+      - CAPWAP_AC
+      - CAPWAP_WTP
+      - IPSEC_IKE_INTERMEDIATE
+      - SMARTCARD_LOGON
+      type: string
+    CustomClaimsAliases:
+      properties:
+        allowAllPolicies:
+          maxLength: 128
+          type: string
+        allowedPolicies:
+          maxLength: 128
+          type: string
+        configuration:
+          maxLength: 128
+          type: string
+      type: object
+    ConfigurationUpdateRequest:
+      properties:
+        advancedSettings:
+          $ref: '#/components/schemas/AdvancedSettings'
+        clientAuthentication:
+          $ref: '#/components/schemas/ClientAuthentication'
+        clientAuthorization:
+          $ref: '#/components/schemas/ClientAuthorization'
+        cloudProviders:
+          $ref: '#/components/schemas/CloudProviders'
+        minTlsVersion:
+          $ref: '#/components/schemas/MinTLSVersion'
+        name:
+          description: Name of the configuration
+          example: Some configuration
+          maxLength: 64
+          type: string
+        policyIds:
+          description: Array of UUIDs of policies to associate with the configuration
+          example:
+          - 8ae92800-b1e0-11ed-859d-b39255f965ee
+          items:
+            format: uuid
+            type: string
+          minItems: 1
+          type: array
+        serviceAccountIds:
+          items:
+            format: uuid
+            type: string
+          type: array
+        subCaProviderId:
+          description: UUID of Sub CA provider to associate with the configuration
+          example: 2f3c6030-b1e0-11ed-a3ed-e3dbaf56a746
+          format: uuid
+          type: string
+      type: object
+    CloudProviders:
+      properties:
+        aws:
+          $ref: '#/components/schemas/AWSCloudProvider'
+        azure:
+          $ref: '#/components/schemas/AzureCloudProvider'
+        google:
+          $ref: '#/components/schemas/GoogleCloudProvider'
+      type: object
+    JWTStandardClaimsAuthentication:
+      properties:
+        audience:
+          description: Recipients that the JWT is intended for
+          example: Client1
+          maxLength: 256
+          type: string
+        clients:
+          description: List with clients, identified by processing JWTs that include standard/registered claims
+          items:
+            $ref: '#/components/schemas/JWTClient'
+          minItems: 1
+          type: array
+        type:
+          description: Discriminator for the client authentication method
+          enum:
+          - JWT_STANDARD_CLAIMS
+          type: string
+      required:
+      - type
+      - audience
+      - clients
+      type: object
+    SANs:
+      description: Subject alternative names
+      properties:
+        dnsNames:
+          $ref: '#/components/schemas/Property'
+        ipAddresses:
+          $ref: '#/components/schemas/Property'
+        rfc822Names:
+          $ref: '#/components/schemas/Property'
+        uniformResourceIdentifiers:
+          $ref: '#/components/schemas/Property'
+      type: object
+    PolicyGetResponse:
+      properties:
+        companyId:
+          description: UUID specific to your company
+          example: 03eb6e61-9806-11ed-84f2-c747fb71e467
+          format: uuid
+          type: string
+        creationDate:
+          description: When the policy was initially created
+          example: '2022-10-10T14:50:41.71Z'
+          format: date-time
+          type: string
+        extendedKeyUsages:
+          description: Extended key usages
+          example:
+          - CLIENT_AUTH
+          - SERVER_AUTH
+          items:
+            $ref: '#/components/schemas/ExtendedKeyUsage'
+          type: array
+        id:
+          description: UUID of the policy
+          example: 8ae92800-b1e0-11ed-859d-b39255f965ee
+          format: uuid
+          type: string
+        keyAlgorithm:
+          $ref: '#/components/schemas/KeyAlgorithmInformation'
+        keyUsages:
+          description: Key usages
+          example:
+          - keyEncipherment
+          - digitalSignature
+          items:
+            $ref: '#/components/schemas/KeyUsage'
+          type: array
+        modificationDate:
+          description: When the policy was last modified
+          example: '2023-12-12T20:00:10.5Z'
+          format: date-time
+          type: string
+        name:
+          description: Name of the policy
+          example: Some policy
+          type: string
+        sans:
+          $ref: '#/components/schemas/SANs'
+        shareWithAll:
+          description: Shared with all sub-TSGs
+          example: false
+          type: boolean
+        sharedWithSubTsgIds:
+          items:
+            description: Sub-TSG IDs this policy is shared with
+            type: string
+          type: array
+          uniqueItems: true
+        subject:
+          $ref: '#/components/schemas/SubjectAttributes'
+        validityPeriod:
+          description: ISO8601 Period Format
+          example: P30D
+          format: PnYnMnDTnHnMnS
+          type: string
+      type: object
+    ForwardTrustProxyConfigurationGetResponse:
+      description: Configuration that issues forward-trust proxy intermediate certificates. It references only a Sub CA provider; the policy, client authentication/authorization, cloud-provider, advanced-settings, min-TLS-version and service-account fields do not apply.
+      properties:
+        issuerKind:
+          description: The kind of issuer this configuration represents
+          enum:
+          - FORWARD_TRUST_PROXY
+          type: string
+        subCaProviderId:
+          description: UUID of the Sub CA provider associated with the configuration
+          example: 7268d820-a08d-11ed-bbc0-252385d6d389
+          format: uuid
+          type: string
+      required:
+      - issuerKind
+      type: object
+    JWTJWKSAuthentication:
+      properties:
+        allowedPolicyIds:
+          description: Array of UUIDs of policies that the client is permitted to use. Server-populated on responses from the parent configuration's policyIds; ignored on requests.
+          example:
+          - 8ae92800-b1e0-11ed-859d-b39255f965ee
+          items:
+            format: uuid
+            type: string
+          readOnly: true
+          type: array
+        type:
+          description: Discriminator for the client authentication method
+          enum:
+          - JWT_JWKS
+          type: string
+        urls:
+          description: Array of JWT JWKS urls
+          example:
+          - https://jwks.example.com
+          items:
+            type: string
+          minItems: 1
+          type: array
+      required:
+      - type
+      - urls
+      type: object
+    GoogleCloudProvider:
+      properties:
+        projectIdentifiers:
+          description: Array of Google project identifiers each of which should be a string with int64 number or 6 to 30 lowercase letters, digits, or hyphens, should start with a letter and not contain trailing hyphens
+          example:
+          - '415104041262'
+          - tokyo-rain-123
+          items:
+            type: string
+          minItems: 1
+          type: array
+        regions:
+          description: Array of Google regions
+          example:
+          - us-west1
+          items:
+            enum:
+            - asia-east1
+            - asia-east2
+            - asia-northeast1
+            - asia-northeast2
+            - asia-northeast3
+            - asia-south1
+            - asia-south2
+            - asia-southeast1
+            - asia-southeast2
+            - australia-southeast1
+            - australia-southeast2
+            - europe-central2
+            - europe-north1
+            - europe-southwest1
+            - europe-west1
+            - europe-west12
+            - europe-west2
+            - europe-west3
+            - europe-west4
+            - europe-west6
+            - europe-west8
+            - europe-west9
+            - me-central1
+            - me-west1
+            - northamerica-northeast1
+            - northamerica-northeast2
+            - southamerica-east1
+            - southamerica-west1
+            - us-central1
+            - us-east1
+            - us-east4
+            - us-east5
+            - us-south1
+            - us-west1
+            - us-west2
+            - us-west3
+            - us-west4
+            type: string
+          type: array
+      required:
+      - projectIdentifiers
+      - regions
+      type: object
+    Error1:
+      description: A single error. The numeric `code` is stable and matches the codes listed at the start of each cause in the endpoints' error-response descriptions, so clients can branch on it instead of parsing `message`.
+      properties:
+        args:
+          description: Positional values interpolated into the message (e.g. the offending field value or entity id).
+          items:
+            type: object
+          type: array
+        code:
+          description: Stable numeric error code identifying the specific failure.
+          format: int32
+          type: integer
+        message:
+          description: Human-readable description of the error.
+          type: string
+      type: object
+    ConfigurationCreateRequest:
+      allOf:
+      - $ref: '#/components/schemas/ConfigurationUpdateRequest'
+      - required:
+        - name
+        - policyIds
+        - subCaProviderId
+        type: object
+    KeyAlgorithmInformation:
+      description: Key algorithm
+      properties:
+        allowedValues:
+          description: Key algorithm allowed values
+          items:
+            $ref: '#/components/schemas/KeyAlgorithm1'
+          minItems: 1
+          type: array
+        defaultValue:
+          $ref: '#/components/schemas/KeyAlgorithm1'
+      required:
+      - allowedValues
+      - defaultValue
+      type: object
+    KeyUsage:
+      description: Key usage
+      enum:
+      - digitalSignature
+      - nonRepudiation
+      - keyEncipherment
+      - dataEncipherment
+      - keyAgreement
+      - keyCertSign
+      - cRLSign
+      - encipherOnly
+      - decipherOnly
+      type: string
+    SubjectAttributes:
+      description: Subject attributes
+      properties:
+        commonName:
+          $ref: '#/components/schemas/Property'
+        country:
+          $ref: '#/components/schemas/Property'
+        locality:
+          $ref: '#/components/schemas/Property'
+        organization:
+          $ref: '#/components/schemas/Property'
+        organizationalUnit:
+          $ref: '#/components/schemas/Property'
+        stateOrProvince:
+          $ref: '#/components/schemas/Property'
+      type: object
+  securitySchemes:
+    service-account:
+      in: header
+      name: service-account
+      type: apiKey
+    tppl-api-key:
+      in: header
+      name: tppl-api-key
+      type: apiKey
+x-readme:
+  samples-languages:
+  - curl
+  - go
+  - java
+  - javascript
+  - node
+  - python

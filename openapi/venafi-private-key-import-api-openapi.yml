@@ -1,0 +1,246 @@
+openapi: 3.2.0
+info:
+  title: Certificate Manager - SaaS Private Key Import API
+  version: '1.0'
+servers:
+- description: US Region
+  url: https://api.venafi.cloud
+- description: EU Region
+  url: https://api.eu.venafi.cloud
+- description: AU Region
+  url: https://api.au.venafi.cloud
+- description: UK Region
+  url: https://api.uk.venafi.cloud
+- description: SG Region
+  url: https://api.sg.venafi.cloud
+- description: CA Region
+  url: https://api.ca.venafi.cloud
+tags:
+- name: Private Key Import
+paths:
+  /v1/certificates/imports:
+    post:
+      operationId: certificates_import
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CertificateImportRequest1'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateImportResponse1'
+          description: Certificates and private keys imported
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse1'
+          description: Request Conditions Failed
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse1'
+          description: Request Conditions Failed
+      security:
+      - tppl-api-key: []
+      summary: Import a list of certificates and their associated private key pairs
+      tags:
+      - Private Key Import
+      x-rbac:
+        path-prefix: outagedetection
+        permissions:
+          access_type: write
+          description: Ability to import certificate
+          name: ngts.certificate.import
+        roles:
+        - PKIAdmin
+  /v1/certificates/imports/{id}:
+    get:
+      operationId: certificatesImport_getByImportId
+      parameters:
+      - description: Import id associated with the result of importing a list of certificates and private keys
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateImportStatusDetailResponse'
+          description: Import details matching the specified import id
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse1'
+          description: Request Conditions Failed
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse1'
+          description: Import details not found
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse1'
+          description: Request Conditions Failed
+      security:
+      - tppl-api-key: []
+      summary: Retrieve import details
+      tags:
+      - Private Key Import
+      x-rbac:
+        path-prefix: outagedetection
+        permissions:
+          access_type: read
+          description: Ability to get import details
+          name: ngts.certificate_import_details.get
+        roles:
+        - PKIAdmin
+components:
+  schemas:
+    CertificateImportRequest1:
+      properties:
+        edgeInstanceId:
+          description: Id for edge instance
+          format: uuid
+          type: string
+        encryptionKeyId:
+          description: Id for data encryption key
+          minLength: 1
+          type: string
+        importInformation:
+          description: List of the certificates and private key pairs to import
+          items:
+            $ref: '#/components/schemas/CertificateImportInformation'
+          maxItems: 100
+          minItems: 1
+          type: array
+      required:
+      - edgeInstanceId
+      - encryptionKeyId
+      - importInformation
+      type: object
+    ErrorInformation1:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue1'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+    CertificateImportResponse1:
+      properties:
+        creationDate:
+          description: Import creation date of certificates and private keys
+          format: date-time
+          type: string
+        id:
+          description: Import id used to check the status of the bulk operation
+          type: string
+      type: object
+    CertificateImportStatusDetailResponse:
+      properties:
+        id:
+          description: Import id
+          format: uuid
+          type: string
+        results:
+          description: Status detail information for each certificate and private key imported related to the import id
+          items:
+            $ref: '#/components/schemas/CertificateImportStatusDetail'
+          type: array
+        status:
+          description: Status of bulk import
+          enum:
+          - PROCESSING
+          - COMPLETED
+          - WAITING
+          - FAILED
+          type: string
+      type: object
+    AnyValue1:
+      description: Can be any value - string, number, boolean, array or object.
+    ErrorResponse1:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation1'
+          type: array
+      type: object
+    CertificateImportStatusDetail:
+      description: Status detail information for each certificate and private key imported related to the import id
+      properties:
+        certificateBytes:
+          description: Bytes of the imported certificate
+          format: byte
+          type: string
+        fingerprint:
+          description: Unique identifier for the imported certificate
+          type: string
+        reason:
+          description: Reason for the status result
+          type: string
+        status:
+          description: Result status for the import
+          enum:
+          - IMPORTED
+          - FAILED
+          - SKIPPED
+          - PROCESSING
+          type: string
+      type: object
+    CertificateImportInformation:
+      description: List of the certificates and private key pairs to import
+      properties:
+        certificate:
+          description: Certificate to import
+          type: string
+        dekEncryptedPassword:
+          description: Password to decrypt the certificate
+          type: string
+        dekEncryptedPrivateKey:
+          description: Format of the private key
+          type: string
+        passwordEncryptedPrivateKey:
+          description: Private key for certificate to import
+          type: string
+        pkcs12Keystore:
+          description: pkcs12 keystore base64 encoded string
+          type: string
+      required:
+      - certificate
+      - dekEncryptedPrivateKey
+      - passwordEncryptedPrivateKey
+      type: object
+  securitySchemes:
+    service-account:
+      in: header
+      name: service-account
+      type: apiKey
+    tppl-api-key:
+      in: header
+      name: tppl-api-key
+      type: apiKey
+x-readme:
+  samples-languages:
+  - curl
+  - go
+  - java
+  - javascript
+  - node
+  - python

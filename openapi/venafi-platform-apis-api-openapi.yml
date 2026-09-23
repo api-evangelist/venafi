@@ -1,0 +1,656 @@
+openapi: 3.2.0
+info:
+  title: Trust Protection Foundation WebSDK Platform APIs API
+  description: '# Introduction
+
+    The Trust Protection Foundation Web SDK is a subset of REST APIs that allow you to:
+
+    * Automate certificate management
+
+    * Integrate with DevOps processes
+
+    * Discover machine identities
+
+    * Extract data to integrate with data warehouses
+
+    * Perform bulk actions
+
+    * Set up and administer Trust Protection Foundation
+
+    * Onboard teams
+
+    * Create custom, automated business logic and flows between internal systems
+
+
+    All these use cases can be accomplished using the Trust Protection Foundation REST…'
+  version: 26.1.1
+servers:
+- url: /
+  description: Current Host
+- url: https://REPLACEdnsnameME/
+  description: System
+- url: https://{dnsname}/
+  description: Configurable Hostname
+  variables:
+    dnsname:
+      default: localhost
+      description: Production API Hostname
+security:
+- AccessToken: []
+tags:
+- name: Platform APIs
+  description: 'The ServerStatus endpoints allow you to query if a Trust Protection Foundation is in the active or idle state. This can be useful in configurations where
+
+    the standby feature is enabled and load balancers are used. This API allows load balancers, for example, to check server
+
+    status to determine if a server endpoint should be part of a balanced group.'
+paths:
+  /vedsdk/serverstatus/idle:
+    get:
+      tags:
+      - Platform APIs
+      summary: Check if idle
+      description: 'This call is the inverse of **active**
+
+
+        _Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_ServerStatusRest_GetStandby
+      responses:
+        '200':
+          description: Server is idle
+        '404':
+          description: Server is active
+      security:
+      - AccessToken: []
+  /vedsdk/serverstatus/active:
+    get:
+      tags:
+      - Platform APIs
+      summary: Check if active
+      description: 'This call is the inverse of **idle**
+
+
+        _Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_ServerStatusRest_GetActive
+      responses:
+        '200':
+          description: Server is active
+        '404':
+          description: Server is idle
+      security:
+      - AccessToken: []
+  /vedsdk/BusStatus/getstatus:
+    post:
+      tags:
+      - Platform APIs
+      summary: Request bus participant status
+      description: '_Required scope: admin_'
+      operationId: Venafi_Core_WebSDK_BusStatusRest_GetStatus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type:
+              - object
+              - 'null'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_BusStatusWebResponse_getstatus'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/BusStatus/getmeshdnsname:
+    post:
+      tags:
+      - Platform APIs
+      summary: Get mesh partner DNS name
+      description: '_Required scope: admin_'
+      operationId: Venafi_Core_WebSDK_BusStatusRest_GetMeshDnsName
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_BusStatusWebRequest_getmeshdnsname'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_BusStatusWebResponse_getmeshdnsname'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/BusStatus/setmeshdnsname:
+    post:
+      tags:
+      - Platform APIs
+      summary: Set mesh partner DNS name
+      description: '_Required scope: admin_'
+      operationId: Venafi_Core_WebSDK_BusStatusRest_SetMeshDnsName
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_BusStatusWebRequest_setmeshdnsname'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_BusStatusWebResponse_setmeshdnsname'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/platform/delete:
+    post:
+      tags:
+      - Platform APIs
+      summary: Delete an engine
+      description: '_Required scope: configuration:delete_'
+      operationId: Venafi_Platform_WebSDK_PlatformRest_DeletePlatform
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Platform_WebSDK_PlatformWebRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Platform_WebSDK_PlatformWebResponse'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+components:
+  schemas:
+    Core_WebSDK_BusStatusWebResponse_setmeshdnsname:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: Indicates whether the request was successfully completed
+        Status:
+          type: object
+          properties:
+            ReportingEngine:
+              type: string
+              description: The CN of the TPP engine identity
+            Mesh:
+              type: boolean
+              description: Indicates if bus operates in mesh mode
+            MeshPort:
+              type: integer
+              description: The port used for bus connections
+              format: int32
+            Status:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    MeshDnsName:
+                      type: string
+                      description: The configured DNS name used to connect to in mesh mode
+                    EngineIdentity:
+                      type: string
+                      description: The identity of the TPP engine
+                    UnreachableBusPartners:
+                      type: array
+                      items:
+                        type: string
+                      description: "**null** if all partners are reachable or if operating in central MQTT broker mode. Otherwise, \na list of engine identities that aren't reachable"
+                    CurrentLatency:
+                      type: integer
+                      description: Database latency
+                      format: int32
+                    CurrentWorkload:
+                      type: integer
+                      description: ToDo workload
+                      format: int32
+                    StandbyMode:
+                      type: integer
+                      description: Standby mode
+                      format: int32
+                    LoadedModules:
+                      type: array
+                      items:
+                        type: string
+                      description: If the application is Trust Protection Foundation service, the list of loaded service modules. Otherwise **null**
+                    ProcessType:
+                      type: string
+                      description: 'The type of the process reporting the status.
+
+                        Possible values:
+
+                        * Application
+
+                        * Service
+
+                        * IIS
+
+
+                        All valid values are defined as constants in the _ProcessTypes_ class'
+                    ProcessId:
+                      type: integer
+                      description: Gets the numerical process identifier
+                      format: int32
+                    ProcessIdentity:
+                      type: string
+                      description: The Windows identity of the reporting application
+                    StartTimeISO8601:
+                      type: string
+                      description: The date and time (UTC) indicating when the status was last updated, in ISO-8601 format
+                    LastSeenISO8601:
+                      type: string
+                      description: The date and time (UTC) indicating when the application was last seen, in ISO-8601 format
+                    SendingHost:
+                      type: string
+                      description: The engine that generated the record
+                    SendingApplication:
+                      type: string
+                      description: The application/process the record describes
+                    NoResponse:
+                      type: boolean
+                      description: '**true** if the engine did not respond to the status request or is offline, **false** if the engine is responsive'
+                    CoreReceivedMessageCount:
+                      type: integer
+                      description: Number of messages Core has received from MQTT
+                      format: int64
+                    CoreBackloggedMessagePeak:
+                      type: integer
+                      description: Highest number of Message Bus messages that had been received from MQTT but not yet been handled by Core
+                      format: int64
+                    BrokerDroppedMessageCount:
+                      type: integer
+                      description: Number of Message Bus messages the broker dropped and didn't deliver because the mailbox was full
+                      format: int64
+                    BrokerAcceptedMessageCount:
+                      type: integer
+                      description: Number of Message Bus messages the broker accepted for delivery
+                      format: int64
+                    BrokerPendingOutgoingPeak:
+                      type: integer
+                      description: Peak number of messages the broker had pending, waiting to be sent over the network
+                      format: int64
+                  description: Response message for bus status requests
+                description: Connected applications
+              description: 'A dictionary, with the engine identity as key, holding a list of status messages for each connected application
+
+
+                **Key**: Engine identity'
+            StatusLastUpdatedISO8601:
+              type: string
+              description: The date and time (UTC) indicating when the status was last updated, in ISO-8601 format
+          description: The bus status
+    Core_WebSDK_BusStatusWebRequest_getmeshdnsname:
+      type: object
+      properties:
+        Engine:
+          type: string
+          description: The name of the engine whose mesh DNS name to get
+    Platform_WebSDK_PlatformWebResponse:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: '**true** if the request was successfully completed, **false** otherwise'
+        Error:
+          type: string
+          description: '**null** if the request was successfully completed, a string describing the error otherwise'
+      description: ''
+    Core_WebSDK_BusStatusWebRequest_setmeshdnsname:
+      type: object
+      properties:
+        Engine:
+          type: string
+          description: The name of the engine whose mesh DNS name to set
+        MeshDnsName:
+          type: string
+          description: The DNS name to use when attempting to connect to the engine
+    Core_WebSDK_BusStatusWebResponse_getmeshdnsname:
+      type: object
+      properties:
+        DnsName:
+          type: string
+          description: The automatically detected DNS name used for connecting to the engine in mesh mode.
+        MeshDnsName:
+          type: string
+          description: The configured DNS name to use when connecting to the engine in mesh mode.
+        Success:
+          type: boolean
+          description: Indicates whether the request was successfully completed
+        Status:
+          type: object
+          properties:
+            ReportingEngine:
+              type: string
+              description: The CN of the TPP engine identity
+            Mesh:
+              type: boolean
+              description: Indicates if bus operates in mesh mode
+            MeshPort:
+              type: integer
+              description: The port used for bus connections
+              format: int32
+            Status:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    MeshDnsName:
+                      type: string
+                      description: The configured DNS name used to connect to in mesh mode
+                    EngineIdentity:
+                      type: string
+                      description: The identity of the TPP engine
+                    UnreachableBusPartners:
+                      type: array
+                      items:
+                        type: string
+                      description: "**null** if all partners are reachable or if operating in central MQTT broker mode. Otherwise, \na list of engine identities that aren't reachable"
+                    CurrentLatency:
+                      type: integer
+                      description: Database latency
+                      format: int32
+                    CurrentWorkload:
+                      type: integer
+                      description: ToDo workload
+                      format: int32
+                    StandbyMode:
+                      type: integer
+                      description: Standby mode
+                      format: int32
+                    LoadedModules:
+                      type: array
+                      items:
+                        type: string
+                      description: If the application is Trust Protection Foundation service, the list of loaded service modules. Otherwise **null**
+                    ProcessType:
+                      type: string
+                      description: 'The type of the process reporting the status.
+
+                        Possible values:
+
+                        * Application
+
+                        * Service
+
+                        * IIS
+
+
+                        All valid values are defined as constants in the _ProcessTypes_ class'
+                    ProcessId:
+                      type: integer
+                      description: Gets the numerical process identifier
+                      format: int32
+                    ProcessIdentity:
+                      type: string
+                      description: The Windows identity of the reporting application
+                    StartTimeISO8601:
+                      type: string
+                      description: The date and time (UTC) indicating when the status was last updated, in ISO-8601 format
+                    LastSeenISO8601:
+                      type: string
+                      description: The date and time (UTC) indicating when the application was last seen, in ISO-8601 format
+                    SendingHost:
+                      type: string
+                      description: The engine that generated the record
+                    SendingApplication:
+                      type: string
+                      description: The application/process the record describes
+                    NoResponse:
+                      type: boolean
+                      description: '**true** if the engine did not respond to the status request or is offline, **false** if the engine is responsive'
+                    CoreReceivedMessageCount:
+                      type: integer
+                      description: Number of messages Core has received from MQTT
+                      format: int64
+                    CoreBackloggedMessagePeak:
+                      type: integer
+                      description: Highest number of Message Bus messages that had been received from MQTT but not yet been handled by Core
+                      format: int64
+                    BrokerDroppedMessageCount:
+                      type: integer
+                      description: Number of Message Bus messages the broker dropped and didn't deliver because the mailbox was full
+                      format: int64
+                    BrokerAcceptedMessageCount:
+                      type: integer
+                      description: Number of Message Bus messages the broker accepted for delivery
+                      format: int64
+                    BrokerPendingOutgoingPeak:
+                      type: integer
+                      description: Peak number of messages the broker had pending, waiting to be sent over the network
+                      format: int64
+                  description: Response message for bus status requests
+                description: Connected applications
+              description: 'A dictionary, with the engine identity as key, holding a list of status messages for each connected application
+
+
+                **Key**: Engine identity'
+            StatusLastUpdatedISO8601:
+              type: string
+              description: The date and time (UTC) indicating when the status was last updated, in ISO-8601 format
+          description: The bus status
+    Platform_WebSDK_PlatformWebRequest:
+      type: object
+      properties:
+        Platform:
+          type: string
+          description: The component.
+      description: Class to represent a Platform request for the WebSDK
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
+    Core_WebSDK_BusStatusWebResponse_getstatus:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: Indicates whether the request was successfully completed
+        Status:
+          type: object
+          properties:
+            ReportingEngine:
+              type: string
+              description: The CN of the TPP engine identity
+            Mesh:
+              type: boolean
+              description: Indicates if bus operates in mesh mode
+            MeshPort:
+              type: integer
+              description: The port used for bus connections
+              format: int32
+            Status:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    MeshDnsName:
+                      type: string
+                      description: The configured DNS name used to connect to in mesh mode
+                    EngineIdentity:
+                      type: string
+                      description: The identity of the TPP engine
+                    UnreachableBusPartners:
+                      type: array
+                      items:
+                        type: string
+                      description: "**null** if all partners are reachable or if operating in central MQTT broker mode. Otherwise, \na list of engine identities that aren't reachable"
+                    CurrentLatency:
+                      type: integer
+                      description: Database latency
+                      format: int32
+                    CurrentWorkload:
+                      type: integer
+                      description: ToDo workload
+                      format: int32
+                    StandbyMode:
+                      type: integer
+                      description: Standby mode
+                      format: int32
+                    LoadedModules:
+                      type: array
+                      items:
+                        type: string
+                      description: If the application is Trust Protection Foundation service, the list of loaded service modules. Otherwise **null**
+                    ProcessType:
+                      type: string
+                      description: 'The type of the process reporting the status.
+
+                        Possible values:
+
+                        * Application
+
+                        * Service
+
+                        * IIS
+
+
+                        All valid values are defined as constants in the _ProcessTypes_ class'
+                    ProcessId:
+                      type: integer
+                      description: Gets the numerical process identifier
+                      format: int32
+                    ProcessIdentity:
+                      type: string
+                      description: The Windows identity of the reporting application
+                    StartTimeISO8601:
+                      type: string
+                      description: The date and time (UTC) indicating when the status was last updated, in ISO-8601 format
+                    LastSeenISO8601:
+                      type: string
+                      description: The date and time (UTC) indicating when the application was last seen, in ISO-8601 format
+                    SendingHost:
+                      type: string
+                      description: The engine that generated the record
+                    SendingApplication:
+                      type: string
+                      description: The application/process the record describes
+                    NoResponse:
+                      type: boolean
+                      description: '**true** if the engine did not respond to the status request or is offline, **false** if the engine is responsive'
+                    CoreReceivedMessageCount:
+                      type: integer
+                      description: Number of messages Core has received from MQTT
+                      format: int64
+                    CoreBackloggedMessagePeak:
+                      type: integer
+                      description: Highest number of Message Bus messages that had been received from MQTT but not yet been handled by Core
+                      format: int64
+                    BrokerDroppedMessageCount:
+                      type: integer
+                      description: Number of Message Bus messages the broker dropped and didn't deliver because the mailbox was full
+                      format: int64
+                    BrokerAcceptedMessageCount:
+                      type: integer
+                      description: Number of Message Bus messages the broker accepted for delivery
+                      format: int64
+                    BrokerPendingOutgoingPeak:
+                      type: integer
+                      description: Peak number of messages the broker had pending, waiting to be sent over the network
+                      format: int64
+                  description: Response message for bus status requests
+                description: Connected applications
+              description: 'A dictionary, with the engine identity as key, holding a list of status messages for each connected application
+
+
+                **Key**: Engine identity'
+            StatusLastUpdatedISO8601:
+              type: string
+              description: The date and time (UTC) indicating when the status was last updated, in ISO-8601 format
+          description: The bus status
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer

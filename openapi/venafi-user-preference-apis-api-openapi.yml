@@ -1,0 +1,232 @@
+openapi: 3.2.0
+info:
+  title: Trust Protection Foundation WebSDK User Preference APIs API
+  description: '# Introduction
+
+    The Trust Protection Foundation Web SDK is a subset of REST APIs that allow you to:
+
+    * Automate certificate management
+
+    * Integrate with DevOps processes
+
+    * Discover machine identities
+
+    * Extract data to integrate with data warehouses
+
+    * Perform bulk actions
+
+    * Set up and administer Trust Protection Foundation
+
+    * Onboard teams
+
+    * Create custom, automated business logic and flows between internal systems
+
+
+    All these use cases can be accomplished using the Trust Protection Foundation REST…'
+  version: 26.1.1
+servers:
+- url: /
+  description: Current Host
+- url: https://REPLACEdnsnameME/
+  description: System
+- url: https://{dnsname}/
+  description: Configurable Hostname
+  variables:
+    dnsname:
+      default: localhost
+      description: Production API Hostname
+security:
+- AccessToken: []
+tags:
+- name: User Preference APIs
+  description: The Preference APIs allow to manages the caller's user preferences
+paths:
+  /vedsdk/preferences/:
+    get:
+      tags:
+      - User Preference APIs
+      summary: Get user preferences
+      description: '_Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_PreferenceRest_Get
+      parameters:
+      - name: Product
+        in: query
+        description: Product the preference belongs to
+        schema:
+          type: string
+      - name: Category
+        in: query
+        description: Preference category
+        schema:
+          type: string
+      - name: Name
+        in: query
+        description: Preference name
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Preferences Returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_PreferenceWebResponse'
+        '401':
+          description: Invalid session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_PreferenceWebResponse'
+        '400':
+          description: Empty request or other error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_PreferenceWebResponse'
+      security:
+      - AccessToken: []
+    post:
+      tags:
+      - User Preference APIs
+      summary: Add user preference
+      description: '_Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_PreferenceRest_Add
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_PreferenceWebRequest'
+        required: true
+      responses:
+        '201':
+          description: Preferences added
+        '401':
+          description: Invalid session
+        '400':
+          description: Empty request or other error
+      security:
+      - AccessToken: []
+    delete:
+      tags:
+      - User Preference APIs
+      summary: Clear user preference
+      description: '_Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_PreferenceRest_Clear
+      parameters:
+      - name: Product
+        in: query
+        description: Product the preference belongs to
+        schema:
+          type: string
+      - name: Category
+        in: query
+        description: Preference category
+        schema:
+          type: string
+      - name: Name
+        in: query
+        description: Preference name
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Preferences cleared
+        '401':
+          description: Invalid session
+        '400':
+          description: Failed to delete/clear preference
+      security:
+      - AccessToken: []
+components:
+  schemas:
+    Core_WebSDK_PreferenceWebRequest:
+      type: object
+      properties:
+        Preferences:
+          type: array
+          items:
+            type: object
+            properties:
+              Id:
+                type:
+                - integer
+                - 'null'
+                description: The identifier.
+                format: int64
+              Universal:
+                type: string
+                description: The universal.
+              Product:
+                type: string
+                description: The product.
+              Category:
+                type: string
+                description: The category.
+              Name:
+                type: string
+                description: The name.
+              Value:
+                type: string
+                description: The value.
+              Locked:
+                type: boolean
+                description: '**true** if locked; otherwise, **false**.'
+            description: CyberArk User Preference Storage.
+          description: The preferences.
+      description: Data class for handling preference web request
+    Core_Preferences_ResultCode:
+      title: Preference result codes
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      type: integer
+      description: "\n\n**0**: **Success**  \nThe success\n\n**1**: **DatabaseError**  \nThe database error\n\n**2**: **MissingDSN**  \nThe missing DSN\n\n**3**: **MissingDatabaseName**  \nThe missing database name\n\n**4**: **AssemblyNotSignedOrTrusted**  \nThe assembly not signed or trusted\n\n**5**: **InvalidTppProductName**  \nThe invalid TPP product name\n\n**6**: **UniqueIndexViolationError**  \nThe unique index violation error\n\n**7**: **NotMasterAdmin**  \nNot master admin\n\n**8**: **InvalidId**  \nInvalid preference ID\n"
+      format: int32
+    Core_WebSDK_PreferenceWebResponse:
+      type: object
+      properties:
+        Preferences:
+          type: array
+          items:
+            type: object
+            properties:
+              Id:
+                type:
+                - integer
+                - 'null'
+                description: The identifier.
+                format: int64
+              Universal:
+                type: string
+                description: The universal.
+              Product:
+                type: string
+                description: The product.
+              Category:
+                type: string
+                description: The category.
+              Name:
+                type: string
+                description: The name.
+              Value:
+                type: string
+                description: The value.
+              Locked:
+                type: boolean
+                description: '**true** if locked; otherwise, **false**.'
+            description: CyberArk User Preference Storage.
+          description: The preferences.
+        ResultCode:
+          $ref: '#/components/schemas/Core_Preferences_ResultCode'
+      description: Data class for handling preference web response
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer

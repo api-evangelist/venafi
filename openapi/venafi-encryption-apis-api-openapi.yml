@@ -1,0 +1,141 @@
+openapi: 3.2.0
+info:
+  title: Trust Protection Foundation WebSDK Encryption APIs API
+  description: '# Introduction
+
+    The Trust Protection Foundation Web SDK is a subset of REST APIs that allow you to:
+
+    * Automate certificate management
+
+    * Integrate with DevOps processes
+
+    * Discover machine identities
+
+    * Extract data to integrate with data warehouses
+
+    * Perform bulk actions
+
+    * Set up and administer Trust Protection Foundation
+
+    * Onboard teams
+
+    * Create custom, automated business logic and flows between internal systems
+
+
+    All these use cases can be accomplished using the Trust Protection Foundation REST…'
+  version: 26.1.1
+servers:
+- url: /
+  description: Current Host
+- url: https://REPLACEdnsnameME/
+  description: System
+- url: https://{dnsname}/
+  description: Configurable Hostname
+  variables:
+    dnsname:
+      default: localhost
+      description: Production API Hostname
+security:
+- AccessToken: []
+tags:
+- name: Encryption APIs
+  description: The Crypto interface provides limited access to the cryptography configuration.
+paths:
+  /vedsdk/crypto/availablekeys:
+    get:
+      tags:
+      - Encryption APIs
+      summary: List available keys
+      description: '_Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_CryptoRest_AvailableKeys
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_CryptoWebResponse_availablekeys'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/crypto/defaultkey:
+    get:
+      tags:
+      - Encryption APIs
+      summary: Get default key
+      description: '_Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_CryptoRest_DefaultKey
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_CryptoWebResponse_defaultkey'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+components:
+  schemas:
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
+    Core_WebSDK_CryptoWebResponse_availablekeys:
+      type: object
+      properties:
+        Keynames:
+          type: array
+          items:
+            type: string
+          description: The keynames.
+    Core_WebSDK_CryptoWebResponse_defaultkey:
+      type: object
+      properties:
+        DefaultKey:
+          type: string
+          description: The default key.
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer

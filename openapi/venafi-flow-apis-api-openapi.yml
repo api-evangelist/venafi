@@ -1,0 +1,1049 @@
+openapi: 3.2.0
+info:
+  title: Trust Protection Foundation WebSDK Flow APIs API
+  description: '# Introduction
+
+    The Trust Protection Foundation Web SDK is a subset of REST APIs that allow you to:
+
+    * Automate certificate management
+
+    * Integrate with DevOps processes
+
+    * Discover machine identities
+
+    * Extract data to integrate with data warehouses
+
+    * Perform bulk actions
+
+    * Set up and administer Trust Protection Foundation
+
+    * Onboard teams
+
+    * Create custom, automated business logic and flows between internal systems
+
+
+    All these use cases can be accomplished using the Trust Protection Foundation REST…'
+  version: 26.1.1
+servers:
+- url: /
+  description: Current Host
+- url: https://REPLACEdnsnameME/
+  description: System
+- url: https://{dnsname}/
+  description: Configurable Hostname
+  variables:
+    dnsname:
+      default: localhost
+      description: Production API Hostname
+security:
+- AccessToken: []
+tags:
+- name: Flow APIs
+  description: The Flow API manages the sequence of tasks. If one of the tasks is has an 'approval required', Flow Tickets manages that approval.
+paths:
+  /vedsdk/flow/tickets/enumerate:
+    post:
+      tags:
+      - Flow APIs
+      summary: Enumerate pending tickets
+      description: '_Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_FlowTicketRest_EnumerateTickets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_FlowTicketRequest_enumerate'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_FlowTicketResponse_enumerate'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/flow/tickets/enumerateapproved:
+    post:
+      tags:
+      - Flow APIs
+      summary: Enumerate approved and still in use tickets
+      description: '_Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_FlowTicketRest_EnumerateApproved
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_FlowTicketRequest_enumerateapproved'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_FlowTicketResponse_enumerateapproved'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/flow/tickets/approve:
+    post:
+      tags:
+      - Flow APIs
+      summary: Approve one or more pending tickets
+      description: '_Required scope: :approve_'
+      operationId: Venafi_Core_WebSDK_FlowTicketRest_Approve
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_FlowTicketRequest_approve'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_FlowTicketResponse_approve'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/flow/tickets/reject:
+    post:
+      tags:
+      - Flow APIs
+      summary: Reject one or more pending tickets
+      description: '_Required scope: :approve_'
+      operationId: Venafi_Core_WebSDK_FlowTicketRest_Reject
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_FlowTicketRequest_reject'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_FlowTicketResponse_reject'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/flow/tickets/count:
+    post:
+      tags:
+      - Flow APIs
+      summary: Count pending tickets
+      description: '_Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_FlowTicketRest_Count
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_FlowTicketRequest_count'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_FlowTicketResponse_count'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/flow/tickets/countapproved:
+    post:
+      tags:
+      - Flow APIs
+      summary: Count approved tickets
+      description: '_Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_FlowTicketRest_CountApproved
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_FlowTicketRequest_countapproved'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_FlowTicketResponse_countapproved'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/flow/tickets/load:
+    post:
+      tags:
+      - Flow APIs
+      summary: Load a single ticket
+      description: '_Required scope: Any_'
+      operationId: Venafi_Core_WebSDK_FlowTicketRest_LoadSingle
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_FlowTicketRequest_load'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_FlowTicketResponse_load'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/flow/tickets/update:
+    post:
+      tags:
+      - Flow APIs
+      summary: Update existing approval
+      description: '_Required scope: :approve_'
+      operationId: Venafi_Core_WebSDK_FlowTicketRest_UpdateExisting
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_FlowTicketRequest_update'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_FlowTicketResponse_update'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+components:
+  schemas:
+    Core_WebSDK_FlowTicketResponse_count:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Core_FlowTicketResult'
+        Message:
+          type: string
+          description: The error.
+        Count:
+          type: integer
+          description: A count of objects
+          format: int32
+    Core_WebSDK_FlowTicketResponse_update:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Core_FlowTicketResult'
+        Message:
+          type: string
+          description: The error.
+    Core_WebSDK_FlowTicketRequest_countapproved:
+      type: object
+      properties:
+        ProductCode:
+          type: integer
+          description: 'The product code used to filter which tickets are visible.
+
+            ## Values and Behaviors ##
+
+
+            |Value|Description|
+
+            |---|---|
+
+            |Specific code|Filter on a specific product code. For example the integer 0x60020001 will filter down to tickets for Code Signing Key Use Flows.|
+
+            |Component only|Filter on a particular component. The component is represented by the high bits in the integer. For example the integer 0x60020000 will interact with any Flow in the Code Signing component, including all product codes from 0x60020001 through 0x6002FFFF|
+
+            |Zero (0)|Providing a zero for this value will not filter the results.|'
+          format: int32
+    Core_WebSDK_FlowTicketRequest_enumerateapproved:
+      required:
+      - ProductCode
+      - TicketPageSize
+      - TicketPageNumber
+      type: object
+      properties:
+        ProductCode:
+          type: integer
+          description: 'The product code used to filter which tickets are visible.
+
+            ## Values and Behaviors ##
+
+
+            |Value|Description|
+
+            |---|---|
+
+            |Specific code|Filter on a specific product code. For example the integer 0x60020001 will filter down to tickets for Code Signing Key Use Flows.|
+
+            |Component only|Filter on a particular component. The component is represented by the high bits in the integer. For example the integer 0x60020000 will interact with any Flow in the Code Signing component, including all product codes from 0x60020001 through 0x6002FFFF|
+
+            |Zero (0)|Providing a zero for this value will not filter the results.|'
+          format: int32
+        TicketPageSize:
+          type: integer
+          description: The page size of tickets to be enumerated
+          format: int32
+        TicketPageNumber:
+          type: integer
+          description: The page number of tickets to be enumerated
+          format: int32
+    Core_WebSDK_FlowTicketResponse_enumerateapproved:
+      type: object
+      properties:
+        Tickets:
+          type: array
+          items:
+            type: object
+            properties:
+              Id:
+                type: integer
+                description: The unique identifier of this ticket
+                format: int64
+              FlowId:
+                type: integer
+                description: The reference to its parent Flow configuration
+                format: int64
+              RequiredApprovals:
+                type: integer
+                description: Gets the minimum number of approvals required before this ticket is approved
+                format: int32
+              CreationTime:
+                type: string
+                description: The time this ticket was created
+              RemainingUses:
+                type:
+                - integer
+                - 'null'
+                description: Gets the remaining number of uses at the time of creation if the ticket has been approved. If **null** the ticket use is unlimited
+                format: int32
+              NotBefore:
+                type:
+                - string
+                - 'null'
+                description: ''
+              ExpiresOn:
+                type:
+                - string
+                - 'null'
+                description: The ticket has been approved and can be used until this date. If **null** the ticket does not expire.
+              Approvers:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Prefix:
+                      type: string
+                      description: Gets the prefix of the identity provider owning the entry
+                    PrefixedName:
+                      type: string
+                      description: The name of the prefixed.
+                    PrefixedUniversal:
+                      type: string
+                      description: Gets the prefixed universal.
+                    Name:
+                      type: string
+                      description: Gets the name of the entry
+                    FullName:
+                      type: string
+                      description: Gets the full name of the entry
+                    Universal:
+                      type: string
+                      description: Gets the universal (machine-readable) name of the entry
+                    IsGroup:
+                      type: boolean
+                      description: True if the entry represents a group
+                    Type:
+                      $ref: '#/components/schemas/Core_IdentityType'
+                    State:
+                      $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+                  description: Describes an Identity
+                description: Gets the list of prefixed universals of users/groups who can approve this ticket
+              Approvals:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Universal:
+                      type: string
+                      description: The prefixed universal of the user that supplied this approval
+                    Comment:
+                      type: string
+                      description: The optional comment left by the user
+                    ApprovalTime:
+                      type: string
+                      description: The time that this approval was issued
+                  description: Information about a specific ticket approval
+                description: Gets the list of prefixed universals of users who have approved the request
+              FlowProcessId:
+                type: integer
+                description: The Id of the process blocked by this ticket
+                format: int64
+              Identifier:
+                type: string
+                description: The identifier string of the process
+              ProductCode:
+                type: integer
+                description: Gets the product code of the flow that created this ticket
+                format: int32
+              Environment:
+                type: object
+                additionalProperties:
+                  type: string
+                  description: Value
+                description: 'The current environment variables of the process blocked by this ticket
+
+
+                  **Key**: Environment Name'
+              PriorEnvironment:
+                type: object
+                additionalProperties:
+                  type: string
+                  description: Value
+                description: 'The most recent set of environment variables of previous processes that have utilizied this ticket
+
+
+                  **Key**: Environment Name'
+              RejectionStatus:
+                $ref: '#/components/schemas/Core_FlowTicketRejectionStatus'
+              RejectionComment:
+                type: string
+                description: Gets the rejection comment if the ticket has been rejected
+            description: A ticket inside the FlowTickets system
+          description: The flow tickets.
+        Message:
+          type: string
+          description: The error.
+    Core_WebSDK_FlowTicketResponse_load:
+      type: object
+      properties:
+        Ticket:
+          type: object
+          properties:
+            Id:
+              type: integer
+              description: The unique identifier of this ticket
+              format: int64
+            FlowId:
+              type: integer
+              description: The reference to its parent Flow configuration
+              format: int64
+            RequiredApprovals:
+              type: integer
+              description: Gets the minimum number of approvals required before this ticket is approved
+              format: int32
+            CreationTime:
+              type: string
+              description: The time this ticket was created
+            RemainingUses:
+              type:
+              - integer
+              - 'null'
+              description: Gets the remaining number of uses at the time of creation if the ticket has been approved. If **null** the ticket use is unlimited
+              format: int32
+            NotBefore:
+              type:
+              - string
+              - 'null'
+              description: ''
+            ExpiresOn:
+              type:
+              - string
+              - 'null'
+              description: The ticket has been approved and can be used until this date. If **null** the ticket does not expire.
+            Approvers:
+              type: array
+              items:
+                type: object
+                properties:
+                  Prefix:
+                    type: string
+                    description: Gets the prefix of the identity provider owning the entry
+                  PrefixedName:
+                    type: string
+                    description: The name of the prefixed.
+                  PrefixedUniversal:
+                    type: string
+                    description: Gets the prefixed universal.
+                  Name:
+                    type: string
+                    description: Gets the name of the entry
+                  FullName:
+                    type: string
+                    description: Gets the full name of the entry
+                  Universal:
+                    type: string
+                    description: Gets the universal (machine-readable) name of the entry
+                  IsGroup:
+                    type: boolean
+                    description: True if the entry represents a group
+                  Type:
+                    $ref: '#/components/schemas/Core_IdentityType'
+                  State:
+                    $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+                description: Describes an Identity
+              description: Gets the list of prefixed universals of users/groups who can approve this ticket
+            Approvals:
+              type: array
+              items:
+                type: object
+                properties:
+                  Universal:
+                    type: string
+                    description: The prefixed universal of the user that supplied this approval
+                  Comment:
+                    type: string
+                    description: The optional comment left by the user
+                  ApprovalTime:
+                    type: string
+                    description: The time that this approval was issued
+                description: Information about a specific ticket approval
+              description: Gets the list of prefixed universals of users who have approved the request
+            FlowProcessId:
+              type: integer
+              description: The Id of the process blocked by this ticket
+              format: int64
+            Identifier:
+              type: string
+              description: The identifier string of the process
+            ProductCode:
+              type: integer
+              description: Gets the product code of the flow that created this ticket
+              format: int32
+            Environment:
+              type: object
+              additionalProperties:
+                type: string
+                description: Value
+              description: 'The current environment variables of the process blocked by this ticket
+
+
+                **Key**: Environment Name'
+            PriorEnvironment:
+              type: object
+              additionalProperties:
+                type: string
+                description: Value
+              description: 'The most recent set of environment variables of previous processes that have utilizied this ticket
+
+
+                **Key**: Environment Name'
+            RejectionStatus:
+              $ref: '#/components/schemas/Core_FlowTicketRejectionStatus'
+            RejectionComment:
+              type: string
+              description: Gets the rejection comment if the ticket has been rejected
+          description: A Flow Ticket
+        Result:
+          $ref: '#/components/schemas/Core_FlowTicketResult'
+        Message:
+          type: string
+          description: The error.
+    Core_WebSDK_FlowTicketRequest_approve:
+      required:
+      - Comment
+      type: object
+      properties:
+        Comment:
+          type: string
+          description: A comment to apply to the approval or rejection
+        UseCount:
+          type:
+          - integer
+          - 'null'
+          description: The maximum number of times the ticket may be used before a new ticket is required. Default is null to allow an unlimited number of times the ticket can be reused.
+          format: int32
+        NotBefore:
+          type: string
+          description: The optional earliest time the ticket may be used. ISO 8601 (YYYY-MM-DDTHH:mm:ssZ) format
+        Expires:
+          type: string
+          description: The optional latest time the ticket may be used before the approval expires and a new ticket is required. ISO 8601 (YYYY-MM-DDTHH:mm:ssZ) format
+        TicketIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: A collection of unique flow ticket IDs. Ticket IDs are can be obtained via Enumerate.
+        TicketId:
+          type: integer
+          description: A unique identifier for a flow ticket. A ticket ID can be obtained via Enumerate.
+          format: int64
+    Core_WebSDK_FlowTicketRequest_reject:
+      required:
+      - Comment
+      - RejectionLevel
+      type: object
+      properties:
+        Comment:
+          type: string
+          description: A comment to apply to the approval or rejection
+        RejectionLevel:
+          $ref: '#/components/schemas/Core_FlowTicketRejectionStatus'
+        TicketIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: A collection of unique flow ticket IDs. Ticket IDs are can be obtained via Enumerate.
+        TicketId:
+          type: integer
+          description: A unique identifier for a flow ticket. A ticket ID can be obtained via Enumerate.
+          format: int64
+    Core_WebSDK_FlowTicketResponse_approve:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Core_FlowTicketResult'
+        Message:
+          type: string
+          description: The error.
+    Core_WebSDK_FlowTicketResponse_countapproved:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Core_FlowTicketResult'
+        Message:
+          type: string
+          description: The error.
+        Count:
+          type: integer
+          description: A count of objects
+          format: int32
+    Core_FlowTicketRejectionStatus:
+      title: The rejection severity of a rejected ticket
+      enum:
+      - 0
+      - 1
+      - 2
+      type: integer
+      description: "\n\n**0**: **None**  \nTicket has not been rejected\n\n**1**: **Retry**  \nProcess has an issue, fix the issue and retry from the current stage\n\n**2**: **Final**  \nProcess cannot complete and must be restarted from the beginning\n"
+      format: int32
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
+    Core_WebSDK_FlowTicketRequest_enumerate:
+      required:
+      - ProductCode
+      - TicketPageSize
+      - TicketPageNumber
+      type: object
+      properties:
+        ProductCode:
+          type: integer
+          description: 'The product code used to filter which tickets are visible.
+
+            ## Values and Behaviors ##
+
+
+            |Value|Description|
+
+            |---|---|
+
+            |Specific code|Filter on a specific product code. For example the integer 0x60020001 will filter down to tickets for Code Signing Key Use Flows.|
+
+            |Component only|Filter on a particular component. The component is represented by the high bits in the integer. For example the integer 0x60020000 will interact with any Flow in the Code Signing component, including all product codes from 0x60020001 through 0x6002FFFF|
+
+            |Zero (0)|Providing a zero for this value will not filter the results.|'
+          format: int32
+        TicketPageSize:
+          type: integer
+          description: The page size of tickets to be enumerated
+          format: int32
+        TicketPageNumber:
+          type: integer
+          description: The page number of tickets to be enumerated
+          format: int32
+    Core_WebSDK_FlowTicketResponse_enumerate:
+      type: object
+      properties:
+        Tickets:
+          type: array
+          items:
+            type: object
+            properties:
+              Id:
+                type: integer
+                description: The unique identifier of this ticket
+                format: int64
+              FlowId:
+                type: integer
+                description: The reference to its parent Flow configuration
+                format: int64
+              RequiredApprovals:
+                type: integer
+                description: Gets the minimum number of approvals required before this ticket is approved
+                format: int32
+              CreationTime:
+                type: string
+                description: The time this ticket was created
+              RemainingUses:
+                type:
+                - integer
+                - 'null'
+                description: Gets the remaining number of uses at the time of creation if the ticket has been approved. If **null** the ticket use is unlimited
+                format: int32
+              NotBefore:
+                type:
+                - string
+                - 'null'
+                description: ''
+              ExpiresOn:
+                type:
+                - string
+                - 'null'
+                description: The ticket has been approved and can be used until this date. If **null** the ticket does not expire.
+              Approvers:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Prefix:
+                      type: string
+                      description: Gets the prefix of the identity provider owning the entry
+                    PrefixedName:
+                      type: string
+                      description: The name of the prefixed.
+                    PrefixedUniversal:
+                      type: string
+                      description: Gets the prefixed universal.
+                    Name:
+                      type: string
+                      description: Gets the name of the entry
+                    FullName:
+                      type: string
+                      description: Gets the full name of the entry
+                    Universal:
+                      type: string
+                      description: Gets the universal (machine-readable) name of the entry
+                    IsGroup:
+                      type: boolean
+                      description: True if the entry represents a group
+                    Type:
+                      $ref: '#/components/schemas/Core_IdentityType'
+                    State:
+                      $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+                  description: Describes an Identity
+                description: Gets the list of prefixed universals of users/groups who can approve this ticket
+              Approvals:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Universal:
+                      type: string
+                      description: The prefixed universal of the user that supplied this approval
+                    Comment:
+                      type: string
+                      description: The optional comment left by the user
+                    ApprovalTime:
+                      type: string
+                      description: The time that this approval was issued
+                  description: Information about a specific ticket approval
+                description: Gets the list of prefixed universals of users who have approved the request
+              FlowProcessId:
+                type: integer
+                description: The Id of the process blocked by this ticket
+                format: int64
+              Identifier:
+                type: string
+                description: The identifier string of the process
+              ProductCode:
+                type: integer
+                description: Gets the product code of the flow that created this ticket
+                format: int32
+              Environment:
+                type: object
+                additionalProperties:
+                  type: string
+                  description: Value
+                description: 'The current environment variables of the process blocked by this ticket
+
+
+                  **Key**: Environment Name'
+              PriorEnvironment:
+                type: object
+                additionalProperties:
+                  type: string
+                  description: Value
+                description: 'The most recent set of environment variables of previous processes that have utilizied this ticket
+
+
+                  **Key**: Environment Name'
+              RejectionStatus:
+                $ref: '#/components/schemas/Core_FlowTicketRejectionStatus'
+              RejectionComment:
+                type: string
+                description: Gets the rejection comment if the ticket has been rejected
+            description: A ticket inside the FlowTickets system
+          description: The flow tickets.
+        Message:
+          type: string
+          description: The error.
+    Core_WebSDK_FlowTicketRequest_load:
+      required:
+      - TicketId
+      type: object
+      properties:
+        TicketId:
+          type: integer
+          description: A unique identifier for a flow ticket. A ticket ID can be obtained via Enumerate.
+          format: int64
+    Core_FlowTicketResult:
+      title: The result code enumeration for FlowTickets operations
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      type: integer
+      description: "\n\n**0**: **Success**  \nThe ticket operation was successful\n\n**1**: **InsufficientPermission**  \nInsufficient permission to perform the requested operation\n\n**2**: **TicketNotFound**  \nThe requested ticket was not found in the system\n\n**3**: **FailedToEnumerateTickets**  \nAn error occurred while enumerating tickets\n\n**4**: **FailedToApproveTickets**  \nAn error occurred while approving one or more pending tickets\n\n**5**: **FailedToRejectTickets**  \nAn error occurred while rejecting one or more pending tickets\n\n**6**: **FailedToCreateTicket**  \nAn error occurred while creating a ticket\n\n**7**: **FailedToGetTicket**  \nAn error occurred while trying to load a ticket\n\n**8**: **FailedToDeleteTicket**  \nAn error occurred while trying to delete a ticket\n\n**9**: **FailedToUseTicket**  \nAn error occurred when trying to use an approved ticket\n\n**10**: **NoTicketUsesRemain**  \nAttempted to consume a ticket that has been fully consumed\n\n**11**: **FailedToUpdateTickets**  \nAn error occurred while trying to update existing approved tickets\n"
+      format: int32
+    Core_WebSDK_FlowTicketRequest_count:
+      type: object
+      properties:
+        ProductCode:
+          type: integer
+          description: 'The product code used to filter which tickets are visible.
+
+            ## Values and Behaviors ##
+
+
+            |Value|Description|
+
+            |---|---|
+
+            |Specific code|Filter on a specific product code. For example the integer 0x60020001 will filter down to tickets for Code Signing Key Use Flows.|
+
+            |Component only|Filter on a particular component. The component is represented by the high bits in the integer. For example the integer 0x60020000 will interact with any Flow in the Code Signing component, including all product codes from 0x60020001 through 0x6002FFFF|
+
+            |Zero (0)|Providing a zero for this value will not filter the results.|'
+          format: int32
+    Core_IdentityType:
+      title: Enumeration defining Identity type objects
+      enum:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      - 16
+      - 32
+      type: integer
+      description: "\n\n**0**: **Undefined**  \nUndefined\n\n**1**: **User**  \nUser object\n\n**2**: **Group**  \nGroup object\n\n**4**: **Container**  \nContainer of users and groups\n\n**8**: **DistributionList**  \nDistribution List\n\n**16**: **Machine**  \nMachine\n\n**32**: **Provider**  \nThe Identity Provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
+    Core_WebSDK_FlowTicketResponse_reject:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Core_FlowTicketResult'
+        Message:
+          type: string
+          description: The error.
+    Core_IdentityEntry_EntryState:
+      title: Enumeration indicating the state of an IdentityEntry
+      enum:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      type: integer
+      description: "\n\n**0**: **Normal**  \nNo special state associated with the entry\n\n**1**: **Disabled**  \nThe identity has been disabled\n\n**2**: **LockedOut**  \nThe identity has been locked out\n\n**4**: **Deleted**  \nThe identity has been deleted\n\n**8**: **Unverifiable**  \nThe identity could not be verified with a provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
+    Core_WebSDK_FlowTicketRequest_update:
+      required:
+      - Comment
+      type: object
+      properties:
+        Comment:
+          type: string
+          description: A comment to apply to the approval or rejection
+        UseCount:
+          type:
+          - integer
+          - 'null'
+          description: The maximum number of times the ticket may be used before a new ticket is required. Default is null to allow an unlimited number of times the ticket can be reused.
+          format: int32
+        NotBefore:
+          type: string
+          description: The optional earliest time the ticket may be used. ISO 8601 (YYYY-MM-DDTHH:mm:ssZ) format
+        Expires:
+          type: string
+          description: The optional latest time the ticket may be used before the approval expires and a new ticket is required. ISO 8601 (YYYY-MM-DDTHH:mm:ssZ) format
+        TicketIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: A collection of unique flow ticket IDs. Ticket IDs are can be obtained via Enumerate.
+        TicketId:
+          type: integer
+          description: A unique identifier for a flow ticket. A ticket ID can be obtained via Enumerate.
+          format: int64
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer

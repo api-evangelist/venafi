@@ -1,0 +1,452 @@
+openapi: 3.2.0
+info:
+  title: Trust Protection Foundation WebSDK Processing Engines APIs…
+  description: '# Introduction
+
+    The Trust Protection Foundation Web SDK is a subset of REST APIs that allow you to:
+
+    * Automate certificate management
+
+    * Integrate with DevOps processes
+
+    * Discover machine identities
+
+    * Extract data to integrate with data warehouses
+
+    * Perform bulk actions
+
+    * Set up and administer Trust Protection Foundation
+
+    * Onboard teams
+
+    * Create custom, automated business logic and flows between internal systems
+
+
+    All these use cases can be accomplished using the Trust Protection Foundation REST…'
+  version: 26.1.1
+servers:
+- url: /
+  description: Current Host
+- url: https://REPLACEdnsnameME/
+  description: System
+- url: https://{dnsname}/
+  description: Configurable Hostname
+  variables:
+    dnsname:
+      default: localhost
+      description: Production API Hostname
+security:
+- AccessToken: []
+tags:
+- name: Processing Engines APIs
+  description: The ProcessingEngines interface assigns and controls how Platforms engines manage information in Policy folders. These features provide a means for load balancing certificate management across a network.
+paths:
+  /vedsdk/processingengines/:
+    get:
+      tags:
+      - Processing Engines APIs
+      summary: Get all processing engines
+      description: '_Required scope: configuration_'
+      operationId: Venafi_Core_WebSDK_ManagementPartitionRest_GetEngines
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_EnginesResponse'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/processingengines/folder/{folderGuid}:
+    parameters:
+    - name: folderGuid
+      in: path
+      description: The guid of the container to query engine restrictions for
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Processing Engines APIs
+      summary: Get restrictions for a folder
+      description: '_Required scope: configuration_'
+      operationId: Venafi_Core_WebSDK_ManagementPartitionRest_GetFolderRestrictions
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_FolderRestrictionsResponse'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+    put:
+      tags:
+      - Processing Engines APIs
+      summary: Update restriction
+      description: '_Required scope: configuration:manage_'
+      operationId: Venafi_Core_WebSDK_ManagementPartitionRest_SetFolderRestrictions
+      parameters:
+      - name: folderGuid
+        in: query
+        description: The guid of the folder
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_FolderRestrictionsRequest'
+        required: true
+      responses:
+        '200':
+          description: Restrictions Set
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+    delete:
+      tags:
+      - Processing Engines APIs
+      summary: Clear all restrictions on a folder
+      description: '_Required scope: configuration:delete_'
+      operationId: Venafi_Core_WebSDK_ManagementPartitionRest_Clear
+      responses:
+        '200':
+          description: All Restrictions Deleted
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/processingengines/engine/{engineGuid}:
+    parameters:
+    - name: engineGuid
+      in: path
+      description: The guid of the engine to query restriction locations
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Processing Engines APIs
+      summary: Get restrictions for an engine
+      description: '_Required scope: configuration_'
+      operationId: Venafi_Core_WebSDK_ManagementPartitionRest_GetEngineRestrictions
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_EngineRestrictionsResponse'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+    post:
+      tags:
+      - Processing Engines APIs
+      summary: Add a new restriction
+      description: '_Required scope: configuration:manage_'
+      operationId: Venafi_Core_WebSDK_ManagementPartitionRest_AddEngineRestrictions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Core_WebSDK_EngineRestrictionsRequest_engine__engineGuid_'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core_WebSDK_AddOperationResponse'
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+  /vedsdk/processingengines/folder/{folderGuid}/{engineGuid}:
+    parameters:
+    - name: folderGuid
+      in: path
+      description: The guid of the folder
+      required: true
+      schema:
+        type: string
+    - name: engineGuid
+      in: path
+      description: The guid of the engine to remove
+      required: true
+      schema:
+        type: string
+    delete:
+      tags:
+      - Processing Engines APIs
+      summary: Remove one engine from restriction on a folder
+      description: '_Required scope: configuration:delete_'
+      operationId: Venafi_Core_WebSDK_ManagementPartitionRest_Remove
+      responses:
+        '200':
+          description: Restrictions Deleted
+        '403':
+          description: ' The API requires a scope not granted to the provided access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '400':
+          description: ' Missing or invalid request property. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+        '401':
+          description: ' A valid access token is required. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthError'
+      security:
+      - AccessToken: []
+components:
+  schemas:
+    Core_WebSDK_EngineRestrictionsRequest_engine__engineGuid_:
+      required:
+      - FolderGuids
+      type: object
+      properties:
+        FolderGuids:
+          type: array
+          items:
+            type: string
+          description: List of folders that will be processed by an engine
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
+    Core_WebSDK_FolderRestrictionsResponse:
+      type: object
+      properties:
+        Engines:
+          type: array
+          items:
+            type: object
+            properties:
+              EngineName:
+                type: string
+                description: Engine Name
+              EngineGuid:
+                type: string
+                description: Engine Guid
+              EngineDN:
+                type: string
+                description: Engine DN
+              _links:
+                type: object
+                properties:
+                  self:
+                    type: object
+                    properties:
+                      href:
+                        type: string
+                        description: Link to resource details
+                    description: Link to resource details
+                description: Resource link
+            description: Represents details about an engine
+          description: List of engines that can be used for processing a folder
+      description: Folder Restrictions Response
+    Core_WebSDK_EngineRestrictionsResponse:
+      type: object
+      properties:
+        Folders:
+          type: array
+          items:
+            type: object
+            properties:
+              FolderName:
+                type: string
+                description: Folder Name
+              FolderGuid:
+                type: string
+                description: Folder Guid
+              FolderDN:
+                type: string
+                description: Folder DN
+              _links:
+                type: object
+                properties:
+                  self:
+                    type: object
+                    properties:
+                      href:
+                        type: string
+                        description: Link to resource details
+                    description: Link to resource details
+                description: Resource link
+            description: Represents details about a folder
+          description: List of engine restrictions
+      description: Engine Restrictions Response
+    Core_WebSDK_EnginesResponse:
+      type: object
+      properties:
+        Engines:
+          type: array
+          items:
+            type: object
+            properties:
+              EngineName:
+                type: string
+                description: Engine Name
+              EngineGuid:
+                type: string
+                description: Engine Guid
+              EngineDN:
+                type: string
+                description: Engine DN
+              _links:
+                type: object
+                properties:
+                  self:
+                    type: object
+                    properties:
+                      href:
+                        type: string
+                        description: Link to resource details
+                    description: Link to resource details
+                description: Resource link
+            description: Represents details about an engine
+          description: List of engines
+      description: All engines
+    Core_WebSDK_AddOperationResponse:
+      type: object
+      properties:
+        AddedCount:
+          type: integer
+          description: Count of added restrictions
+          format: int32
+        Errors:
+          type: array
+          items:
+            type: string
+          description: List of errors that occurred while processing the request
+      description: Represents request to add a new part
+    Core_WebSDK_FolderRestrictionsRequest:
+      type: object
+      properties:
+        EngineGuids:
+          type: array
+          items:
+            type: string
+          description: List of engines that can be used for processing a folder
+      description: Represents request to add a new partition management restrictions
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer

@@ -1,0 +1,650 @@
+openapi: 3.2.0
+info:
+  title: Certificate Manager - SaaS Teams API
+  version: '1.0'
+servers:
+- description: US Region
+  url: https://api.venafi.cloud
+- description: EU Region
+  url: https://api.eu.venafi.cloud
+- description: AU Region
+  url: https://api.au.venafi.cloud
+- description: UK Region
+  url: https://api.uk.venafi.cloud
+- description: SG Region
+  url: https://api.sg.venafi.cloud
+- description: CA Region
+  url: https://api.ca.venafi.cloud
+tags:
+- name: Teams
+paths:
+  /v1/teams:
+    get:
+      operationId: teams_getAll
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamsResponse'
+          description: List of teams.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Retrieve teams for the current company
+      tags:
+      - Teams
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: read
+          description: Ability to read teams
+          name: ngts.team.get
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+        - Guest
+    post:
+      description: Creates a team for the company with which the authenticated user is associated.
+      operationId: teams_create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTeamRequest'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamInformation2'
+          description: Team created
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Add a team
+      tags:
+      - Teams
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: write
+          description: Ability to create teams
+          name: ngts.team.create
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+  /v1/teams/{id}:
+    get:
+      description: Retrieve the details of a team that has the specified `id`.
+      operationId: teams_getById
+      parameters:
+      - description: ' UUID of a team.'
+        in: path
+        name: id
+        required: true
+        schema:
+          description: ' UUID of a team.'
+          format: uuid
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamInformation2'
+          description: Team's details.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Get a team's details
+      tags:
+      - Teams
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: read
+          description: Ability to read teams
+          name: ngts.team.get
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+        - Guest
+    delete:
+      description: Deletes the team with specified `id`.
+      operationId: teams_delete
+      parameters:
+      - description: UUID of a team.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a team.
+          format: uuid
+          type: string
+      responses:
+        '204':
+          description: Team was deleted.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: delete a team
+      tags:
+      - Teams
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: write
+          description: Ability to delete teams
+          name: ngts.team.delete
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+    patch:
+      description: Updates the details of a team that matches the specified team `id`.
+      operationId: teams_update
+      parameters:
+      - description: UUID of a team.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a team.
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTeamRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamInformation2'
+          description: Successfully updated team properties.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Update team's details
+      tags:
+      - Teams
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: write
+          description: Ability to update teams
+          name: ngts.team.update
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+  /v1/teams/{id}/members:
+    post:
+      description: Adds members to the team with specified team's`id`.
+      operationId: teams_members_add
+      parameters:
+      - description: UUID of a team.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a team.
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeamMembersRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamInformation2'
+          description: Successfully added team members. Updated team details in the response.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Add team members
+      tags:
+      - Teams
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: write
+          description: Ability to update teams
+          name: ngts.team.update
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+    delete:
+      description: Removes team members with the specified team's `id`.
+      operationId: teams_members_delete
+      parameters:
+      - description: UUID of a team.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a team.
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeamMembersRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamInformation2'
+          description: Members were removed. Updated team details in response.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Remove team members
+      tags:
+      - Teams
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: write
+          description: Ability to update teams
+          name: ngts.team.update
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+  /v1/teams/{id}/owners:
+    post:
+      description: Adds owners to the team with the specified team's `id`.
+      operationId: teams_members_owners_add
+      parameters:
+      - description: UUID of a team.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a team.
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeamOwnersRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamInformation2'
+          description: Successfully added Team owners.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Add team owners
+      tags:
+      - Teams
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: write
+          description: Ability to update teams
+          name: ngts.team.update
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+    delete:
+      description: Removes owners from the team with the specified team's `id`.
+      operationId: teams_members_owners_remove
+      parameters:
+      - description: UUID of a team.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a team.
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeamOwnersRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamInformation2'
+          description: Owners were removed. Updated team details in response.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse8'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Remove team owners
+      tags:
+      - Teams
+      x-rbac:
+        cm-only: true
+        permissions:
+          access_type: write
+          description: Ability to update teams
+          name: ngts.team.update
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+components:
+  schemas:
+    CreateTeamRequest:
+      properties:
+        members:
+          items:
+            format: uuid
+            type: string
+          type: array
+          uniqueItems: true
+        name:
+          maxLength: 100
+          type: string
+        owners:
+          items:
+            format: uuid
+            type: string
+          type: array
+          uniqueItems: true
+        role:
+          $ref: '#/components/schemas/TeamRole'
+        userMatchingRules:
+          items:
+            $ref: '#/components/schemas/UserMatchingRule'
+          maxItems: 20
+          type: array
+      required:
+      - name
+      - owners
+      - role
+      type: object
+    AnyValue6:
+      description: Can be any value - string, number, boolean, array or object.
+    TeamsResponse:
+      properties:
+        teams:
+          items:
+            $ref: '#/components/schemas/TeamInformation2'
+          type: array
+      type: object
+    ErrorResponse8:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation6'
+          type: array
+      type: object
+    SystemRole:
+      enum:
+      - SYSTEM_ADMIN
+      - CONDOR_METRICS
+      type: string
+    Role2:
+      enum:
+      - SECURITY_ADMIN
+      - DEVOPS_LEAD
+      - DEVOPS_USER
+      - OUTAGEDETECTION_ADMIN
+      - RESOURCE_OWNER
+      - PKI_ADMIN
+      - GUEST
+      - PLATFORM_ADMIN
+      type: string
+    TeamOwnersRequest:
+      properties:
+        owners:
+          items:
+            format: uuid
+            type: string
+          type: array
+          uniqueItems: true
+      required:
+      - owners
+      type: object
+    Operator:
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - CONTAINS
+      - NOT_CONTAINS
+      - STARTS_WITH
+      - ENDS_WITH
+      type: string
+    TeamRole:
+      enum:
+      - SYSTEM_ADMIN
+      - PKI_ADMIN
+      - RESOURCE_OWNER
+      - GUEST
+      - PLATFORM_ADMIN
+      type: string
+    TeamInformation2:
+      properties:
+        companyId:
+          format: uuid
+          type: string
+        id:
+          format: uuid
+          type: string
+        members:
+          items:
+            format: uuid
+            type: string
+          type: array
+          uniqueItems: true
+        modificationDate:
+          format: date-time
+          type: string
+        name:
+          type: string
+        owners:
+          items:
+            format: uuid
+            type: string
+          type: array
+          uniqueItems: true
+        productRoles:
+          additionalProperties:
+            items:
+              $ref: '#/components/schemas/Role2'
+            type: array
+            uniqueItems: true
+          type: object
+        role:
+          $ref: '#/components/schemas/TeamRole'
+        systemRoles:
+          items:
+            $ref: '#/components/schemas/SystemRole'
+          type: array
+          uniqueItems: true
+        userMatchingRules:
+          items:
+            $ref: '#/components/schemas/UserMatchingRule'
+          type: array
+      type: object
+    UserMatchingRule:
+      properties:
+        claimName:
+          maxLength: 500
+          type: string
+        operator:
+          $ref: '#/components/schemas/Operator'
+        value:
+          maxLength: 1000
+          type: string
+      required:
+      - claimName
+      - operator
+      - value
+      type: object
+    ErrorInformation6:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue6'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+    UpdateTeamRequest:
+      properties:
+        name:
+          maxLength: 100
+          type: string
+        role:
+          $ref: '#/components/schemas/TeamRole'
+        userMatchingRules:
+          items:
+            $ref: '#/components/schemas/UserMatchingRule'
+          maxItems: 20
+          type: array
+      type: object
+    TeamMembersRequest:
+      properties:
+        members:
+          items:
+            format: uuid
+            type: string
+          type: array
+          uniqueItems: true
+      required:
+      - members
+      type: object
+  securitySchemes:
+    service-account:
+      in: header
+      name: service-account
+      type: apiKey
+    tppl-api-key:
+      in: header
+      name: tppl-api-key
+      type: apiKey
+x-readme:
+  samples-languages:
+  - curl
+  - go
+  - java
+  - javascript
+  - node
+  - python

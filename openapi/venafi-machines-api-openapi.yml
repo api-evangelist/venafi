@@ -1,0 +1,927 @@
+openapi: 3.2.0
+info:
+  title: Certificate Manager - SaaS Machines API
+  version: '1.0'
+servers:
+- description: US Region
+  url: https://api.venafi.cloud
+- description: EU Region
+  url: https://api.eu.venafi.cloud
+- description: AU Region
+  url: https://api.au.venafi.cloud
+- description: UK Region
+  url: https://api.uk.venafi.cloud
+- description: SG Region
+  url: https://api.sg.venafi.cloud
+- description: CA Region
+  url: https://api.ca.venafi.cloud
+tags:
+- name: Machines
+paths:
+  /v1/machines:
+    get:
+      description: Retrieves the details of all machines.
+      operationId: machines_getAll
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachinesResponse'
+          description: Details of Machines in response body.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Incomplete or malformed request.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Get the details of all machines
+      tags:
+      - Machines
+      x-rbac:
+        permissions:
+          access_type: read
+          description: Ability to get machine
+          name: ngts.machine.get
+        roles:
+        - Guest
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+    post:
+      description: Creates a machine corresponding to the specified `pluginId`.
+      operationId: machines_create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MachineCreationRequest'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineInformation'
+          description: Machine was created; details in response body.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Add a machine
+      tags:
+      - Machines
+      x-rbac:
+        permissions:
+          access_type: write
+          description: Ability to create a machine
+          name: ngts.machine.create
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+  /v1/machines/{id}:
+    get:
+      description: Retrieves the details of the machine that matches the specified `id`.
+      operationId: machines_getById
+      parameters:
+      - description: UUID of a Machine
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a Machine
+          format: uuid
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineInformation'
+          description: Machine was found; details in the response body.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Incomplete or malformed request.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Machine not found.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Get a machine's details
+      tags:
+      - Machines
+      x-rbac:
+        permissions:
+          access_type: read
+          description: Ability to get machine
+          name: ngts.machine.get
+        roles:
+        - Guest
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+    delete:
+      description: Deletes a machine that has the specified `id`.
+      operationId: machines_delete
+      parameters:
+      - description: UUID of a Machine.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a Machine.
+          format: uuid
+          type: string
+      responses:
+        '204':
+          description: Machine deleted.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Request conditions failed.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Certificate installation not found.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Request conditions failed.
+      security:
+      - tppl-api-key: []
+      summary: Delete a machine
+      tags:
+      - Machines
+      x-rbac:
+        permissions:
+          access_type: write
+          description: Ability to delete a machine
+          name: ngts.machine.delete
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+    patch:
+      description: Updates specific details of the machine that matches the specified `id`.
+      operationId: machines_update
+      parameters:
+      - description: UUID of a Machine.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a Machine.
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MachineUpdateRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineInformation'
+          description: Machine was updated; details in the response body.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Incomplete or malformed request.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Machine not found.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Update a machine's details
+      tags:
+      - Machines
+      x-rbac:
+        permissions:
+          access_type: write
+          description: Ability to update a machine
+          name: ngts.machine.update
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+  /v1/machines/{id}/workflows:
+    post:
+      description: Triggers the beginning of the workflow.
+      operationId: machines_initiateWorkflow
+      parameters:
+      - description: UUID of a Machine.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a Machine.
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MachineWorkflowRequest'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineInformation'
+          description: Workflow initiated successfully.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Request conditions failed.
+      security:
+      - tppl-api-key: []
+      summary: Initiate the workflow
+      tags:
+      - Machines
+      x-rbac:
+        permissions:
+          access_type: write
+          description: Ability to create a machine workflow
+          name: ngts.machine_workflow.create
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+  /v1/machines/workflows:
+    post:
+      description: Triggers test connection workflow on a machine connector.
+      operationId: machines_initiateTestConnectionWorkflow
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestConnectionWorkflowRequest'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineInformation'
+          description: Test connection workflow initiated successfully.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Request conditions failed.
+      security:
+      - tppl-api-key: []
+      summary: Initiate workflow (currently supported test connection only)
+      tags:
+      - Machines
+      x-rbac:
+        permissions:
+          access_type: write
+          description: Ability to trigger machine test connection workflow
+          name: ngts.machine_workflow.create
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+  /v1/machinesearch:
+    post:
+      description: Retrieves the details of machines that match the specified search expression.
+      operationId: getMachinesByExpression
+      parameters:
+      - description: Indicates whether response should include nested ownership data (e.g., `owningContainers`)
+        in: query
+        name: ownershipTree
+        schema:
+          default: false
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MachinesSearchRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineDocumentResponse'
+          description: Details of Machines in response body.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Incomplete or malformed request.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Incomplete or malformed request.
+      summary: Get the details of machines matching search criteria
+      tags:
+      - Machines
+      x-rbac:
+        permissions:
+          access_type: read
+          description: Ability to search for machine
+          name: ngts.machine.search
+        roles:
+        - Guest
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+  /v1/machines/{id}/batchprovisionings/abort:
+    post:
+      description: Triggers the abort operation on the current batch provisioning process for the machine with the specified `id`.
+      operationId: abort-v1-batchprovisionings-forMachineId
+      parameters:
+      - description: UUID of a Machine.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a Machine.
+          format: uuid
+          type: string
+      responses:
+        '202':
+          description: Batch provisioning abort success.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Operation forbidden.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Active batch provisioning not found.
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Abort batch provisioning not allowed.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Internal server error.
+      security:
+      - tppl-api-key: []
+      summary: Abort active batch provisioning for a machine by ID
+      tags:
+      - Machines
+      x-rbac:
+        permissions:
+          access_type: write
+          description: Ability to abort a machine's batch provisioning
+          name: ngts.machine_batch_provisioning.abort
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+  /v1/machines/{id}/discovery:
+    get:
+      description: Retrieves the details of the machine's discovery.
+      operationId: machineDiscoveryResults_getByMachineId
+      parameters:
+      - description: UUID of a Machine.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a Machine.
+          format: uuid
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineDiscoveryResultInformation'
+          description: Discovery result for machine was found; details in response body.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Incomplete or malformed request.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: The discovery result for the machine was not found. It is possible that discovery was never initiated. Run discovery and try again.
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Incomplete or malformed request.
+      security:
+      - tppl-api-key: []
+      summary: Get the discovery results for a machine by its ID
+      tags:
+      - Machines
+      x-rbac:
+        permissions:
+          access_type: read
+          description: Ability to get details of machine's discovery
+          name: ngts.machine_discovery.get
+        roles:
+        - Guest
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+  /v1/machines/{id}/discovery/abort:
+    post:
+      description: Aborts an active discovery.
+      operationId: machineDiscoveryResults_abortdiscovery
+      parameters:
+      - description: UUID of a Machine.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of a Machine.
+          format: uuid
+          type: string
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineInformation'
+          description: Abort discovery success.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Operation forbidden.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Active discovery not found.
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse2'
+          description: Abort discovery not allowed.
+      security:
+      - tppl-api-key: []
+      summary: Abort machine discovery
+      tags:
+      - Machines
+      x-rbac:
+        permissions:
+          access_type: write
+          description: Ability to abort a machine's discovery
+          name: ngts.machine_discovery.abort
+        roles:
+        - PKIAdmin
+        - PlatformAdmin
+        - ResourceOwner
+components:
+  schemas:
+    MachineUpdateRequest:
+      properties:
+        batchProvisioningSchedulerEnabled:
+          type: boolean
+        batchProvisioningSchedulerPattern:
+          $ref: '#/components/schemas/SchedulerPatternInformation1'
+        connectionDetails:
+          $ref: '#/components/schemas/AnyValue2'
+        consumerTsgIds:
+          items:
+            type: string
+          type: array
+        discoveryJson:
+          $ref: '#/components/schemas/AnyValue2'
+        discoverySchedulerEnabled:
+          type: boolean
+        discoverySchedulerPattern:
+          $ref: '#/components/schemas/SchedulerPatternInformation1'
+        edgeInstanceId:
+          format: uuid
+          type: string
+        name:
+          type: string
+        owningTeamId:
+          format: uuid
+          type: string
+      type: object
+    MachineCreationRequest:
+      properties:
+        connectionDetails:
+          $ref: '#/components/schemas/AnyValue2'
+        consumerTsgIds:
+          items:
+            type: string
+          type: array
+        dekId:
+          type: string
+        edgeInstanceId:
+          format: uuid
+          type: string
+        machineTypeId:
+          deprecated: true
+          format: uuid
+          type: string
+        name:
+          minLength: 1
+          type: string
+        owningTeamId:
+          format: uuid
+          type: string
+        pluginId:
+          format: uuid
+          type: string
+        tags:
+          items:
+            type: string
+          type: array
+      required:
+      - connectionDetails
+      - name
+      - pluginId
+      type: object
+    ErrorInformation2:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue2'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+    Paging:
+      properties:
+        pageNumber:
+          format: int32
+          type: integer
+        pageSize:
+          format: int32
+          type: integer
+      type: object
+    TestConnectionWorkflowRequest:
+      properties:
+        connection:
+          $ref: '#/components/schemas/AnyValue2'
+        dekId:
+          type: string
+        edgeInstanceId:
+          format: uuid
+          type: string
+        integrationId:
+          format: uuid
+          type: string
+        pluginId:
+          format: uuid
+          type: string
+        wsClientId:
+          type: string
+      type: object
+    OrderObject:
+      properties:
+        direction:
+          enum:
+          - ASC
+          - DESC
+          type: string
+        field:
+          type: string
+      type: object
+    Ordering:
+      properties:
+        orders:
+          items:
+            $ref: '#/components/schemas/OrderObject'
+          type: array
+      type: object
+    MachinesResponse:
+      properties:
+        machines:
+          items:
+            $ref: '#/components/schemas/MachineInformation'
+          type: array
+      type: object
+    MachinesSearchRequest:
+      properties:
+        expression:
+          $ref: '#/components/schemas/AnyValue2'
+        ordering:
+          $ref: '#/components/schemas/Ordering'
+        paging:
+          $ref: '#/components/schemas/Paging'
+      type: object
+    MachineDocumentInformation:
+      properties:
+        companyId:
+          format: uuid
+          type: string
+        creationDate:
+          format: date-time
+          type: string
+        id:
+          format: uuid
+          type: string
+        integrationId:
+          format: uuid
+          type: string
+        machineIdentitiesCount:
+          format: int32
+          type: integer
+        machineName:
+          type: string
+        machineType:
+          deprecated: true
+          type: string
+        machineTypeId:
+          deprecated: true
+          format: uuid
+          type: string
+        modificationDate:
+          format: date-time
+          type: string
+        ownership:
+          $ref: '#/components/schemas/MachineOwnership'
+        owningTeam:
+          format: uuid
+          type: string
+        pluginId:
+          format: uuid
+          type: string
+        pluginName:
+          type: string
+        status:
+          enum:
+          - DRAFT
+          - VERIFIED
+          - UNVERIFIED
+          - DELETING
+          type: string
+        tsgId:
+          type: string
+      type: object
+    MachineInformation:
+      properties:
+        batchProvisioningResult:
+          $ref: '#/components/schemas/MachineBatchProvisioningResultInformation'
+        batchProvisioningSchedulerEnabled:
+          type: boolean
+        batchProvisioningSchedulerPattern:
+          $ref: '#/components/schemas/SchedulerPatternInformation1'
+        batchProvisioningStatus:
+          enum:
+          - NEVER_INITIATED
+          - INITIATED
+          - RUNNING
+          - COMPLETED
+          - ABORTED
+          - ABORTING
+          - FAILED
+          type: string
+        companyId:
+          format: uuid
+          type: string
+        consumerTsgIds:
+          items:
+            type: string
+          type: array
+        creationDate:
+          format: date-time
+          type: string
+        discoveryJson:
+          $ref: '#/components/schemas/AnyValue2'
+        discoverySchedulerEnabled:
+          type: boolean
+        discoverySchedulerPattern:
+          $ref: '#/components/schemas/SchedulerPatternInformation1'
+        discoveryStatus:
+          enum:
+          - NEVER INITIATED
+          - INITIATED
+          - RUNNING
+          - COMPLETED
+          - ABORTED
+          - ABORTING
+          - FAILED
+          type: string
+        edgeInstanceId:
+          format: uuid
+          type: string
+        id:
+          format: uuid
+          type: string
+        integrationId:
+          format: uuid
+          type: string
+        machineType:
+          deprecated: true
+          type: string
+        modificationDate:
+          format: date-time
+          type: string
+        name:
+          type: string
+        owningTeamId:
+          format: uuid
+          type: string
+        pluginId:
+          format: uuid
+          type: string
+        shareWithAll:
+          type: boolean
+        status:
+          enum:
+          - DRAFT
+          - VERIFIED
+          - UNVERIFIED
+          - DELETING
+          type: string
+        tsgId:
+          type: string
+      type: object
+    MachineDocumentResponse:
+      properties:
+        machines:
+          items:
+            $ref: '#/components/schemas/MachineDocumentInformation'
+          type: array
+        totalCount:
+          format: int64
+          type: integer
+      type: object
+    MachineDiscoveryResultInformation:
+      properties:
+        certificatesCountCurrent:
+          format: int64
+          type: integer
+        certificatesCountTotal:
+          format: int64
+          type: integer
+        companyId:
+          format: uuid
+          type: string
+        discoveryStatus:
+          enum:
+          - NEVER INITIATED
+          - INITIATED
+          - RUNNING
+          - COMPLETED
+          - ABORTED
+          - ABORTING
+          - FAILED
+          type: string
+        endDate:
+          format: date-time
+          type: string
+        errorCount:
+          format: int32
+          type: integer
+        machineIdentitiesCount:
+          format: int64
+          type: integer
+        machineIdentitiesDeletedCount:
+          format: int64
+          type: integer
+        machineIdentitiesMissingCount:
+          format: int64
+          type: integer
+        startDate:
+          format: date-time
+          type: string
+      type: object
+    AnyValue2:
+      description: Can be any value - string, number, boolean, array or object.
+    MachineOwnership:
+      properties:
+        owningTeams:
+          items:
+            format: uuid
+            type: string
+          type: array
+          uniqueItems: true
+      type: object
+    SchedulerPatternInformation1:
+      discriminator:
+        propertyName: recurrenceType
+      properties:
+        recurrenceType:
+          type: string
+      required:
+      - recurrenceType
+      type: object
+    ErrorResponse2:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation2'
+          type: array
+      type: object
+    MachineWorkflowRequest:
+      properties:
+        workflowInput:
+          $ref: '#/components/schemas/AnyValue2'
+        workflowName:
+          type: string
+      type: object
+    MachineBatchProvisioningResultInformation:
+      properties:
+        endDate:
+          format: date-time
+          type: string
+        errorMessage:
+          type: string
+        machineIdentitiesCount:
+          format: int64
+          type: integer
+        machineIdentitiesFailedCount:
+          format: int64
+          type: integer
+        machineIdentitiesSucceedCount:
+          format: int64
+          type: integer
+        startDate:
+          format: date-time
+          type: string
+        type:
+          enum:
+          - MANUAL
+          - SCHEDULED
+          type: string
+      type: object
+  securitySchemes:
+    service-account:
+      in: header
+      name: service-account
+      type: apiKey
+    tppl-api-key:
+      in: header
+      name: tppl-api-key
+      type: apiKey
+x-readme:
+  samples-languages:
+  - curl
+  - go
+  - java
+  - javascript
+  - node
+  - python
