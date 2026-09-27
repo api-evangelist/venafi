@@ -139,41 +139,6 @@ paths:
       - AccessToken: []
 components:
   schemas:
-    Core_WebSDK_PreferenceWebRequest:
-      type: object
-      properties:
-        Preferences:
-          type: array
-          items:
-            type: object
-            properties:
-              Id:
-                type:
-                - integer
-                - 'null'
-                description: The identifier.
-                format: int64
-              Universal:
-                type: string
-                description: The universal.
-              Product:
-                type: string
-                description: The product.
-              Category:
-                type: string
-                description: The category.
-              Name:
-                type: string
-                description: The name.
-              Value:
-                type: string
-                description: The value.
-              Locked:
-                type: boolean
-                description: '**true** if locked; otherwise, **false**.'
-            description: CyberArk User Preference Storage.
-          description: The preferences.
-      description: Data class for handling preference web request
     Core_Preferences_ResultCode:
       title: Preference result codes
       enum:
@@ -226,6 +191,41 @@ components:
         ResultCode:
           $ref: '#/components/schemas/Core_Preferences_ResultCode'
       description: Data class for handling preference web response
+    Core_WebSDK_PreferenceWebRequest:
+      type: object
+      properties:
+        Preferences:
+          type: array
+          items:
+            type: object
+            properties:
+              Id:
+                type:
+                - integer
+                - 'null'
+                description: The identifier.
+                format: int64
+              Universal:
+                type: string
+                description: The universal.
+              Product:
+                type: string
+                description: The product.
+              Category:
+                type: string
+                description: The category.
+              Name:
+                type: string
+                description: The name.
+              Value:
+                type: string
+                description: The value.
+              Locked:
+                type: boolean
+                description: '**true** if locked; otherwise, **false**.'
+            description: CyberArk User Preference Storage.
+          description: The preferences.
+      description: Data class for handling preference web request
   securitySchemes:
     AccessToken:
       type: http

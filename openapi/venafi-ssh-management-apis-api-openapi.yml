@@ -857,6 +857,87 @@ paths:
                 $ref: '#/components/schemas/Ssh_WebSDK_DataContract_SshWebResponse'
 components:
   schemas:
+    Ssh_WebSDK_DataContract_Requests_KeysetToPolicyWebRequest:
+      type: object
+      properties:
+        KeysetIds:
+          type: array
+          items:
+            type: string
+          description: The keysets id's.
+        PolicyDN:
+          type: string
+          description: The policy DN.
+        PolicyPath:
+          type: string
+          description: The dn path.
+      description: The class for keyset to policy migration.
+    Ssh_WebSDK_DataContract_Requests_AuthorizedKeyData:
+      type: object
+      properties:
+        KeyContentBase64:
+          type: string
+          description: Base64 contents of public key file, in OpenSSH or SSH2 format. For Tectia, this should be single key file (not authorization file).
+        DeviceGuid:
+          type: string
+          description: The GUID of a device.
+        Username:
+          type: string
+          description: Name on user specified device that will own the key.
+        Filepath:
+          type: string
+          description: Path of the file.
+        Format:
+          type: string
+          description: 'Format of authorized key. Supported formats: OpenSSH and SSH2.'
+      description: The class for importing authorized key request.
+    Ssh_WebSDK_DataContract_PageResponse_1_Ssh_WebSDK_DataContract_SshKeyUsageData_:
+      type: object
+      properties:
+        Data:
+          type: array
+          items:
+            type: object
+            properties:
+              KeyUsageId:
+                type: integer
+                description: Key Usage Record Identifier.
+                format: int32
+              ServerName:
+                type: string
+                description: Server hostname/IP, represented as a string.
+              ServerAccount:
+                type: string
+                description: Server account name that was accessed.
+              ClientName:
+                type: string
+                description: The host client name or full name of the device.
+              Fingerprint:
+                type: string
+                description: Fingerprint of a key that was used for access.
+              AuthorizedKeyId:
+                type:
+                - integer
+                - 'null'
+                description: Id of the authorized key that allowed the access. Can be null if authorized key is not found in TPP database.
+                format: int64
+              PrivateKeyId:
+                type:
+                - integer
+                - 'null'
+                description: Id of the private key that was used. Can be null if matching private key is not found in the Trust Protection Foundation database.
+                format: int64
+              Alert:
+                $ref: '#/components/schemas/Nullable_1_Ssh_WebSDK_DataContract_SshKeyUsageAlert_'
+              LastUsed:
+                type: string
+                description: The last time the client device tried to use this key to connect to this device.
+              KeysetId:
+                type: string
+                description: The identifier for a set of public and private keys that is valid for the device.
+            description: Stores detailed key usage information.
+          description: Array with one page of data.
+      description: Contains the response information for paginated queries.
     Ssh_WebSDK_DataContract_AddKeyWebResponse:
       type: object
       properties:
@@ -881,69 +962,6 @@ components:
               description: Omitted if Success is true.The corresponding error message if any.
           description: SshWebResponse object with result of the operation
       description: The class for adding key response.
-    Ssh_WebSDK_DataContract_KeyProcessStatus:
-      title: The possible process status result codes that can occur while Trust Protection Foundation manages public and private keys for devices that use Secure Shell
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 6
-      - 7
-      type: integer
-      description: "\n\n**0**: **NoStatus**  \nIndicates that no status is available for the key.\n\n**1**: **Provisioning**  \nIndicates that key is being provisioned (added or edited) to its device.\n\n**2**: **Removing**  \nIndicates that key is being removed from its device.\n\n**3**: **FailedToProvision**  \nIndicates that key failed to provision (added or edited) to its device.\n\n**4**: **FailedToRemove**  \nIndicates that key failed to be removed from its device.\n\n**5**: **CleaningUp**  \nIndicates that the old version of the public key is being cleaned up.\n\n**6**: **PendingApproval**  \nIndicates that a key operation is pending approval.\n\n**7**: **PendingMyApproval**  \nIndicates that a key operation is pending approval from the current user.\n"
-      format: int32
-    Ssh_WebSDK_DataContract_Requests_KeyOptionsWebRequest:
-      type: object
-      properties:
-        KeyId:
-          type: string
-          description: Numeric identifier of the authorized key. If the KeyId does not map to an authorized key, the error is "Failed to find key."
-        AllowedSourceRestriction:
-          type: array
-          items:
-            type: string
-          description: List of allowed IP addresses for the key. If omitted, existing value is not changed.
-        DeniedSourceRestriction:
-          type: array
-          items:
-            type: string
-          description: List of denied IP addresses for the key. If omitted, existing value is not changed.
-        ForcedCommand:
-          type: string
-          description: The SSH command for connections that use the authorized key. If omitted, existing value is not changed.
-        Options:
-          type: array
-          items:
-            type: string
-          description: 'List of authorized key options. If omitted, existing value is not changed:  no-x11-forwarding, no-agent-forwarding, no-pty, no-port-forwarding, permitopen, environment, cert-authority, principals, tunnel, allow-from, deny-from, from, command.
-
-            For additional help, see https://en.wikibooks.org/wiki/OpenSSH/Client_Configuration_Files#Available_key_login_options.'
-      description: The class for key options request.
-    Ssh_WebSDK_DataContract_Requests_AddSelfServicePrivateKeyWebRequest:
-      type: object
-      properties:
-        Owner:
-          type: string
-          description: Identity that will own the key.
-        ContactEmail:
-          type: string
-          description: (optional) email of contact, optional. will be used if actual owner is outside of organization
-        FolderId:
-          type: string
-          description: GUID of a Folder to add key to.
-        Location:
-          type: string
-          description: Key location.
-        Notes:
-          type: string
-          description: Arbitrary notes
-        KeysetId:
-          type: string
-          description: The keyset that this key will be added to. If not specified, new keyset will be created.
-      description: The class for adding selfservice private key request.
     Ssh_WebSDK_DataContract_Requests_KeySetWebRequest:
       type: object
       properties:
@@ -951,207 +969,23 @@ components:
           type: string
           description: The keyset identifier of a set of public and private key pairs. You can get the appropriate KeysetId, from the Aperture inventory.
       description: The class for keyset request.
-    Ssh_WebSDK_DataContract_Requests_UnmatchedKeysetRequest:
+    Ssh_WebSDK_DataContract_Requests_KeyUsageData:
       type: object
       properties:
-        UnmatchedTrustId:
-          type: string
-          description: Unmatched keyset trust ID
-        Passphrase:
-          type: string
-          description: Unmatched encrypted private key passphrase
-      description: The class for working with unmatched encrypted keyset
-    Ssh_WebSDK_DataContract_AddUserPrivateKeyWebResponse:
-      type: object
-      properties:
-        KeyId:
-          type: integer
-          description: Identifier of newly created key
-          format: int64
-        KeysetId:
-          type: string
-          description: Identifier of keyset new key is located in.
-        Response:
-          type: object
-          properties:
-            Success:
-              type: boolean
-              description: 'true: The operation succeeded
-
-                false: The operation failed.'
-            ErrorCode:
-              type: integer
-              description: Omitted if Success is true. The code that describes the error if any.
-              format: int32
-            ErrorMessage:
-              type: string
-              description: Omitted if Success is true.The corresponding error message if any.
-          description: SshWebResponse object with result of the operation
-      description: The class for adding user private key response.
-    Ssh_WebSDK_DataContract_Requests_SshLoadDataRequest:
-      type: object
-      properties:
-        KeysetFilter:
-          type: object
-          properties:
-            DeviceGuid:
-              type: array
-              items:
-                type: string
-              description: 'An array of GUIDs that identify devices.
-
-                Example: DeviceGuid: ["{6955f049-19c5-412a-ad99-974fa4a4183e}"]'
-            Username:
-              type: array
-              items:
-                type: string
-              description: An array of names of users that own the keys.
-            Length:
-              type: array
-              items:
-                type: integer
-                format: int64
-              description: 'An array of key lengths.
-
-                Example: Length: [1024]'
-            MaxKeyLength:
-              type: integer
-              description: The maximum allowed key length.
-              format: int32
-            Algorithm:
-              type: array
-              items:
-                type: string
-              description: 'An array of key algorithms. Supported values: DSA, RSA, or RSA1.
-
-                Example: Algorithm: [RSA]'
-            PkixParameterSet:
-              type: array
-              items:
-                type: string
-              description: An array of PKIX Parameter Set values describing the key algorithms.
-            ProcessStatus:
-              type: array
-              items:
-                type: integer
-                format: int32
-              description: The result that occurred while processing keys.
-            ViolationStatus:
-              type: array
-              items:
-                type: integer
-                format: int32
-              description: An array of various key violation status codes for a keyset.
-            Type:
-              type: string
-              description: 'The type of keyset: Host or User.'
-            UsageFilterType:
-              type: string
-              description: 'The type of usage filter: NeverUsed, UnusedSince, or UsedSince. Use in conjunction with LastUsed to specify a date.'
-            LastUsed:
-              type:
-              - string
-              - 'null'
-              description: 'The date to use in conjunction with UsageFilterType. Specify the date in the Epoch format.
-
-                Example: LastUsed: /Date(1443449923000+0000)/).'
-            AuthorizedKeyComment:
-              type: array
-              items:
-                type: string
-              description: An array of authorized key comments.
-            FingerprintSHA256:
-              type: array
-              items:
-                type: string
-              description: An array of sha256 fingerprints.
-            FingerprintMD5:
-              type: array
-              items:
-                type: string
-              description: An array of md5 fingerprints.
-          description: Filter details for keysets
-        SshKeyUsageFilter:
-          type: object
-          properties:
-            ServerName:
-              type: array
-              items:
-                type: string
-              description: 'An array of authorized server IP addresses, full names, or partial names that provide keys to ClientName. Also known as the target device.
-
-                For example, host715.test.com.'
-            ServerAccount:
-              type: array
-              items:
-                type: string
-              description: 'An array of authorized server account names that provide keys to ClientName.
-
-                For example, Admin.'
-            ClientName:
-              type: array
-              items:
-                type: string
-              description: 'An array of client IP addresses, full names, or partial names that can that connect to ServerAccount with a corresponding key pair. Also known as the source device.
-
-                For example, 10.240.102.94.'
-            Alert:
-              type: array
-              items:
-                type: integer
-                format: int32
-              description: 'An array of key usage alerts found on the Server:
-
-                1 = An orphan key.
-
-                2 = A key that does not belong to any client.'
-          description: Filter details for key usage
-        SshDeviceFilter:
-          type: object
-          properties:
-            DeviceName:
-              type: array
-              items:
-                type: string
-              description: List of host names to search. Partial match is allowed.
-            Type:
-              type: string
-              description: 'Only one type of Ssh Device. If not specified, all devices are returned.
-
-                Client = Return all devices containing client keys(user and known host keys).
-
-                Server = Return all devices containing server keys(host and authorized keys).
-
-                ClientServer = Return all devices containing both client and server keys.'
-            IsCompliant:
-              type:
-              - boolean
-              - 'null'
-              description: Whether the device has any issues with SSH key compliance.
-          description: Filter details for devices
-        PageSize:
-          type: integer
-          description: Page size
-          format: int32
-        Offset:
-          type: integer
-          description: Starting page
-          format: int32
-        LoadKeyData:
-          type: boolean
-          description: Load the key data
-        deviceGuids:
+        LogData:
           type: array
           items:
-            type: string
-          description: List of device GUIDs
-        KeyId:
-          type: array
-          items:
-            type: integer
-            format: int64
-          description: List of key IDs
-      description: Data object
+            type: object
+            properties:
+              LogRecord:
+                type: string
+                description: Log data
+              LogUtcEpochDate:
+                type: string
+                description: Date/Time of the event, in seconds since 1970
+            description: A log entry
+          description: An array of SysLog entries.
+      description: The class for key usage request.
     IList_1_Ssh_WebSDK_DataContract_KeyData_:
       type: array
       items:
@@ -1249,77 +1083,82 @@ components:
             type: string
             description: The comment of the authorized key
         description: The class for detailed SSH key information.
-    Ssh_WebSDK_DataContract_Requests_SshLoadDataRequest_KeyUsage:
-      required:
-      - SshKeyUsageFilter
-      - PageSize
-      - Offset
+    Ssh_WebSDK_DataContract_Requests_WorkflowKeyOperationRequest:
       type: object
       properties:
-        SshKeyUsageFilter:
-          type: object
-          properties:
-            ServerName:
-              type: array
-              items:
-                type: string
-              description: 'An array of authorized server IP addresses, full names, or partial names that provide keys to ClientName. Also known as the target device.
-
-                For example, host715.test.com.'
-            ServerAccount:
-              type: array
-              items:
-                type: string
-              description: 'An array of authorized server account names that provide keys to ClientName.
-
-                For example, Admin.'
-            ClientName:
-              type: array
-              items:
-                type: string
-              description: 'An array of client IP addresses, full names, or partial names that can that connect to ServerAccount with a corresponding key pair. Also known as the source device.
-
-                For example, 10.240.102.94.'
-            Alert:
-              type: array
-              items:
-                type: integer
-                format: int32
-              description: 'An array of key usage alerts found on the Server:
-
-                1 = An orphan key.
-
-                2 = A key that does not belong to any client.'
-          description: Filter details for key usage
-        PageSize:
-          type: integer
-          description: Page size
-          format: int32
-        Offset:
-          type: integer
-          description: Starting page
-          format: int32
-    Ssh_WebSDK_DataContract_Requests_AddSelfServiceAuthorizedKeyWebRequest:
+        KeyId:
+          type: string
+          description: An identifier of a public or private key that requires workflow approval.
+        Comment:
+          type: string
+          description: The reason why the operation was approved or rejected.
+      description: The class for workflow key operation request.
+    Ssh_WebSDK_DataContract_Requests_KeyOptionsWebRequest:
       type: object
       properties:
-        Owner:
+        KeyId:
           type: string
-          description: Identity that will own the key.
-        ContactEmail:
+          description: Numeric identifier of the authorized key. If the KeyId does not map to an authorized key, the error is "Failed to find key."
+        AllowedSourceRestriction:
+          type: array
+          items:
+            type: string
+          description: List of allowed IP addresses for the key. If omitted, existing value is not changed.
+        DeniedSourceRestriction:
+          type: array
+          items:
+            type: string
+          description: List of denied IP addresses for the key. If omitted, existing value is not changed.
+        ForcedCommand:
           type: string
-          description: (optional) email of contact, optional. will be used if actual owner is outside of organization
-        FolderId:
+          description: The SSH command for connections that use the authorized key. If omitted, existing value is not changed.
+        Options:
+          type: array
+          items:
+            type: string
+          description: 'List of authorized key options. If omitted, existing value is not changed:  no-x11-forwarding, no-agent-forwarding, no-pty, no-port-forwarding, permitopen, environment, cert-authority, principals, tunnel, allow-from, deny-from, from, command.
+
+            For additional help, see https://en.wikibooks.org/wiki/OpenSSH/Client_Configuration_Files#Available_key_login_options.'
+      description: The class for key options request.
+    Ssh_WebSDK_DataContract_KeyProcessStatus:
+      title: The possible process status result codes that can occur while Trust Protection Foundation manages public and private keys for devices that use Secure Shell
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      type: integer
+      description: "\n\n**0**: **NoStatus**  \nIndicates that no status is available for the key.\n\n**1**: **Provisioning**  \nIndicates that key is being provisioned (added or edited) to its device.\n\n**2**: **Removing**  \nIndicates that key is being removed from its device.\n\n**3**: **FailedToProvision**  \nIndicates that key failed to provision (added or edited) to its device.\n\n**4**: **FailedToRemove**  \nIndicates that key failed to be removed from its device.\n\n**5**: **CleaningUp**  \nIndicates that the old version of the public key is being cleaned up.\n\n**6**: **PendingApproval**  \nIndicates that a key operation is pending approval.\n\n**7**: **PendingMyApproval**  \nIndicates that a key operation is pending approval from the current user.\n"
+      format: int32
+    Ssh_WebSDK_DataContract_SshWebResponse:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: 'true: The operation succeeded
+
+            false: The operation failed.'
+        ErrorCode:
+          type: integer
+          description: Omitted if Success is true. The code that describes the error if any.
+          format: int32
+        ErrorMessage:
           type: string
-          description: GUID of a Folder to add key to.
+          description: Omitted if Success is true.The corresponding error message if any.
+      description: Contains the response information for arbitrary action.
+    Ssh_WebSDK_DataContract_Requests_EditSelfServiceAuthorizedKeyWebRequest:
+      type: object
+      properties:
         Location:
           type: string
           description: Key location.
         Notes:
           type: string
           description: Arbitrary notes
-        KeysetId:
-          type: string
-          description: The keyset that this key will be added to.
         AllowedSourceRestriction:
           type: array
           items:
@@ -1338,316 +1177,10 @@ components:
           items:
             type: string
           description: List of authorized key options.
-      description: The class for adding selfservice authorized key request.
-    Ssh_WebSDK_DataContract_Requests_KeyUsageData:
+      description: The class for editing selfservice authorized key request.
+    Ssh_WebSDK_DataContract_ExportSelfServiceKeyResponse:
       type: object
       properties:
-        LogData:
-          type: array
-          items:
-            type: object
-            properties:
-              LogRecord:
-                type: string
-                description: Log data
-              LogUtcEpochDate:
-                type: string
-                description: Date/Time of the event, in seconds since 1970
-            description: A log entry
-          description: An array of SysLog entries.
-      description: The class for key usage request.
-    Ssh_WebSDK_DataContract_Requests_ExportSelfServiceKeyRequest:
-      type: object
-      properties:
-        KeyId:
-          type: integer
-          description: The identifier of key to download. To get the KeyId, use GET SSH/KeysetDetails.
-          format: int64
-        Format:
-          type: string
-          description: '(Optional) Format of the key material: OpenSSH, SSH2, PuTTY (only for private keys).
-
-            If format is not specified, the value is taken from policy. If the policy format is not specified, the default is OpenSSH.'
-      description: The class for exporting selfservice key request.
-    ProductLogic_Ssh_Entities_PolicyViolation:
-      title: Possible policy violations
-      enum:
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 6
-      - 7
-      - 8
-      - 9
-      - 10
-      - 11
-      - 12
-      - 13
-      - 16
-      - 17
-      - 18
-      - 19
-      - 20
-      - 21
-      - 22
-      - 33
-      - 35
-      - 36
-      - 37
-      - 38
-      type: integer
-      description: "\n\n**1**: **IsRootAccessOrphan**  \nRoot access orphan\n\n**2**: **IsClientAccessOrphan**  \nClient access orphan\n\n**3**: **IsPrivateKeyOrphan**  \nPrivate key orphan\n\n**4**: **IsKnownHostOrphan**  \nKnown host orphan\n\n**5**: **IsRootAccess**  \nRoot access\n\n**6**: **IsDuplicateClientPrivateKey**  \nDuplicate client private key\n\n**7**: **IsIllegalAlgorithm**  \nIllegal algorithm\n\n**8**: **IsIllegalProtocolVersion**  \nIllegal protocol version\n\n**9**: **IsIllegalVendorFormat**  \nIllegal vendor format\n\n**10**: **IsIllegalForcedCommand**  \nIllegal forced command\n\n**11**: **IsIllegalSourceRestrictions**  \nIllegal source restriction\n\n**12**: **IsMissingOptions**  \nMissing option\n\n**13**: **IsKeyOlderThanAllowed**  \nOlder than allowed\n\n**16**: **IsSharedPrivateKey**  \nShared private key\n\n**17**: **IsUnEncryptedKey**  \nUnencrypted key\n\n**18**: **IsSharedServerAccount**  \nShared server account\n\n**19**: **IsPassphraseUnknown**  \nPassphrase unknown\n\n**20**: **IsUnknownClient**  \nUnknown client\n\n**21**: **KeyWasNotRotated**  \nKey was not rotated\n\n**22**: **IsEnvironmentCrossing**  \nEnvironment crossing\n\n**33**: **IsDuplicateHostPrivateKey**  \nDuplicate host private key\n\n**35**: **IsSymbolicLinkKey**  \nKey or some of its parent directories is a symbolic link\n\n**36**: **IsTooOpenPrivateKeyPermissions**  \nPrivate key allows other users to read its material\n\n**37**: **IsNotApprovedKeyEncryptionAlgorithm**  \nNot approved PBE algorithm is used for a key\n\n**38**: **IsDisallowedKeyFormat**  \nDisallowed key format\n"
-      format: int32
-    Nullable_1_Ssh_WebSDK_DataContract_SshKeyUsageAlert_:
-      title: The class for key usage alert
-      enum:
-      - 1
-      - 2
-      type:
-      - integer
-      - 'null'
-      description: "\n\n**1**: **UntrackedKey**  \nUntracked key.\n\n**2**: **UnknownClient**  \nUnknown client.\n"
-      format: int32
-    Ssh_WebSDK_DataContract_Requests_UnmatchedKeysetDeleteRequest:
-      type: object
-      properties:
-        UnmatchedTrustId:
-          type: string
-          description: Unmatched keyset trust ID
-      description: The class for working with a deletion of a unmatched encrypted keyset
-    Ssh_WebSDK_DataContract_Requests_AddAuthorizedKeyWebRequest:
-      type: object
-      properties:
-        DeviceGuid:
-          type: string
-          description: GUID of a Device to add key to.
-        Username:
-          type: string
-          description: Name on user specified device that will own the key.
-        Filepath:
-          type: string
-          description: Name on user specified device that will own the key.
-        KeysetId:
-          type: string
-          description: Keyset to add the key to.
-        AllowedSourceRestriction:
-          type: array
-          items:
-            type: string
-          description: List of allowed source restrictions for the key. If omitted, the value is taken from device policy.
-        DeniedSourceRestriction:
-          type: array
-          items:
-            type: string
-          description: List of denied source restrictions for the key. If omitted, the value is taken from device policy.
-        ForcedCommand:
-          type: string
-          description: Forced command for connections with the key. If omitted, the value is taken from device policy.
-        Options:
-          type: array
-          items:
-            type: string
-          description: List of authorized key options. If omitted, the value is taken from device policy.
-        Format:
-          type: string
-          description: 'Format of the key. Can be one of: OpenSSH, SSH2. Can be omitted if specified on device policy.'
-        TrailingComment:
-          type: string
-          description: The trailing comment of the authorized key.
-      description: The class for adding authorized key request.
-    Ssh_WebSDK_DataContract_PageResponse_1_Ssh_WebSDK_DataContract_SshKeyUsageData_:
-      type: object
-      properties:
-        Data:
-          type: array
-          items:
-            type: object
-            properties:
-              KeyUsageId:
-                type: integer
-                description: Key Usage Record Identifier.
-                format: int32
-              ServerName:
-                type: string
-                description: Server hostname/IP, represented as a string.
-              ServerAccount:
-                type: string
-                description: Server account name that was accessed.
-              ClientName:
-                type: string
-                description: The host client name or full name of the device.
-              Fingerprint:
-                type: string
-                description: Fingerprint of a key that was used for access.
-              AuthorizedKeyId:
-                type:
-                - integer
-                - 'null'
-                description: Id of the authorized key that allowed the access. Can be null if authorized key is not found in TPP database.
-                format: int64
-              PrivateKeyId:
-                type:
-                - integer
-                - 'null'
-                description: Id of the private key that was used. Can be null if matching private key is not found in the Trust Protection Foundation database.
-                format: int64
-              Alert:
-                $ref: '#/components/schemas/Nullable_1_Ssh_WebSDK_DataContract_SshKeyUsageAlert_'
-              LastUsed:
-                type: string
-                description: The last time the client device tried to use this key to connect to this device.
-              KeysetId:
-                type: string
-                description: The identifier for a set of public and private keys that is valid for the device.
-            description: Stores detailed key usage information.
-          description: Array with one page of data.
-      description: Contains the response information for paginated queries.
-    Ssh_WebSDK_AuthRulesResponse:
-      type: object
-      properties:
-        TotalCount:
-          type: integer
-          description: The total number of rules that match the specified search filters.
-          format: int32
-        DataRange:
-          type: string
-          description: The data range for the current page, i.e., 20-50.
-        Rules:
-          type: array
-          items:
-            type: object
-            properties:
-              Account:
-                type: string
-                description: The account of the rule.
-              Host:
-                type: string
-                description: The host of the rule.
-              KeyAlgorithm:
-                type: string
-                description: 'Possible values:
-
-
-                  | OID | Key type | Description |
-
-                  |-----|-----------|-------------|
-
-                  |1.3.6.1.4.1.28783.10.1.1.1024|ssh-rsa|RSA 1024. Not recommended for high-security applications.|
-
-                  |1.3.6.1.4.1.28783.10.1.1.2048|ssh-rsa|RSA 2048.|
-
-                  |1.3.6.1.4.1.28783.10.1.1.3072|ssh-rsa|RSA 3072.|
-
-                  |1.3.6.1.4.1.28783.10.1.1.4096|ssh-rsa|RSA 4096.|
-
-                  |1.3.6.1.4.1.28783.10.8.1024|ssh-dss|DSA 1024. Outdated and insecure. Not recommended for high-security applications.|
-
-                  |1.3.6.1.4.1.28783.10.8.2048|ssh-dss|DSA 2048. Outdated and insecure. Not recommended for high-security applications.|
-
-                  |1.3.6.1.4.1.28783.10.8.3072|ssh-dss|DSA 3072. Outdated and insecure. Not recommended for high-security applications.|
-
-                  |1.3.6.1.4.1.28783.10.8.4096|ssh-dss|DSA 4096. Outdated and insecure. Not recommended for high-security applications.|
-
-                  |1.3.6.1.4.1.28783.10.2.1.256|ecdsa-sha2-nistp256|ECC 256.|
-
-                  |1.3.6.1.4.1.28783.10.2.1.384|ecdsa-sha2-nistp384|ECC 384.|
-
-                  |1.3.6.1.4.1.28783.10.2.1.521|ecdsa-sha2-nistp521|ECC 521.|
-
-                  |1.3.6.1.4.1.28783.10.3.25519|ssh-ed25519|ED25519.|'
-              KeyFingerprint:
-                type: string
-                description: The key fingerprint of the rule.
-              FirstHit:
-                type: string
-                description: The first hit date of the rule in ISO 8601 format.
-              LastHit:
-                type: string
-                description: The last hit date of the rule in ISO 8601 format.
-              HitCount:
-                type: string
-                description: The hit count of the rule being returned.
-            description: Key authorization rule object.
-          description: The list of rules being returned.
-        ErrorDetails:
-          type: string
-          description: The error details, if an error was encountered querying for the rules.
-      description: Result class containing list of key authorization rules as well as paging links and count information.
-    Ssh_WebSDK_DataContract_PageResponse_1_Ssh_WebSDK_DataContract_SshDeviceData_:
-      type: object
-      properties:
-        Data:
-          type: array
-          items:
-            type: object
-            properties:
-              DeviceGuid:
-                type: string
-                description: The Device Identifier.
-              DN:
-                type: string
-                description: The full device DN.
-              Type:
-                type: string
-                description: 'The type of Ssh Device. Can be one of: Client, Server, ClientServer.'
-              HostName:
-                type: string
-                description: The hostname of a device.
-              IsCompliant:
-                type:
-                - boolean
-                - 'null'
-                description: Whether the device has any issues with SSH key compliance.
-            description: Stores detailed device information.
-          description: Array with one page of data.
-      description: Contains the response information for paginated queries.
-    Ssh_WebSDK_DataContract_Requests_WorkflowKeyOperationRequest:
-      type: object
-      properties:
-        KeyId:
-          type: string
-          description: An identifier of a public or private key that requires workflow approval.
-        Comment:
-          type: string
-          description: The reason why the operation was approved or rejected.
-      description: The class for workflow key operation request.
-    Ssh_WebSDK_DataContract_Requests_PrivateKeyData:
-      type: object
-      properties:
-        KeyContentBase64:
-          type: string
-          description: Base64 contents of private key file, in OpenSSH, SSH2 or PuTTY format.
-        DeviceGuid:
-          type: string
-          description: The GUID of a device.
-        Username:
-          type: string
-          description: Name on user specified device that will own the key.
-        Passphrase:
-          type: string
-          description: Passphrase to decrypt the key. To specify a password, use your own company password standards or follow the guidelines from the National Institute of Standards and Technology (NIST).
-        Filepath:
-          type: string
-          description: Path of the file with the key.
-        Format:
-          type: string
-          description: 'Format of the private key. Supported formats: OpenSSH, SSH2 and PuTTY.'
-      description: The class for importing private key request.
-    Ssh_WebSDK_DataContract_AddSelfServiceKeyWebResponse:
-      type: object
-      properties:
-        KeyId:
-          type: integer
-          description: Identifier of newly created key
-          format: int64
-        KeysetId:
-          type: string
-          description: Identifier of keyset new key is located in.
-        Notes:
-          type: string
-          description: Notes for manual key
         Response:
           type: object
           properties:
@@ -1664,54 +1197,10 @@ components:
               type: string
               description: Omitted if Success is true.The corresponding error message if any.
           description: SshWebResponse object with result of the operation
-      description: The class for adding selfservice private key response.
-    Ssh_WebSDK_DataContract_Requests_ExportSelfServicePrivateKeyRequest:
-      type: object
-      properties:
-        Passphrase:
+        KeyMaterial:
           type: string
-          description: '(Optional) The passphrase to use to encrypt the key.
-
-            To specify a passphrase, use your own company standards or follow the guidelines from the National Institute of Standards and Technology (NIST).'
-        KeyId:
-          type: integer
-          description: The identifier of key to download. To get the KeyId, use GET SSH/KeysetDetails.
-          format: int64
-        Format:
-          type: string
-          description: '(Optional) Format of the key material: OpenSSH, SSH2, PuTTY (only for private keys).
-
-            If format is not specified, the value is taken from policy. If the policy format is not specified, the default is OpenSSH.'
-      description: The class for exporting selfservice key request.
-    Ssh_WebSDK_DataContract_Requests_AddHostPrivateKeyWebRequest:
-      type: object
-      properties:
-        DeviceGuid:
-          type: string
-          description: GUID of a Device to add key to.
-        Username:
-          type: string
-          description: Name on user specified device that will own the key.
-        Filepath:
-          type: string
-          description: Path of the file with the key.
-        KeysetId:
-          type: string
-          description: Keyset to add the key to. If not specified, new keyset will be created.
-        Format:
-          type: string
-          description: 'Format of the key. Can be one of: OpenSSH, SSH2, PuTTY. Can be omitted if specified on device policy.'
-        PolicyDN:
-          type: string
-          description: The DN of the policy where the keyset will be created.
-      description: The class for adding host private key request.
-    Ssh_WebSDK_DataContract_Requests_KeyWebRequest:
-      type: object
-      properties:
-        KeyId:
-          type: string
-          description: Key Identifier
-      description: The class for key request.
+          description: Self service key material
+      description: The class for exporting selfservice key response.
     Ssh_WebSDK_DataContract_Requests_AddKnownHostKeyWebRequest:
       type: object
       properties:
@@ -1731,69 +1220,28 @@ components:
           type: string
           description: 'Format of the key. Can be one of: OpenSSH, SSH2. Can be omitted if specified on device policy.'
       description: The class for adding knownhost key request.
-    Ssh_WebSDK_DataContract_Requests_KeysetToPolicyWebRequest:
+    Ssh_WebSDK_DataContract_Requests_AddSelfServicePrivateKeyWebRequest:
       type: object
       properties:
-        KeysetIds:
-          type: array
-          items:
-            type: string
-          description: The keysets id's.
-        PolicyDN:
+        Owner:
           type: string
-          description: The policy DN.
-        PolicyPath:
+          description: Identity that will own the key.
+        ContactEmail:
           type: string
-          description: The dn path.
-      description: The class for keyset to policy migration.
-    Ssh_WebSDK_DataContract_Requests_ChangePrivateKeyPassphraseRequest:
-      type: object
-      properties:
-        KeyId:
-          type: integer
-          description: Private key ID
-          format: int64
-        Passphrase:
+          description: (optional) email of contact, optional. will be used if actual owner is outside of organization
+        FolderId:
           type: string
-          description: New passphrase
-      description: To change parivate key passphrase
-    Web_SDK_Authentication_OAuthError:
-      type: object
-      properties:
-        error:
+          description: GUID of a Folder to add key to.
+        Location:
           type: string
-          description: Gets or sets the short error name
-        error_description:
+          description: Key location.
+        Notes:
           type: string
-          description: Gets or sets the description of the error
-      description: REST OAuth Error Response
-    Ssh_WebSDK_DataContract_AddHostPrivateKeyWebResponse:
-      type: object
-      properties:
-        KeyId:
-          type: integer
-          description: Identifier of newly created key
-          format: int64
+          description: Arbitrary notes
         KeysetId:
           type: string
-          description: Identifier of keyset new key is located in.
-        Response:
-          type: object
-          properties:
-            Success:
-              type: boolean
-              description: 'true: The operation succeeded
-
-                false: The operation failed.'
-            ErrorCode:
-              type: integer
-              description: Omitted if Success is true. The code that describes the error if any.
-              format: int32
-            ErrorMessage:
-              type: string
-              description: Omitted if Success is true.The corresponding error message if any.
-          description: SshWebResponse object with result of the operation
-      description: The class for adding host private key response.
+          description: The keyset that this key will be added to. If not specified, new keyset will be created.
+      description: The class for adding selfservice private key request.
     Ssh_WebSDK_DataContract_KeysetData:
       type: object
       properties:
@@ -2040,41 +1488,16 @@ components:
           type: string
           description: SHA256 fingerprint.
       description: Stores detailed SSH keyset information.
-    Ssh_WebSDK_DataContract_Requests_AuthorizedKeyData:
+    Ssh_WebSDK_DataContract_AddUserPrivateKeyWebResponse:
       type: object
       properties:
-        KeyContentBase64:
+        KeyId:
+          type: integer
+          description: Identifier of newly created key
+          format: int64
+        KeysetId:
           type: string
-          description: Base64 contents of public key file, in OpenSSH or SSH2 format. For Tectia, this should be single key file (not authorization file).
-        DeviceGuid:
-          type: string
-          description: The GUID of a device.
-        Username:
-          type: string
-          description: Name on user specified device that will own the key.
-        Filepath:
-          type: string
-          description: Path of the file.
-        Format:
-          type: string
-          description: 'Format of authorized key. Supported formats: OpenSSH and SSH2.'
-      description: The class for importing authorized key request.
-    Ssh_WebSDK_DataContract_KeysetProcessStatus:
-      title: The possible process status result codes that can occur while Trust Protection Foundation manages public and private keys for devices that use Secure Shell
-      enum:
-      - 5
-      - 6
-      - 7
-      - 8
-      - 9
-      - 10
-      - 11
-      type: integer
-      description: "\n\n**5**: **Rotating**  \nIndicates that keyset is being rotated.\n\n**6**: **FailedToRotate**  \nIndicates that keyset had error during rotation.\n\n**7**: **KeyOperationRunning**  \nIndicates that at least one add, remove, or options edit operation is occurring with key of the keyset.\n\n**8**: **RotationSuspended**  \nIndicates that keyset rotation is suspended. Waiting for the user to finish manual server reconfiguration, and then press the Resume button.\n\n**9**: **RollingBack**  \nIndicates that keyset rotation is in the process of moving back to a previous state.\n\n**10**: **PendingApproval**  \nIndicates that the keyset has at least one key operation which is pending approval.\n\n**11**: **PendingMyApproval**  \nIndicates that the keyset has at least one key operation which is pending approval from the current user.\n"
-      format: int32
-    Ssh_WebSDK_DataContract_ExportSelfServiceKeyResponse:
-      type: object
-      properties:
+          description: Identifier of keyset new key is located in.
         Response:
           type: object
           properties:
@@ -2091,10 +1514,136 @@ components:
               type: string
               description: Omitted if Success is true.The corresponding error message if any.
           description: SshWebResponse object with result of the operation
-        KeyMaterial:
+      description: The class for adding user private key response.
+    Ssh_WebSDK_DataContract_Requests_AddSelfServiceAuthorizedKeyWebRequest:
+      type: object
+      properties:
+        Owner:
           type: string
-          description: Self service key material
-      description: The class for exporting selfservice key response.
+          description: Identity that will own the key.
+        ContactEmail:
+          type: string
+          description: (optional) email of contact, optional. will be used if actual owner is outside of organization
+        FolderId:
+          type: string
+          description: GUID of a Folder to add key to.
+        Location:
+          type: string
+          description: Key location.
+        Notes:
+          type: string
+          description: Arbitrary notes
+        KeysetId:
+          type: string
+          description: The keyset that this key will be added to.
+        AllowedSourceRestriction:
+          type: array
+          items:
+            type: string
+          description: List of allowed source restrictions for the key.
+        DeniedSourceRestriction:
+          type: array
+          items:
+            type: string
+          description: List of denied source restrictions for the key.
+        ForcedCommand:
+          type: string
+          description: Forced command for connections with the key.
+        Options:
+          type: array
+          items:
+            type: string
+          description: List of authorized key options.
+      description: The class for adding selfservice authorized key request.
+    Ssh_WebSDK_DataContract_Requests_AddHostPrivateKeyWebRequest:
+      type: object
+      properties:
+        DeviceGuid:
+          type: string
+          description: GUID of a Device to add key to.
+        Username:
+          type: string
+          description: Name on user specified device that will own the key.
+        Filepath:
+          type: string
+          description: Path of the file with the key.
+        KeysetId:
+          type: string
+          description: Keyset to add the key to. If not specified, new keyset will be created.
+        Format:
+          type: string
+          description: 'Format of the key. Can be one of: OpenSSH, SSH2, PuTTY. Can be omitted if specified on device policy.'
+        PolicyDN:
+          type: string
+          description: The DN of the policy where the keyset will be created.
+      description: The class for adding host private key request.
+    Ssh_WebSDK_DataContract_Requests_ExportSelfServiceKeyRequest:
+      type: object
+      properties:
+        KeyId:
+          type: integer
+          description: The identifier of key to download. To get the KeyId, use GET SSH/KeysetDetails.
+          format: int64
+        Format:
+          type: string
+          description: '(Optional) Format of the key material: OpenSSH, SSH2, PuTTY (only for private keys).
+
+            If format is not specified, the value is taken from policy. If the policy format is not specified, the default is OpenSSH.'
+      description: The class for exporting selfservice key request.
+    Ssh_WebSDK_DataContract_Requests_UnmatchedKeysetRequest:
+      type: object
+      properties:
+        UnmatchedTrustId:
+          type: string
+          description: Unmatched keyset trust ID
+        Passphrase:
+          type: string
+          description: Unmatched encrypted private key passphrase
+      description: The class for working with unmatched encrypted keyset
+    Ssh_WebSDK_DataContract_Requests_PrivateKeyData:
+      type: object
+      properties:
+        KeyContentBase64:
+          type: string
+          description: Base64 contents of private key file, in OpenSSH, SSH2 or PuTTY format.
+        DeviceGuid:
+          type: string
+          description: The GUID of a device.
+        Username:
+          type: string
+          description: Name on user specified device that will own the key.
+        Passphrase:
+          type: string
+          description: Passphrase to decrypt the key. To specify a password, use your own company password standards or follow the guidelines from the National Institute of Standards and Technology (NIST).
+        Filepath:
+          type: string
+          description: Path of the file with the key.
+        Format:
+          type: string
+          description: 'Format of the private key. Supported formats: OpenSSH, SSH2 and PuTTY.'
+      description: The class for importing private key request.
+    IList_1_Ssh_WebSDK_DataContract_TestDeviceConnectionResult_:
+      type: array
+      items:
+        type: object
+        properties:
+          DeviceGuid:
+            type: string
+            description: The Device Identifier.
+          Success:
+            type: boolean
+            description: Whether connection to the device was successful
+          Error:
+            type: string
+            description: Error description
+        description: Stores device
+    Ssh_WebSDK_DataContract_Requests_UnmatchedKeysetDeleteRequest:
+      type: object
+      properties:
+        UnmatchedTrustId:
+          type: string
+          description: Unmatched keyset trust ID
+      description: The class for working with a deletion of a unmatched encrypted keyset
     Ssh_WebSDK_DataContract_ImportResponse:
       type: object
       properties:
@@ -2119,65 +1668,495 @@ components:
               description: Omitted if Success is true.The corresponding error message if any.
           description: SshWebResponse object with result of the operation
       description: The class for importing key response.
-    Ssh_WebSDK_DataContract_SshWebResponse:
+    Ssh_WebSDK_DataContract_Requests_AddUserPrivateKeyWebRequest:
       type: object
       properties:
-        Success:
-          type: boolean
-          description: 'true: The operation succeeded
+        DeviceGuid:
+          type: string
+          description: GUID of a Device to add key to.
+        Username:
+          type: string
+          description: Name on user specified device that will own the key.
+        Filepath:
+          type: string
+          description: Path of the file with the key.
+        KeysetId:
+          type: string
+          description: Keyset to add the key to. If not specified, new keyset will be created.
+        Format:
+          type: string
+          description: 'Format of the key. Can be one of: OpenSSH, SSH2, PuTTY. Can be omitted if specified on device policy.'
+        Passphrase:
+          type: string
+          description: Passphrase to encrypt the new key.
+        PolicyDN:
+          type: string
+          description: The DN of the policy where the keyset will be created.
+      description: The class for adding user private key request.
+    Ssh_WebSDK_DataContract_Requests_ExportSelfServicePrivateKeyRequest:
+      type: object
+      properties:
+        Passphrase:
+          type: string
+          description: '(Optional) The passphrase to use to encrypt the key.
 
-            false: The operation failed.'
-        ErrorCode:
+            To specify a passphrase, use your own company standards or follow the guidelines from the National Institute of Standards and Technology (NIST).'
+        KeyId:
           type: integer
-          description: Omitted if Success is true. The code that describes the error if any.
-          format: int32
-        ErrorMessage:
+          description: The identifier of key to download. To get the KeyId, use GET SSH/KeysetDetails.
+          format: int64
+        Format:
           type: string
-          description: Omitted if Success is true.The corresponding error message if any.
-      description: Contains the response information for arbitrary action.
-    Ssh_WebSDK_DataContract_Requests_EditSelfServiceAuthorizedKeyWebRequest:
+          description: '(Optional) Format of the key material: OpenSSH, SSH2, PuTTY (only for private keys).
+
+            If format is not specified, the value is taken from policy. If the policy format is not specified, the default is OpenSSH.'
+      description: The class for exporting selfservice key request.
+    Ssh_WebSDK_DataContract_Requests_AddAuthorizedKeyWebRequest:
       type: object
       properties:
-        Location:
+        DeviceGuid:
           type: string
-          description: Key location.
-        Notes:
+          description: GUID of a Device to add key to.
+        Username:
           type: string
-          description: Arbitrary notes
+          description: Name on user specified device that will own the key.
+        Filepath:
+          type: string
+          description: Name on user specified device that will own the key.
+        KeysetId:
+          type: string
+          description: Keyset to add the key to.
         AllowedSourceRestriction:
           type: array
           items:
             type: string
-          description: List of allowed source restrictions for the key.
+          description: List of allowed source restrictions for the key. If omitted, the value is taken from device policy.
         DeniedSourceRestriction:
           type: array
           items:
             type: string
-          description: List of denied source restrictions for the key.
+          description: List of denied source restrictions for the key. If omitted, the value is taken from device policy.
         ForcedCommand:
           type: string
-          description: Forced command for connections with the key.
+          description: Forced command for connections with the key. If omitted, the value is taken from device policy.
         Options:
           type: array
           items:
             type: string
-          description: List of authorized key options.
-      description: The class for editing selfservice authorized key request.
-    IList_1_Ssh_WebSDK_DataContract_TestDeviceConnectionResult_:
-      type: array
-      items:
-        type: object
-        properties:
-          DeviceGuid:
+          description: List of authorized key options. If omitted, the value is taken from device policy.
+        Format:
+          type: string
+          description: 'Format of the key. Can be one of: OpenSSH, SSH2. Can be omitted if specified on device policy.'
+        TrailingComment:
+          type: string
+          description: The trailing comment of the authorized key.
+      description: The class for adding authorized key request.
+    Ssh_WebSDK_AuthRulesResponse:
+      type: object
+      properties:
+        TotalCount:
+          type: integer
+          description: The total number of rules that match the specified search filters.
+          format: int32
+        DataRange:
+          type: string
+          description: The data range for the current page, i.e., 20-50.
+        Rules:
+          type: array
+          items:
+            type: object
+            properties:
+              Account:
+                type: string
+                description: The account of the rule.
+              Host:
+                type: string
+                description: The host of the rule.
+              KeyAlgorithm:
+                type: string
+                description: 'Possible values:
+
+
+                  | OID | Key type | Description |
+
+                  |-----|-----------|-------------|
+
+                  |1.3.6.1.4.1.28783.10.1.1.1024|ssh-rsa|RSA 1024. Not recommended for high-security applications.|
+
+                  |1.3.6.1.4.1.28783.10.1.1.2048|ssh-rsa|RSA 2048.|
+
+                  |1.3.6.1.4.1.28783.10.1.1.3072|ssh-rsa|RSA 3072.|
+
+                  |1.3.6.1.4.1.28783.10.1.1.4096|ssh-rsa|RSA 4096.|
+
+                  |1.3.6.1.4.1.28783.10.8.1024|ssh-dss|DSA 1024. Outdated and insecure. Not recommended for high-security applications.|
+
+                  |1.3.6.1.4.1.28783.10.8.2048|ssh-dss|DSA 2048. Outdated and insecure. Not recommended for high-security applications.|
+
+                  |1.3.6.1.4.1.28783.10.8.3072|ssh-dss|DSA 3072. Outdated and insecure. Not recommended for high-security applications.|
+
+                  |1.3.6.1.4.1.28783.10.8.4096|ssh-dss|DSA 4096. Outdated and insecure. Not recommended for high-security applications.|
+
+                  |1.3.6.1.4.1.28783.10.2.1.256|ecdsa-sha2-nistp256|ECC 256.|
+
+                  |1.3.6.1.4.1.28783.10.2.1.384|ecdsa-sha2-nistp384|ECC 384.|
+
+                  |1.3.6.1.4.1.28783.10.2.1.521|ecdsa-sha2-nistp521|ECC 521.|
+
+                  |1.3.6.1.4.1.28783.10.3.25519|ssh-ed25519|ED25519.|'
+              KeyFingerprint:
+                type: string
+                description: The key fingerprint of the rule.
+              FirstHit:
+                type: string
+                description: The first hit date of the rule in ISO 8601 format.
+              LastHit:
+                type: string
+                description: The last hit date of the rule in ISO 8601 format.
+              HitCount:
+                type: string
+                description: The hit count of the rule being returned.
+            description: Key authorization rule object.
+          description: The list of rules being returned.
+        ErrorDetails:
+          type: string
+          description: The error details, if an error was encountered querying for the rules.
+      description: Result class containing list of key authorization rules as well as paging links and count information.
+    Ssh_WebSDK_DataContract_KeysetProcessStatus:
+      title: The possible process status result codes that can occur while Trust Protection Foundation manages public and private keys for devices that use Secure Shell
+      enum:
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      type: integer
+      description: "\n\n**5**: **Rotating**  \nIndicates that keyset is being rotated.\n\n**6**: **FailedToRotate**  \nIndicates that keyset had error during rotation.\n\n**7**: **KeyOperationRunning**  \nIndicates that at least one add, remove, or options edit operation is occurring with key of the keyset.\n\n**8**: **RotationSuspended**  \nIndicates that keyset rotation is suspended. Waiting for the user to finish manual server reconfiguration, and then press the Resume button.\n\n**9**: **RollingBack**  \nIndicates that keyset rotation is in the process of moving back to a previous state.\n\n**10**: **PendingApproval**  \nIndicates that the keyset has at least one key operation which is pending approval.\n\n**11**: **PendingMyApproval**  \nIndicates that the keyset has at least one key operation which is pending approval from the current user.\n"
+      format: int32
+    Ssh_WebSDK_DataContract_Requests_SshLoadDataRequest_KeyUsage:
+      required:
+      - SshKeyUsageFilter
+      - PageSize
+      - Offset
+      type: object
+      properties:
+        SshKeyUsageFilter:
+          type: object
+          properties:
+            ServerName:
+              type: array
+              items:
+                type: string
+              description: 'An array of authorized server IP addresses, full names, or partial names that provide keys to ClientName. Also known as the target device.
+
+                For example, host715.test.com.'
+            ServerAccount:
+              type: array
+              items:
+                type: string
+              description: 'An array of authorized server account names that provide keys to ClientName.
+
+                For example, Admin.'
+            ClientName:
+              type: array
+              items:
+                type: string
+              description: 'An array of client IP addresses, full names, or partial names that can that connect to ServerAccount with a corresponding key pair. Also known as the source device.
+
+                For example, 10.240.102.94.'
+            Alert:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: 'An array of key usage alerts found on the Server:
+
+                1 = An orphan key.
+
+                2 = A key that does not belong to any client.'
+          description: Filter details for key usage
+        PageSize:
+          type: integer
+          description: Page size
+          format: int32
+        Offset:
+          type: integer
+          description: Starting page
+          format: int32
+    Nullable_1_Ssh_WebSDK_DataContract_SshKeyUsageAlert_:
+      title: The class for key usage alert
+      enum:
+      - 1
+      - 2
+      type:
+      - integer
+      - 'null'
+      description: "\n\n**1**: **UntrackedKey**  \nUntracked key.\n\n**2**: **UnknownClient**  \nUnknown client.\n"
+      format: int32
+    Ssh_WebSDK_DataContract_AddSelfServiceKeyWebResponse:
+      type: object
+      properties:
+        KeyId:
+          type: integer
+          description: Identifier of newly created key
+          format: int64
+        KeysetId:
+          type: string
+          description: Identifier of keyset new key is located in.
+        Notes:
+          type: string
+          description: Notes for manual key
+        Response:
+          type: object
+          properties:
+            Success:
+              type: boolean
+              description: 'true: The operation succeeded
+
+                false: The operation failed.'
+            ErrorCode:
+              type: integer
+              description: Omitted if Success is true. The code that describes the error if any.
+              format: int32
+            ErrorMessage:
+              type: string
+              description: Omitted if Success is true.The corresponding error message if any.
+          description: SshWebResponse object with result of the operation
+      description: The class for adding selfservice private key response.
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
+    ProductLogic_Ssh_Entities_PolicyViolation:
+      title: Possible policy violations
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 16
+      - 17
+      - 18
+      - 19
+      - 20
+      - 21
+      - 22
+      - 33
+      - 35
+      - 36
+      - 37
+      - 38
+      type: integer
+      description: "\n\n**1**: **IsRootAccessOrphan**  \nRoot access orphan\n\n**2**: **IsClientAccessOrphan**  \nClient access orphan\n\n**3**: **IsPrivateKeyOrphan**  \nPrivate key orphan\n\n**4**: **IsKnownHostOrphan**  \nKnown host orphan\n\n**5**: **IsRootAccess**  \nRoot access\n\n**6**: **IsDuplicateClientPrivateKey**  \nDuplicate client private key\n\n**7**: **IsIllegalAlgorithm**  \nIllegal algorithm\n\n**8**: **IsIllegalProtocolVersion**  \nIllegal protocol version\n\n**9**: **IsIllegalVendorFormat**  \nIllegal vendor format\n\n**10**: **IsIllegalForcedCommand**  \nIllegal forced command\n\n**11**: **IsIllegalSourceRestrictions**  \nIllegal source restriction\n\n**12**: **IsMissingOptions**  \nMissing option\n\n**13**: **IsKeyOlderThanAllowed**  \nOlder than allowed\n\n**16**: **IsSharedPrivateKey**  \nShared private key\n\n**17**: **IsUnEncryptedKey**  \nUnencrypted key\n\n**18**: **IsSharedServerAccount**  \nShared server account\n\n**19**: **IsPassphraseUnknown**  \nPassphrase unknown\n\n**20**: **IsUnknownClient**  \nUnknown client\n\n**21**: **KeyWasNotRotated**  \nKey was not rotated\n\n**22**: **IsEnvironmentCrossing**  \nEnvironment crossing\n\n**33**: **IsDuplicateHostPrivateKey**  \nDuplicate host private key\n\n**35**: **IsSymbolicLinkKey**  \nKey or some of its parent directories is a symbolic link\n\n**36**: **IsTooOpenPrivateKeyPermissions**  \nPrivate key allows other users to read its material\n\n**37**: **IsNotApprovedKeyEncryptionAlgorithm**  \nNot approved PBE algorithm is used for a key\n\n**38**: **IsDisallowedKeyFormat**  \nDisallowed key format\n"
+      format: int32
+    Ssh_WebSDK_DataContract_AddHostPrivateKeyWebResponse:
+      type: object
+      properties:
+        KeyId:
+          type: integer
+          description: Identifier of newly created key
+          format: int64
+        KeysetId:
+          type: string
+          description: Identifier of keyset new key is located in.
+        Response:
+          type: object
+          properties:
+            Success:
+              type: boolean
+              description: 'true: The operation succeeded
+
+                false: The operation failed.'
+            ErrorCode:
+              type: integer
+              description: Omitted if Success is true. The code that describes the error if any.
+              format: int32
+            ErrorMessage:
+              type: string
+              description: Omitted if Success is true.The corresponding error message if any.
+          description: SshWebResponse object with result of the operation
+      description: The class for adding host private key response.
+    Ssh_WebSDK_DataContract_Requests_SshLoadDataRequest:
+      type: object
+      properties:
+        KeysetFilter:
+          type: object
+          properties:
+            DeviceGuid:
+              type: array
+              items:
+                type: string
+              description: 'An array of GUIDs that identify devices.
+
+                Example: DeviceGuid: ["{6955f049-19c5-412a-ad99-974fa4a4183e}"]'
+            Username:
+              type: array
+              items:
+                type: string
+              description: An array of names of users that own the keys.
+            Length:
+              type: array
+              items:
+                type: integer
+                format: int64
+              description: 'An array of key lengths.
+
+                Example: Length: [1024]'
+            MaxKeyLength:
+              type: integer
+              description: The maximum allowed key length.
+              format: int32
+            Algorithm:
+              type: array
+              items:
+                type: string
+              description: 'An array of key algorithms. Supported values: DSA, RSA, or RSA1.
+
+                Example: Algorithm: [RSA]'
+            PkixParameterSet:
+              type: array
+              items:
+                type: string
+              description: An array of PKIX Parameter Set values describing the key algorithms.
+            ProcessStatus:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: The result that occurred while processing keys.
+            ViolationStatus:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: An array of various key violation status codes for a keyset.
+            Type:
+              type: string
+              description: 'The type of keyset: Host or User.'
+            UsageFilterType:
+              type: string
+              description: 'The type of usage filter: NeverUsed, UnusedSince, or UsedSince. Use in conjunction with LastUsed to specify a date.'
+            LastUsed:
+              type:
+              - string
+              - 'null'
+              description: 'The date to use in conjunction with UsageFilterType. Specify the date in the Epoch format.
+
+                Example: LastUsed: /Date(1443449923000+0000)/).'
+            AuthorizedKeyComment:
+              type: array
+              items:
+                type: string
+              description: An array of authorized key comments.
+            FingerprintSHA256:
+              type: array
+              items:
+                type: string
+              description: An array of sha256 fingerprints.
+            FingerprintMD5:
+              type: array
+              items:
+                type: string
+              description: An array of md5 fingerprints.
+          description: Filter details for keysets
+        SshKeyUsageFilter:
+          type: object
+          properties:
+            ServerName:
+              type: array
+              items:
+                type: string
+              description: 'An array of authorized server IP addresses, full names, or partial names that provide keys to ClientName. Also known as the target device.
+
+                For example, host715.test.com.'
+            ServerAccount:
+              type: array
+              items:
+                type: string
+              description: 'An array of authorized server account names that provide keys to ClientName.
+
+                For example, Admin.'
+            ClientName:
+              type: array
+              items:
+                type: string
+              description: 'An array of client IP addresses, full names, or partial names that can that connect to ServerAccount with a corresponding key pair. Also known as the source device.
+
+                For example, 10.240.102.94.'
+            Alert:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: 'An array of key usage alerts found on the Server:
+
+                1 = An orphan key.
+
+                2 = A key that does not belong to any client.'
+          description: Filter details for key usage
+        SshDeviceFilter:
+          type: object
+          properties:
+            DeviceName:
+              type: array
+              items:
+                type: string
+              description: List of host names to search. Partial match is allowed.
+            Type:
+              type: string
+              description: 'Only one type of Ssh Device. If not specified, all devices are returned.
+
+                Client = Return all devices containing client keys(user and known host keys).
+
+                Server = Return all devices containing server keys(host and authorized keys).
+
+                ClientServer = Return all devices containing both client and server keys.'
+            IsCompliant:
+              type:
+              - boolean
+              - 'null'
+              description: Whether the device has any issues with SSH key compliance.
+          description: Filter details for devices
+        PageSize:
+          type: integer
+          description: Page size
+          format: int32
+        Offset:
+          type: integer
+          description: Starting page
+          format: int32
+        LoadKeyData:
+          type: boolean
+          description: Load the key data
+        deviceGuids:
+          type: array
+          items:
             type: string
-            description: The Device Identifier.
-          Success:
-            type: boolean
-            description: Whether connection to the device was successful
-          Error:
-            type: string
-            description: Error description
-        description: Stores device
+          description: List of device GUIDs
+        KeyId:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: List of key IDs
+      description: Data object
     Ssh_WebSDK_DataContract_PageResponse_1_Ssh_WebSDK_DataContract_KeysetData_:
       type: object
       properties:
@@ -2431,31 +2410,52 @@ components:
             description: Stores detailed SSH keyset information.
           description: Array with one page of data.
       description: Contains the response information for paginated queries.
-    Ssh_WebSDK_DataContract_Requests_AddUserPrivateKeyWebRequest:
+    Ssh_WebSDK_DataContract_PageResponse_1_Ssh_WebSDK_DataContract_SshDeviceData_:
       type: object
       properties:
-        DeviceGuid:
+        Data:
+          type: array
+          items:
+            type: object
+            properties:
+              DeviceGuid:
+                type: string
+                description: The Device Identifier.
+              DN:
+                type: string
+                description: The full device DN.
+              Type:
+                type: string
+                description: 'The type of Ssh Device. Can be one of: Client, Server, ClientServer.'
+              HostName:
+                type: string
+                description: The hostname of a device.
+              IsCompliant:
+                type:
+                - boolean
+                - 'null'
+                description: Whether the device has any issues with SSH key compliance.
+            description: Stores detailed device information.
+          description: Array with one page of data.
+      description: Contains the response information for paginated queries.
+    Ssh_WebSDK_DataContract_Requests_KeyWebRequest:
+      type: object
+      properties:
+        KeyId:
           type: string
-          description: GUID of a Device to add key to.
-        Username:
-          type: string
-          description: Name on user specified device that will own the key.
-        Filepath:
-          type: string
-          description: Path of the file with the key.
-        KeysetId:
-          type: string
-          description: Keyset to add the key to. If not specified, new keyset will be created.
-        Format:
-          type: string
-          description: 'Format of the key. Can be one of: OpenSSH, SSH2, PuTTY. Can be omitted if specified on device policy.'
+          description: Key Identifier
+      description: The class for key request.
+    Ssh_WebSDK_DataContract_Requests_ChangePrivateKeyPassphraseRequest:
+      type: object
+      properties:
+        KeyId:
+          type: integer
+          description: Private key ID
+          format: int64
         Passphrase:
           type: string
-          description: Passphrase to encrypt the new key.
-        PolicyDN:
-          type: string
-          description: The DN of the policy where the keyset will be created.
-      description: The class for adding user private key request.
+          description: New passphrase
+      description: To change parivate key passphrase
   securitySchemes:
     AccessToken:
       type: http

@@ -242,46 +242,6 @@ paths:
         - ResourceOwner
         - Guest
 components:
-  examples:
-    ApplicationRenewalConfigurationExampleModified:
-      value:
-        id: 22153ae0-4352-11ee-b95c-3531a284802b
-        renewalActions:
-          provision: false
-          renew: true
-        renewalWindow:
-          days: 15
-          inherit: false
-    ApplicationRenewalConfigurationExampleDefault:
-      value:
-        id: 22153ae0-4352-11ee-b95c-3531a284802b
-        renewalActions:
-          provision: false
-          renew: false
-        renewalWindow:
-          inherit: true
-    StatusResponseExample:
-      value:
-        current:
-          applications: 13
-          certificates:
-            eligible: 47
-            renewal:
-              failed: 1
-              successful: 9
-              triggered: 3
-          state: running
-          timestamp: '2023-08-25T20:59:36.688019837Z'
-        previous:
-          applications: 13
-          certificates:
-            eligible: 47
-            renewal:
-              failed: 1
-              successful: 46
-              triggered: 47
-          state: complete
-          timestamp: '2023-08-24T20:57:36.688019837Z'
   schemas:
     ApplicationRenewalConfiguration:
       properties:
@@ -321,6 +281,16 @@ components:
       required:
       - renewalActions
       - renewalWindow
+      type: object
+    StatusResponse:
+      description: Details about the current in-progress certificate auto-renewal process, and the most recently completed process.
+      properties:
+        current:
+          $ref: '#/components/schemas/StatusResponseItem'
+        previous:
+          $ref: '#/components/schemas/StatusResponseItem'
+      required:
+      - current
       type: object
     TenantRenewalConfiguration:
       properties:
@@ -364,16 +334,6 @@ components:
       required:
       - id
       - renewalWindow
-      type: object
-    StatusResponse:
-      description: Details about the current in-progress certificate auto-renewal process, and the most recently completed process.
-      properties:
-        current:
-          $ref: '#/components/schemas/StatusResponseItem'
-        previous:
-          $ref: '#/components/schemas/StatusResponseItem'
-      required:
-      - current
       type: object
     StatusResponseItem:
       description: Details about the upcoming certificate auto-renewal run.
@@ -453,6 +413,46 @@ components:
       - applications
       - certificates
       type: object
+  examples:
+    ApplicationRenewalConfigurationExampleDefault:
+      value:
+        id: 22153ae0-4352-11ee-b95c-3531a284802b
+        renewalActions:
+          provision: false
+          renew: false
+        renewalWindow:
+          inherit: true
+    StatusResponseExample:
+      value:
+        current:
+          applications: 13
+          certificates:
+            eligible: 47
+            renewal:
+              failed: 1
+              successful: 9
+              triggered: 3
+          state: running
+          timestamp: '2023-08-25T20:59:36.688019837Z'
+        previous:
+          applications: 13
+          certificates:
+            eligible: 47
+            renewal:
+              failed: 1
+              successful: 46
+              triggered: 47
+          state: complete
+          timestamp: '2023-08-24T20:57:36.688019837Z'
+    ApplicationRenewalConfigurationExampleModified:
+      value:
+        id: 22153ae0-4352-11ee-b95c-3531a284802b
+        renewalActions:
+          provision: false
+          renew: true
+        renewalWindow:
+          days: 15
+          inherit: false
   securitySchemes:
     service-account:
       in: header

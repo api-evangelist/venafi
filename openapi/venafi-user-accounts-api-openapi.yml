@@ -65,18 +65,6 @@ paths:
         - Guest
 components:
   schemas:
-    SSOStatus:
-      enum:
-      - ACTIVE
-      - INACTIVE
-      type: string
-    UserAccountType:
-      enum:
-      - WEB_UI
-      - API
-      type: string
-    AnyValue6:
-      description: Can be any value - string, number, boolean, array or object.
     ApiKeyInformation:
       properties:
         apiKeyStatus:
@@ -137,82 +125,35 @@ components:
           format: date-time
           type: string
       type: object
-    SystemRole:
+    UserType:
       enum:
-      - SYSTEM_ADMIN
-      - CONDOR_METRICS
-      type: string
-    ProductEntitlementInformation:
-      properties:
-        capabilities:
-          items:
-            $ref: '#/components/schemas/CapabilityInformation'
-          type: array
-        label:
-          $ref: '#/components/schemas/ProductEntitlement1'
-        visibilityConstraintsInformation:
-          $ref: '#/components/schemas/VisibilityConstraintsInformation'
-      required:
-      - capabilities
-      - label
-      - visibilityConstraintsInformation
-      type: object
-    UserAccountResponse:
-      properties:
-        apiKey:
-          $ref: '#/components/schemas/ApiKeyInformation'
-        company:
-          $ref: '#/components/schemas/CompanyInformation'
-        user:
-          $ref: '#/components/schemas/UserInformation2'
-      type: object
-    ProductEntitlement1:
-      enum:
-      - ANY
-      - MIRA
-      - DEVOPS
-      - OUTAGE_DETECTION
-      - CODESIGN
-      type: string
-    CompanyType:
-      enum:
+      - EXTERNAL
       - INTERNAL
-      - CA
-      - TPP_CUSTOMER
-      - REGULAR
-      - OTHER
       type: string
-    CompanyInformation:
+    UserStatus:
+      enum:
+      - PENDING_ACTIVATION
+      - ACTIVE
+      - INACTIVE
+      type: string
+    ErrorResponse8:
       properties:
-        active:
-          type: boolean
-        companyType:
-          $ref: '#/components/schemas/CompanyType'
-        creationDate:
-          format: date-time
-          type: string
-        domains:
+        errors:
           items:
-            type: string
+            $ref: '#/components/schemas/ErrorInformation6'
           type: array
-        id:
-          format: uuid
-          type: string
-        instanceId:
-          type: string
-        name:
-          type: string
-        productEntitlements:
+      type: object
+    ErrorInformation6:
+      properties:
+        args:
           items:
-            $ref: '#/components/schemas/ProductEntitlementInformation'
+            $ref: '#/components/schemas/AnyValue6'
           type: array
-        tsgId:
+        code:
+          format: int32
+          type: integer
+        message:
           type: string
-        urlPrefix:
-          type: string
-      required:
-      - id
-      - productEntitlements
       type: object
     CapabilityInformation:
       properties:
@@ -230,39 +171,6 @@ components:
       - isTrial
       - name
       - productExpiryDate
-      type: object
-    UserType:
-      enum:
-      - EXTERNAL
-      - INTERNAL
-      type: string
-    ApiKeyStatus:
-      enum:
-      - PENDING_ACTIVATION
-      - ACTIVE
-      - INACTIVE
-      - PENDING_ROTATION
-      - ROTATED
-      - EXPIRED
-      type: string
-    VisibilityConstraintsInformation:
-      properties:
-        fullAccessDurationDays:
-          format: int32
-          minimum: 0
-          type: integer
-        limitedAccessNotificationDays:
-          format: int32
-          minimum: 0
-          type: integer
-        limitedVisibilityCertCount:
-          format: int32
-          minimum: 0
-          type: integer
-        limitedVisibilityCertInstallPerCertCount:
-          format: int32
-          minimum: 0
-          type: integer
       type: object
     UserInformation2:
       properties:
@@ -333,19 +241,37 @@ components:
         username:
           type: string
       type: object
-    UserStatus:
-      enum:
-      - PENDING_ACTIVATION
-      - ACTIVE
-      - INACTIVE
-      type: string
-    ErrorResponse8:
+    ProductEntitlementInformation:
       properties:
-        errors:
+        capabilities:
           items:
-            $ref: '#/components/schemas/ErrorInformation6'
+            $ref: '#/components/schemas/CapabilityInformation'
           type: array
+        label:
+          $ref: '#/components/schemas/ProductEntitlement1'
+        visibilityConstraintsInformation:
+          $ref: '#/components/schemas/VisibilityConstraintsInformation'
+      required:
+      - capabilities
+      - label
+      - visibilityConstraintsInformation
       type: object
+    ProductEntitlement1:
+      enum:
+      - ANY
+      - MIRA
+      - DEVOPS
+      - OUTAGE_DETECTION
+      - CODESIGN
+      type: string
+    CompanyType:
+      enum:
+      - INTERNAL
+      - CA
+      - TPP_CUSTOMER
+      - REGULAR
+      - OTHER
+      type: string
     Role2:
       enum:
       - SECURITY_ADMIN
@@ -357,24 +283,26 @@ components:
       - GUEST
       - PLATFORM_ADMIN
       type: string
+    UserAccountType:
+      enum:
+      - WEB_UI
+      - API
+      type: string
+    ApiKeyStatus:
+      enum:
+      - PENDING_ACTIVATION
+      - ACTIVE
+      - INACTIVE
+      - PENDING_ROTATION
+      - ROTATED
+      - EXPIRED
+      type: string
     ApiVersion:
       description: Indicates version of the API.
       enum:
       - ALL
       - V1
       type: string
-    ErrorInformation6:
-      properties:
-        args:
-          items:
-            $ref: '#/components/schemas/AnyValue6'
-          type: array
-        code:
-          format: int32
-          type: integer
-        message:
-          type: string
-      type: object
     Capability:
       enum:
       - DEFAULT
@@ -393,6 +321,78 @@ components:
       - KUBERNETES_ENTERPRISE_COMPONENTS_APE
       - KUBERNETES_ENTERPRISE_COMPONENTS_OS
       - KUBERNETES_INTEGRATION_TLSPDC
+      type: string
+    SSOStatus:
+      enum:
+      - ACTIVE
+      - INACTIVE
+      type: string
+    VisibilityConstraintsInformation:
+      properties:
+        fullAccessDurationDays:
+          format: int32
+          minimum: 0
+          type: integer
+        limitedAccessNotificationDays:
+          format: int32
+          minimum: 0
+          type: integer
+        limitedVisibilityCertCount:
+          format: int32
+          minimum: 0
+          type: integer
+        limitedVisibilityCertInstallPerCertCount:
+          format: int32
+          minimum: 0
+          type: integer
+      type: object
+    UserAccountResponse:
+      properties:
+        apiKey:
+          $ref: '#/components/schemas/ApiKeyInformation'
+        company:
+          $ref: '#/components/schemas/CompanyInformation'
+        user:
+          $ref: '#/components/schemas/UserInformation2'
+      type: object
+    CompanyInformation:
+      properties:
+        active:
+          type: boolean
+        companyType:
+          $ref: '#/components/schemas/CompanyType'
+        creationDate:
+          format: date-time
+          type: string
+        domains:
+          items:
+            type: string
+          type: array
+        id:
+          format: uuid
+          type: string
+        instanceId:
+          type: string
+        name:
+          type: string
+        productEntitlements:
+          items:
+            $ref: '#/components/schemas/ProductEntitlementInformation'
+          type: array
+        tsgId:
+          type: string
+        urlPrefix:
+          type: string
+      required:
+      - id
+      - productEntitlements
+      type: object
+    AnyValue6:
+      description: Can be any value - string, number, boolean, array or object.
+    SystemRole:
+      enum:
+      - SYSTEM_ADMIN
+      - CONDOR_METRICS
       type: string
   securitySchemes:
     service-account:

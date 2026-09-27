@@ -290,110 +290,6 @@ paths:
       - AccessToken: []
 components:
   schemas:
-    Web_SDK_Authentication_AuthorizeOAuthResponse_jwt:
-      type: object
-      properties:
-        access_token:
-          type: string
-          description: The scope (WebSDK, CSP, etc) this grant applies to
-        refresh_token:
-          type: string
-          description: The token to use to get an updated access token
-        scope:
-          type: string
-          description: The scope of the grant
-        identity:
-          type: string
-          description: The identity the grant is for
-    Web_SDK_Authentication_AuthorizeOAuthRequest_oauth:
-      type: object
-      properties:
-        client_id:
-          type: string
-          description: Client (Application) ID
-        username:
-          type: string
-          description: Valid username; can be prefixed with provider
-        password:
-          type: string
-          description: Valid password for _Username_
-        scope:
-          type: string
-          description: Desired Scope
-    Web_SDK_Authentication_AuthorizeVerifyResponse:
-      type: object
-      properties:
-        identity:
-          type: string
-          description: The PrefixedUniversal identity the grant has been issued to
-        scope:
-          type: string
-          description: The scope (WebSDK, CSP, etc) this grant applies to
-        valid_for:
-          type: integer
-          description: Number of seconds the access token is valid
-          format: int64
-        access_issued_on:
-          type: string
-          description: The date and time (UTC) when the access token was issued last
-        access_issued_on_unix_time:
-          type: integer
-          description: Unixtime when the access token was issued last
-          format: int64
-        access_issued_on_ISO8601:
-          type: string
-          description: The date and time (UTC) when the access token was issued last, in ISO-8601 format
-        expires:
-          type:
-          - string
-          - 'null'
-          description: The date and time (UTC) when the grant expires and cannot be refreshed, null if it does not expire
-        expires_unix_time:
-          type: integer
-          description: Unixtime when the grant expires and cannot be refreshed anymore, 0 if it does not expire
-          format: int64
-        expires_ISO8601:
-          type: string
-          description: The date and time (UTC) when the grant expires and cannot be refreshed, null if it does not expire (in ISO-8601 format)
-        grant_issued_on:
-          type: string
-          description: The date and time (UTC) when the grant was issued
-        grant_issued_on_unix_time:
-          type: integer
-          description: Unixtime when the grant was issued
-          format: int64
-        grant_issued_on_ISO8601:
-          type: string
-          description: The date and time (UTC) when the grant was issued (in ISO-8601 format)
-        application:
-          type: string
-          description: The application this grant applies to
-      description: Holds information about a particular access grant
-    Web_SDK_Authentication_AuthorizeOAuthRequest_certificate:
-      type: object
-      properties:
-        client_id:
-          type: string
-          description: Client (Application) ID
-        scope:
-          type: string
-          description: Desired Scope
-    Web_SDK_Authentication_TokenOAuthRequest:
-      type: object
-      properties:
-        refresh_token:
-          type: string
-          description: Gets or sets the refresh token being used to obtain a new access token.
-        client_id:
-          type: string
-          description: Gets or sets the client id.
-        grant_type:
-          type: string
-          description: OAuth grant type.
-        device_code:
-          type: string
-          description: The device verification code, "device_code" from the device authorization response.
-      description: RFC6749 token request.
     Web_SDK_Authentication_AuthError:
       type: object
       properties:
@@ -419,15 +315,6 @@ components:
         identity:
           type: string
           description: The identity the grant is for
-    Web_SDK_Authentication_AuthorizeOAuthRequest_integrated:
-      type: object
-      properties:
-        client_id:
-          type: string
-          description: Client (Application) ID
-        scope:
-          type: string
-          description: Desired Scope
     Web_SDK_Authentication_AuthorizeOAuthRequest_device:
       type: object
       properties:
@@ -437,73 +324,6 @@ components:
         scope:
           type: string
           description: Desired Scope
-    Web_SDK_Authentication_OAuthError:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Gets or sets the short error name
-        error_description:
-          type: string
-          description: Gets or sets the description of the error
-      description: REST OAuth Error Response
-    Web_SDK_Authentication_AuthorizeOAuthResponse_device:
-      type: object
-      properties:
-        access_token:
-          type: string
-          description: The scope (WebSDK, CSP, etc) this grant applies to
-        refresh_token:
-          type: string
-          description: The token to use to get an updated access token
-        scope:
-          type: string
-          description: The scope of the grant
-        identity:
-          type: string
-          description: The identity the grant is for
-    Web_SDK_Authentication_AuthorizeOAuthResponse_oauth:
-      type: object
-      properties:
-        access_token:
-          type: string
-          description: The scope (WebSDK, CSP, etc) this grant applies to
-        refresh_token:
-          type: string
-          description: The token to use to get an updated access token
-        scope:
-          type: string
-          description: The scope of the grant
-        identity:
-          type: string
-          description: The identity the grant is for
-    Web_SDK_Authentication_AuthorizeOAuthRequest_jwt:
-      type: object
-      properties:
-        client_id:
-          type: string
-          description: Client (Application) ID
-        jwt:
-          type: string
-          description: Trusted Json Web Token
-        scope:
-          type: string
-          description: Desired Scope
-    Web_SDK_Authentication_AuthorizeOAuthResponse_integrated:
-      type: object
-      properties:
-        access_token:
-          type: string
-          description: The scope (WebSDK, CSP, etc) this grant applies to
-        refresh_token:
-          type: string
-          description: The token to use to get an updated access token
-        scope:
-          type: string
-          description: The scope of the grant
-        identity:
-          type: string
-          description: The identity the grant is for
     Web_SDK_Authentication_AuthorizeOAuthResponse:
       type: object
       properties:
@@ -557,6 +377,186 @@ components:
           description: The minimum amount of time in seconds that the client should wait between polling requests to the token endpoint.
           format: int64
       description: Holds information about a particular access grant
+    Web_SDK_Authentication_AuthorizeOAuthResponse_integrated:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: The scope (WebSDK, CSP, etc) this grant applies to
+        refresh_token:
+          type: string
+          description: The token to use to get an updated access token
+        scope:
+          type: string
+          description: The scope of the grant
+        identity:
+          type: string
+          description: The identity the grant is for
+    Web_SDK_Authentication_AuthorizeOAuthRequest_certificate:
+      type: object
+      properties:
+        client_id:
+          type: string
+          description: Client (Application) ID
+        scope:
+          type: string
+          description: Desired Scope
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
+    Web_SDK_Authentication_AuthorizeVerifyResponse:
+      type: object
+      properties:
+        identity:
+          type: string
+          description: The PrefixedUniversal identity the grant has been issued to
+        scope:
+          type: string
+          description: The scope (WebSDK, CSP, etc) this grant applies to
+        valid_for:
+          type: integer
+          description: Number of seconds the access token is valid
+          format: int64
+        access_issued_on:
+          type: string
+          description: The date and time (UTC) when the access token was issued last
+        access_issued_on_unix_time:
+          type: integer
+          description: Unixtime when the access token was issued last
+          format: int64
+        access_issued_on_ISO8601:
+          type: string
+          description: The date and time (UTC) when the access token was issued last, in ISO-8601 format
+        expires:
+          type:
+          - string
+          - 'null'
+          description: The date and time (UTC) when the grant expires and cannot be refreshed, null if it does not expire
+        expires_unix_time:
+          type: integer
+          description: Unixtime when the grant expires and cannot be refreshed anymore, 0 if it does not expire
+          format: int64
+        expires_ISO8601:
+          type: string
+          description: The date and time (UTC) when the grant expires and cannot be refreshed, null if it does not expire (in ISO-8601 format)
+        grant_issued_on:
+          type: string
+          description: The date and time (UTC) when the grant was issued
+        grant_issued_on_unix_time:
+          type: integer
+          description: Unixtime when the grant was issued
+          format: int64
+        grant_issued_on_ISO8601:
+          type: string
+          description: The date and time (UTC) when the grant was issued (in ISO-8601 format)
+        application:
+          type: string
+          description: The application this grant applies to
+      description: Holds information about a particular access grant
+    Web_SDK_Authentication_AuthorizeOAuthResponse_jwt:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: The scope (WebSDK, CSP, etc) this grant applies to
+        refresh_token:
+          type: string
+          description: The token to use to get an updated access token
+        scope:
+          type: string
+          description: The scope of the grant
+        identity:
+          type: string
+          description: The identity the grant is for
+    Web_SDK_Authentication_AuthorizeOAuthResponse_device:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: The scope (WebSDK, CSP, etc) this grant applies to
+        refresh_token:
+          type: string
+          description: The token to use to get an updated access token
+        scope:
+          type: string
+          description: The scope of the grant
+        identity:
+          type: string
+          description: The identity the grant is for
+    Web_SDK_Authentication_AuthorizeOAuthResponse_oauth:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: The scope (WebSDK, CSP, etc) this grant applies to
+        refresh_token:
+          type: string
+          description: The token to use to get an updated access token
+        scope:
+          type: string
+          description: The scope of the grant
+        identity:
+          type: string
+          description: The identity the grant is for
+    Web_SDK_Authentication_AuthorizeOAuthRequest_oauth:
+      type: object
+      properties:
+        client_id:
+          type: string
+          description: Client (Application) ID
+        username:
+          type: string
+          description: Valid username; can be prefixed with provider
+        password:
+          type: string
+          description: Valid password for _Username_
+        scope:
+          type: string
+          description: Desired Scope
+    Web_SDK_Authentication_AuthorizeOAuthRequest_jwt:
+      type: object
+      properties:
+        client_id:
+          type: string
+          description: Client (Application) ID
+        jwt:
+          type: string
+          description: Trusted Json Web Token
+        scope:
+          type: string
+          description: Desired Scope
+    Web_SDK_Authentication_AuthorizeOAuthRequest_integrated:
+      type: object
+      properties:
+        client_id:
+          type: string
+          description: Client (Application) ID
+        scope:
+          type: string
+          description: Desired Scope
+    Web_SDK_Authentication_TokenOAuthRequest:
+      type: object
+      properties:
+        refresh_token:
+          type: string
+          description: Gets or sets the refresh token being used to obtain a new access token.
+        client_id:
+          type: string
+          description: Gets or sets the client id.
+        grant_type:
+          type: string
+          description: OAuth grant type.
+        device_code:
+          type: string
+          description: The device verification code, "device_code" from the device authorization response.
+      description: RFC6749 token request.
   securitySchemes:
     AccessToken:
       type: http

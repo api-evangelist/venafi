@@ -210,26 +210,6 @@ paths:
         - PlatformAdmin
 components:
   schemas:
-    ConnectorsInformation:
-      properties:
-        id:
-          description: Unique identifier of the connector.
-          format: uuid
-          type: string
-        name:
-          description: Human-readable name of the connector.
-          type: string
-        properties:
-          $ref: '#/components/schemas/WebhookProperties'
-        status:
-          description: Current status of the connector (for example, enabled or disabled).
-          type: string
-      required:
-      - id
-      - name
-      - status
-      - properties
-      type: object
     Target:
       properties:
         connection:
@@ -255,6 +235,22 @@ components:
       - connection
       - type
       type: object
+    ErrorResponse4:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation3'
+          type: array
+      type: object
+    ConnectorsResponse:
+      properties:
+        connectors:
+          items:
+            $ref: '#/components/schemas/ConnectorsInformation'
+          type: array
+      required:
+      - connectors
+      type: object
     WebhookProperties:
       description: "Connector properties for webhook-based notifications.\nWebhook notifications are delivered as HTTP POST requests with a JSON body structured as:\n```json\n{\n  \"events\": [\n    {\n      \"eventName\": \"string\",\n      \"eventType\": \"string\",\n      \"message\": \"string\",\n      \"criticality\": 0,\n      \"createdAt\": \"2025-01-15T12:45:00Z\"\n    }\n  ]\n}\n```\nOnly one event is included per request. The webhook service sets `Content-Type: application/json`, `VaaS-Timestamp`, and, when a `secret` is configured in the connection, `VaaS-Signature`.\n"
       properties:
@@ -265,6 +261,48 @@ components:
       required:
       - filter
       - target
+      type: object
+    Filter1:
+      format: json
+      type: string
+    AnyValue3:
+      description: Can be any value - string, number, boolean, array or object.
+    ConnectorsUpdateRequest:
+      properties:
+        properties:
+          $ref: '#/components/schemas/WebhookProperties'
+      required:
+      - properties
+      type: object
+    ConnectorsCreationRequest:
+      properties:
+        name:
+          type: string
+        properties:
+          $ref: '#/components/schemas/WebhookProperties'
+      required:
+      - name
+      - properties
+      type: object
+    ConnectorsInformation:
+      properties:
+        id:
+          description: Unique identifier of the connector.
+          format: uuid
+          type: string
+        name:
+          description: Human-readable name of the connector.
+          type: string
+        properties:
+          $ref: '#/components/schemas/WebhookProperties'
+        status:
+          description: Current status of the connector (for example, enabled or disabled).
+          type: string
+      required:
+      - id
+      - name
+      - status
+      - properties
       type: object
     ErrorInformation3:
       properties:
@@ -278,44 +316,6 @@ components:
         message:
           type: string
       type: object
-    ErrorResponse4:
-      properties:
-        errors:
-          items:
-            $ref: '#/components/schemas/ErrorInformation3'
-          type: array
-      type: object
-    Filter1:
-      format: json
-      type: string
-    ConnectorsCreationRequest:
-      properties:
-        name:
-          type: string
-        properties:
-          $ref: '#/components/schemas/WebhookProperties'
-      required:
-      - name
-      - properties
-      type: object
-    ConnectorsUpdateRequest:
-      properties:
-        properties:
-          $ref: '#/components/schemas/WebhookProperties'
-      required:
-      - properties
-      type: object
-    ConnectorsResponse:
-      properties:
-        connectors:
-          items:
-            $ref: '#/components/schemas/ConnectorsInformation'
-          type: array
-      required:
-      - connectors
-      type: object
-    AnyValue3:
-      description: Can be any value - string, number, boolean, array or object.
   securitySchemes:
     service-account:
       in: header

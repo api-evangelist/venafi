@@ -257,31 +257,15 @@ paths:
         - PKIAdmin
 components:
   schemas:
-    CertificateRevocationApprovalConditionsFilterRuleInformation:
-      properties:
-        certificateAuthorityAccountIds:
-          description: A collection of certificate authority account ids the rule will be applicable to
-          example: 4ece3180-b1e0-11ed-862d-ad36b18e787a
-          format: uuid
-          items:
-            format: uuid
-            type: string
-          minItems: 1
-          type: array
-      required:
-      - certificateAuthorityAccountIds
-      type: object
-    ApproverPropertyOpenApi:
-      description: Approver with id that can be only user type
+    ApproverProperty:
       properties:
         id:
-          description: UUID specific to the approver user/team
-          example: 8268d820-a08d-11ed-bbc0-252385d6d389
           format: uuid
           type: string
         type:
-          description: Approver type
-          example: USER
+          enum:
+          - USER
+          - TEAM
           type: string
       type: object
     CertificateRevocationApprovalRulesUpdateRequest:
@@ -341,15 +325,12 @@ components:
       - name
       - type
       type: object
-    CertificateRevocationApprovalRuleDeleteResponseOpenApi:
+    ErrorResponse10:
       properties:
-        id:
-          description: Approval rule `id`
-          format: uuid
-          type: string
-        name:
-          description: Approval rule name
-          type: string
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation8'
+          type: array
       type: object
     CertificateRevocationApprovalRulesRequest:
       properties:
@@ -403,6 +384,54 @@ components:
       - name
       - type
       type: object
+    AnyValue8:
+      description: Can be any value - string, number, boolean, array or object.
+    ApproverPropertyOpenApi:
+      description: Approver with id that can be only user type
+      properties:
+        id:
+          description: UUID specific to the approver user/team
+          example: 8268d820-a08d-11ed-bbc0-252385d6d389
+          format: uuid
+          type: string
+        type:
+          description: Approver type
+          example: USER
+          type: string
+      type: object
+    ErrorInformation8:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue8'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+    CertificateRevocationApprovalRulesResponseOpenApi:
+      properties:
+        approvalRules:
+          items:
+            $ref: '#/components/schemas/CertificateRevocationApprovalRuleOpenApi'
+          type: array
+      type: object
+    CertificateRevocationApprovalConditionsFilterRuleInformation:
+      properties:
+        certificateAuthorityAccountIds:
+          description: A collection of certificate authority account ids the rule will be applicable to
+          example: 4ece3180-b1e0-11ed-862d-ad36b18e787a
+          format: uuid
+          items:
+            format: uuid
+            type: string
+          minItems: 1
+          type: array
+      required:
+      - certificateAuthorityAccountIds
+      type: object
     CertificateRevocationApprovalExceptionsFilterRuleInformation:
       properties:
         applicationIds:
@@ -420,24 +449,15 @@ components:
           type: array
           uniqueItems: true
       type: object
-    ErrorInformation8:
+    CertificateRevocationApprovalRuleDeleteResponseOpenApi:
       properties:
-        args:
-          items:
-            $ref: '#/components/schemas/AnyValue8'
-          type: array
-        code:
-          format: int32
-          type: integer
-        message:
+        id:
+          description: Approval rule `id`
+          format: uuid
           type: string
-      type: object
-    ErrorResponse10:
-      properties:
-        errors:
-          items:
-            $ref: '#/components/schemas/ErrorInformation8'
-          type: array
+        name:
+          description: Approval rule name
+          type: string
       type: object
     CertificateRevocationApprovalRuleOpenApi:
       properties:
@@ -487,26 +507,6 @@ components:
         type:
           description: The type of the approval rule
           type: string
-      type: object
-    ApproverProperty:
-      properties:
-        id:
-          format: uuid
-          type: string
-        type:
-          enum:
-          - USER
-          - TEAM
-          type: string
-      type: object
-    AnyValue8:
-      description: Can be any value - string, number, boolean, array or object.
-    CertificateRevocationApprovalRulesResponseOpenApi:
-      properties:
-        approvalRules:
-          items:
-            $ref: '#/components/schemas/CertificateRevocationApprovalRuleOpenApi'
-          type: array
       type: object
   securitySchemes:
     service-account:

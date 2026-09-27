@@ -90,29 +90,25 @@ paths:
       - Certificate Import
 components:
   schemas:
-    CertificateUsageMetadata:
+    ErrorResponse4:
       properties:
-        appName:
-          type: string
-        automationMetadata:
-          type: string
-        nodeName:
-          type: string
-      type: object
-    CertificateImportResponse2:
-      properties:
-        certificateInformations:
-          description: A collection of information about certificates that were newly imported.
+        errors:
           items:
-            $ref: '#/components/schemas/ImportedCertificateInformation'
+            $ref: '#/components/schemas/ErrorInformation3'
           type: array
-        statistics:
-          additionalProperties:
-            description: Certificate import statistics
-            format: int32
-            type: integer
-          description: Certificate import statistics
-          type: object
+      type: object
+    CertificateImportRequest2:
+      properties:
+        certificates:
+          description: Base64 encoding certificate content.
+          items:
+            $ref: '#/components/schemas/CertificateImportInfo'
+          type: array
+        overrideBlocklist:
+          description: Imports the certificate even if it's present in the Certificates blocklist.
+          type: boolean
+      required:
+      - certificates
       type: object
     CertificateImportInfo:
       description: Base64 encoding certificate content.
@@ -154,18 +150,32 @@ components:
       required:
       - certificate
       type: object
-    ErrorInformation3:
+    CertificateUsageMetadata:
       properties:
-        args:
-          items:
-            $ref: '#/components/schemas/AnyValue3'
-          type: array
-        code:
-          format: int32
-          type: integer
-        message:
+        appName:
+          type: string
+        automationMetadata:
+          type: string
+        nodeName:
           type: string
       type: object
+    CertificateImportResponse2:
+      properties:
+        certificateInformations:
+          description: A collection of information about certificates that were newly imported.
+          items:
+            $ref: '#/components/schemas/ImportedCertificateInformation'
+          type: array
+        statistics:
+          additionalProperties:
+            description: Certificate import statistics
+            format: int32
+            type: integer
+          description: Certificate import statistics
+          type: object
+      type: object
+    AnyValue3:
+      description: Can be any value - string, number, boolean, array or object.
     ImportedCertificateInformation:
       properties:
         apiClientInformation:
@@ -238,26 +248,6 @@ components:
           format: uuid
           type: string
       type: object
-    ErrorResponse4:
-      properties:
-        errors:
-          items:
-            $ref: '#/components/schemas/ErrorInformation3'
-          type: array
-      type: object
-    CertificateImportRequest2:
-      properties:
-        certificates:
-          description: Base64 encoding certificate content.
-          items:
-            $ref: '#/components/schemas/CertificateImportInfo'
-          type: array
-        overrideBlocklist:
-          description: Imports the certificate even if it's present in the Certificates blocklist.
-          type: boolean
-      required:
-      - certificates
-      type: object
     ApiClientInformation:
       description: Represents the information of the client that is calling the API
       example:
@@ -273,8 +263,18 @@ components:
           example: Venafi VCert CLI
           type: string
       type: object
-    AnyValue3:
-      description: Can be any value - string, number, boolean, array or object.
+    ErrorInformation3:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue3'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
   securitySchemes:
     service-account:
       in: header

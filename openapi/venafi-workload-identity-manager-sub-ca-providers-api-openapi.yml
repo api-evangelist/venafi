@@ -355,6 +355,130 @@ components:
           example: Some Sub CA
           type: string
       type: object
+    ErrorResponse3:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/Error1'
+          type: array
+      type: object
+    KeyAlgorithm1:
+      description: Key algorithm type
+      enum:
+      - RSA_2048
+      - RSA_3072
+      - RSA_4096
+      - EC_P256
+      - EC_P384
+      - EC_P521
+      - EC_ED25519
+      example: EC_P256
+      type: string
+    SubCAProviderListResponse:
+      properties:
+        subCaProviders:
+          items:
+            $ref: '#/components/schemas/SubCAProviderGetResponse'
+          type: array
+      type: object
+    CAType:
+      description: Type of CA this Sub CA provider works with
+      enum:
+      - MOCKCA
+      - DIGICERT
+      - GLOBALSIGN
+      - BUILTIN
+      - ENTRUST
+      - MICROSOFT
+      - ACME
+      - ZTPKI
+      - GLOBALSIGNMSSL
+      - TPP
+      example: BUILTIN
+      type: string
+    SubCAProviderCreateRequest:
+      allOf:
+      - $ref: '#/components/schemas/SubCAProviderUpdateRequest'
+      - properties:
+          caAccountId:
+            description: UUID of the CA account used by this Sub CA provider
+            example: 4ece3180-b1e0-11ed-862d-ad36b18e787a
+            format: uuid
+            type: string
+          caType:
+            $ref: '#/components/schemas/CAType'
+        required:
+        - caAccountId
+        - caProductOptionId
+        - caType
+        - commonName
+        - keyAlgorithm
+        - name
+        - validityPeriod
+        type: object
+    SubCAProviderUpdateRequest:
+      properties:
+        caProductOptionId:
+          description: UUID of the CA product option used by this Sub CA provider
+          example: 6b3d8d20-b1e0-11ed-9c2f-953e35982bbd
+          format: uuid
+          type: string
+        commonName:
+          description: Common name
+          example: example.com
+          maxLength: 64
+          type: string
+        country:
+          description: Country
+          example: US
+          maxLength: 64
+          type: string
+        keyAlgorithm:
+          $ref: '#/components/schemas/KeyAlgorithm1'
+        locality:
+          description: Locality
+          example: San Antonio
+          maxLength: 64
+          type: string
+        name:
+          description: Name of the Sub CA provider
+          example: Some Sub CA
+          maxLength: 64
+          type: string
+        organization:
+          description: Organization
+          example: Some organization
+          maxLength: 64
+          type: string
+        organizationalUnit:
+          description: Organizational unit
+          example: Some organizational unit
+          maxLength: 64
+          type: string
+        pkcs11:
+          $ref: '#/components/schemas/SubCAProviderPKCS11Configuration'
+        shareWithAll:
+          description: Share with all sub-TSGs
+          type: boolean
+        sharedWithSubTsgIds:
+          example:
+          - '1378242802'
+          - '1896239460'
+          items:
+            description: Specific sub-TSG IDs to share with
+            type: string
+          type: array
+        stateOrProvince:
+          description: State or province
+          example: Texas
+          maxLength: 64
+          type: string
+        validityPeriod:
+          description: ISO8601 Period Format
+          example: P30D
+          format: PnYnMnDTnHnMnS
+          type: string
+      type: object
     SubCAProviderGetResponse:
       properties:
         caAccountId:
@@ -437,33 +561,6 @@ components:
           format: PnYnMnDTnHnMnS
           type: string
       type: object
-    ErrorResponse3:
-      properties:
-        errors:
-          items:
-            $ref: '#/components/schemas/Error1'
-          type: array
-      type: object
-    SubCAProviderCreateRequest:
-      allOf:
-      - $ref: '#/components/schemas/SubCAProviderUpdateRequest'
-      - properties:
-          caAccountId:
-            description: UUID of the CA account used by this Sub CA provider
-            example: 4ece3180-b1e0-11ed-862d-ad36b18e787a
-            format: uuid
-            type: string
-          caType:
-            $ref: '#/components/schemas/CAType'
-        required:
-        - caAccountId
-        - caProductOptionId
-        - caType
-        - commonName
-        - keyAlgorithm
-        - name
-        - validityPeriod
-        type: object
     SubCAProviderPKCS11Configuration:
       properties:
         allowedClientLibraries:
@@ -492,21 +589,6 @@ components:
           example: true
           type: boolean
       type: object
-    CAType:
-      description: Type of CA this Sub CA provider works with
-      enum:
-      - MOCKCA
-      - DIGICERT
-      - GLOBALSIGN
-      - BUILTIN
-      - ENTRUST
-      - MICROSOFT
-      - ACME
-      - ZTPKI
-      - GLOBALSIGNMSSL
-      - TPP
-      example: BUILTIN
-      type: string
     Error1:
       description: A single error. The numeric `code` is stable and matches the codes listed at the start of each cause in the endpoints' error-response descriptions, so clients can branch on it instead of parsing `message`.
       properties:
@@ -521,88 +603,6 @@ components:
           type: integer
         message:
           description: Human-readable description of the error.
-          type: string
-      type: object
-    KeyAlgorithm1:
-      description: Key algorithm type
-      enum:
-      - RSA_2048
-      - RSA_3072
-      - RSA_4096
-      - EC_P256
-      - EC_P384
-      - EC_P521
-      - EC_ED25519
-      example: EC_P256
-      type: string
-    SubCAProviderListResponse:
-      properties:
-        subCaProviders:
-          items:
-            $ref: '#/components/schemas/SubCAProviderGetResponse'
-          type: array
-      type: object
-    SubCAProviderUpdateRequest:
-      properties:
-        caProductOptionId:
-          description: UUID of the CA product option used by this Sub CA provider
-          example: 6b3d8d20-b1e0-11ed-9c2f-953e35982bbd
-          format: uuid
-          type: string
-        commonName:
-          description: Common name
-          example: example.com
-          maxLength: 64
-          type: string
-        country:
-          description: Country
-          example: US
-          maxLength: 64
-          type: string
-        keyAlgorithm:
-          $ref: '#/components/schemas/KeyAlgorithm1'
-        locality:
-          description: Locality
-          example: San Antonio
-          maxLength: 64
-          type: string
-        name:
-          description: Name of the Sub CA provider
-          example: Some Sub CA
-          maxLength: 64
-          type: string
-        organization:
-          description: Organization
-          example: Some organization
-          maxLength: 64
-          type: string
-        organizationalUnit:
-          description: Organizational unit
-          example: Some organizational unit
-          maxLength: 64
-          type: string
-        pkcs11:
-          $ref: '#/components/schemas/SubCAProviderPKCS11Configuration'
-        shareWithAll:
-          description: Share with all sub-TSGs
-          type: boolean
-        sharedWithSubTsgIds:
-          example:
-          - '1378242802'
-          - '1896239460'
-          items:
-            description: Specific sub-TSG IDs to share with
-            type: string
-          type: array
-        stateOrProvince:
-          description: State or province
-          example: Texas
-          maxLength: 64
-          type: string
-        validityPeriod:
-          description: ISO8601 Period Format
-          example: P30D
-          format: PnYnMnDTnHnMnS
           type: string
       type: object
   securitySchemes:

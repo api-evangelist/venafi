@@ -399,6 +399,31 @@ paths:
           name: ngts.user_forcelocalpasswordexpiration.update
 components:
   schemas:
+    UserForceLocalPasswordExpirationRequest:
+      properties:
+        forceLocalPasswordExpiration:
+          type: boolean
+      required:
+      - forceLocalPasswordExpiration
+      type: object
+    LocalLoginRequest:
+      properties:
+        localLoginDisabled:
+          type: boolean
+      type: object
+    UserType:
+      enum:
+      - EXTERNAL
+      - INTERNAL
+      type: string
+    UserStatus:
+      enum:
+      - PENDING_ACTIVATION
+      - ACTIVE
+      - INACTIVE
+      type: string
+    AnyValue6:
+      description: Can be any value - string, number, boolean, array or object.
     UserInformation2:
       properties:
         companyId:
@@ -468,26 +493,15 @@ components:
         username:
           type: string
       type: object
-    SSOStatus:
-      enum:
-      - ACTIVE
-      - INACTIVE
-      type: string
-    UserResponse:
+    RolesRequest:
       properties:
-        users:
-          items:
-            $ref: '#/components/schemas/UserInformation2'
-          type: array
+        roles:
+          additionalProperties:
+            $ref: '#/components/schemas/Role2'
+          type: object
+        systemAdmin:
+          type: boolean
       type: object
-    AnyValue6:
-      description: Can be any value - string, number, boolean, array or object.
-    UserStatus:
-      enum:
-      - PENDING_ACTIVATION
-      - ACTIVE
-      - INACTIVE
-      type: string
     ErrorResponse8:
       properties:
         errors:
@@ -495,10 +509,36 @@ components:
             $ref: '#/components/schemas/ErrorInformation6'
           type: array
       type: object
-    UserType:
+    UserResponse:
+      properties:
+        users:
+          items:
+            $ref: '#/components/schemas/UserInformation2'
+          type: array
+      type: object
+    UserAccountTypeRequest:
+      properties:
+        accountType:
+          $ref: '#/components/schemas/UserAccountType'
+      required:
+      - accountType
+      type: object
+    ErrorInformation6:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue6'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+    SSOStatus:
       enum:
-      - EXTERNAL
-      - INTERNAL
+      - ACTIVE
+      - INACTIVE
       type: string
     SystemRole:
       enum:
@@ -516,51 +556,11 @@ components:
       - GUEST
       - PLATFORM_ADMIN
       type: string
-    UserAccountTypeRequest:
-      properties:
-        accountType:
-          $ref: '#/components/schemas/UserAccountType'
-      required:
-      - accountType
-      type: object
-    UserForceLocalPasswordExpirationRequest:
-      properties:
-        forceLocalPasswordExpiration:
-          type: boolean
-      required:
-      - forceLocalPasswordExpiration
-      type: object
-    LocalLoginRequest:
-      properties:
-        localLoginDisabled:
-          type: boolean
-      type: object
-    ErrorInformation6:
-      properties:
-        args:
-          items:
-            $ref: '#/components/schemas/AnyValue6'
-          type: array
-        code:
-          format: int32
-          type: integer
-        message:
-          type: string
-      type: object
     UserAccountType:
       enum:
       - WEB_UI
       - API
       type: string
-    RolesRequest:
-      properties:
-        roles:
-          additionalProperties:
-            $ref: '#/components/schemas/Role2'
-          type: object
-        systemAdmin:
-          type: boolean
-      type: object
   securitySchemes:
     service-account:
       in: header

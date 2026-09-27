@@ -109,27 +109,27 @@ paths:
         - PKIAdmin
 components:
   schemas:
-    CertificateImportRequest1:
+    CertificateImportStatusDetail:
+      description: Status detail information for each certificate and private key imported related to the import id
       properties:
-        edgeInstanceId:
-          description: Id for edge instance
-          format: uuid
+        certificateBytes:
+          description: Bytes of the imported certificate
+          format: byte
           type: string
-        encryptionKeyId:
-          description: Id for data encryption key
-          minLength: 1
+        fingerprint:
+          description: Unique identifier for the imported certificate
           type: string
-        importInformation:
-          description: List of the certificates and private key pairs to import
-          items:
-            $ref: '#/components/schemas/CertificateImportInformation'
-          maxItems: 100
-          minItems: 1
-          type: array
-      required:
-      - edgeInstanceId
-      - encryptionKeyId
-      - importInformation
+        reason:
+          description: Reason for the status result
+          type: string
+        status:
+          description: Result status for the import
+          enum:
+          - IMPORTED
+          - FAILED
+          - SKIPPED
+          - PROCESSING
+          type: string
       type: object
     ErrorInformation1:
       properties:
@@ -151,57 +151,6 @@ components:
           type: string
         id:
           description: Import id used to check the status of the bulk operation
-          type: string
-      type: object
-    CertificateImportStatusDetailResponse:
-      properties:
-        id:
-          description: Import id
-          format: uuid
-          type: string
-        results:
-          description: Status detail information for each certificate and private key imported related to the import id
-          items:
-            $ref: '#/components/schemas/CertificateImportStatusDetail'
-          type: array
-        status:
-          description: Status of bulk import
-          enum:
-          - PROCESSING
-          - COMPLETED
-          - WAITING
-          - FAILED
-          type: string
-      type: object
-    AnyValue1:
-      description: Can be any value - string, number, boolean, array or object.
-    ErrorResponse1:
-      properties:
-        errors:
-          items:
-            $ref: '#/components/schemas/ErrorInformation1'
-          type: array
-      type: object
-    CertificateImportStatusDetail:
-      description: Status detail information for each certificate and private key imported related to the import id
-      properties:
-        certificateBytes:
-          description: Bytes of the imported certificate
-          format: byte
-          type: string
-        fingerprint:
-          description: Unique identifier for the imported certificate
-          type: string
-        reason:
-          description: Reason for the status result
-          type: string
-        status:
-          description: Result status for the import
-          enum:
-          - IMPORTED
-          - FAILED
-          - SKIPPED
-          - PROCESSING
           type: string
       type: object
     CertificateImportInformation:
@@ -226,6 +175,57 @@ components:
       - certificate
       - dekEncryptedPrivateKey
       - passwordEncryptedPrivateKey
+      type: object
+    CertificateImportRequest1:
+      properties:
+        edgeInstanceId:
+          description: Id for edge instance
+          format: uuid
+          type: string
+        encryptionKeyId:
+          description: Id for data encryption key
+          minLength: 1
+          type: string
+        importInformation:
+          description: List of the certificates and private key pairs to import
+          items:
+            $ref: '#/components/schemas/CertificateImportInformation'
+          maxItems: 100
+          minItems: 1
+          type: array
+      required:
+      - edgeInstanceId
+      - encryptionKeyId
+      - importInformation
+      type: object
+    ErrorResponse1:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation1'
+          type: array
+      type: object
+    AnyValue1:
+      description: Can be any value - string, number, boolean, array or object.
+    CertificateImportStatusDetailResponse:
+      properties:
+        id:
+          description: Import id
+          format: uuid
+          type: string
+        results:
+          description: Status detail information for each certificate and private key imported related to the import id
+          items:
+            $ref: '#/components/schemas/CertificateImportStatusDetail'
+          type: array
+        status:
+          description: Status of bulk import
+          enum:
+          - PROCESSING
+          - COMPLETED
+          - WAITING
+          - FAILED
+          type: string
       type: object
   securitySchemes:
     service-account:

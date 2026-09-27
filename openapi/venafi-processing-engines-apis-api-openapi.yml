@@ -311,16 +311,90 @@ paths:
       - AccessToken: []
 components:
   schemas:
-    Core_WebSDK_EngineRestrictionsRequest_engine__engineGuid_:
-      required:
-      - FolderGuids
+    Core_WebSDK_FolderRestrictionsRequest:
       type: object
       properties:
-        FolderGuids:
+        EngineGuids:
           type: array
           items:
             type: string
-          description: List of folders that will be processed by an engine
+          description: List of engines that can be used for processing a folder
+      description: Represents request to add a new partition management restrictions
+    Core_WebSDK_EngineRestrictionsResponse:
+      type: object
+      properties:
+        Folders:
+          type: array
+          items:
+            type: object
+            properties:
+              FolderName:
+                type: string
+                description: Folder Name
+              FolderGuid:
+                type: string
+                description: Folder Guid
+              FolderDN:
+                type: string
+                description: Folder DN
+              _links:
+                type: object
+                properties:
+                  self:
+                    type: object
+                    properties:
+                      href:
+                        type: string
+                        description: Link to resource details
+                    description: Link to resource details
+                description: Resource link
+            description: Represents details about a folder
+          description: List of engine restrictions
+      description: Engine Restrictions Response
+    Core_WebSDK_AddOperationResponse:
+      type: object
+      properties:
+        AddedCount:
+          type: integer
+          description: Count of added restrictions
+          format: int32
+        Errors:
+          type: array
+          items:
+            type: string
+          description: List of errors that occurred while processing the request
+      description: Represents request to add a new part
+    Core_WebSDK_EnginesResponse:
+      type: object
+      properties:
+        Engines:
+          type: array
+          items:
+            type: object
+            properties:
+              EngineName:
+                type: string
+                description: Engine Name
+              EngineGuid:
+                type: string
+                description: Engine Guid
+              EngineDN:
+                type: string
+                description: Engine DN
+              _links:
+                type: object
+                properties:
+                  self:
+                    type: object
+                    properties:
+                      href:
+                        type: string
+                        description: Link to resource details
+                    description: Link to resource details
+                description: Resource link
+            description: Represents details about an engine
+          description: List of engines
+      description: All engines
     Web_SDK_Authentication_OAuthError:
       type: object
       properties:
@@ -362,90 +436,16 @@ components:
             description: Represents details about an engine
           description: List of engines that can be used for processing a folder
       description: Folder Restrictions Response
-    Core_WebSDK_EngineRestrictionsResponse:
+    Core_WebSDK_EngineRestrictionsRequest_engine__engineGuid_:
+      required:
+      - FolderGuids
       type: object
       properties:
-        Folders:
-          type: array
-          items:
-            type: object
-            properties:
-              FolderName:
-                type: string
-                description: Folder Name
-              FolderGuid:
-                type: string
-                description: Folder Guid
-              FolderDN:
-                type: string
-                description: Folder DN
-              _links:
-                type: object
-                properties:
-                  self:
-                    type: object
-                    properties:
-                      href:
-                        type: string
-                        description: Link to resource details
-                    description: Link to resource details
-                description: Resource link
-            description: Represents details about a folder
-          description: List of engine restrictions
-      description: Engine Restrictions Response
-    Core_WebSDK_EnginesResponse:
-      type: object
-      properties:
-        Engines:
-          type: array
-          items:
-            type: object
-            properties:
-              EngineName:
-                type: string
-                description: Engine Name
-              EngineGuid:
-                type: string
-                description: Engine Guid
-              EngineDN:
-                type: string
-                description: Engine DN
-              _links:
-                type: object
-                properties:
-                  self:
-                    type: object
-                    properties:
-                      href:
-                        type: string
-                        description: Link to resource details
-                    description: Link to resource details
-                description: Resource link
-            description: Represents details about an engine
-          description: List of engines
-      description: All engines
-    Core_WebSDK_AddOperationResponse:
-      type: object
-      properties:
-        AddedCount:
-          type: integer
-          description: Count of added restrictions
-          format: int32
-        Errors:
+        FolderGuids:
           type: array
           items:
             type: string
-          description: List of errors that occurred while processing the request
-      description: Represents request to add a new part
-    Core_WebSDK_FolderRestrictionsRequest:
-      type: object
-      properties:
-        EngineGuids:
-          type: array
-          items:
-            type: string
-          description: List of engines that can be used for processing a folder
-      description: Represents request to add a new partition management restrictions
+          description: List of folders that will be processed by an engine
   securitySchemes:
     AccessToken:
       type: http

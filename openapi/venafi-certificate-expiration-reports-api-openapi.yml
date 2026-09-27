@@ -115,6 +115,22 @@ paths:
         - PKIAdmin
 components:
   schemas:
+    Recipient:
+      properties:
+        id:
+          description: The ID of a user or team who should be included as a recipient.
+          format: UUID
+          type: string
+        type:
+          description: The type of the recipient.
+          enum:
+          - User
+          - Team
+          type: string
+      required:
+      - type
+      - id
+      type: object
     Role1:
       enum:
       - SYSTEM_ADMIN
@@ -169,22 +185,6 @@ components:
           description: A cron string representing the desired schedule for delivering reports. Note that currently reports may not be sent more than once per day. The `hour` and `minute` fields of the cron schedule will be ignored.
           example: 0 0 * * Mon
           type: string
-      type: object
-    Recipient:
-      properties:
-        id:
-          description: The ID of a user or team who should be included as a recipient.
-          format: UUID
-          type: string
-        type:
-          description: The type of the recipient.
-          enum:
-          - User
-          - Team
-          type: string
-      required:
-      - type
-      - id
       type: object
     Channel:
       enum:

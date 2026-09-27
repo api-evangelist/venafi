@@ -321,302 +321,6 @@ paths:
       - AccessToken: []
 components:
   schemas:
-    Teams_WebSDK_TeamWebRequest__:
-      required:
-      - Name
-      - Members
-      - Owners
-      - Products
-      - Assets
-      - Description
-      type: object
-      properties:
-        Name:
-          type: object
-          properties:
-            Prefix:
-              type: string
-              description: Gets the prefix of the identity provider owning the entry
-            PrefixedName:
-              type: string
-              description: The name of the prefixed.
-            PrefixedUniversal:
-              type: string
-              description: Gets the prefixed universal.
-            Name:
-              type: string
-              description: Gets the name of the entry
-            FullName:
-              type: string
-              description: Gets the full name of the entry
-            Universal:
-              type: string
-              description: Gets the universal (machine-readable) name of the entry
-            IsGroup:
-              type: boolean
-              description: True if the entry represents a group
-            Type:
-              $ref: '#/components/schemas/Core_IdentityType'
-            State:
-              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
-          description: The prefixed name of the team to be created.
-        Members:
-          type: array
-          items:
-            type: object
-            properties:
-              Prefix:
-                type: string
-                description: Gets the prefix of the identity provider owning the entry
-              PrefixedName:
-                type: string
-                description: The name of the prefixed.
-              PrefixedUniversal:
-                type: string
-                description: Gets the prefixed universal.
-              Name:
-                type: string
-                description: Gets the name of the entry
-              FullName:
-                type: string
-                description: Gets the full name of the entry
-              Universal:
-                type: string
-                description: Gets the universal (machine-readable) name of the entry
-              IsGroup:
-                type: boolean
-                description: True if the entry represents a group
-              Type:
-                $ref: '#/components/schemas/Core_IdentityType'
-              State:
-                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
-            description: Describes an Identity
-          description: The list of members to be added to the team.
-        Owners:
-          type: array
-          items:
-            type: object
-            properties:
-              Prefix:
-                type: string
-                description: Gets the prefix of the identity provider owning the entry
-              PrefixedName:
-                type: string
-                description: The name of the prefixed.
-              PrefixedUniversal:
-                type: string
-                description: Gets the prefixed universal.
-              Name:
-                type: string
-                description: Gets the name of the entry
-              FullName:
-                type: string
-                description: Gets the full name of the entry
-              Universal:
-                type: string
-                description: Gets the universal (machine-readable) name of the entry
-              IsGroup:
-                type: boolean
-                description: True if the entry represents a group
-              Type:
-                $ref: '#/components/schemas/Core_IdentityType'
-              State:
-                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
-            description: Describes an Identity
-          description: The list of owners for the team.
-        Products:
-          type: array
-          items:
-            type: string
-          description: The list of products the team should have access to.
-        Assets:
-          type: array
-          items:
-            type: string
-          description: The list of assets for the team.
-        Description:
-          type: string
-          description: The description of the team.
-    Teams_WebSDK_TeamWebRequest_renameteam:
-      required:
-      - Team
-      - NewTeamName
-      type: object
-      properties:
-        Team:
-          type: object
-          properties:
-            Prefix:
-              type: string
-              description: Gets the prefix of the identity provider owning the entry
-            PrefixedName:
-              type: string
-              description: The name of the prefixed.
-            PrefixedUniversal:
-              type: string
-              description: Gets the prefixed universal.
-            Name:
-              type: string
-              description: Gets the name of the entry
-            FullName:
-              type: string
-              description: Gets the full name of the entry
-            Universal:
-              type: string
-              description: Gets the universal (machine-readable) name of the entry
-            IsGroup:
-              type: boolean
-              description: True if the entry represents a group
-            Type:
-              $ref: '#/components/schemas/Core_IdentityType'
-            State:
-              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
-          description: The name or prefixed universal of the team.
-        NewTeamName:
-          type: string
-          description: The new name for the team.
-    Teams_WebSDK_TeamWebRequest_demoteteamowners:
-      required:
-      - Team
-      - ShowMembers
-      - Owners
-      type: object
-      properties:
-        Team:
-          type: object
-          properties:
-            Prefix:
-              type: string
-              description: Gets the prefix of the identity provider owning the entry
-            PrefixedName:
-              type: string
-              description: The name of the prefixed.
-            PrefixedUniversal:
-              type: string
-              description: Gets the prefixed universal.
-            Name:
-              type: string
-              description: Gets the name of the entry
-            FullName:
-              type: string
-              description: Gets the full name of the entry
-            Universal:
-              type: string
-              description: Gets the universal (machine-readable) name of the entry
-            IsGroup:
-              type: boolean
-              description: True if the entry represents a group
-            Type:
-              $ref: '#/components/schemas/Core_IdentityType'
-            State:
-              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
-          description: The name or prefixed universal of the team.
-        ShowMembers:
-          type: boolean
-          description: A flag indicating whether the added members should be returned.
-        Owners:
-          type: array
-          items:
-            type: object
-            properties:
-              Prefix:
-                type: string
-                description: Gets the prefix of the identity provider owning the entry
-              PrefixedName:
-                type: string
-                description: The name of the prefixed.
-              PrefixedUniversal:
-                type: string
-                description: Gets the prefixed universal.
-              Name:
-                type: string
-                description: Gets the name of the entry
-              FullName:
-                type: string
-                description: Gets the full name of the entry
-              Universal:
-                type: string
-                description: Gets the universal (machine-readable) name of the entry
-              IsGroup:
-                type: boolean
-                description: True if the entry represents a group
-              Type:
-                $ref: '#/components/schemas/Core_IdentityType'
-              State:
-                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
-            description: Describes an Identity
-          description: The list of owners for the team.
-    Teams_WebSDK_TeamWebRequest_addteamowners:
-      required:
-      - Team
-      - ShowMembers
-      - Owners
-      type: object
-      properties:
-        Team:
-          type: object
-          properties:
-            Prefix:
-              type: string
-              description: Gets the prefix of the identity provider owning the entry
-            PrefixedName:
-              type: string
-              description: The name of the prefixed.
-            PrefixedUniversal:
-              type: string
-              description: Gets the prefixed universal.
-            Name:
-              type: string
-              description: Gets the name of the entry
-            FullName:
-              type: string
-              description: Gets the full name of the entry
-            Universal:
-              type: string
-              description: Gets the universal (machine-readable) name of the entry
-            IsGroup:
-              type: boolean
-              description: True if the entry represents a group
-            Type:
-              $ref: '#/components/schemas/Core_IdentityType'
-            State:
-              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
-          description: The name or prefixed universal of the team.
-        ShowMembers:
-          type: boolean
-          description: A flag indicating whether the added members should be returned.
-        Owners:
-          type: array
-          items:
-            type: object
-            properties:
-              Prefix:
-                type: string
-                description: Gets the prefix of the identity provider owning the entry
-              PrefixedName:
-                type: string
-                description: The name of the prefixed.
-              PrefixedUniversal:
-                type: string
-                description: Gets the prefixed universal.
-              Name:
-                type: string
-                description: Gets the name of the entry
-              FullName:
-                type: string
-                description: Gets the full name of the entry
-              Universal:
-                type: string
-                description: Gets the universal (machine-readable) name of the entry
-              IsGroup:
-                type: boolean
-                description: True if the entry represents a group
-              Type:
-                $ref: '#/components/schemas/Core_IdentityType'
-              State:
-                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
-            description: Describes an Identity
-          description: The list of owners for the team.
     Teams_WebSDK_TeamWebRequest_addteammembers:
       required:
       - Team
@@ -696,6 +400,88 @@ components:
       - 32
       type: integer
       description: "\n\n**0**: **Undefined**  \nUndefined\n\n**1**: **User**  \nUser object\n\n**2**: **Group**  \nGroup object\n\n**4**: **Container**  \nContainer of users and groups\n\n**8**: **DistributionList**  \nDistribution List\n\n**16**: **Machine**  \nMachine\n\n**32**: **Provider**  \nThe Identity Provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
+    Teams_WebSDK_TeamWebRequest_removeteammembers:
+      required:
+      - Team
+      - Members
+      - ShowMembers
+      type: object
+      properties:
+        Team:
+          type: object
+          properties:
+            Prefix:
+              type: string
+              description: Gets the prefix of the identity provider owning the entry
+            PrefixedName:
+              type: string
+              description: The name of the prefixed.
+            PrefixedUniversal:
+              type: string
+              description: Gets the prefixed universal.
+            Name:
+              type: string
+              description: Gets the name of the entry
+            FullName:
+              type: string
+              description: Gets the full name of the entry
+            Universal:
+              type: string
+              description: Gets the universal (machine-readable) name of the entry
+            IsGroup:
+              type: boolean
+              description: True if the entry represents a group
+            Type:
+              $ref: '#/components/schemas/Core_IdentityType'
+            State:
+              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+          description: The name or prefixed universal of the team.
+        Members:
+          type: array
+          items:
+            type: object
+            properties:
+              Prefix:
+                type: string
+                description: Gets the prefix of the identity provider owning the entry
+              PrefixedName:
+                type: string
+                description: The name of the prefixed.
+              PrefixedUniversal:
+                type: string
+                description: Gets the prefixed universal.
+              Name:
+                type: string
+                description: Gets the name of the entry
+              FullName:
+                type: string
+                description: Gets the full name of the entry
+              Universal:
+                type: string
+                description: Gets the universal (machine-readable) name of the entry
+              IsGroup:
+                type: boolean
+                description: True if the entry represents a group
+              Type:
+                $ref: '#/components/schemas/Core_IdentityType'
+              State:
+                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+            description: Describes an Identity
+          description: The list of members to be added to the team.
+        ShowMembers:
+          type: boolean
+          description: A flag indicating whether the added members should be returned.
+    Core_IdentityEntry_EntryState:
+      title: Enumeration indicating the state of an IdentityEntry
+      enum:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      type: integer
+      description: "\n\n**0**: **Normal**  \nNo special state associated with the entry\n\n**1**: **Disabled**  \nThe identity has been disabled\n\n**2**: **LockedOut**  \nThe identity has been locked out\n\n**4**: **Deleted**  \nThe identity has been deleted\n\n**8**: **Unverifiable**  \nThe identity could not be verified with a provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
       format: int32
     Teams_WebSDK_TeamWebResponse:
       type: object
@@ -874,14 +660,17 @@ components:
           type: string
           description: The description of the team.
       description: Class to pass when issuing a team request
-    Teams_WebSDK_TeamWebRequest_removeteammembers:
+    Teams_WebSDK_TeamWebRequest__:
       required:
-      - Team
+      - Name
       - Members
-      - ShowMembers
+      - Owners
+      - Products
+      - Assets
+      - Description
       type: object
       properties:
-        Team:
+        Name:
           type: object
           properties:
             Prefix:
@@ -909,7 +698,7 @@ components:
               $ref: '#/components/schemas/Core_IdentityType'
             State:
               $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
-          description: The name or prefixed universal of the team.
+          description: The prefixed name of the team to be created.
         Members:
           type: array
           items:
@@ -942,20 +731,51 @@ components:
                 $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
             description: Describes an Identity
           description: The list of members to be added to the team.
-        ShowMembers:
-          type: boolean
-          description: A flag indicating whether the added members should be returned.
-    Core_IdentityEntry_EntryState:
-      title: Enumeration indicating the state of an IdentityEntry
-      enum:
-      - 0
-      - 1
-      - 2
-      - 4
-      - 8
-      type: integer
-      description: "\n\n**0**: **Normal**  \nNo special state associated with the entry\n\n**1**: **Disabled**  \nThe identity has been disabled\n\n**2**: **LockedOut**  \nThe identity has been locked out\n\n**4**: **Deleted**  \nThe identity has been deleted\n\n**8**: **Unverifiable**  \nThe identity could not be verified with a provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
-      format: int32
+        Owners:
+          type: array
+          items:
+            type: object
+            properties:
+              Prefix:
+                type: string
+                description: Gets the prefix of the identity provider owning the entry
+              PrefixedName:
+                type: string
+                description: The name of the prefixed.
+              PrefixedUniversal:
+                type: string
+                description: Gets the prefixed universal.
+              Name:
+                type: string
+                description: Gets the name of the entry
+              FullName:
+                type: string
+                description: Gets the full name of the entry
+              Universal:
+                type: string
+                description: Gets the universal (machine-readable) name of the entry
+              IsGroup:
+                type: boolean
+                description: True if the entry represents a group
+              Type:
+                $ref: '#/components/schemas/Core_IdentityType'
+              State:
+                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+            description: Describes an Identity
+          description: The list of owners for the team.
+        Products:
+          type: array
+          items:
+            type: string
+          description: The list of products the team should have access to.
+        Assets:
+          type: array
+          items:
+            type: string
+          description: The list of assets for the team.
+        Description:
+          type: string
+          description: The description of the team.
     Teams_WebSDK_TeamWebRequest:
       type: object
       properties:
@@ -1130,6 +950,186 @@ components:
           type: string
           description: The description of the team.
       description: Class to pass when issuing a Team request.
+    Teams_WebSDK_TeamWebRequest_addteamowners:
+      required:
+      - Team
+      - ShowMembers
+      - Owners
+      type: object
+      properties:
+        Team:
+          type: object
+          properties:
+            Prefix:
+              type: string
+              description: Gets the prefix of the identity provider owning the entry
+            PrefixedName:
+              type: string
+              description: The name of the prefixed.
+            PrefixedUniversal:
+              type: string
+              description: Gets the prefixed universal.
+            Name:
+              type: string
+              description: Gets the name of the entry
+            FullName:
+              type: string
+              description: Gets the full name of the entry
+            Universal:
+              type: string
+              description: Gets the universal (machine-readable) name of the entry
+            IsGroup:
+              type: boolean
+              description: True if the entry represents a group
+            Type:
+              $ref: '#/components/schemas/Core_IdentityType'
+            State:
+              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+          description: The name or prefixed universal of the team.
+        ShowMembers:
+          type: boolean
+          description: A flag indicating whether the added members should be returned.
+        Owners:
+          type: array
+          items:
+            type: object
+            properties:
+              Prefix:
+                type: string
+                description: Gets the prefix of the identity provider owning the entry
+              PrefixedName:
+                type: string
+                description: The name of the prefixed.
+              PrefixedUniversal:
+                type: string
+                description: Gets the prefixed universal.
+              Name:
+                type: string
+                description: Gets the name of the entry
+              FullName:
+                type: string
+                description: Gets the full name of the entry
+              Universal:
+                type: string
+                description: Gets the universal (machine-readable) name of the entry
+              IsGroup:
+                type: boolean
+                description: True if the entry represents a group
+              Type:
+                $ref: '#/components/schemas/Core_IdentityType'
+              State:
+                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+            description: Describes an Identity
+          description: The list of owners for the team.
+    Teams_WebSDK_TeamWebRequest_renameteam:
+      required:
+      - Team
+      - NewTeamName
+      type: object
+      properties:
+        Team:
+          type: object
+          properties:
+            Prefix:
+              type: string
+              description: Gets the prefix of the identity provider owning the entry
+            PrefixedName:
+              type: string
+              description: The name of the prefixed.
+            PrefixedUniversal:
+              type: string
+              description: Gets the prefixed universal.
+            Name:
+              type: string
+              description: Gets the name of the entry
+            FullName:
+              type: string
+              description: Gets the full name of the entry
+            Universal:
+              type: string
+              description: Gets the universal (machine-readable) name of the entry
+            IsGroup:
+              type: boolean
+              description: True if the entry represents a group
+            Type:
+              $ref: '#/components/schemas/Core_IdentityType'
+            State:
+              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+          description: The name or prefixed universal of the team.
+        NewTeamName:
+          type: string
+          description: The new name for the team.
+    Teams_WebSDK_TeamWebRequest_demoteteamowners:
+      required:
+      - Team
+      - ShowMembers
+      - Owners
+      type: object
+      properties:
+        Team:
+          type: object
+          properties:
+            Prefix:
+              type: string
+              description: Gets the prefix of the identity provider owning the entry
+            PrefixedName:
+              type: string
+              description: The name of the prefixed.
+            PrefixedUniversal:
+              type: string
+              description: Gets the prefixed universal.
+            Name:
+              type: string
+              description: Gets the name of the entry
+            FullName:
+              type: string
+              description: Gets the full name of the entry
+            Universal:
+              type: string
+              description: Gets the universal (machine-readable) name of the entry
+            IsGroup:
+              type: boolean
+              description: True if the entry represents a group
+            Type:
+              $ref: '#/components/schemas/Core_IdentityType'
+            State:
+              $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+          description: The name or prefixed universal of the team.
+        ShowMembers:
+          type: boolean
+          description: A flag indicating whether the added members should be returned.
+        Owners:
+          type: array
+          items:
+            type: object
+            properties:
+              Prefix:
+                type: string
+                description: Gets the prefix of the identity provider owning the entry
+              PrefixedName:
+                type: string
+                description: The name of the prefixed.
+              PrefixedUniversal:
+                type: string
+                description: Gets the prefixed universal.
+              Name:
+                type: string
+                description: Gets the name of the entry
+              FullName:
+                type: string
+                description: Gets the full name of the entry
+              Universal:
+                type: string
+                description: Gets the universal (machine-readable) name of the entry
+              IsGroup:
+                type: boolean
+                description: True if the entry represents a group
+              Type:
+                $ref: '#/components/schemas/Core_IdentityType'
+              State:
+                $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+            description: Describes an Identity
+          description: The list of owners for the team.
   securitySchemes:
     AccessToken:
       type: http

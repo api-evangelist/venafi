@@ -106,6 +106,16 @@ paths:
       - AccessToken: []
 components:
   schemas:
+    WebSDK_CertificateRequest_DiscoveryDeleteResponse:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: A detailed error message explaining why the deletion failed (if applicable).
+        Success:
+          type: boolean
+          description: A flag indicating whether the discovery job was successfully deleted.
+      description: The Network Discovery delete method response.
     WebSDK_CertificateRequest_DiscoveryImportRequest:
       type: object
       properties:
@@ -176,16 +186,6 @@ components:
             type: string
           description: A list of non-critical warnings, such as applications that failed to be created, skipped endpoints due to missing certificate data, or naming conflicts resolved automatically.
       description: Discovery import response.
-    WebSDK_CertificateRequest_DiscoveryDeleteResponse:
-      type: object
-      properties:
-        Error:
-          type: string
-          description: A detailed error message explaining why the deletion failed (if applicable).
-        Success:
-          type: boolean
-          description: A flag indicating whether the discovery job was successfully deleted.
-      description: The Network Discovery delete method response.
   securitySchemes:
     AccessToken:
       type: http

@@ -479,204 +479,6 @@ paths:
       - AccessToken: []
 components:
   schemas:
-    Drivers_Applications_HashiCorp_REST_Pkis:
-      type: object
-      properties:
-        pkis:
-          type: array
-          items:
-            type: object
-            properties:
-              PkiGuid:
-                type: string
-                description: Guid of PKI object.
-              PkiDn:
-                type: string
-                description: DN of PKI object.
-              CertificateGuid:
-                type: string
-                description: Guid of certificate associated to PKI object.
-              CertificateDn:
-                type: string
-                description: DN of certificate associated to PKI object.
-            description: PKI object.
-          description: List if PKI objects.
-        Error:
-          type: string
-          description: Error.
-      description: List of all PKI objects.
-    Drivers_Applications_HashiCorp_REST_CreateRoleRequest_:
-      required:
-      - FolderDn
-      - RoleName
-      type: object
-      properties:
-        FolderDn:
-          type: string
-          description: Dn of the policy object.
-        RoleName:
-          type: string
-          description: HashiCorp role name.
-    Drivers_Applications_HashiCorp_REST_Role:
-      type: object
-      properties:
-        Guid:
-          type: string
-          description: Guid of policy object.
-        FolderDn:
-          type: string
-          description: Dn of the policy object.
-        RoleName:
-          type: string
-          description: HashiCorp role name.
-        WhitelistedDomains:
-          type: array
-          items:
-            type: string
-          description: Whitelisted domains.
-        OrganizationalUnits:
-          type: array
-          items:
-            type: string
-          description: Organizational unit.
-        Organization:
-          type: string
-          description: Organization.
-        City:
-          type: string
-          description: City.
-        State:
-          type: string
-          description: State.
-        Country:
-          type: string
-          description: Country.
-        KeyAlgorithm:
-          type: string
-          description: Key algorithm.
-        KeyBitSize:
-          type: string
-          description: Key strength.
-        PkixParameterSet:
-          type: string
-          description: Pkix Parameter Set
-        EnhancedKeyUsage:
-          type: array
-          items:
-            type: string
-          description: Enhanced key usage (server_flag, client_flag, code_signing_flag, email_protection_flag).
-        Error:
-          type: string
-          description: Error.
-      description: HashiCorp Role policy object.
-    Web_SDK_Authentication_OAuthError:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Gets or sets the short error name
-        error_description:
-          type: string
-          description: Gets or sets the description of the error
-      description: REST OAuth Error Response
-    Drivers_Applications_HashiCorp_REST_PkiResponse:
-      type: object
-      properties:
-        FolderDn:
-          type: string
-          description: Device DN where PKI object should be created.
-        PkiPath:
-          type: string
-          description: PKI path name.
-        Certificate:
-          type: object
-          properties:
-            CommonName:
-              type: string
-              description: Common name.
-            Organization:
-              type: string
-              description: Organization.
-            OrganizationalUnits:
-              type: array
-              items:
-                type: string
-              description: Organization units.
-            City:
-              type: string
-              description: City.
-            State:
-              type: string
-              description: State.
-            Country:
-              type: string
-              description: Country.
-            SubjectAltNames:
-              type: array
-              items:
-                type: object
-                properties:
-                  Name:
-                    type: string
-                    description: Name
-                  TypeName:
-                    type: string
-                    description: Type (DNS, RFC822, UPN, URI, IP)
-                description: Subject alternative name collection.
-              description: Subject alternative name collection.
-            KeyBitSize:
-              type: string
-              description: DEPRECATED - Use PkixParameterSet
-            KeyAlgorithm:
-              type: string
-              description: DEPRECATED - Use PkixParameterSet
-            PkixParameterSet:
-              type: string
-              description: PKIX Parameter Set
-          description: CA certificate configuration.
-        Installation:
-          type: object
-          properties:
-            Host:
-              type: string
-              description: Pki host.
-            Port:
-              type:
-              - integer
-              - 'null'
-              description: Pki port.
-              format: int32
-            CredentialDn:
-              type: string
-              description: DN of password credential object.
-            Status:
-              type: string
-              description: Installation status.
-            InError:
-              type: boolean
-              description: Installation is in error flag.
-          description: PKI installation settings.
-        CRLAddress:
-          type: string
-          description: CRL address.
-        OCSPAddress:
-          type: string
-          description: OCSP address.
-        CreateCertificateAuthority:
-          type: boolean
-          description: If true, creates CA if doesn't exist.
-        CreatePKIRole:
-          type: boolean
-          description: If true, creates Role if doesn't exist.
-        Roles:
-          type: array
-          items:
-            type: string
-          description: Roles.
-        Error:
-          type: string
-          description: Error.
-      description: PKI details.
     Drivers_Applications_HashiCorp_REST_CreateRoleResponse:
       type: object
       properties:
@@ -780,6 +582,58 @@ components:
             type: string
           description: Roles.
       description: Create HashiCorp PKI request.
+    Drivers_Applications_HashiCorp_REST_Role:
+      type: object
+      properties:
+        Guid:
+          type: string
+          description: Guid of policy object.
+        FolderDn:
+          type: string
+          description: Dn of the policy object.
+        RoleName:
+          type: string
+          description: HashiCorp role name.
+        WhitelistedDomains:
+          type: array
+          items:
+            type: string
+          description: Whitelisted domains.
+        OrganizationalUnits:
+          type: array
+          items:
+            type: string
+          description: Organizational unit.
+        Organization:
+          type: string
+          description: Organization.
+        City:
+          type: string
+          description: City.
+        State:
+          type: string
+          description: State.
+        Country:
+          type: string
+          description: Country.
+        KeyAlgorithm:
+          type: string
+          description: Key algorithm.
+        KeyBitSize:
+          type: string
+          description: Key strength.
+        PkixParameterSet:
+          type: string
+          description: Pkix Parameter Set
+        EnhancedKeyUsage:
+          type: array
+          items:
+            type: string
+          description: Enhanced key usage (server_flag, client_flag, code_signing_flag, email_protection_flag).
+        Error:
+          type: string
+          description: Error.
+      description: HashiCorp Role policy object.
     Drivers_Applications_HashiCorp_REST_CreatePkiResponse:
       type: object
       properties:
@@ -796,6 +650,152 @@ components:
           type: string
           description: DN of certificate object.
       description: Response for PKI create request.
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
+    Drivers_Applications_HashiCorp_REST_CreateRoleRequest_:
+      required:
+      - FolderDn
+      - RoleName
+      type: object
+      properties:
+        FolderDn:
+          type: string
+          description: Dn of the policy object.
+        RoleName:
+          type: string
+          description: HashiCorp role name.
+    Drivers_Applications_HashiCorp_REST_PkiResponse:
+      type: object
+      properties:
+        FolderDn:
+          type: string
+          description: Device DN where PKI object should be created.
+        PkiPath:
+          type: string
+          description: PKI path name.
+        Certificate:
+          type: object
+          properties:
+            CommonName:
+              type: string
+              description: Common name.
+            Organization:
+              type: string
+              description: Organization.
+            OrganizationalUnits:
+              type: array
+              items:
+                type: string
+              description: Organization units.
+            City:
+              type: string
+              description: City.
+            State:
+              type: string
+              description: State.
+            Country:
+              type: string
+              description: Country.
+            SubjectAltNames:
+              type: array
+              items:
+                type: object
+                properties:
+                  Name:
+                    type: string
+                    description: Name
+                  TypeName:
+                    type: string
+                    description: Type (DNS, RFC822, UPN, URI, IP)
+                description: Subject alternative name collection.
+              description: Subject alternative name collection.
+            KeyBitSize:
+              type: string
+              description: DEPRECATED - Use PkixParameterSet
+            KeyAlgorithm:
+              type: string
+              description: DEPRECATED - Use PkixParameterSet
+            PkixParameterSet:
+              type: string
+              description: PKIX Parameter Set
+          description: CA certificate configuration.
+        Installation:
+          type: object
+          properties:
+            Host:
+              type: string
+              description: Pki host.
+            Port:
+              type:
+              - integer
+              - 'null'
+              description: Pki port.
+              format: int32
+            CredentialDn:
+              type: string
+              description: DN of password credential object.
+            Status:
+              type: string
+              description: Installation status.
+            InError:
+              type: boolean
+              description: Installation is in error flag.
+          description: PKI installation settings.
+        CRLAddress:
+          type: string
+          description: CRL address.
+        OCSPAddress:
+          type: string
+          description: OCSP address.
+        CreateCertificateAuthority:
+          type: boolean
+          description: If true, creates CA if doesn't exist.
+        CreatePKIRole:
+          type: boolean
+          description: If true, creates Role if doesn't exist.
+        Roles:
+          type: array
+          items:
+            type: string
+          description: Roles.
+        Error:
+          type: string
+          description: Error.
+      description: PKI details.
+    Drivers_Applications_HashiCorp_REST_Pkis:
+      type: object
+      properties:
+        pkis:
+          type: array
+          items:
+            type: object
+            properties:
+              PkiGuid:
+                type: string
+                description: Guid of PKI object.
+              PkiDn:
+                type: string
+                description: DN of PKI object.
+              CertificateGuid:
+                type: string
+                description: Guid of certificate associated to PKI object.
+              CertificateDn:
+                type: string
+                description: DN of certificate associated to PKI object.
+            description: PKI object.
+          description: List if PKI objects.
+        Error:
+          type: string
+          description: Error.
+      description: List of all PKI objects.
   securitySchemes:
     AccessToken:
       type: http
