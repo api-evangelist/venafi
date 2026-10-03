@@ -793,49 +793,314 @@ paths:
       - AccessToken: []
 components:
   schemas:
-    Core_WebSDK_MetadataWebRequest_get:
+    Core_WebSDK_MetadataWebRequest_getitems:
       required:
       - DN
       type: object
       properties:
         DN:
           type: string
-          description: The DN of a certificate or device.
-        All:
-          type: boolean
-          description: Boolean indicating that all Custom Fields that apply to this object should be returned, even if no values exist for them.
-    Core_WebSDK_MetadataWebRequest_setpolicy:
+          description: The DN of a Certificate or Device object to look up.
+    Core_WebSDK_MetadataWebRequest_undefineitem:
       required:
-      - DN
-      - SchemaClass
-      - Locked
-      - GuidData
+      - ItemGuid
       type: object
       properties:
-        DN:
+        ItemGuid:
           type: string
-          description: The DN of a policy folder that has values for at least one Custom Field. If necessary, use the DN value from the GET Metadata/Items or POST Metadata/GetItemsForClass response.
-        SchemaClass:
-          type: string
-          description: The Device or X509 Certificate class. (_Pre-24.1 this parameter was named ConfigClass_)
-        Locked:
+          description: The GUID of the Custom Field to delete.
+        RemoveData:
           type: boolean
-          description: Boolean indicating whether the value is to be locked by policy. If not specified, the value will not be locked by policy.
-        GuidData:
+          description: 'Boolean indicating if existing values should be deleted when the Custom Field is deleted:
+
+            * **true**: Delete existing values stored for the Custom Field before deleting the Custom Field itself.
+
+            * **false**: Default. Do not delete any stored values. If values exist, the delete of the Custom Field will fail.'
+    Core_WebSDK_MetadataWebResponse_loaditem:
+      type: object
+      properties:
+        Item:
+          type: object
+          properties:
+            Type:
+              $ref: '#/components/schemas/Core_MetadataType'
+            Label:
+              type: string
+              description: Gets or sets the metadata label
+            Help:
+              type: string
+              description: Gets or sets the help text describing the metadata field.
+            Category:
+              type: string
+              description: The category DN, or **null** if none.
+            DisplayAfter:
+              type: string
+              description: The metadata item after which to render this item
+            Name:
+              type: string
+              description: Gets or sets the name of the metadata item.
+            Guid:
+              type: string
+              description: Gets or sets the Guid of the metadata item.
+            DN:
+              type: string
+              description: The DN.
+            Mandatory:
+              type: boolean
+              description: '**true** if mandatory; otherwise, **false**.'
+            DefaultValues:
+              type: array
+              items:
+                type: string
+              description: Gets or sets the list of default values for this metadata field.
+            AllowedValues:
+              type: array
+              items:
+                type: string
+              description: Gets or sets the list of allowed values for this metadata field.
+            Classes:
+              type: array
+              items:
+                type: string
+              description: Gets or sets the list of schema classes this metadata field applies to
+            LocalizationSet:
+              type: array
+              items:
+                type: object
+                properties:
+                  Language:
+                    type: string
+                    description: ''
+                  List:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Invariant:
+                          type: string
+                          description: ''
+                        Localized:
+                          type: string
+                          description: ''
+                      description: Support class to allow serialization of values for a metadata object
+                    description: ''
+                description: Support class to allow serialization of values for a metadata object
+              description: The localization table.
+            MinimumLength:
+              type:
+              - integer
+              - 'null'
+              description: Gets or sets the minimum length of the text field.
+              format: int32
+            MaximumLength:
+              type:
+              - integer
+              - 'null'
+              description: Gets or sets the maximum length of the text field.
+              format: int32
+            Mask:
+              type: string
+              description: Gets or sets the input mask.
+            AllowedCharacters:
+              type: string
+              description: Gets or sets the allowed characters for the text field.
+            RegularExpression:
+              type: string
+              description: Gets or sets the regular expression for the text field.
+            ErrorMessage:
+              type: string
+              description: Gets or sets the error message for the text field.
+            Single:
+              type: boolean
+              description: '**true** if single; otherwise, **false**.'
+            DateOnly:
+              type: boolean
+              description: '**true** if only a date should be selected; otherwise, **false**.'
+            TimeOnly:
+              type: boolean
+              description: '**true** if only a time should be selected; otherwise, **false**.'
+            Policyable:
+              type: boolean
+              description: '**true** if policy is supported; otherwise, **false**.'
+            SchemaAttribute:
+              type: string
+              description: Gets the attribute name used when writing this value to the object store
+            ConfigAttribute:
+              type: string
+              description: Provided for 23.3 and earlier compatibility. Use _SchemaAttribute_ instead
+            RenderHidden:
+              type: boolean
+              description: '**true** if field is hidden; otherwise, **false**.'
+            RenderReadOnly:
+              type: boolean
+              description: '**true** if field is read-only; otherwise, **false**.'
+          description: The metadata item (Custom Field) definition
+        Result:
+          $ref: '#/components/schemas/Core_MetadataResult'
+        Error:
+          type: string
+          description: Provides an error explanation if the request was not successful, otherwise **null**
+    Core_WebSDK_MetadataWebResponse_items:
+      type: object
+      properties:
+        Items:
           type: array
           items:
             type: object
             properties:
-              ItemGuid:
+              Type:
+                $ref: '#/components/schemas/Core_MetadataType'
+              Label:
                 type: string
-                description: The GUID that identifies the Custom Field. To get the Custom Field GUID, use POST Metadata/GetItems. Depending on your environment, the GUID may be expressed with or without curly braces {}. For example, _{3d6b61d-1c71-4603-883f-25b8c2ceecdd}_.
-              List:
+                description: Gets or sets the metadata label
+              Help:
+                type: string
+                description: Gets or sets the help text describing the metadata field.
+              Category:
+                type: string
+                description: The category DN, or **null** if none.
+              DisplayAfter:
+                type: string
+                description: The metadata item after which to render this item
+              Name:
+                type: string
+                description: Gets or sets the name of the metadata item.
+              Guid:
+                type: string
+                description: Gets or sets the Guid of the metadata item.
+              DN:
+                type: string
+                description: The DN.
+              Mandatory:
+                type: boolean
+                description: '**true** if mandatory; otherwise, **false**.'
+              DefaultValues:
                 type: array
                 items:
                   type: string
-                description: An array of one or more Custom Field value changes. The value must match a Metadata Field Type. For example, to set a date, use the MM/DD/YYYY format.
-            description: Support class to allow serialization of values for a metadata object
-          description: An array of ItemGuid-List pairs that apply to the DN. Each pair uniquely identifies a Custom Field and the new value(s). If _GuidData_ is empty and _KeepExisting_ is **false** or not specified, every Custom Field for the DN resets to null.
+                description: Gets or sets the list of default values for this metadata field.
+              AllowedValues:
+                type: array
+                items:
+                  type: string
+                description: Gets or sets the list of allowed values for this metadata field.
+              Classes:
+                type: array
+                items:
+                  type: string
+                description: Gets or sets the list of schema classes this metadata field applies to
+              LocalizationSet:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Language:
+                      type: string
+                      description: ''
+                    List:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          Invariant:
+                            type: string
+                            description: ''
+                          Localized:
+                            type: string
+                            description: ''
+                        description: Support class to allow serialization of values for a metadata object
+                      description: ''
+                  description: Support class to allow serialization of values for a metadata object
+                description: The localization table.
+              MinimumLength:
+                type:
+                - integer
+                - 'null'
+                description: Gets or sets the minimum length of the text field.
+                format: int32
+              MaximumLength:
+                type:
+                - integer
+                - 'null'
+                description: Gets or sets the maximum length of the text field.
+                format: int32
+              Mask:
+                type: string
+                description: Gets or sets the input mask.
+              AllowedCharacters:
+                type: string
+                description: Gets or sets the allowed characters for the text field.
+              RegularExpression:
+                type: string
+                description: Gets or sets the regular expression for the text field.
+              ErrorMessage:
+                type: string
+                description: Gets or sets the error message for the text field.
+              Single:
+                type: boolean
+                description: '**true** if single; otherwise, **false**.'
+              DateOnly:
+                type: boolean
+                description: '**true** if only a date should be selected; otherwise, **false**.'
+              TimeOnly:
+                type: boolean
+                description: '**true** if only a time should be selected; otherwise, **false**.'
+              Policyable:
+                type: boolean
+                description: '**true** if policy is supported; otherwise, **false**.'
+              SchemaAttribute:
+                type: string
+                description: Gets the attribute name used when writing this value to the object store
+              ConfigAttribute:
+                type: string
+                description: Provided for 23.3 and earlier compatibility. Use _SchemaAttribute_ instead
+              RenderHidden:
+                type: boolean
+                description: '**true** if field is hidden; otherwise, **false**.'
+              RenderReadOnly:
+                type: boolean
+                description: '**true** if field is read-only; otherwise, **false**.'
+            description: Common metadata
+          description: A list of all existing Custom Field definitions
+        Result:
+          $ref: '#/components/schemas/Core_MetadataResult'
+        Error:
+          type: string
+          description: Provides an error explanation if the request was not successful, otherwise **null**
+    Core_WebSDK_MetadataWebRequest_find:
+      type: object
+      properties:
+        ItemGuid:
+          type: string
+          description: The GUID of a Custom Field. If provided, only values of this Custom Field are searched
+        Value:
+          type: string
+          description: The value a stored Custom Field value must match.
+    Core_MetadataType:
+      title: Enumeration of possible metadata types
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      type: integer
+      description: "\n\n**0**: **Unknown**  \nUnknown\n\n**1**: **Text**  \nText input field\n\n**2**: **List**  \nList selection\n\n**3**: **Choice**  \nSingle/Multiple choice\n\n**4**: **DateTime**  \nDate/Time picker\n\n**5**: **Identity**  \nIdentity selector\n\n**6**: **DNReference**  \nDN\n\n**7**: **Integer**  \nInteger\n\n**8**: **Boolean**  \nBoolean\n"
+      format: int32
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
     Core_WebSDK_MetadataWebResponse_getpolicyitems:
       type: object
       properties:
@@ -966,6 +1231,77 @@ components:
         Error:
           type: string
           description: Provides an error explanation if the request was not successful, otherwise **null**
+    Core_WebSDK_MetadataWebResponse_loaditemguid:
+      type: object
+      properties:
+        ItemGuid:
+          type: string
+          description: The GUID of the Custom Field
+        Result:
+          $ref: '#/components/schemas/Core_MetadataResult'
+        Error:
+          type: string
+          description: Provides an error explanation if the request was not successful, otherwise **null**
+    Core_WebSDK_MetadataWebResponse_find:
+      type: object
+      properties:
+        Objects:
+          type: array
+          items:
+            type: object
+            properties:
+              TypeName:
+                type: string
+                description: The schema class of the object
+              DN:
+                type: string
+                description: The DN of the object.
+              GUID:
+                type: string
+                description: The GUID of the object.
+              Name:
+                type: string
+                description: The name (CN) of the object.
+              Disabled:
+                type: boolean
+                description: '**true** if the object is excluded from processing; **false** otherwise.'
+              InError:
+                type: boolean
+                description: '**true** if an error processing a request for the object has occurent; **false** otherwise.'
+              Id:
+                type:
+                - integer
+                - 'null'
+                description: The unique ID of this object.
+                format: int64
+              Parent:
+                type: string
+                description: The DN of the parent object.
+              AbsoluteGUID:
+                type: string
+                description: A concatenated string of GUIDs of the object's hierarchy, from the root to the object itself.
+              Revision:
+                type: integer
+                description: 'The revision of this object.
+
+
+                  Revisions are updated with each change, and, in case of a container, if a subordinate object is added or deleted.'
+                format: int64
+            description: The CyberArk storage system for object referencing.
+          description: The list of objects that have a matching Custom Field value
+        Result:
+          $ref: '#/components/schemas/Core_MetadataResult'
+        Error:
+          type: string
+          description: Provides an error explanation if the request was not successful, otherwise **null**
+    Core_WebSDK_MetadataWebRequest_getitemsforclass:
+      required:
+      - SchemaClass
+      type: object
+      properties:
+        SchemaClass:
+          type: string
+          description: "An object class  (_Pre-24.1 this parameter was named `ConfigClass`_)\n\nCommon object classes are: \n* `Code Signing Environment Base`: Show the Custom Fields for Code Signing Project Environments\n* `Code Signing Project`: Show the Custom Fields for Code Signing Projects \n* `Device`: Show the Custom Fields for Devices\n* `X509 Certificate`: Show the Custom Fields for Certificates"
     Core_WebSDK_MetadataWebResponse_getitemguids:
       type: object
       properties:
@@ -1093,193 +1429,86 @@ components:
         Error:
           type: string
           description: Provides an error explanation if the request was not successful, otherwise **null**
-    Core_WebSDK_MetadataWebResponse_find:
+    Core_MetadataResult:
+      title: Metadata API result codes
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+      - 20
+      - 21
+      - 22
+      - 23
+      - 24
+      - 25
+      - 26
+      - 27
+      - 28
+      - 29
+      type: integer
+      description: "\n\n**0**: **Success**  \nSuccess\n\n**1**: **InvalidConfigObject**  \nAn invalid or **null**_Config_ object was passed\n\n**2**: **InvalidDN**  \nA **null** or empty DN string was passed\n\n**3**: **InvalidName**  \nA **null** or empty Name string was passed\n\n**4**: **InvalidItem**  \nThe _MetadataObject_ object was invalid or incomplete\n\n**5**: **InvalidClass**  \nThe _SchemaClass_ object was invalid or incomplete\n\n**6**: **InvalidMetadataObject**  \nThe _MetadataObject_ object was invalid or incomplete\n\n**7**: **InvalidRights**  \nThe rights were invalid to perform the requested operation\n\n**8**: **ItemIsNull**  \nA **null**_MetadataObject_ was passed\n\n**9**: **ItemAlreadyExists**  \nA _MetadataObject_ object with the same name or label already exists\n\n**10**: **ItemTypeUnknown**  \nThe type of _MetadataObject_ object is not supported\n\n**11**: **ConfigCreateFailed**  \nThe metadata storage failed to create the object\n\n**12**: **ConfigWriteFailed**  \nThe metadata storage failed when updating the object\n\n**13**: **ConfigDeleteFailed**  \nThe metadata storage failed when deleting the object\n\n**14**: **MetadataInUse**  \nThe metadata item could not be deleted because it is still referenced on objects\n\n**15**: **NoAllowedValues**  \nThe Metadata item has no allowed values\n\n**16**: **AllowedValueDoesNotExist**  \nThe specified 'allowed' value does not exist\n\n**17**: **ValueNotInAllowedList**  \nThe provided value is not in the list of allowed values\n\n**18**: **ItemNotValidForClass**  \nThe specified metadata item is not valid for the object class\n\n**19**: **NameTooLong**  \nThe name for the metadata item is longer than allowed (255 chars, including its parents)\n\n**20**: **TooManyContainers**  \nThe name for the metadata is nested deeper than allowed\n\n**21**: **ConfigDnNotContainer**  \nPassed DN was expected to be a container\n\n**22**: **InvalidPolicyState**  \nCannot write a policy with the specified policy state\n\n**23**: **ConfigLockFailed**  \nFailed to acquire a config lock\n\n**24**: **ConfigReadFailed**  \nFailed to read data from config\n\n**25**: **RemoteError**  \nA remote request failed; see Error property for details\n\n**26**: **ValueDoesNotMatchRegex**  \nThe value supplied does not match the regex pattern which is configured for this metadata type\n\n**27**: **ArgumentIsNull**  \nA required argument was null\n\n**28**: **TransientAttributeUnknown**  \nThe schema attribute matching the metadata item is missing\n\n**29**: **BusError**  \nA bus-related unspecified error\n"
+      format: int32
+    Core_WebSDK_MetadataWebResponse_set:
       type: object
       properties:
-        Objects:
-          type: array
-          items:
-            type: object
-            properties:
-              TypeName:
-                type: string
-                description: The schema class of the object
-              DN:
-                type: string
-                description: The DN of the object.
-              GUID:
-                type: string
-                description: The GUID of the object.
-              Name:
-                type: string
-                description: The name (CN) of the object.
-              Disabled:
-                type: boolean
-                description: '**true** if the object is excluded from processing; **false** otherwise.'
-              InError:
-                type: boolean
-                description: '**true** if an error processing a request for the object has occurent; **false** otherwise.'
-              Id:
-                type:
-                - integer
-                - 'null'
-                description: The unique ID of this object.
-                format: int64
-              Parent:
-                type: string
-                description: The DN of the parent object.
-              AbsoluteGUID:
-                type: string
-                description: A concatenated string of GUIDs of the object's hierarchy, from the root to the object itself.
-              Revision:
-                type: integer
-                description: 'The revision of this object.
-
-
-                  Revisions are updated with each change, and, in case of a container, if a subordinate object is added or deleted.'
-                format: int64
-            description: The CyberArk storage system for object referencing.
-          description: The list of objects that have a matching Custom Field value
         Result:
           $ref: '#/components/schemas/Core_MetadataResult'
         Error:
           type: string
           description: Provides an error explanation if the request was not successful, otherwise **null**
-    Core_WebSDK_MetadataWebResponse_loaditem:
+    Core_WebSDK_MetadataWebRequest_loaditemguid:
+      required:
+      - DN
       type: object
       properties:
-        Item:
-          type: object
-          properties:
-            Type:
-              $ref: '#/components/schemas/Core_MetadataType'
-            Label:
-              type: string
-              description: Gets or sets the metadata label
-            Help:
-              type: string
-              description: Gets or sets the help text describing the metadata field.
-            Category:
-              type: string
-              description: The category DN, or **null** if none.
-            DisplayAfter:
-              type: string
-              description: The metadata item after which to render this item
-            Name:
-              type: string
-              description: Gets or sets the name of the metadata item.
-            Guid:
-              type: string
-              description: Gets or sets the Guid of the metadata item.
-            DN:
-              type: string
-              description: The DN.
-            Mandatory:
-              type: boolean
-              description: '**true** if mandatory; otherwise, **false**.'
-            DefaultValues:
-              type: array
-              items:
-                type: string
-              description: Gets or sets the list of default values for this metadata field.
-            AllowedValues:
-              type: array
-              items:
-                type: string
-              description: Gets or sets the list of allowed values for this metadata field.
-            Classes:
-              type: array
-              items:
-                type: string
-              description: Gets or sets the list of schema classes this metadata field applies to
-            LocalizationSet:
-              type: array
-              items:
-                type: object
-                properties:
-                  Language:
-                    type: string
-                    description: ''
-                  List:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        Invariant:
-                          type: string
-                          description: ''
-                        Localized:
-                          type: string
-                          description: ''
-                      description: Support class to allow serialization of values for a metadata object
-                    description: ''
-                description: Support class to allow serialization of values for a metadata object
-              description: The localization table.
-            MinimumLength:
-              type:
-              - integer
-              - 'null'
-              description: Gets or sets the minimum length of the text field.
-              format: int32
-            MaximumLength:
-              type:
-              - integer
-              - 'null'
-              description: Gets or sets the maximum length of the text field.
-              format: int32
-            Mask:
-              type: string
-              description: Gets or sets the input mask.
-            AllowedCharacters:
-              type: string
-              description: Gets or sets the allowed characters for the text field.
-            RegularExpression:
-              type: string
-              description: Gets or sets the regular expression for the text field.
-            ErrorMessage:
-              type: string
-              description: Gets or sets the error message for the text field.
-            Single:
-              type: boolean
-              description: '**true** if single; otherwise, **false**.'
-            DateOnly:
-              type: boolean
-              description: '**true** if only a date should be selected; otherwise, **false**.'
-            TimeOnly:
-              type: boolean
-              description: '**true** if only a time should be selected; otherwise, **false**.'
-            Policyable:
-              type: boolean
-              description: '**true** if policy is supported; otherwise, **false**.'
-            SchemaAttribute:
-              type: string
-              description: Gets the attribute name used when writing this value to the object store
-            ConfigAttribute:
-              type: string
-              description: Provided for 23.3 and earlier compatibility. Use _SchemaAttribute_ instead
-            RenderHidden:
-              type: boolean
-              description: '**true** if field is hidden; otherwise, **false**.'
-            RenderReadOnly:
-              type: boolean
-              description: '**true** if field is read-only; otherwise, **false**.'
-          description: The metadata item (Custom Field) definition
+        DN:
+          type: string
+          description: The DN of the Custom Field to return.
+    Core_WebSDK_MetadataWebResponse_updateitem:
+      type: object
+      properties:
         Result:
           $ref: '#/components/schemas/Core_MetadataResult'
         Error:
           type: string
           description: Provides an error explanation if the request was not successful, otherwise **null**
-    Core_WebSDK_MetadataWebResponse_loaditemguid:
+    Core_WebSDK_MetadataWebRequest_readeffectivevalues:
+      required:
+      - ItemGuid
+      - DN
       type: object
       properties:
         ItemGuid:
           type: string
-          description: The GUID of the Custom Field
-        Result:
-          $ref: '#/components/schemas/Core_MetadataResult'
-        Error:
+          description: The GUID of a Custom Field. To get the GUIDs for a DN, use `POST Medata/GetItemGuids`.
+        DN:
           type: string
-          description: Provides an error explanation if the request was not successful, otherwise **null**
+          description: The DN of a Certificate or Device object that contains a Custom Field.
+    Core_WebSDK_MetadataWebRequest_finditem:
+      required:
+      - Name
+      type: object
+      properties:
+        Name:
+          type: string
+          description: The label or name of the Custom Field to find.
     Core_WebSDK_MetadataWebRequest_set:
       required:
       - DN
@@ -1315,316 +1544,6 @@ components:
 
 
             **WARNING**: To retain existing Custom Field values, be sure to set _KeepExisting_ to true. Otherwise, the values for any Custom Fields of the DN, which are absent in the _GuidData_, will be cleared._'
-    Core_WebSDK_MetadataWebRequest_updateitem:
-      type: object
-      properties:
-        Item:
-          type: object
-          properties:
-            Type:
-              $ref: '#/components/schemas/Core_MetadataType'
-            Label:
-              type: string
-              description: Gets or sets the metadata label
-            Help:
-              type: string
-              description: Gets or sets the help text describing the metadata field.
-            Category:
-              type: string
-              description: The category DN, or **null** if none.
-            DisplayAfter:
-              type: string
-              description: The metadata item after which to render this item
-            Name:
-              type: string
-              description: Gets or sets the name of the metadata item.
-            Guid:
-              type: string
-              description: Gets or sets the Guid of the metadata item.
-            DN:
-              type: string
-              description: The DN.
-            Mandatory:
-              type: boolean
-              description: '**true** if mandatory; otherwise, **false**.'
-            DefaultValues:
-              type: array
-              items:
-                type: string
-              description: Gets or sets the list of default values for this metadata field.
-            AllowedValues:
-              type: array
-              items:
-                type: string
-              description: Gets or sets the list of allowed values for this metadata field.
-            Classes:
-              type: array
-              items:
-                type: string
-              description: Gets or sets the list of schema classes this metadata field applies to
-            LocalizationSet:
-              type: array
-              items:
-                type: object
-                properties:
-                  Language:
-                    type: string
-                    description: ''
-                  List:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        Invariant:
-                          type: string
-                          description: ''
-                        Localized:
-                          type: string
-                          description: ''
-                      description: Support class to allow serialization of values for a metadata object
-                    description: ''
-                description: Support class to allow serialization of values for a metadata object
-              description: The localization table.
-            MinimumLength:
-              type:
-              - integer
-              - 'null'
-              description: Gets or sets the minimum length of the text field.
-              format: int32
-            MaximumLength:
-              type:
-              - integer
-              - 'null'
-              description: Gets or sets the maximum length of the text field.
-              format: int32
-            Mask:
-              type: string
-              description: Gets or sets the input mask.
-            AllowedCharacters:
-              type: string
-              description: Gets or sets the allowed characters for the text field.
-            RegularExpression:
-              type: string
-              description: Gets or sets the regular expression for the text field.
-            ErrorMessage:
-              type: string
-              description: Gets or sets the error message for the text field.
-            Single:
-              type: boolean
-              description: '**true** if single; otherwise, **false**.'
-            DateOnly:
-              type: boolean
-              description: '**true** if only a date should be selected; otherwise, **false**.'
-            TimeOnly:
-              type: boolean
-              description: '**true** if only a time should be selected; otherwise, **false**.'
-            Policyable:
-              type: boolean
-              description: '**true** if policy is supported; otherwise, **false**.'
-            SchemaAttribute:
-              type: string
-              description: Gets the attribute name used when writing this value to the object store
-            ConfigAttribute:
-              type: string
-              description: Provided for 23.3 and earlier compatibility. Use _SchemaAttribute_ instead
-            RenderHidden:
-              type: boolean
-              description: '**true** if field is hidden; otherwise, **false**.'
-            RenderReadOnly:
-              type: boolean
-              description: '**true** if field is read-only; otherwise, **false**.'
-          description: The new definition of the Custom Field. Include every setting that you want to retain or change. To reset every Custom Field setting, specify only the DN and the Guid. If the request omits an attribute, the value reverts to the default.
-        Update:
-          type: object
-          description: The values to change for the Custom Field. Only provide properties you want to change, all other settings will be retained.
-    Core_WebSDK_MetadataWebResponse_undefineitem:
-      type: object
-      properties:
-        Result:
-          $ref: '#/components/schemas/Core_MetadataResult'
-        Error:
-          type: string
-          description: Provides an error explanation if the request was not successful, otherwise **null**
-    Core_WebSDK_MetadataWebRequest_finditem:
-      required:
-      - Name
-      type: object
-      properties:
-        Name:
-          type: string
-          description: The label or name of the Custom Field to find.
-    Core_WebSDK_MetadataWebRequest_defineitem:
-      required:
-      - Item
-      type: object
-      properties:
-        Item:
-          type: object
-          properties:
-            Type:
-              $ref: '#/components/schemas/Core_MetadataType'
-            Label:
-              type: string
-              description: Gets or sets the metadata label
-            Help:
-              type: string
-              description: Gets or sets the help text describing the metadata field.
-            Category:
-              type: string
-              description: The category DN, or **null** if none.
-            DisplayAfter:
-              type: string
-              description: The metadata item after which to render this item
-            Name:
-              type: string
-              description: Gets or sets the name of the metadata item.
-            Guid:
-              type: string
-              description: Gets or sets the Guid of the metadata item.
-            DN:
-              type: string
-              description: The DN.
-            Mandatory:
-              type: boolean
-              description: '**true** if mandatory; otherwise, **false**.'
-            DefaultValues:
-              type: array
-              items:
-                type: string
-              description: Gets or sets the list of default values for this metadata field.
-            AllowedValues:
-              type: array
-              items:
-                type: string
-              description: Gets or sets the list of allowed values for this metadata field.
-            Classes:
-              type: array
-              items:
-                type: string
-              description: Gets or sets the list of schema classes this metadata field applies to
-            LocalizationSet:
-              type: array
-              items:
-                type: object
-                properties:
-                  Language:
-                    type: string
-                    description: ''
-                  List:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        Invariant:
-                          type: string
-                          description: ''
-                        Localized:
-                          type: string
-                          description: ''
-                      description: Support class to allow serialization of values for a metadata object
-                    description: ''
-                description: Support class to allow serialization of values for a metadata object
-              description: The localization table.
-            MinimumLength:
-              type:
-              - integer
-              - 'null'
-              description: Gets or sets the minimum length of the text field.
-              format: int32
-            MaximumLength:
-              type:
-              - integer
-              - 'null'
-              description: Gets or sets the maximum length of the text field.
-              format: int32
-            Mask:
-              type: string
-              description: Gets or sets the input mask.
-            AllowedCharacters:
-              type: string
-              description: Gets or sets the allowed characters for the text field.
-            RegularExpression:
-              type: string
-              description: Gets or sets the regular expression for the text field.
-            ErrorMessage:
-              type: string
-              description: Gets or sets the error message for the text field.
-            Single:
-              type: boolean
-              description: '**true** if single; otherwise, **false**.'
-            DateOnly:
-              type: boolean
-              description: '**true** if only a date should be selected; otherwise, **false**.'
-            TimeOnly:
-              type: boolean
-              description: '**true** if only a time should be selected; otherwise, **false**.'
-            Policyable:
-              type: boolean
-              description: '**true** if policy is supported; otherwise, **false**.'
-            SchemaAttribute:
-              type: string
-              description: Gets the attribute name used when writing this value to the object store
-            ConfigAttribute:
-              type: string
-              description: Provided for 23.3 and earlier compatibility. Use _SchemaAttribute_ instead
-            RenderHidden:
-              type: boolean
-              description: '**true** if field is hidden; otherwise, **false**.'
-            RenderReadOnly:
-              type: boolean
-              description: '**true** if field is read-only; otherwise, **false**.'
-          description: A metadata item that represents the Custom Field to be created. A Custom Field requires, at a minimum, the `Label`, `Name`, `Classes` and `Type` properties.
-    Core_WebSDK_MetadataWebResponse_readpolicy:
-      type: object
-      properties:
-        Values:
-          type: array
-          items:
-            type: string
-          description: The values stored for the Custom Field
-        Locked:
-          type: boolean
-          description: 'The Policy status:
-
-            * **true**: The Policy value, which applies to the Custom Field, is locked.
-
-            * **false**: The Policy value for the Custom Field can be overridden at the object level.'
-        Result:
-          $ref: '#/components/schemas/Core_MetadataResult'
-        Error:
-          type: string
-          description: Provides an error explanation if the request was not successful, otherwise **null**
-    Core_WebSDK_MetadataWebRequest_undefineitem:
-      required:
-      - ItemGuid
-      type: object
-      properties:
-        ItemGuid:
-          type: string
-          description: The GUID of the Custom Field to delete.
-        RemoveData:
-          type: boolean
-          description: 'Boolean indicating if existing values should be deleted when the Custom Field is deleted:
-
-            * **true**: Delete existing values stored for the Custom Field before deleting the Custom Field itself.
-
-            * **false**: Default. Do not delete any stored values. If values exist, the delete of the Custom Field will fail.'
-    Core_WebSDK_MetadataWebRequest_getitemguids:
-      required:
-      - DN
-      type: object
-      properties:
-        DN:
-          type: string
-          description: The DN of a Certificate or Device object to look up.
-    Core_WebSDK_MetadataWebResponse_updateitem:
-      type: object
-      properties:
-        Result:
-          $ref: '#/components/schemas/Core_MetadataResult'
-        Error:
-          type: string
-          description: Provides an error explanation if the request was not successful, otherwise **null**
     Core_WebSDK_MetadataWebResponse_getitems:
       type: object
       properties:
@@ -1752,28 +1671,45 @@ components:
         Error:
           type: string
           description: Provides an error explanation if the request was not successful, otherwise **null**
-    Core_WebSDK_MetadataWebRequest_readeffectivevalues:
+    Core_WebSDK_MetadataWebResponse_get:
+      type: object
+      properties:
+        GuidData:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+            description: Values stored for the Custom Field on the object
+          description: 'A dictionary of every Custom Field value for an object.
+
+
+            **Key**: GUID of the Custom Field definition'
+        Result:
+          $ref: '#/components/schemas/Core_MetadataResult'
+        Error:
+          type: string
+          description: Provides an error explanation if the request was not successful, otherwise **null**
+    Core_WebSDK_MetadataWebRequest_get:
       required:
-      - ItemGuid
       - DN
       type: object
       properties:
-        ItemGuid:
-          type: string
-          description: The GUID of a Custom Field. To get the GUIDs for a DN, use `POST Medata/GetItemGuids`.
         DN:
           type: string
-          description: The DN of a Certificate or Device object that contains a Custom Field.
-    Core_WebSDK_MetadataWebRequest_find:
+          description: The DN of a certificate or device.
+        All:
+          type: boolean
+          description: Boolean indicating that all Custom Fields that apply to this object should be returned, even if no values exist for them.
+    Core_WebSDK_MetadataWebRequest_loaditem:
+      required:
+      - DN
       type: object
       properties:
-        ItemGuid:
+        DN:
           type: string
-          description: The GUID of a Custom Field. If provided, only values of this Custom Field are searched
-        Value:
-          type: string
-          description: The value a stored Custom Field value must match.
-    Core_WebSDK_MetadataWebResponse_set:
+          description: The DN of the Custom Field to return.
+    Core_WebSDK_MetadataWebResponse_undefineitem:
       type: object
       properties:
         Result:
@@ -1781,70 +1717,6 @@ components:
         Error:
           type: string
           description: Provides an error explanation if the request was not successful, otherwise **null**
-    Core_WebSDK_MetadataWebResponse_readeffectivevalues:
-      type: object
-      properties:
-        Values:
-          type: array
-          items:
-            type: string
-          description: The values stored for the Custom Field
-        Overridden:
-          type: boolean
-          description: '* **true**: The Policy value was overridden by the value set on the object itself.
-
-            * **false**: The suggested Policy value was used.'
-        Locked:
-          type: boolean
-          description: 'The Policy status:
-
-            * **true**: The Policy value, which applies to the Custom Field, is locked.
-
-            * **false**: The Policy value for the Custom Field can be overridden at the object level.'
-        PolicyDn:
-          type: string
-          description: DN of the policy where values are set
-        Result:
-          $ref: '#/components/schemas/Core_MetadataResult'
-        Error:
-          type: string
-          description: Provides an error explanation if the request was not successful, otherwise **null**
-    Core_MetadataResult:
-      title: Metadata API result codes
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 6
-      - 7
-      - 8
-      - 9
-      - 10
-      - 11
-      - 12
-      - 13
-      - 14
-      - 15
-      - 16
-      - 17
-      - 18
-      - 19
-      - 20
-      - 21
-      - 22
-      - 23
-      - 24
-      - 25
-      - 26
-      - 27
-      - 28
-      - 29
-      type: integer
-      description: "\n\n**0**: **Success**  \nSuccess\n\n**1**: **InvalidConfigObject**  \nAn invalid or **null**_Config_ object was passed\n\n**2**: **InvalidDN**  \nA **null** or empty DN string was passed\n\n**3**: **InvalidName**  \nA **null** or empty Name string was passed\n\n**4**: **InvalidItem**  \nThe _MetadataObject_ object was invalid or incomplete\n\n**5**: **InvalidClass**  \nThe _SchemaClass_ object was invalid or incomplete\n\n**6**: **InvalidMetadataObject**  \nThe _MetadataObject_ object was invalid or incomplete\n\n**7**: **InvalidRights**  \nThe rights were invalid to perform the requested operation\n\n**8**: **ItemIsNull**  \nA **null**_MetadataObject_ was passed\n\n**9**: **ItemAlreadyExists**  \nA _MetadataObject_ object with the same name or label already exists\n\n**10**: **ItemTypeUnknown**  \nThe type of _MetadataObject_ object is not supported\n\n**11**: **ConfigCreateFailed**  \nThe metadata storage failed to create the object\n\n**12**: **ConfigWriteFailed**  \nThe metadata storage failed when updating the object\n\n**13**: **ConfigDeleteFailed**  \nThe metadata storage failed when deleting the object\n\n**14**: **MetadataInUse**  \nThe metadata item could not be deleted because it is still referenced on objects\n\n**15**: **NoAllowedValues**  \nThe Metadata item has no allowed values\n\n**16**: **AllowedValueDoesNotExist**  \nThe specified 'allowed' value does not exist\n\n**17**: **ValueNotInAllowedList**  \nThe provided value is not in the list of allowed values\n\n**18**: **ItemNotValidForClass**  \nThe specified metadata item is not valid for the object class\n\n**19**: **NameTooLong**  \nThe name for the metadata item is longer than allowed (255 chars, including its parents)\n\n**20**: **TooManyContainers**  \nThe name for the metadata is nested deeper than allowed\n\n**21**: **ConfigDnNotContainer**  \nPassed DN was expected to be a container\n\n**22**: **InvalidPolicyState**  \nCannot write a policy with the specified policy state\n\n**23**: **ConfigLockFailed**  \nFailed to acquire a config lock\n\n**24**: **ConfigReadFailed**  \nFailed to read data from config\n\n**25**: **RemoteError**  \nA remote request failed; see Error property for details\n\n**26**: **ValueDoesNotMatchRegex**  \nThe value supplied does not match the regex pattern which is configured for this metadata type\n\n**27**: **ArgumentIsNull**  \nA required argument was null\n\n**28**: **TransientAttributeUnknown**  \nThe schema attribute matching the metadata item is missing\n\n**29**: **BusError**  \nA bus-related unspecified error\n"
-      format: int32
     Core_WebSDK_MetadataWebResponse_defineitem:
       type: object
       properties:
@@ -1972,41 +1844,175 @@ components:
         Error:
           type: string
           description: Provides an error explanation if the request was not successful, otherwise **null**
-    Core_WebSDK_MetadataWebResponse_get:
+    Core_WebSDK_MetadataWebResponse_finditem:
       type: object
       properties:
-        GuidData:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              type: string
-            description: Values stored for the Custom Field on the object
-          description: 'A dictionary of every Custom Field value for an object.
-
-
-            **Key**: GUID of the Custom Field definition'
+        ItemGuid:
+          type: string
+          description: The GUID of the matching Custom Field, if a match was found
         Result:
           $ref: '#/components/schemas/Core_MetadataResult'
         Error:
           type: string
           description: Provides an error explanation if the request was not successful, otherwise **null**
-    Core_WebSDK_MetadataWebRequest_loaditemguid:
+    Core_WebSDK_MetadataWebRequest_getitemguids:
       required:
       - DN
       type: object
       properties:
         DN:
           type: string
-          description: The DN of the Custom Field to return.
-    Core_WebSDK_MetadataWebResponse_setpolicy:
+          description: The DN of a Certificate or Device object to look up.
+    Core_WebSDK_MetadataWebRequest_readpolicy:
+      required:
+      - ItemGuid
+      - DN
+      - Type
       type: object
       properties:
-        Result:
-          $ref: '#/components/schemas/Core_MetadataResult'
-        Error:
+        ItemGuid:
           type: string
-          description: Provides an error explanation if the request was not successful, otherwise **null**
+          description: The GUID of a Custom Field. To get the GUIDs for a DN, use `POST Medata/GetItemGuids`.
+        DN:
+          type: string
+          description: The DN of a Certificate or Device object that contains a Custom Field.
+        Type:
+          type: string
+          description: The class type to read policy for
+    Core_WebSDK_MetadataWebRequest_defineitem:
+      required:
+      - Item
+      type: object
+      properties:
+        Item:
+          type: object
+          properties:
+            Type:
+              $ref: '#/components/schemas/Core_MetadataType'
+            Label:
+              type: string
+              description: Gets or sets the metadata label
+            Help:
+              type: string
+              description: Gets or sets the help text describing the metadata field.
+            Category:
+              type: string
+              description: The category DN, or **null** if none.
+            DisplayAfter:
+              type: string
+              description: The metadata item after which to render this item
+            Name:
+              type: string
+              description: Gets or sets the name of the metadata item.
+            Guid:
+              type: string
+              description: Gets or sets the Guid of the metadata item.
+            DN:
+              type: string
+              description: The DN.
+            Mandatory:
+              type: boolean
+              description: '**true** if mandatory; otherwise, **false**.'
+            DefaultValues:
+              type: array
+              items:
+                type: string
+              description: Gets or sets the list of default values for this metadata field.
+            AllowedValues:
+              type: array
+              items:
+                type: string
+              description: Gets or sets the list of allowed values for this metadata field.
+            Classes:
+              type: array
+              items:
+                type: string
+              description: Gets or sets the list of schema classes this metadata field applies to
+            LocalizationSet:
+              type: array
+              items:
+                type: object
+                properties:
+                  Language:
+                    type: string
+                    description: ''
+                  List:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Invariant:
+                          type: string
+                          description: ''
+                        Localized:
+                          type: string
+                          description: ''
+                      description: Support class to allow serialization of values for a metadata object
+                    description: ''
+                description: Support class to allow serialization of values for a metadata object
+              description: The localization table.
+            MinimumLength:
+              type:
+              - integer
+              - 'null'
+              description: Gets or sets the minimum length of the text field.
+              format: int32
+            MaximumLength:
+              type:
+              - integer
+              - 'null'
+              description: Gets or sets the maximum length of the text field.
+              format: int32
+            Mask:
+              type: string
+              description: Gets or sets the input mask.
+            AllowedCharacters:
+              type: string
+              description: Gets or sets the allowed characters for the text field.
+            RegularExpression:
+              type: string
+              description: Gets or sets the regular expression for the text field.
+            ErrorMessage:
+              type: string
+              description: Gets or sets the error message for the text field.
+            Single:
+              type: boolean
+              description: '**true** if single; otherwise, **false**.'
+            DateOnly:
+              type: boolean
+              description: '**true** if only a date should be selected; otherwise, **false**.'
+            TimeOnly:
+              type: boolean
+              description: '**true** if only a time should be selected; otherwise, **false**.'
+            Policyable:
+              type: boolean
+              description: '**true** if policy is supported; otherwise, **false**.'
+            SchemaAttribute:
+              type: string
+              description: Gets the attribute name used when writing this value to the object store
+            ConfigAttribute:
+              type: string
+              description: Provided for 23.3 and earlier compatibility. Use _SchemaAttribute_ instead
+            RenderHidden:
+              type: boolean
+              description: '**true** if field is hidden; otherwise, **false**.'
+            RenderReadOnly:
+              type: boolean
+              description: '**true** if field is read-only; otherwise, **false**.'
+          description: A metadata item that represents the Custom Field to be created. A Custom Field requires, at a minimum, the `Label`, `Name`, `Classes` and `Type` properties.
+    Core_WebSDK_MetadataWebResponse_readeffectivevalues:
+      type: object
+      properties:
+        Values:
+          type: array
+          items:
+            type: string
+          description: The values stored for the Custom Field
+        Overridden:
+          type: boolean
+          description: '* **true**: The Policy value was overridden by the value set on the object itself.
+
+            * **false**: The suggested Policy value was used.'
         Locked:
           type: boolean
           description: 'The Policy status:
@@ -2014,6 +2020,188 @@ components:
             * **true**: The Policy value, which applies to the Custom Field, is locked.
 
             * **false**: The Policy value for the Custom Field can be overridden at the object level.'
+        PolicyDn:
+          type: string
+          description: DN of the policy where values are set
+        Result:
+          $ref: '#/components/schemas/Core_MetadataResult'
+        Error:
+          type: string
+          description: Provides an error explanation if the request was not successful, otherwise **null**
+    Core_WebSDK_MetadataWebRequest_updateitem:
+      type: object
+      properties:
+        Item:
+          type: object
+          properties:
+            Type:
+              $ref: '#/components/schemas/Core_MetadataType'
+            Label:
+              type: string
+              description: Gets or sets the metadata label
+            Help:
+              type: string
+              description: Gets or sets the help text describing the metadata field.
+            Category:
+              type: string
+              description: The category DN, or **null** if none.
+            DisplayAfter:
+              type: string
+              description: The metadata item after which to render this item
+            Name:
+              type: string
+              description: Gets or sets the name of the metadata item.
+            Guid:
+              type: string
+              description: Gets or sets the Guid of the metadata item.
+            DN:
+              type: string
+              description: The DN.
+            Mandatory:
+              type: boolean
+              description: '**true** if mandatory; otherwise, **false**.'
+            DefaultValues:
+              type: array
+              items:
+                type: string
+              description: Gets or sets the list of default values for this metadata field.
+            AllowedValues:
+              type: array
+              items:
+                type: string
+              description: Gets or sets the list of allowed values for this metadata field.
+            Classes:
+              type: array
+              items:
+                type: string
+              description: Gets or sets the list of schema classes this metadata field applies to
+            LocalizationSet:
+              type: array
+              items:
+                type: object
+                properties:
+                  Language:
+                    type: string
+                    description: ''
+                  List:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Invariant:
+                          type: string
+                          description: ''
+                        Localized:
+                          type: string
+                          description: ''
+                      description: Support class to allow serialization of values for a metadata object
+                    description: ''
+                description: Support class to allow serialization of values for a metadata object
+              description: The localization table.
+            MinimumLength:
+              type:
+              - integer
+              - 'null'
+              description: Gets or sets the minimum length of the text field.
+              format: int32
+            MaximumLength:
+              type:
+              - integer
+              - 'null'
+              description: Gets or sets the maximum length of the text field.
+              format: int32
+            Mask:
+              type: string
+              description: Gets or sets the input mask.
+            AllowedCharacters:
+              type: string
+              description: Gets or sets the allowed characters for the text field.
+            RegularExpression:
+              type: string
+              description: Gets or sets the regular expression for the text field.
+            ErrorMessage:
+              type: string
+              description: Gets or sets the error message for the text field.
+            Single:
+              type: boolean
+              description: '**true** if single; otherwise, **false**.'
+            DateOnly:
+              type: boolean
+              description: '**true** if only a date should be selected; otherwise, **false**.'
+            TimeOnly:
+              type: boolean
+              description: '**true** if only a time should be selected; otherwise, **false**.'
+            Policyable:
+              type: boolean
+              description: '**true** if policy is supported; otherwise, **false**.'
+            SchemaAttribute:
+              type: string
+              description: Gets the attribute name used when writing this value to the object store
+            ConfigAttribute:
+              type: string
+              description: Provided for 23.3 and earlier compatibility. Use _SchemaAttribute_ instead
+            RenderHidden:
+              type: boolean
+              description: '**true** if field is hidden; otherwise, **false**.'
+            RenderReadOnly:
+              type: boolean
+              description: '**true** if field is read-only; otherwise, **false**.'
+          description: The new definition of the Custom Field. Include every setting that you want to retain or change. To reset every Custom Field setting, specify only the DN and the Guid. If the request omits an attribute, the value reverts to the default.
+        Update:
+          type: object
+          description: The values to change for the Custom Field. Only provide properties you want to change, all other settings will be retained.
+    Core_WebSDK_MetadataWebRequest_setpolicy:
+      required:
+      - DN
+      - SchemaClass
+      - Locked
+      - GuidData
+      type: object
+      properties:
+        DN:
+          type: string
+          description: The DN of a policy folder that has values for at least one Custom Field. If necessary, use the DN value from the GET Metadata/Items or POST Metadata/GetItemsForClass response.
+        SchemaClass:
+          type: string
+          description: The Device or X509 Certificate class. (_Pre-24.1 this parameter was named ConfigClass_)
+        Locked:
+          type: boolean
+          description: Boolean indicating whether the value is to be locked by policy. If not specified, the value will not be locked by policy.
+        GuidData:
+          type: array
+          items:
+            type: object
+            properties:
+              ItemGuid:
+                type: string
+                description: The GUID that identifies the Custom Field. To get the Custom Field GUID, use POST Metadata/GetItems. Depending on your environment, the GUID may be expressed with or without curly braces {}. For example, _{3d6b61d-1c71-4603-883f-25b8c2ceecdd}_.
+              List:
+                type: array
+                items:
+                  type: string
+                description: An array of one or more Custom Field value changes. The value must match a Metadata Field Type. For example, to set a date, use the MM/DD/YYYY format.
+            description: Support class to allow serialization of values for a metadata object
+          description: An array of ItemGuid-List pairs that apply to the DN. Each pair uniquely identifies a Custom Field and the new value(s). If _GuidData_ is empty and _KeepExisting_ is **false** or not specified, every Custom Field for the DN resets to null.
+    Core_WebSDK_MetadataWebResponse_readpolicy:
+      type: object
+      properties:
+        Values:
+          type: array
+          items:
+            type: string
+          description: The values stored for the Custom Field
+        Locked:
+          type: boolean
+          description: 'The Policy status:
+
+            * **true**: The Policy value, which applies to the Custom Field, is locked.
+
+            * **false**: The Policy value for the Custom Field can be overridden at the object level.'
+        Result:
+          $ref: '#/components/schemas/Core_MetadataResult'
+        Error:
+          type: string
+          description: Provides an error explanation if the request was not successful, otherwise **null**
     Core_WebSDK_MetadataWebResponse_getitemsforclass:
       type: object
       properties:
@@ -2141,58 +2329,6 @@ components:
         Error:
           type: string
           description: Provides an error explanation if the request was not successful, otherwise **null**
-    Web_SDK_Authentication_OAuthError:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Gets or sets the short error name
-        error_description:
-          type: string
-          description: Gets or sets the description of the error
-      description: REST OAuth Error Response
-    Core_WebSDK_MetadataWebRequest_getitems:
-      required:
-      - DN
-      type: object
-      properties:
-        DN:
-          type: string
-          description: The DN of a Certificate or Device object to look up.
-    Core_WebSDK_MetadataWebRequest_getitemsforclass:
-      required:
-      - SchemaClass
-      type: object
-      properties:
-        SchemaClass:
-          type: string
-          description: "An object class  (_Pre-24.1 this parameter was named `ConfigClass`_)\n\nCommon object classes are: \n* `Code Signing Environment Base`: Show the Custom Fields for Code Signing Project Environments\n* `Code Signing Project`: Show the Custom Fields for Code Signing Projects \n* `Device`: Show the Custom Fields for Devices\n* `X509 Certificate`: Show the Custom Fields for Certificates"
-    Core_WebSDK_MetadataWebResponse_finditem:
-      type: object
-      properties:
-        ItemGuid:
-          type: string
-          description: The GUID of the matching Custom Field, if a match was found
-        Result:
-          $ref: '#/components/schemas/Core_MetadataResult'
-        Error:
-          type: string
-          description: Provides an error explanation if the request was not successful, otherwise **null**
-    Core_MetadataType:
-      title: Enumeration of possible metadata types
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 6
-      - 7
-      - 8
-      type: integer
-      description: "\n\n**0**: **Unknown**  \nUnknown\n\n**1**: **Text**  \nText input field\n\n**2**: **List**  \nList selection\n\n**3**: **Choice**  \nSingle/Multiple choice\n\n**4**: **DateTime**  \nDate/Time picker\n\n**5**: **Identity**  \nIdentity selector\n\n**6**: **DNReference**  \nDN\n\n**7**: **Integer**  \nInteger\n\n**8**: **Boolean**  \nBoolean\n"
-      format: int32
     Core_WebSDK_MetadataWebRequest_getpolicyitems:
       required:
       - DN
@@ -2201,157 +2337,21 @@ components:
         DN:
           type: string
           description: A container DN.
-    Core_WebSDK_MetadataWebRequest_readpolicy:
-      required:
-      - ItemGuid
-      - DN
-      - Type
+    Core_WebSDK_MetadataWebResponse_setpolicy:
       type: object
       properties:
-        ItemGuid:
-          type: string
-          description: The GUID of a Custom Field. To get the GUIDs for a DN, use `POST Medata/GetItemGuids`.
-        DN:
-          type: string
-          description: The DN of a Certificate or Device object that contains a Custom Field.
-        Type:
-          type: string
-          description: The class type to read policy for
-    Core_WebSDK_MetadataWebRequest_loaditem:
-      required:
-      - DN
-      type: object
-      properties:
-        DN:
-          type: string
-          description: The DN of the Custom Field to return.
-    Core_WebSDK_MetadataWebResponse_items:
-      type: object
-      properties:
-        Items:
-          type: array
-          items:
-            type: object
-            properties:
-              Type:
-                $ref: '#/components/schemas/Core_MetadataType'
-              Label:
-                type: string
-                description: Gets or sets the metadata label
-              Help:
-                type: string
-                description: Gets or sets the help text describing the metadata field.
-              Category:
-                type: string
-                description: The category DN, or **null** if none.
-              DisplayAfter:
-                type: string
-                description: The metadata item after which to render this item
-              Name:
-                type: string
-                description: Gets or sets the name of the metadata item.
-              Guid:
-                type: string
-                description: Gets or sets the Guid of the metadata item.
-              DN:
-                type: string
-                description: The DN.
-              Mandatory:
-                type: boolean
-                description: '**true** if mandatory; otherwise, **false**.'
-              DefaultValues:
-                type: array
-                items:
-                  type: string
-                description: Gets or sets the list of default values for this metadata field.
-              AllowedValues:
-                type: array
-                items:
-                  type: string
-                description: Gets or sets the list of allowed values for this metadata field.
-              Classes:
-                type: array
-                items:
-                  type: string
-                description: Gets or sets the list of schema classes this metadata field applies to
-              LocalizationSet:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    Language:
-                      type: string
-                      description: ''
-                    List:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          Invariant:
-                            type: string
-                            description: ''
-                          Localized:
-                            type: string
-                            description: ''
-                        description: Support class to allow serialization of values for a metadata object
-                      description: ''
-                  description: Support class to allow serialization of values for a metadata object
-                description: The localization table.
-              MinimumLength:
-                type:
-                - integer
-                - 'null'
-                description: Gets or sets the minimum length of the text field.
-                format: int32
-              MaximumLength:
-                type:
-                - integer
-                - 'null'
-                description: Gets or sets the maximum length of the text field.
-                format: int32
-              Mask:
-                type: string
-                description: Gets or sets the input mask.
-              AllowedCharacters:
-                type: string
-                description: Gets or sets the allowed characters for the text field.
-              RegularExpression:
-                type: string
-                description: Gets or sets the regular expression for the text field.
-              ErrorMessage:
-                type: string
-                description: Gets or sets the error message for the text field.
-              Single:
-                type: boolean
-                description: '**true** if single; otherwise, **false**.'
-              DateOnly:
-                type: boolean
-                description: '**true** if only a date should be selected; otherwise, **false**.'
-              TimeOnly:
-                type: boolean
-                description: '**true** if only a time should be selected; otherwise, **false**.'
-              Policyable:
-                type: boolean
-                description: '**true** if policy is supported; otherwise, **false**.'
-              SchemaAttribute:
-                type: string
-                description: Gets the attribute name used when writing this value to the object store
-              ConfigAttribute:
-                type: string
-                description: Provided for 23.3 and earlier compatibility. Use _SchemaAttribute_ instead
-              RenderHidden:
-                type: boolean
-                description: '**true** if field is hidden; otherwise, **false**.'
-              RenderReadOnly:
-                type: boolean
-                description: '**true** if field is read-only; otherwise, **false**.'
-            description: Common metadata
-          description: A list of all existing Custom Field definitions
         Result:
           $ref: '#/components/schemas/Core_MetadataResult'
         Error:
           type: string
           description: Provides an error explanation if the request was not successful, otherwise **null**
+        Locked:
+          type: boolean
+          description: 'The Policy status:
+
+            * **true**: The Policy value, which applies to the Custom Field, is locked.
+
+            * **false**: The Policy value for the Custom Field can be overridden at the object level.'
   securitySchemes:
     AccessToken:
       type: http

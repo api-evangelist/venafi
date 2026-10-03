@@ -1594,42 +1594,7 @@ paths:
       - AccessToken: []
 components:
   schemas:
-    WebSDK_CertificateRequest_ValidateResponse:
-      type: object
-      properties:
-        Error:
-          type: string
-          description: Error message if any validation process failed.
-        Warnings:
-          type: array
-          items:
-            type: string
-          description: A list of warning messages encountered during the validation process.
-        ValidatedCertificateGUIDs:
-          type: array
-          items:
-            type: string
-          description: A list of validated certificate GUIDs.
-        ValidatedCertificateDNs:
-          type: array
-          items:
-            type: string
-          description: A list of validated certificate DNs.
-        Success:
-          type: boolean
-          description: Indicates whether the validation process was successful.
-      description: Certificates validate response.
-    WebSDK_CertificateRequest_DissociateResponse:
-      type: object
-      properties:
-        Error:
-          type: string
-          description: A detailed error message describing why the dissociation request failed.
-        Success:
-          type: boolean
-          description: A flag indicating whether the certificate was successfully dissociated from the application(s).
-      description: Certificate dissociate response.
-    WebSDK_CertificateRequest_RequestResponse:
+    WebSDK_CertificateRequest_RequestResponse_Request:
       type: object
       properties:
         CertificateDN:
@@ -1664,9 +1629,6 @@ components:
                 description: The list of applications.
             description: The class for device response data.
           description: The devices associated with the certificate.
-        Error:
-          type: string
-          description: The error message if any.
         Warning:
           type: string
           description: The warning message if any.
@@ -1688,47 +1650,96 @@ components:
           - 'null'
           description: The certificate processing stage.
           format: int32
-      description: The class for certificate request method response.
-    WebSDK_CertificateRequest_RenewRequest:
+        Error:
+          type: string
+          description: The error message if any.
+    Core_IdentityType:
+      title: Enumeration defining Identity type objects
+      enum:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      - 16
+      - 32
+      type: integer
+      description: "\n\n**0**: **Undefined**  \nUndefined\n\n**1**: **User**  \nUser object\n\n**2**: **Group**  \nGroup object\n\n**4**: **Container**  \nContainer of users and groups\n\n**8**: **DistributionList**  \nDistribution List\n\n**16**: **Machine**  \nMachine\n\n**32**: **Provider**  \nThe Identity Provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
+    WebSDK_CertificateRequest_AssociateRequest:
       type: object
       properties:
         CertificateDN:
           type: string
-          description: The Distinguished Name (DN) of the certificate to be renewed.
-        PKCS10:
-          type: string
-          description: The PKCS#10 certificate signing request.
-        Reenable:
+          description: The Distinguished Name (DN) of the certificate to be associated with an application. This must reference a valid certificate in the system.
+        PushToNew:
           type: boolean
-          description: Indicates whether to re-enable a previously disabled certificate.
+          description: A flag indicating whether the certificate should be pushed to new applications.
+        ApplicationDN:
+          type: array
+          items:
+            type: string
+          description: The Distinguished Name (DN) of the application object(s) that will use the certificate. This must be a valid application object in the system.
+      description: Request to associate certificate and applications.
+    WebSDK_CertificateRequest_RevokeRequest:
+      type: object
+      properties:
+        CertificateDN:
+          type: string
+          description: The Distinguished Name (DN) of the certificate to be revoked.
+        Thumbprint:
+          type: string
+          description: The unique hash (SHA-1) of the certificate to be revoked.
+        Reason:
+          $ref: '#/components/schemas/Nullable_1_Core_Revocation_RevocationReason_'
+        Comments:
+          type: string
+          description: Optional comments providing additional details about the revocation request.
+        Disable:
+          type: boolean
+          description: If true, disables the certificate in addition to revocation. Defaults to false.
         WorkToDoTimeout:
           type:
           - integer
           - 'null'
-          description: Number of seconds to wait for the todo to finish before returning
+          description: The maximum time (in seconds) to wait for revocation processing before returning a response.
           format: int32
-        Format:
+      description: The class for certificate revoke method request.
+    WebSDK_CertificateRequest_CheckPolicyRequest:
+      type: object
+      properties:
+        PolicyDN:
           type: string
-          description: The format in which to retrieve the renewed certificate (e.g., Base64, DER)
-        Password:
+          description: The Distinguished Name (DN) of the policy to be checked. This must reference a valid policy in the system.
+        PKCS10:
           type: string
-          description: The password to use if the certificate includes a private key.
-        IncludePrivateKey:
+          description: The PKCS#10 certificate signing request (CSR) to be checked against the policy.
+      description: Check policy request.
+    WebSDK_CertificateRequest_ValidateResponse:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: Error message if any validation process failed.
+        Warnings:
+          type: array
+          items:
+            type: string
+          description: A list of warning messages encountered during the validation process.
+        ValidatedCertificateGUIDs:
+          type: array
+          items:
+            type: string
+          description: A list of validated certificate GUIDs.
+        ValidatedCertificateDNs:
+          type: array
+          items:
+            type: string
+          description: A list of validated certificate DNs.
+        Success:
           type: boolean
-          description: Indicates whether to include the private key in the response.
-        IncludeChain:
-          type: boolean
-          description: Indicates whether to include the certificate chain in the response.
-        FriendlyName:
-          type: string
-          description: The friendly name for the certificate.
-        RootFirstOrder:
-          type: boolean
-          description: Indicates whether to order the certificate chain with the root first.
-        KeystorePassword:
-          type: string
-          description: The password for the Java Keystore (JKS) format.
-      description: The class for renew method request.
+          description: Indicates whether the validation process was successful.
+      description: Certificates validate response.
     WebSDK_CertificateRequest_RetrieveRequest_Retrieve:
       required:
       - CertificateDN
@@ -1817,376 +1828,6 @@ components:
             |2.16.840.1.101.3.4.1.42|AES256-CBC|256-bit security, suitable for highly sensitive data encryption.|
 
             |2.16.840.1.101.3.4.1.46|AES256-GCM|256-bit security, ideal for secure communications with the highest security needs.|'
-    WebSDK_CertificateRequest_AssociateResponse:
-      type: object
-      properties:
-        Error:
-          type: string
-          description: A detailed error message describing why the association request failed.
-        Warning:
-          type: string
-          description: A message providing additional information, such as potential issues encountered during the association process.
-        Success:
-          type: boolean
-          description: A flag indicating whether the certificate was successfully associated with the application(s).
-      description: Certificate associate response.
-    WebSDK_CertificateRequest_RetrieveResponse:
-      type: object
-      properties:
-        CertificateData:
-          type: string
-          description: The certificate data in the requested format.
-        Format:
-          type: string
-          description: The format of the retrieved certificate.
-        Filename:
-          type: string
-          description: The filename for the retrieved certificate.
-        Status:
-          type: string
-          description: The status of the certificate retrieval process.
-        Stage:
-          type:
-          - integer
-          - 'null'
-          description: The stage of the certificate retrieval process.
-          format: int32
-        Error:
-          type: string
-          description: Error message if the certificate retrieval process failed.
-      description: The class for certificate retrieve response.
-    WebSDK_CertificateRequest_RevokeResponse:
-      type: object
-      properties:
-        Error:
-          type: string
-          description: Contains an error message if the revocation request failed.
-        Warning:
-          type: string
-          description: A warning message if the revocation request is pending or partially completed.
-        Revoked:
-          type: boolean
-          description: A flag that is true if the certificate has been fully revoked and confirmed.
-        Requested:
-          type: boolean
-          description: A flag that is true if the revocation was requested but not yet confirmed.
-        Success:
-          type: boolean
-          description: A flag that is true if the revocation request was processed successfully.
-      description: The class for certificate revoke method response.
-    WebSDK_CertificateRequest_ValidateRequest:
-      type: object
-      properties:
-        CertificateDNs:
-          type: array
-          items:
-            type: string
-          description: The list of certificate Distinguished Names (DNs) to validate.
-        CertificateGUIDs:
-          type: array
-          items:
-            type: string
-          description: The list of certificate GUIDs to validate.
-      description: Request to validate certificates.
-    WebSDK_CertificateRequest_CertificateResults:
-      type: object
-      properties:
-        TotalCount:
-          type: integer
-          description: The total number of certificates being returned.
-          format: int32
-        DataRange:
-          type: string
-          description: The data range for the current page, e.g., "20-50".
-        Certificates:
-          type: array
-          items:
-            type: object
-            properties:
-              _links:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    Details:
-                      type: string
-                      description: A string containing the URL to the certificate details.
-                  description: Provides the functionality for creating a link to the details of a certificate.
-                description: A list of _CertificateDetailsLink_ objects containing links to the certificate details.
-              CreatedOn:
-                type: string
-                description: The creation date of the certificate in ISO 8601 format.
-              DN:
-                type: string
-                description: The Distinguished Name (DN) of the certificate.
-              Guid:
-                type: string
-                description: The unique identifier (GUID) of the certificate.
-              Name:
-                type: string
-                description: The name of the certificate.
-              ParentDn:
-                type: string
-                description: The Parent Distinguished Name (DN) of the certificate.
-              SchemaClass:
-                type: string
-                description: The schema class of the certificate.
-              X509:
-                type: object
-                properties:
-                  CN:
-                    type: string
-                    description: Certificate Common Name.
-                  SANS:
-                    type: object
-                    properties:
-                      DNS:
-                        type: array
-                        items:
-                          type: string
-                        description: DNS names.
-                      Email:
-                        type: array
-                        items:
-                          type: string
-                        description: Emails.
-                      IP:
-                        type: array
-                        items:
-                          type: string
-                        description: IPs.
-                      UPN:
-                        type: array
-                        items:
-                          type: string
-                        description: UPNs.
-                      URI:
-                        type: array
-                        items:
-                          type: string
-                        description: URIs.
-                    description: Certificate Subject alternative names.
-                  Serial:
-                    type: string
-                    description: Certificate serial number.
-                  Thumbprint:
-                    type: string
-                    description: Certificate thumbprint.
-                  ValidFrom:
-                    type: string
-                    description: Certificate start date and time.
-                  ValidTo:
-                    type: string
-                    description: Certificate end date and time.
-                  Subject:
-                    type: string
-                    description: Certificate Subject.
-                  KeyAlgorithm:
-                    type: string
-                    description: DEPRECATED - Use PkixParameterSet or KeyAlgorithmName
-                  KeySize:
-                    type:
-                    - integer
-                    - 'null'
-                    description: DEPRECATED - Use PkixParameterSet
-                    format: int32
-                  KeyAlgorithmName:
-                    type: string
-                    description: Certificate RFC name of the key algorithm.
-                  KeyAlgorithmOid:
-                    type: string
-                    description: Certificate dotted-string notation OID of the key algorithm.
-                  PkixParameterSet:
-                    type: string
-                    description: PKIX Parameter Set for the key algorithm.
-                  Issuer:
-                    type: string
-                    description: Certificate Issuer.
-                description: An _X509Details_ object containing detailed X509 information about the certificate.
-            description: Basic Certificate object containing the base properties for a certificate.
-          description: The list of certificates being returned.
-        _links:
-          type: array
-          items:
-            type: object
-            properties:
-              Previous:
-                type: string
-                description: A string containing the URL to the previous page of results.
-              Next:
-                type: string
-                description: A string containing the URL to the next page of results.
-            description: Paging class, used to build and return the pagination links.
-          description: The pagination links for navigating through the certificate results.
-        ErrorDetails:
-          type: string
-          description: The error details, if an error was encountered querying for the certificates.
-      description: Result class containing list of results as well as paging links and count information.
-    WebSDK_CertificateRequest_RetrieveByVaultIdRequest_Retrieve__vaultId_:
-      required:
-      - Format
-      - Password
-      - IncludePrivateKey
-      - IncludeChain
-      - RootFirstOrder
-      type: object
-      properties:
-        Format:
-          type: string
-          description: The data format of the retrieved certificate
-        Password:
-          type: string
-          description: 'The password is required if IncludePrivateKey is true and the format is pkcs #12 or JKS. It is used to protect the private key.'
-        IncludePrivateKey:
-          type: boolean
-          description: A flag indicating whether to include the private key.
-        IncludeChain:
-          type: boolean
-          description: A flag indicating whether to include the certificate chain.
-        FriendlyName:
-          type: string
-          description: The friendly name is required if the format is JKS. It is used to set the friendly name of the certificate in the keystore.
-        RootFirstOrder:
-          type: boolean
-          description: A flag indicating whether to order the certificate chain with the root first.
-        KeystorePassword:
-          type: string
-          description: The keystore password is required if the format is JKS. It is used to protect the keystore.
-        EncryptionAlgorithm:
-          type: string
-          description: 'Possible encryption algorithm values:
-
-
-            | OID | Algorithm | Description |
-
-            |-----|-----------|-------------|
-
-            |1.2.840.113549.1.1.1|RSA|A widely-used asymmetric encryption algorithm that provides secure data transmission, suitable for a variety of security applications including secure communications and data integrity.|
-
-            |1.2.840.113549.1.1.7|RSA-OAEP|An asymmetric encryption algorithm that uses Optimal Asymmetric Encryption Padding (OAEP) to enhance security, suitable for encryption of sensitive information.|
-
-            |1.2.840.113549.1.5.1|PBE-MD2-DES|Outdated and insecure. Not recommended for use.|
-
-            |1.2.840.113549.1.5.3|PBE-MD5-DES|Outdated and insecure. Not recommended for use.|
-
-            |1.2.840.113549.1.5.4|PBE-MD2-RC2-64|Outdated and insecure. Not recommended for use.|
-
-            |1.2.840.113549.1.5.6|PBE-MD5-RC2-64|Outdated and insecure. Not recommended for use.|
-
-            |1.2.840.113549.1.5.10|PBE-SHA1-DES|Suitable for moderate security needs. Not recommended for high-security applications.|
-
-            |1.2.840.113549.1.5.11|PBE-SHA1-RC2-64|Provides moderate security. Not recommended for high-security applications.|
-
-            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA1|Weak security due to vulnerabilities. Not recommended for use..|
-
-            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA1-3DES|Weak security due to vulnerabilities. Suitable for moderate security needs but not recommended for high-security applications.|
-
-            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA256|Suitable for typical security needs. Recommended over SHA-1 but not ideal for high-security applications..|
-
-            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA384|Strong security, but limited adoption. Suitable for high-security encryption if supported by recipient.|
-
-            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA512|Strong security, suitable for high-security encryption.|
-
-            |1.2.840.113549.1.12.1.3|PBE-SHA1-3DES|Suitable for securing sensitive data with moderate security needs. Not recommended for high-security applications due to outdated components.|
-
-            |1.2.840.113549.1.12.1.4|PBE-SHA1-2DES|Suitable for moderate security needs. Not recommended for high-security applications.|
-
-            |1.2.840.113549.1.12.1.5|PBE-SHA1-RC2-128|Provides moderate security. Not recommended for high-security applications.|
-
-            |1.2.840.113549.1.12.1.6|PBE-SHA1-RC2-40|Offers low security. Not recommended for sensitive data.|
-
-            |1.2.840.113549.1.12.5.1.3|JCEKS-SHA1-3DES|Java variant of PBE-SHA1-3DES: Suitable for moderate security needs. Not recommended for high-security applications.|
-
-            |1.2.840.113549.3.7|DES-EDE3-CBC|112-bit security (effectively ~80-bit), suitable for legacy compatibility but not recommended for new secure applications.|
-
-            |2.16.840.1.101.3.4.1.2|AES128-CBC|128-bit security, suitable for moderate security data encryption.|
-
-            |2.16.840.1.101.3.4.1.6|AES128-GCM|128-bit security, ideal for secure communications.|
-
-            |2.16.840.1.101.3.4.1.22|AES192-CBC|192-bit security, suitable for higher security data encryption.|
-
-            |2.16.840.1.101.3.4.1.26|AES192-GCM|192-bit security, ideal for secure communications with higher security needs.|
-
-            |2.16.840.1.101.3.4.1.42|AES256-CBC|256-bit security, suitable for highly sensitive data encryption.|
-
-            |2.16.840.1.101.3.4.1.46|AES256-GCM|256-bit security, ideal for secure communications with the highest security needs.|'
-    Core_IdentityType:
-      title: Enumeration defining Identity type objects
-      enum:
-      - 0
-      - 1
-      - 2
-      - 4
-      - 8
-      - 16
-      - 32
-      type: integer
-      description: "\n\n**0**: **Undefined**  \nUndefined\n\n**1**: **User**  \nUser object\n\n**2**: **Group**  \nGroup object\n\n**4**: **Container**  \nContainer of users and groups\n\n**8**: **DistributionList**  \nDistribution List\n\n**16**: **Machine**  \nMachine\n\n**32**: **Provider**  \nThe Identity Provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
-      format: int32
-    WebSDK_CertificateRequest_RetryRequest:
-      type: object
-      properties:
-        CertificateDN:
-          type: string
-          description: The Distinguished Name (DN) of the certificate to retry.
-        WorkToDoTimeout:
-          type:
-          - integer
-          - 'null'
-          description: Number of seconds to wait for the todo to finish before returning
-          format: int32
-      description: The class for certificate retry method request.
-    Nullable_1_Core_Cryptography_SubjectAltNameType_:
-      title: Enumeration of possible SAN types
-      enum:
-      - 2
-      - 1
-      - 1
-      - 7
-      - 6
-      - 0
-      type:
-      - integer
-      - 'null'
-      description: "\n\n**2**: **DNS**  \nSpecifies the SubjestAltName is a DNS entry\n\n**1**: **RFC822**  \nSpecifies the SubjestAltName is an Email address\n\n**1**: **Email**  \nSpecifies the SubjestAltName is an Email address\n\n**7**: **IPAddress**  \nSpecifies the SubjestAltName is an IP Address\n\n**6**: **URI**  \nSpecifies the SubjestAltName is a Uniform Resource Identifier\n\n**0**: **OtherName**  \nSpecifies the Subject AltName is an Other Name.\n"
-      format: int32
-    WebSDK_CertificateRequest_ImportResponse:
-      type: object
-      properties:
-        CertificateDN:
-          type: string
-          description: The Distinguished Name (DN) of the imported certificate.
-        Guid:
-          type: string
-          description: The unique identifier of the imported certificate.
-        CertificateVaultId:
-          type: integer
-          description: The vault ID of the imported certificate.
-          format: int64
-        PrivateKeyVaultId:
-          type: integer
-          description: The vault ID of the imported private key.
-          format: int64
-        Error:
-          type: string
-          description: Contains an error message if the import operation failed.
-        Warning:
-          type: string
-          description: Contains a warning message if there are any warnings during the import operation.
-      description: The class for import method response.
-    WebSDK_CertificateRequest_PushResponse:
-      type: object
-      properties:
-        Error:
-          type: string
-          description: A detailed error message describing why the push request failed.
-        Warning:
-          type: string
-          description: A message providing additional information, such as potential issues encountered during the push process.
-        Success:
-          type: boolean
-          description: A flag indicating whether the certificate was successfully pushed to the application(s).
-      description: Certificate push response.
     WebSDK_CertificateRequest_PreviousVersionsResponse:
       type: object
       properties:
@@ -2356,144 +1997,19 @@ components:
             description: The class for certificate previous version data.
           description: The list of previous certificate versions.
       description: The class for GET certificate previous versions method response.
-    WebSDK_CertificateRequest_RevokeRequest:
-      type: object
-      properties:
-        CertificateDN:
-          type: string
-          description: The Distinguished Name (DN) of the certificate to be revoked.
-        Thumbprint:
-          type: string
-          description: The unique hash (SHA-1) of the certificate to be revoked.
-        Reason:
-          $ref: '#/components/schemas/Nullable_1_Core_Revocation_RevocationReason_'
-        Comments:
-          type: string
-          description: Optional comments providing additional details about the revocation request.
-        Disable:
-          type: boolean
-          description: If true, disables the certificate in addition to revocation. Defaults to false.
-        WorkToDoTimeout:
-          type:
-          - integer
-          - 'null'
-          description: The maximum time (in seconds) to wait for revocation processing before returning a response.
-          format: int32
-      description: The class for certificate revoke method request.
-    WebSDK_CertificateRequest_ResetResponse:
+    WebSDK_CertificateRequest_PushResponse:
       type: object
       properties:
         Error:
           type: string
-          description: Contains an error message if the operation failed.
-        ProcessingResetCompleted:
+          description: A detailed error message describing why the push request failed.
+        Warning:
+          type: string
+          description: A message providing additional information, such as potential issues encountered during the push process.
+        Success:
           type: boolean
-          description: Indicates whether the processing reset was completed.
-        PrivateKeyMismatchResetCompleted:
-          type: boolean
-          description: Indicates whether the private key mismatch reset was completed.
-        RevocationResetCompleted:
-          type: boolean
-          description: Indicates whether the revocation reset was completed.
-        RestartCompleted:
-          type: boolean
-          description: Indicates whether the restart was completed.
-      description: The class for certificate reset response.
-    WebSDK_CertificateRequest_ImportRequest:
-      type: object
-      properties:
-        PolicyDN:
-          type: string
-          description: The policy Distinguished Name (DN) where the certificate will be imported.
-        ObjectName:
-          type: string
-          description: The name of the certificate object to be created.
-        CertificateData:
-          type: string
-          description: The certificate data to be imported.
-        PrivateKeyData:
-          type: string
-          description: The private key data associated with the certificate.
-        Password:
-          type: string
-          description: The password for the private key, if applicable.
-        CASpecificAttributes:
-          type: array
-          items:
-            type: object
-            properties:
-              Name:
-                type: string
-                description: The name.
-              Value:
-                type: string
-                description: The value.
-            description: Holds a string/object value pair
-          description: The list of Certificate Authority (CA) specific attributes.
-        Reconcile:
-          type: boolean
-          description: A flag indicating whether to reconcile the certificate with existing certificates.
-      description: The import method request.
-    WebSDK_CertificateRequest_AssociateRequest:
-      type: object
-      properties:
-        CertificateDN:
-          type: string
-          description: The Distinguished Name (DN) of the certificate to be associated with an application. This must reference a valid certificate in the system.
-        PushToNew:
-          type: boolean
-          description: A flag indicating whether the certificate should be pushed to new applications.
-        ApplicationDN:
-          type: array
-          items:
-            type: string
-          description: The Distinguished Name (DN) of the application object(s) that will use the certificate. This must be a valid application object in the system.
-      description: Request to associate certificate and applications.
-    WebSDK_CertificateRequest_ResetRequest:
-      type: object
-      properties:
-        CertificateDN:
-          type: string
-          description: The Distinguished Name (DN) of the certificate to reset.
-        Restart:
-          type: boolean
-          description: A flag indicating whether to restart the processing after reset.
-        ClearCSR:
-          type:
-          - boolean
-          - 'null'
-          description: When **true** will clear any CSR present as part of the reset.  Default is **false**.
-        WorkToDoTimeout:
-          type:
-          - integer
-          - 'null'
-          description: Number of seconds to wait for the todo to finish before returning
-          format: int32
-      description: The class for certificate reset method request.
-    WebSDK_CertificateRequest_RetrieveResponse_Retrieve__vaultId_:
-      type: object
-      properties:
-        CertificateData:
-          type: string
-          description: The certificate data in the requested format.
-        Format:
-          type: string
-          description: The format of the retrieved certificate.
-        Filename:
-          type: string
-          description: The filename for the retrieved certificate.
-        Status:
-          type: string
-          description: The status of the certificate retrieval process.
-        Stage:
-          type:
-          - integer
-          - 'null'
-          description: The stage of the certificate retrieval process.
-          format: int32
-        Error:
-          type: string
-          description: Error message if the certificate retrieval process failed.
+          description: A flag indicating whether the certificate was successfully pushed to the application(s).
+      description: Certificate push response.
     WebSDK_CertificateRequest_DissociateRequest:
       type: object
       properties:
@@ -2509,6 +2025,19 @@ components:
           type: boolean
           description: A flag indicating whether the dissociated applications and devices should be deleted if they become orphans.
       description: Request to dissociate certificate and applications.
+    WebSDK_CertificateRequest_AssociateResponse:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: A detailed error message describing why the association request failed.
+        Warning:
+          type: string
+          description: A message providing additional information, such as potential issues encountered during the association process.
+        Success:
+          type: boolean
+          description: A flag indicating whether the certificate was successfully associated with the application(s).
+      description: Certificate associate response.
     WebSDK_CertificateRequest_RequestRequest:
       type: object
       properties:
@@ -3007,216 +2536,60 @@ components:
 
             |2.16.840.1.101.3.4.1.46|AES256-GCM|256-bit security, ideal for secure communications with the highest security needs.|'
       description: The class for certificate request method response.
-    Nullable_1_Core_Revocation_RevocationReason_:
-      title: Enumeration for revocation status
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 6
-      - 7
-      - 8
-      - 9
-      - 10
-      type:
-      - integer
-      - 'null'
-      description: "\n\n**0**: **Unspecified**  \nNo reason given (RFC)\nnone\n\n**1**: **KeyCompromise**  \nThe key was compromised (RFC)\nAn issued certificate's private key was compromised\n\n**2**: **CACompromise**  \nThe Certificate Authority was compromised (RFC)\nThe CA's private key was compromised\n\n**3**: **AffiliationChanged**  \nThe certificates affiliation has changed (RFC)\nUser is no longer associated with the organization for which a certificate was issued\n\n**4**: **Superseded**  \nThe certificate has bee superseded (RFC)\nThe certificate has been superseded\n\n**5**: **CessationOfOperation**  \nThe certificate is no longer being used (RfC)\nThe certificate is no longer valid\n\n**6**: **CertificateHold**  \nThe certificate is being placed in stasis (RFC)\n\n**7**: **Reserved**  \nUnknown reason for the certificate to have been revoked (RFC)\n\n**8**: **RemoveFromCRL**  \nThe certificate is no long being held (RFC)\n\n**9**: **PrivilegeWithdrawn**  \nThe certificate's privilege has been withdrawn (RFC)\n\n**10**: **AACompromise**  \nThe AA of the certificate was compromised (RFC)\n"
-      format: int32
-    WebSDK_CertificateRequest_PutRequest__guid_:
-      required:
-      - AttributeData
-      type: object
-      properties:
-        AttributeData:
-          type: object
-          description: List of attribute names and values.
-    WebSDK_CertificateRequest_CheckPolicyRequest:
-      type: object
-      properties:
-        PolicyDN:
-          type: string
-          description: The Distinguished Name (DN) of the policy to be checked. This must reference a valid policy in the system.
-        PKCS10:
-          type: string
-          description: The PKCS#10 certificate signing request (CSR) to be checked against the policy.
-      description: Check policy request.
-    WebSDK_CertificateRequest_ValidationResultsResponse:
-      type: object
-      properties:
-        SslTls:
-          type: array
-          items:
-            type: object
-            properties:
-              Host:
-                type: string
-                description: The host associated with the validation result
-              IpAddress:
-                type: string
-                description: The IP associated with the validation result
-              Port:
-                type: integer
-                description: The port associated with the validation result
-                format: int32
-              Sources:
-                type: array
-                items:
-                  type: string
-                description: The source(s) of the host associated with the validation result
-              Result:
-                type: object
-                properties:
-                  ID:
-                    type: integer
-                    description: unique identifier for the result
-                    format: int32
-                  EndEntity:
-                    type: object
-                    properties:
-                      BitMask:
-                        type: integer
-                        description: The flags enum
-                        format: int32
-                      Values:
-                        type: array
-                        items:
-                          type: string
-                        description: The readable strings for bits set in the enum (excluding the 0 enum value)
-                    description: The result of the validation for the end-entity certificate
-                  Chain:
-                    type: object
-                    properties:
-                      BitMask:
-                        type: integer
-                        description: The flags enum
-                        format: int32
-                      Values:
-                        type: array
-                        items:
-                          type: string
-                        description: The readable strings for bits set in the enum (excluding the 0 enum value)
-                    description: The result of the validation for the certificate chain
-                  Protocols:
-                    type: object
-                    properties:
-                      BitMask:
-                        type: integer
-                        description: The flags enum
-                        format: int32
-                      Values:
-                        type: array
-                        items:
-                          type: string
-                        description: The readable strings for bits set in the enum (excluding the 0 enum value)
-                    description: The ssl/tls protocols supported by the validation endpoint
-                description: The various ssl/tls and chain results of the validation run
-            description: The class for an SSL/TLS validation result
-          description: Collection of ssl/tls validation results
-        File:
-          type: array
-          items:
-            type: object
-            properties:
-              PerformedOn:
-                type: string
-                description: Last validation date and time.
-              Installation:
-                type: string
-                description: DN of the application.
-              Result:
-                type: array
-                items:
-                  type: string
-                description: List of results.
-            description: Class for file validation data.
-          description: Collection of file validation results.
-      description: The class for certificate validation results retrieve method response
-    WebSDK_CertificateRequest_RetryResponse:
-      type: object
-      properties:
-        Error:
-          type: string
-          description: Contains an error message if the retry failed.
-        Success:
-          type: boolean
-          description: Indicates whether the retry was successful.
-      description: The class for certificate retry method response.
-    WebSDK_CertificateRequest_RequestResponse_Request:
-      type: object
-      properties:
-        CertificateDN:
-          type: string
-          description: The Distinguished Name (DN) of the created certificate.
-        Guid:
-          type: string
-          description: The GUID of the created certificate.
-        Devices:
-          type: array
-          items:
-            type: object
-            properties:
-              DN:
-                type: string
-                description: The device DN.
-              Warning:
-                type: string
-                description: The warning message if any.
-              Applications:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    DN:
-                      type: string
-                      description: The application DN.
-                    Warning:
-                      type: string
-                      description: The warning message of any.
-                  description: The application response data.
-                description: The list of applications.
-            description: The class for device response data.
-          description: The devices associated with the certificate.
-        Warning:
-          type: string
-          description: The warning message if any.
-        CertificateData:
-          type: string
-          description: The certificate data.
-        Format:
-          type: string
-          description: The data format.
-        Filename:
-          type: string
-          description: The filename of the certificate.
-        Status:
-          type: string
-          description: The certificate status.
-        Stage:
-          type:
-          - integer
-          - 'null'
-          description: The certificate processing stage.
-          format: int32
-        Error:
-          type: string
-          description: The error message if any.
-    WebSDK_CertificateRequest_PutResponse:
+    WebSDK_CertificateRequest_ResetResponse:
       type: object
       properties:
         Error:
           type: string
           description: Contains an error message if the operation failed.
-        Warning:
-          type: string
-          description: Contains a warning message if there are any warnings during the operation.
-        Success:
+        ProcessingResetCompleted:
           type: boolean
-          description: Indicates whether the operation was successful.
-      description: The class for put certificate method response.
+          description: Indicates whether the processing reset was completed.
+        PrivateKeyMismatchResetCompleted:
+          type: boolean
+          description: Indicates whether the private key mismatch reset was completed.
+        RevocationResetCompleted:
+          type: boolean
+          description: Indicates whether the revocation reset was completed.
+        RestartCompleted:
+          type: boolean
+          description: Indicates whether the restart was completed.
+      description: The class for certificate reset response.
+    WebSDK_CertificateRequest_ImportRequest:
+      type: object
+      properties:
+        PolicyDN:
+          type: string
+          description: The policy Distinguished Name (DN) where the certificate will be imported.
+        ObjectName:
+          type: string
+          description: The name of the certificate object to be created.
+        CertificateData:
+          type: string
+          description: The certificate data to be imported.
+        PrivateKeyData:
+          type: string
+          description: The private key data associated with the certificate.
+        Password:
+          type: string
+          description: The password for the private key, if applicable.
+        CASpecificAttributes:
+          type: array
+          items:
+            type: object
+            properties:
+              Name:
+                type: string
+                description: The name.
+              Value:
+                type: string
+                description: The value.
+            description: Holds a string/object value pair
+          description: The list of Certificate Authority (CA) specific attributes.
+        Reconcile:
+          type: boolean
+          description: A flag indicating whether to reconcile the certificate with existing certificates.
+      description: The import method request.
     WebSDK_CertificateRequest_CheckPolicyResponse:
       type: object
       properties:
@@ -3714,6 +3087,229 @@ components:
           type: string
           description: A detailed error message describing why the check policy request failed, if applicable.
       description: Check policy response.
+    WebSDK_CertificateRequest_RenewRequest:
+      type: object
+      properties:
+        CertificateDN:
+          type: string
+          description: The Distinguished Name (DN) of the certificate to be renewed.
+        PKCS10:
+          type: string
+          description: The PKCS#10 certificate signing request.
+        Reenable:
+          type: boolean
+          description: Indicates whether to re-enable a previously disabled certificate.
+        WorkToDoTimeout:
+          type:
+          - integer
+          - 'null'
+          description: Number of seconds to wait for the todo to finish before returning
+          format: int32
+        Format:
+          type: string
+          description: The format in which to retrieve the renewed certificate (e.g., Base64, DER)
+        Password:
+          type: string
+          description: The password to use if the certificate includes a private key.
+        IncludePrivateKey:
+          type: boolean
+          description: Indicates whether to include the private key in the response.
+        IncludeChain:
+          type: boolean
+          description: Indicates whether to include the certificate chain in the response.
+        FriendlyName:
+          type: string
+          description: The friendly name for the certificate.
+        RootFirstOrder:
+          type: boolean
+          description: Indicates whether to order the certificate chain with the root first.
+        KeystorePassword:
+          type: string
+          description: The password for the Java Keystore (JKS) format.
+      description: The class for renew method request.
+    WebSDK_CertificateRequest_RetryResponse:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: Contains an error message if the retry failed.
+        Success:
+          type: boolean
+          description: Indicates whether the retry was successful.
+      description: The class for certificate retry method response.
+    WebSDK_CertificateRequest_RetrieveResponse_Retrieve__vaultId_:
+      type: object
+      properties:
+        CertificateData:
+          type: string
+          description: The certificate data in the requested format.
+        Format:
+          type: string
+          description: The format of the retrieved certificate.
+        Filename:
+          type: string
+          description: The filename for the retrieved certificate.
+        Status:
+          type: string
+          description: The status of the certificate retrieval process.
+        Stage:
+          type:
+          - integer
+          - 'null'
+          description: The stage of the certificate retrieval process.
+          format: int32
+        Error:
+          type: string
+          description: Error message if the certificate retrieval process failed.
+    WebSDK_CertificateRequest_PutRequest__guid_:
+      required:
+      - AttributeData
+      type: object
+      properties:
+        AttributeData:
+          type: object
+          description: List of attribute names and values.
+    WebSDK_CertificateRequest_RevokeResponse:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: Contains an error message if the revocation request failed.
+        Warning:
+          type: string
+          description: A warning message if the revocation request is pending or partially completed.
+        Revoked:
+          type: boolean
+          description: A flag that is true if the certificate has been fully revoked and confirmed.
+        Requested:
+          type: boolean
+          description: A flag that is true if the revocation was requested but not yet confirmed.
+        Success:
+          type: boolean
+          description: A flag that is true if the revocation request was processed successfully.
+      description: The class for certificate revoke method response.
+    WebSDK_CertificateRequest_RequestResponse:
+      type: object
+      properties:
+        CertificateDN:
+          type: string
+          description: The Distinguished Name (DN) of the created certificate.
+        Guid:
+          type: string
+          description: The GUID of the created certificate.
+        Devices:
+          type: array
+          items:
+            type: object
+            properties:
+              DN:
+                type: string
+                description: The device DN.
+              Warning:
+                type: string
+                description: The warning message if any.
+              Applications:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    DN:
+                      type: string
+                      description: The application DN.
+                    Warning:
+                      type: string
+                      description: The warning message of any.
+                  description: The application response data.
+                description: The list of applications.
+            description: The class for device response data.
+          description: The devices associated with the certificate.
+        Error:
+          type: string
+          description: The error message if any.
+        Warning:
+          type: string
+          description: The warning message if any.
+        CertificateData:
+          type: string
+          description: The certificate data.
+        Format:
+          type: string
+          description: The data format.
+        Filename:
+          type: string
+          description: The filename of the certificate.
+        Status:
+          type: string
+          description: The certificate status.
+        Stage:
+          type:
+          - integer
+          - 'null'
+          description: The certificate processing stage.
+          format: int32
+      description: The class for certificate request method response.
+    WebSDK_CertificateRequest_PutResponse:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: Contains an error message if the operation failed.
+        Warning:
+          type: string
+          description: Contains a warning message if there are any warnings during the operation.
+        Success:
+          type: boolean
+          description: Indicates whether the operation was successful.
+      description: The class for put certificate method response.
+    WebSDK_CertificateRequest_RenewResponse:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: The error message if any error occurred during the renewal process.
+        Success:
+          type: boolean
+          description: Indicates whether the renewal was successful.
+        CertificateData:
+          type: string
+          description: The certificate data in the requested format.
+        Format:
+          type: string
+          description: 'The format of the renewed certificate. Possible formats include: Base64, Base64 (PKCS #8), DER, PKCS #7, PKCS #12, JKS'
+        Filename:
+          type: string
+          description: The filename for the renewed certificate.
+        Status:
+          type: string
+          description: The status of the certificate renewal process.
+        Stage:
+          type:
+          - integer
+          - 'null'
+          description: 'The stage of the certificate renewal process. Stages include: 800 renewal started, 900 renewal completed.'
+          format: int32
+      description: "The class for renew method\tresponse."
+    WebSDK_CertificateRequest_ResetRequest:
+      type: object
+      properties:
+        CertificateDN:
+          type: string
+          description: The Distinguished Name (DN) of the certificate to reset.
+        Restart:
+          type: boolean
+          description: A flag indicating whether to restart the processing after reset.
+        ClearCSR:
+          type:
+          - boolean
+          - 'null'
+          description: When **true** will clear any CSR present as part of the reset.  Default is **false**.
+        WorkToDoTimeout:
+          type:
+          - integer
+          - 'null'
+          description: Number of seconds to wait for the todo to finish before returning
+          format: int32
+      description: The class for certificate reset method request.
     WebSDK_CertificateRequest_DetailedCertificateResult:
       type: object
       properties:
@@ -4041,17 +3637,297 @@ components:
           type: string
           description: The origin of the certificate.
       description: Detailed Certificate object containing all information for a certificate.
-    Core_IdentityEntry_EntryState:
-      title: Enumeration indicating the state of an IdentityEntry
-      enum:
-      - 0
-      - 1
-      - 2
-      - 4
-      - 8
-      type: integer
-      description: "\n\n**0**: **Normal**  \nNo special state associated with the entry\n\n**1**: **Disabled**  \nThe identity has been disabled\n\n**2**: **LockedOut**  \nThe identity has been locked out\n\n**4**: **Deleted**  \nThe identity has been deleted\n\n**8**: **Unverifiable**  \nThe identity could not be verified with a provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
-      format: int32
+    WebSDK_CertificateRequest_ValidationResultsResponse:
+      type: object
+      properties:
+        SslTls:
+          type: array
+          items:
+            type: object
+            properties:
+              Host:
+                type: string
+                description: The host associated with the validation result
+              IpAddress:
+                type: string
+                description: The IP associated with the validation result
+              Port:
+                type: integer
+                description: The port associated with the validation result
+                format: int32
+              Sources:
+                type: array
+                items:
+                  type: string
+                description: The source(s) of the host associated with the validation result
+              Result:
+                type: object
+                properties:
+                  ID:
+                    type: integer
+                    description: unique identifier for the result
+                    format: int32
+                  EndEntity:
+                    type: object
+                    properties:
+                      BitMask:
+                        type: integer
+                        description: The flags enum
+                        format: int32
+                      Values:
+                        type: array
+                        items:
+                          type: string
+                        description: The readable strings for bits set in the enum (excluding the 0 enum value)
+                    description: The result of the validation for the end-entity certificate
+                  Chain:
+                    type: object
+                    properties:
+                      BitMask:
+                        type: integer
+                        description: The flags enum
+                        format: int32
+                      Values:
+                        type: array
+                        items:
+                          type: string
+                        description: The readable strings for bits set in the enum (excluding the 0 enum value)
+                    description: The result of the validation for the certificate chain
+                  Protocols:
+                    type: object
+                    properties:
+                      BitMask:
+                        type: integer
+                        description: The flags enum
+                        format: int32
+                      Values:
+                        type: array
+                        items:
+                          type: string
+                        description: The readable strings for bits set in the enum (excluding the 0 enum value)
+                    description: The ssl/tls protocols supported by the validation endpoint
+                description: The various ssl/tls and chain results of the validation run
+            description: The class for an SSL/TLS validation result
+          description: Collection of ssl/tls validation results
+        File:
+          type: array
+          items:
+            type: object
+            properties:
+              PerformedOn:
+                type: string
+                description: Last validation date and time.
+              Installation:
+                type: string
+                description: DN of the application.
+              Result:
+                type: array
+                items:
+                  type: string
+                description: List of results.
+            description: Class for file validation data.
+          description: Collection of file validation results.
+      description: The class for certificate validation results retrieve method response
+    WebSDK_CertificateRequest_CertificateResults:
+      type: object
+      properties:
+        TotalCount:
+          type: integer
+          description: The total number of certificates being returned.
+          format: int32
+        DataRange:
+          type: string
+          description: The data range for the current page, e.g., "20-50".
+        Certificates:
+          type: array
+          items:
+            type: object
+            properties:
+              _links:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Details:
+                      type: string
+                      description: A string containing the URL to the certificate details.
+                  description: Provides the functionality for creating a link to the details of a certificate.
+                description: A list of _CertificateDetailsLink_ objects containing links to the certificate details.
+              CreatedOn:
+                type: string
+                description: The creation date of the certificate in ISO 8601 format.
+              DN:
+                type: string
+                description: The Distinguished Name (DN) of the certificate.
+              Guid:
+                type: string
+                description: The unique identifier (GUID) of the certificate.
+              Name:
+                type: string
+                description: The name of the certificate.
+              ParentDn:
+                type: string
+                description: The Parent Distinguished Name (DN) of the certificate.
+              SchemaClass:
+                type: string
+                description: The schema class of the certificate.
+              X509:
+                type: object
+                properties:
+                  CN:
+                    type: string
+                    description: Certificate Common Name.
+                  SANS:
+                    type: object
+                    properties:
+                      DNS:
+                        type: array
+                        items:
+                          type: string
+                        description: DNS names.
+                      Email:
+                        type: array
+                        items:
+                          type: string
+                        description: Emails.
+                      IP:
+                        type: array
+                        items:
+                          type: string
+                        description: IPs.
+                      UPN:
+                        type: array
+                        items:
+                          type: string
+                        description: UPNs.
+                      URI:
+                        type: array
+                        items:
+                          type: string
+                        description: URIs.
+                    description: Certificate Subject alternative names.
+                  Serial:
+                    type: string
+                    description: Certificate serial number.
+                  Thumbprint:
+                    type: string
+                    description: Certificate thumbprint.
+                  ValidFrom:
+                    type: string
+                    description: Certificate start date and time.
+                  ValidTo:
+                    type: string
+                    description: Certificate end date and time.
+                  Subject:
+                    type: string
+                    description: Certificate Subject.
+                  KeyAlgorithm:
+                    type: string
+                    description: DEPRECATED - Use PkixParameterSet or KeyAlgorithmName
+                  KeySize:
+                    type:
+                    - integer
+                    - 'null'
+                    description: DEPRECATED - Use PkixParameterSet
+                    format: int32
+                  KeyAlgorithmName:
+                    type: string
+                    description: Certificate RFC name of the key algorithm.
+                  KeyAlgorithmOid:
+                    type: string
+                    description: Certificate dotted-string notation OID of the key algorithm.
+                  PkixParameterSet:
+                    type: string
+                    description: PKIX Parameter Set for the key algorithm.
+                  Issuer:
+                    type: string
+                    description: Certificate Issuer.
+                description: An _X509Details_ object containing detailed X509 information about the certificate.
+            description: Basic Certificate object containing the base properties for a certificate.
+          description: The list of certificates being returned.
+        _links:
+          type: array
+          items:
+            type: object
+            properties:
+              Previous:
+                type: string
+                description: A string containing the URL to the previous page of results.
+              Next:
+                type: string
+                description: A string containing the URL to the next page of results.
+            description: Paging class, used to build and return the pagination links.
+          description: The pagination links for navigating through the certificate results.
+        ErrorDetails:
+          type: string
+          description: The error details, if an error was encountered querying for the certificates.
+      description: Result class containing list of results as well as paging links and count information.
+    WebSDK_CertificateRequest_PushRequest:
+      type: object
+      properties:
+        CertificateDN:
+          type: string
+          description: The Distinguished Name (DN) of the certificate to be pushed to the application(s). This must reference a valid certificate in the system.
+        ApplicationDN:
+          type: array
+          items:
+            type: string
+          description: List of Distinguished Names (DNs) of the application objects to which the certificate will be pushed. This must be a valid application object in the system.
+        PushToAll:
+          type: boolean
+          description: A flag indicating whether the certificate should be pushed to all consumers. If this flag is set, do not pass application DNs.
+      description: Request for certificate provisioning to some or all consumers which are valid application DNs for this certificate.
+    WebSDK_CertificateRequest_RetrieveResponse:
+      type: object
+      properties:
+        CertificateData:
+          type: string
+          description: The certificate data in the requested format.
+        Format:
+          type: string
+          description: The format of the retrieved certificate.
+        Filename:
+          type: string
+          description: The filename for the retrieved certificate.
+        Status:
+          type: string
+          description: The status of the certificate retrieval process.
+        Stage:
+          type:
+          - integer
+          - 'null'
+          description: The stage of the certificate retrieval process.
+          format: int32
+        Error:
+          type: string
+          description: Error message if the certificate retrieval process failed.
+      description: The class for certificate retrieve response.
+    WebSDK_CertificateRequest_DeleteResponse:
+      type: object
+      properties:
+        Error:
+          type: string
+          description: Contains an error message if the delete operation failed.
+        Warning:
+          type: string
+          description: Contains a warning message if there are any warnings during the delete operation.
+        Success:
+          type: boolean
+          description: Indicates whether the delete operation was successful.
+      description: The delete method response.
+    WebSDK_CertificateRequest_RetryRequest:
+      type: object
+      properties:
+        CertificateDN:
+          type: string
+          description: The Distinguished Name (DN) of the certificate to retry.
+        WorkToDoTimeout:
+          type:
+          - integer
+          - 'null'
+          description: Number of seconds to wait for the todo to finish before returning
+          format: int32
+      description: The class for certificate retry method request.
     WebSDK_CertificateRequest_RenewResponse_Renew:
       type: object
       properties:
@@ -4073,64 +3949,188 @@ components:
         Error:
           type: string
           description: The error message if any error occurred during the renewal process.
-    WebSDK_CertificateRequest_RenewResponse:
+    WebSDK_CertificateRequest_ValidateRequest:
       type: object
       properties:
-        Error:
-          type: string
-          description: The error message if any error occurred during the renewal process.
-        Success:
-          type: boolean
-          description: Indicates whether the renewal was successful.
-        CertificateData:
-          type: string
-          description: The certificate data in the requested format.
+        CertificateDNs:
+          type: array
+          items:
+            type: string
+          description: The list of certificate Distinguished Names (DNs) to validate.
+        CertificateGUIDs:
+          type: array
+          items:
+            type: string
+          description: The list of certificate GUIDs to validate.
+      description: Request to validate certificates.
+    Core_IdentityEntry_EntryState:
+      title: Enumeration indicating the state of an IdentityEntry
+      enum:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      type: integer
+      description: "\n\n**0**: **Normal**  \nNo special state associated with the entry\n\n**1**: **Disabled**  \nThe identity has been disabled\n\n**2**: **LockedOut**  \nThe identity has been locked out\n\n**4**: **Deleted**  \nThe identity has been deleted\n\n**8**: **Unverifiable**  \nThe identity could not be verified with a provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
+    Nullable_1_Core_Revocation_RevocationReason_:
+      title: Enumeration for revocation status
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      type:
+      - integer
+      - 'null'
+      description: "\n\n**0**: **Unspecified**  \nNo reason given (RFC)\nnone\n\n**1**: **KeyCompromise**  \nThe key was compromised (RFC)\nAn issued certificate's private key was compromised\n\n**2**: **CACompromise**  \nThe Certificate Authority was compromised (RFC)\nThe CA's private key was compromised\n\n**3**: **AffiliationChanged**  \nThe certificates affiliation has changed (RFC)\nUser is no longer associated with the organization for which a certificate was issued\n\n**4**: **Superseded**  \nThe certificate has bee superseded (RFC)\nThe certificate has been superseded\n\n**5**: **CessationOfOperation**  \nThe certificate is no longer being used (RfC)\nThe certificate is no longer valid\n\n**6**: **CertificateHold**  \nThe certificate is being placed in stasis (RFC)\n\n**7**: **Reserved**  \nUnknown reason for the certificate to have been revoked (RFC)\n\n**8**: **RemoveFromCRL**  \nThe certificate is no long being held (RFC)\n\n**9**: **PrivilegeWithdrawn**  \nThe certificate's privilege has been withdrawn (RFC)\n\n**10**: **AACompromise**  \nThe AA of the certificate was compromised (RFC)\n"
+      format: int32
+    WebSDK_CertificateRequest_RetrieveByVaultIdRequest_Retrieve__vaultId_:
+      required:
+      - Format
+      - Password
+      - IncludePrivateKey
+      - IncludeChain
+      - RootFirstOrder
+      type: object
+      properties:
         Format:
           type: string
-          description: 'The format of the renewed certificate. Possible formats include: Base64, Base64 (PKCS #8), DER, PKCS #7, PKCS #12, JKS'
-        Filename:
+          description: The data format of the retrieved certificate
+        Password:
           type: string
-          description: The filename for the renewed certificate.
-        Status:
+          description: 'The password is required if IncludePrivateKey is true and the format is pkcs #12 or JKS. It is used to protect the private key.'
+        IncludePrivateKey:
+          type: boolean
+          description: A flag indicating whether to include the private key.
+        IncludeChain:
+          type: boolean
+          description: A flag indicating whether to include the certificate chain.
+        FriendlyName:
           type: string
-          description: The status of the certificate renewal process.
-        Stage:
-          type:
-          - integer
-          - 'null'
-          description: 'The stage of the certificate renewal process. Stages include: 800 renewal started, 900 renewal completed.'
-          format: int32
-      description: "The class for renew method\tresponse."
-    WebSDK_CertificateRequest_DeleteResponse:
+          description: The friendly name is required if the format is JKS. It is used to set the friendly name of the certificate in the keystore.
+        RootFirstOrder:
+          type: boolean
+          description: A flag indicating whether to order the certificate chain with the root first.
+        KeystorePassword:
+          type: string
+          description: The keystore password is required if the format is JKS. It is used to protect the keystore.
+        EncryptionAlgorithm:
+          type: string
+          description: 'Possible encryption algorithm values:
+
+
+            | OID | Algorithm | Description |
+
+            |-----|-----------|-------------|
+
+            |1.2.840.113549.1.1.1|RSA|A widely-used asymmetric encryption algorithm that provides secure data transmission, suitable for a variety of security applications including secure communications and data integrity.|
+
+            |1.2.840.113549.1.1.7|RSA-OAEP|An asymmetric encryption algorithm that uses Optimal Asymmetric Encryption Padding (OAEP) to enhance security, suitable for encryption of sensitive information.|
+
+            |1.2.840.113549.1.5.1|PBE-MD2-DES|Outdated and insecure. Not recommended for use.|
+
+            |1.2.840.113549.1.5.3|PBE-MD5-DES|Outdated and insecure. Not recommended for use.|
+
+            |1.2.840.113549.1.5.4|PBE-MD2-RC2-64|Outdated and insecure. Not recommended for use.|
+
+            |1.2.840.113549.1.5.6|PBE-MD5-RC2-64|Outdated and insecure. Not recommended for use.|
+
+            |1.2.840.113549.1.5.10|PBE-SHA1-DES|Suitable for moderate security needs. Not recommended for high-security applications.|
+
+            |1.2.840.113549.1.5.11|PBE-SHA1-RC2-64|Provides moderate security. Not recommended for high-security applications.|
+
+            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA1|Weak security due to vulnerabilities. Not recommended for use..|
+
+            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA1-3DES|Weak security due to vulnerabilities. Suitable for moderate security needs but not recommended for high-security applications.|
+
+            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA256|Suitable for typical security needs. Recommended over SHA-1 but not ideal for high-security applications..|
+
+            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA384|Strong security, but limited adoption. Suitable for high-security encryption if supported by recipient.|
+
+            |1.2.840.113549.1.5.13|PBES2-PKCS5-SHA512|Strong security, suitable for high-security encryption.|
+
+            |1.2.840.113549.1.12.1.3|PBE-SHA1-3DES|Suitable for securing sensitive data with moderate security needs. Not recommended for high-security applications due to outdated components.|
+
+            |1.2.840.113549.1.12.1.4|PBE-SHA1-2DES|Suitable for moderate security needs. Not recommended for high-security applications.|
+
+            |1.2.840.113549.1.12.1.5|PBE-SHA1-RC2-128|Provides moderate security. Not recommended for high-security applications.|
+
+            |1.2.840.113549.1.12.1.6|PBE-SHA1-RC2-40|Offers low security. Not recommended for sensitive data.|
+
+            |1.2.840.113549.1.12.5.1.3|JCEKS-SHA1-3DES|Java variant of PBE-SHA1-3DES: Suitable for moderate security needs. Not recommended for high-security applications.|
+
+            |1.2.840.113549.3.7|DES-EDE3-CBC|112-bit security (effectively ~80-bit), suitable for legacy compatibility but not recommended for new secure applications.|
+
+            |2.16.840.1.101.3.4.1.2|AES128-CBC|128-bit security, suitable for moderate security data encryption.|
+
+            |2.16.840.1.101.3.4.1.6|AES128-GCM|128-bit security, ideal for secure communications.|
+
+            |2.16.840.1.101.3.4.1.22|AES192-CBC|192-bit security, suitable for higher security data encryption.|
+
+            |2.16.840.1.101.3.4.1.26|AES192-GCM|192-bit security, ideal for secure communications with higher security needs.|
+
+            |2.16.840.1.101.3.4.1.42|AES256-CBC|256-bit security, suitable for highly sensitive data encryption.|
+
+            |2.16.840.1.101.3.4.1.46|AES256-GCM|256-bit security, ideal for secure communications with the highest security needs.|'
+    Nullable_1_Core_Cryptography_SubjectAltNameType_:
+      title: Enumeration of possible SAN types
+      enum:
+      - 2
+      - 1
+      - 1
+      - 7
+      - 6
+      - 0
+      type:
+      - integer
+      - 'null'
+      description: "\n\n**2**: **DNS**  \nSpecifies the SubjestAltName is a DNS entry\n\n**1**: **RFC822**  \nSpecifies the SubjestAltName is an Email address\n\n**1**: **Email**  \nSpecifies the SubjestAltName is an Email address\n\n**7**: **IPAddress**  \nSpecifies the SubjestAltName is an IP Address\n\n**6**: **URI**  \nSpecifies the SubjestAltName is a Uniform Resource Identifier\n\n**0**: **OtherName**  \nSpecifies the Subject AltName is an Other Name.\n"
+      format: int32
+    WebSDK_CertificateRequest_DissociateResponse:
       type: object
       properties:
         Error:
           type: string
-          description: Contains an error message if the delete operation failed.
-        Warning:
-          type: string
-          description: Contains a warning message if there are any warnings during the delete operation.
+          description: A detailed error message describing why the dissociation request failed.
         Success:
           type: boolean
-          description: Indicates whether the delete operation was successful.
-      description: The delete method response.
-    IO_Stream:
-      type: object
-    WebSDK_CertificateRequest_PushRequest:
+          description: A flag indicating whether the certificate was successfully dissociated from the application(s).
+      description: Certificate dissociate response.
+    WebSDK_CertificateRequest_ImportResponse:
       type: object
       properties:
         CertificateDN:
           type: string
-          description: The Distinguished Name (DN) of the certificate to be pushed to the application(s). This must reference a valid certificate in the system.
-        ApplicationDN:
-          type: array
-          items:
-            type: string
-          description: List of Distinguished Names (DNs) of the application objects to which the certificate will be pushed. This must be a valid application object in the system.
-        PushToAll:
-          type: boolean
-          description: A flag indicating whether the certificate should be pushed to all consumers. If this flag is set, do not pass application DNs.
-      description: Request for certificate provisioning to some or all consumers which are valid application DNs for this certificate.
+          description: The Distinguished Name (DN) of the imported certificate.
+        Guid:
+          type: string
+          description: The unique identifier of the imported certificate.
+        CertificateVaultId:
+          type: integer
+          description: The vault ID of the imported certificate.
+          format: int64
+        PrivateKeyVaultId:
+          type: integer
+          description: The vault ID of the imported private key.
+          format: int64
+        Error:
+          type: string
+          description: Contains an error message if the import operation failed.
+        Warning:
+          type: string
+          description: Contains a warning message if there are any warnings during the import operation.
+      description: The class for import method response.
+    IO_Stream:
+      type: object
   securitySchemes:
     AccessToken:
       type: http

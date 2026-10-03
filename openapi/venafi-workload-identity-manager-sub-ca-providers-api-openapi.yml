@@ -343,59 +343,6 @@ paths:
         - PKIAdmin
 components:
   schemas:
-    SubCAProviderDeleteResponse:
-      properties:
-        id:
-          description: UUID of the Sub CA provider
-          example: 2f3c6030-b1e0-11ed-a3ed-e3dbaf56a746
-          format: uuid
-          type: string
-        name:
-          description: Name of the Sub CA provider
-          example: Some Sub CA
-          type: string
-      type: object
-    ErrorResponse3:
-      properties:
-        errors:
-          items:
-            $ref: '#/components/schemas/Error1'
-          type: array
-      type: object
-    KeyAlgorithm1:
-      description: Key algorithm type
-      enum:
-      - RSA_2048
-      - RSA_3072
-      - RSA_4096
-      - EC_P256
-      - EC_P384
-      - EC_P521
-      - EC_ED25519
-      example: EC_P256
-      type: string
-    SubCAProviderListResponse:
-      properties:
-        subCaProviders:
-          items:
-            $ref: '#/components/schemas/SubCAProviderGetResponse'
-          type: array
-      type: object
-    CAType:
-      description: Type of CA this Sub CA provider works with
-      enum:
-      - MOCKCA
-      - DIGICERT
-      - GLOBALSIGN
-      - BUILTIN
-      - ENTRUST
-      - MICROSOFT
-      - ACME
-      - ZTPKI
-      - GLOBALSIGNMSSL
-      - TPP
-      example: BUILTIN
-      type: string
     SubCAProviderCreateRequest:
       allOf:
       - $ref: '#/components/schemas/SubCAProviderUpdateRequest'
@@ -416,6 +363,59 @@ components:
         - name
         - validityPeriod
         type: object
+    CAType:
+      description: Type of CA this Sub CA provider works with
+      enum:
+      - MOCKCA
+      - DIGICERT
+      - GLOBALSIGN
+      - BUILTIN
+      - ENTRUST
+      - MICROSOFT
+      - ACME
+      - ZTPKI
+      - GLOBALSIGNMSSL
+      - TPP
+      example: BUILTIN
+      type: string
+    ErrorResponse3:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/Error1'
+          type: array
+      type: object
+    SubCAProviderListResponse:
+      properties:
+        subCaProviders:
+          items:
+            $ref: '#/components/schemas/SubCAProviderGetResponse'
+          type: array
+      type: object
+    SubCAProviderDeleteResponse:
+      properties:
+        id:
+          description: UUID of the Sub CA provider
+          example: 2f3c6030-b1e0-11ed-a3ed-e3dbaf56a746
+          format: uuid
+          type: string
+        name:
+          description: Name of the Sub CA provider
+          example: Some Sub CA
+          type: string
+      type: object
+    KeyAlgorithm1:
+      description: Key algorithm type
+      enum:
+      - RSA_2048
+      - RSA_3072
+      - RSA_4096
+      - EC_P256
+      - EC_P384
+      - EC_P521
+      - EC_ED25519
+      example: EC_P256
+      type: string
     SubCAProviderUpdateRequest:
       properties:
         caProductOptionId:
@@ -478,6 +478,50 @@ components:
           example: P30D
           format: PnYnMnDTnHnMnS
           type: string
+      type: object
+    Error1:
+      description: A single error. The numeric `code` is stable and matches the codes listed at the start of each cause in the endpoints' error-response descriptions, so clients can branch on it instead of parsing `message`.
+      properties:
+        args:
+          description: Positional values interpolated into the message (e.g. the offending field value or entity id).
+          items:
+            type: object
+          type: array
+        code:
+          description: Stable numeric error code identifying the specific failure.
+          format: int32
+          type: integer
+        message:
+          description: Human-readable description of the error.
+          type: string
+      type: object
+    SubCAProviderPKCS11Configuration:
+      properties:
+        allowedClientLibraries:
+          description: A collection of strings each of which represents SHA256 hash of an allowed HSM client library
+          example:
+          - c34d199f2e30bb679cd9b8533b99975465aefe8b023be1b37972f1ab43ab7b2d
+          items:
+            type: string
+          type: array
+        partitionLabel:
+          description: HSM Partition Label
+          example: workload-identity-manager-hsm-partition
+          type: string
+        partitionSerialNumber:
+          description: HSM Partition Serial Number
+          example: '1444210958933'
+          pattern: ^[A-Fa-fx0-9]{0,18}$
+          type: string
+        pin:
+          description: HSM PIN
+          example: '1234'
+          type: string
+          writeOnly: true
+        signingEnabled:
+          description: Indicates whether HSM signing is enabled or not
+          example: true
+          type: boolean
       type: object
     SubCAProviderGetResponse:
       properties:
@@ -559,50 +603,6 @@ components:
           description: ISO8601 Period Format
           example: P30D
           format: PnYnMnDTnHnMnS
-          type: string
-      type: object
-    SubCAProviderPKCS11Configuration:
-      properties:
-        allowedClientLibraries:
-          description: A collection of strings each of which represents SHA256 hash of an allowed HSM client library
-          example:
-          - c34d199f2e30bb679cd9b8533b99975465aefe8b023be1b37972f1ab43ab7b2d
-          items:
-            type: string
-          type: array
-        partitionLabel:
-          description: HSM Partition Label
-          example: workload-identity-manager-hsm-partition
-          type: string
-        partitionSerialNumber:
-          description: HSM Partition Serial Number
-          example: '1444210958933'
-          pattern: ^[A-Fa-fx0-9]{0,18}$
-          type: string
-        pin:
-          description: HSM PIN
-          example: '1234'
-          type: string
-          writeOnly: true
-        signingEnabled:
-          description: Indicates whether HSM signing is enabled or not
-          example: true
-          type: boolean
-      type: object
-    Error1:
-      description: A single error. The numeric `code` is stable and matches the codes listed at the start of each cause in the endpoints' error-response descriptions, so clients can branch on it instead of parsing `message`.
-      properties:
-        args:
-          description: Positional values interpolated into the message (e.g. the offending field value or entity id).
-          items:
-            type: object
-          type: array
-        code:
-          description: Stable numeric error code identifying the specific failure.
-          format: int32
-          type: integer
-        message:
-          description: Human-readable description of the error.
           type: string
       type: object
   securitySchemes:

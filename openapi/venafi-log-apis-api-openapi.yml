@@ -117,6 +117,48 @@ paths:
       - AccessToken: []
 components:
   schemas:
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
+    Core_WebSDK_LogWebRequest_evaluatemacro:
+      required:
+      - MacroSource
+      - ID
+      type: object
+      properties:
+        MacroSource:
+          type: string
+          description: The macro text to translate
+        ID:
+          type: integer
+          description: The event ID of the event to simulate
+          format: int32
+        Severity:
+          $ref: '#/components/schemas/Core_Severity'
+        Component:
+          type: string
+          description: The component value for the simulated event
+        Text1:
+          type: string
+          description: The Text1 value for the simulated event
+        Text2:
+          type: string
+          description: The Text2 value for the simulated event
+        Value1:
+          type: integer
+          description: The Value1 value for the simulated event
+          format: int32
+        Value2:
+          type: integer
+          description: The Value2 value for the simulated event
+          format: int32
     Core_LogResult:
       title: Result codes for logging
       enum:
@@ -186,16 +228,6 @@ components:
             type: string
           description: Error information about stored unusable scripts
       description: Response for AdaptableInformation endpoint.
-    Web_SDK_Authentication_OAuthError:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Gets or sets the short error name
-        error_description:
-          type: string
-          description: Gets or sets the description of the error
-      description: REST OAuth Error Response
     Core_WebSDK_LogWebResponse_evaluatemacro:
       type: object
       properties:
@@ -207,38 +239,6 @@ components:
         Error:
           type: string
           description: Error description if the request was not successful
-    Core_WebSDK_LogWebRequest_evaluatemacro:
-      required:
-      - MacroSource
-      - ID
-      type: object
-      properties:
-        MacroSource:
-          type: string
-          description: The macro text to translate
-        ID:
-          type: integer
-          description: The event ID of the event to simulate
-          format: int32
-        Severity:
-          $ref: '#/components/schemas/Core_Severity'
-        Component:
-          type: string
-          description: The component value for the simulated event
-        Text1:
-          type: string
-          description: The Text1 value for the simulated event
-        Text2:
-          type: string
-          description: The Text2 value for the simulated event
-        Value1:
-          type: integer
-          description: The Value1 value for the simulated event
-          format: int32
-        Value2:
-          type: integer
-          description: The Value2 value for the simulated event
-          format: int32
   securitySchemes:
     AccessToken:
       type: http

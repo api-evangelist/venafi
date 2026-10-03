@@ -493,53 +493,6 @@ components:
             $ref: '#/components/schemas/ErrorInformation7'
           type: array
       type: object
-    IntegrationServiceUpdateRequest:
-      properties:
-        edgeInstancesIds:
-          description: A collection of Vsatellite instance IDs
-          example: '[f196eb0-71cb-11ed-9749-93c174f3c18d, f196eb0-81av-11ed-9749-93c174f3c18d]'
-          items:
-            format: uuid
-            type: string
-          type: array
-          uniqueItems: true
-        name:
-          description: Integration service name
-          example: Internet discovery
-          type: string
-        scheduleEnabled:
-          description: If a integration service is scheduled for execution
-          example: true
-          type: boolean
-        schedulePattern:
-          $ref: '#/components/schemas/SchedulerPatternInformation2'
-        targets:
-          $ref: '#/components/schemas/TargetsInformation'
-        workTypes:
-          description: A collection of work types
-          example: DISCOVER
-          items:
-            enum:
-            - DISCOVER
-            - MANAGE
-            type: string
-          maxItems: 2147483647
-          minItems: 1
-          type: array
-          uniqueItems: true
-      type: object
-    IntegrationServiceDetailsResponse:
-      properties:
-        integrationsServices:
-          items:
-            $ref: '#/components/schemas/IntegrationServiceInformation'
-          type: array
-        totalCount:
-          description: The total number of integration services returned
-          example: 10
-          format: int64
-          type: integer
-      type: object
     IntegrationServiceCreationRequest:
       properties:
         edgeInstancesIds:
@@ -598,6 +551,52 @@ components:
       - serviceType
       - workTypes
       type: object
+    AnyValue7:
+      description: Can be any value - string, number, boolean, array or object.
+    IntegrationServiceUpdateRequest:
+      properties:
+        edgeInstancesIds:
+          description: A collection of Vsatellite instance IDs
+          example: '[f196eb0-71cb-11ed-9749-93c174f3c18d, f196eb0-81av-11ed-9749-93c174f3c18d]'
+          items:
+            format: uuid
+            type: string
+          type: array
+          uniqueItems: true
+        name:
+          description: Integration service name
+          example: Internet discovery
+          type: string
+        scheduleEnabled:
+          description: If a integration service is scheduled for execution
+          example: true
+          type: boolean
+        schedulePattern:
+          $ref: '#/components/schemas/SchedulerPatternInformation2'
+        targets:
+          $ref: '#/components/schemas/TargetsInformation'
+        workTypes:
+          description: A collection of work types
+          example: DISCOVER
+          items:
+            enum:
+            - DISCOVER
+            - MANAGE
+            type: string
+          maxItems: 2147483647
+          minItems: 1
+          type: array
+          uniqueItems: true
+      type: object
+    TargetsInformation:
+      discriminator:
+        propertyName: serviceType
+      properties:
+        serviceType:
+          type: string
+      required:
+      - serviceType
+      type: object
     SchedulerPatternInformation2:
       discriminator:
         propertyName: recurrenceType
@@ -607,8 +606,18 @@ components:
       required:
       - recurrenceType
       type: object
-    AnyValue7:
-      description: Can be any value - string, number, boolean, array or object.
+    ErrorInformation7:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue7'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
     IntegrationServiceInformation:
       properties:
         companyId:
@@ -694,26 +703,17 @@ components:
           type: array
           uniqueItems: true
       type: object
-    ErrorInformation7:
+    IntegrationServiceDetailsResponse:
       properties:
-        args:
+        integrationsServices:
           items:
-            $ref: '#/components/schemas/AnyValue7'
+            $ref: '#/components/schemas/IntegrationServiceInformation'
           type: array
-        code:
-          format: int32
+        totalCount:
+          description: The total number of integration services returned
+          example: 10
+          format: int64
           type: integer
-        message:
-          type: string
-      type: object
-    TargetsInformation:
-      discriminator:
-        propertyName: serviceType
-      properties:
-        serviceType:
-          type: string
-      required:
-      - serviceType
       type: object
   securitySchemes:
     service-account:

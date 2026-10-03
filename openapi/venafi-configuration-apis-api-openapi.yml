@@ -1766,12 +1766,241 @@ paths:
       - AccessToken: []
 components:
   schemas:
-    Core_WebSDK_ConfigWebSchemaRequest_attribute:
+    Core_WebSDK_ConfigWebRequest_addvalue:
+      required:
+      - AttributeName
+      - Value
       type: object
       properties:
-        Attribute:
+        ObjectID:
+          type: integer
+          description: The ID of the object whose attribute to add. Takes precedence over ObjectDN.
+          format: int64
+        ObjectDN:
           type: string
-          description: The attribute.
+          description: The DN of the object whose attribute to add. Only honored if ObjectID is not provided.
+        AttributeName:
+          type: string
+          description: The attribute name.
+        Value:
+          type: string
+          description: The value.
+    Core_WebSDK_ConfigWebResponse_attributes:
+      type: object
+      properties:
+        AttributeDefinitions:
+          type: array
+          items:
+            type: object
+            properties:
+              Syntax:
+                $ref: '#/components/schemas/Core_SchemaAttribute_Syntaxes'
+              Property:
+                $ref: '#/components/schemas/Core_SchemaAttribute_Properties'
+              Name:
+                type: string
+                description: The attribute name
+              Id:
+                type: integer
+                description: Gets the attribute ID
+                format: int64
+            description: The CyberArk storage system for schema attributes.
+          description: A list of schema attribute definitions.
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebRequest_containableclasses:
+      required:
+      - ObjectDN
+      type: object
+      properties:
+        ObjectDN:
+          type: string
+          description: The object dn.
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
+    Core_WebSDK_ConfigWebRequest_guidtodn:
+      required:
+      - ObjectGUID
+      type: object
+      properties:
+        ObjectGUID:
+          type: string
+          description: The object GUID.
+    Core_WebSDK_ConfigWebRequest_read:
+      required:
+      - AttributeName
+      type: object
+      properties:
+        ObjectID:
+          type: integer
+          description: The ID of the object whose attribute to read. Takes precedence over ObjectDN.
+          format: int64
+        ObjectDN:
+          type: string
+          description: The DN of the object whose attribute to read. Only honored if ObjectID is not provided.
+        AttributeName:
+          type: string
+          description: The attribute name.
+    Core_WebSDK_ConfigWebResponse_readpolicy:
+      type: object
+      properties:
+        Values:
+          type: array
+          items:
+            type: string
+          description: A list of values.
+        Locked:
+          type:
+          - boolean
+          - 'null'
+          description: '**true** if locked; otherwise, **false**.'
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebResponse_enumerateobjectsderivedfrom:
+      type: object
+      properties:
+        Objects:
+          type: array
+          items:
+            type: object
+            properties:
+              TypeName:
+                type: string
+                description: The schema class of the object
+              DN:
+                type: string
+                description: The DN of the object.
+              GUID:
+                type: string
+                description: The GUID of the object.
+              Name:
+                type: string
+                description: The name (CN) of the object.
+              Disabled:
+                type: boolean
+                description: '**true** if the object is excluded from processing; **false** otherwise.'
+              InError:
+                type: boolean
+                description: '**true** if an error processing a request for the object has occurent; **false** otherwise.'
+              Id:
+                type:
+                - integer
+                - 'null'
+                description: The unique ID of this object.
+                format: int64
+              Parent:
+                type: string
+                description: The DN of the parent object.
+              AbsoluteGUID:
+                type: string
+                description: A concatenated string of GUIDs of the object's hierarchy, from the root to the object itself.
+              Revision:
+                type: integer
+                description: 'The revision of this object.
+
+
+                  Revisions are updated with each change, and, in case of a container, if a subordinate object is added or deleted.'
+                format: int64
+            description: The CyberArk storage system for object referencing.
+          description: A list of `ConfigObject` items, each describing an individual object.
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebResponse_readeffectivepolicy:
+      type: object
+      properties:
+        Values:
+          type: array
+          items:
+            type: string
+          description: A list of values.
+        Overridden:
+          type:
+          - boolean
+          - 'null'
+          description: '**true** if overriden; otherwise, **false**.'
+        Locked:
+          type:
+          - boolean
+          - 'null'
+          description: '**true** if locked; otherwise, **false**.'
+        PolicyDN:
+          type: string
+          description: The DN of the object the policy values are inherited from
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebResponse_class:
+      type: object
+      properties:
+        ClassDefinition:
+          type: object
+          properties:
+            Id:
+              type: integer
+              description: The storage ID.
+              format: int32
+            Property:
+              $ref: '#/components/schemas/Core_SchemaClass_Properties'
+            Name:
+              type: string
+              description: 'The name for this _SchemaClass_
+
+                object.'
+            SuperClassNames:
+              type: array
+              items:
+                type: string
+              description: The super class names.
+            ContainmentNames:
+              type: array
+              items:
+                type: string
+              description: The containment names.
+            ContainmentSubNames:
+              type: array
+              items:
+                type: string
+              description: The containment sub names.
+            OptionalNames:
+              type: array
+              items:
+                type: string
+              description: The optional names.
+            OptionalNamesEx:
+              type: array
+              items:
+                type: string
+              description: The optional attribute names.
+            SuperClassesExNames:
+              type: array
+              items:
+                type: string
+              description: The super class names.
+          description: A schema class definition.
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
     Core_SchemaAttribute_Syntaxes:
       title: Data typing for values of a schema attribute
       enum:
@@ -1794,18 +2023,282 @@ components:
       type: integer
       description: "\n\n**0**: **None**  \nA default internal enumeration.\n\n**2**: **Boolean**  \nThe attribute value is a boolean.\n\n**2**: **Bool**  \nThe attribute value is a boolean.\n\n**5**: **CaseIgnoreString**  \nThe attribute value is a case insensitive string.\n\n**5**: **String**  \nThe attribute value is a case insensitive string.\n\n**7**: **DistinguishedName**  \nThe attribute value is the complete name of an object within \nthe storage system.\n\n**7**: **DN**  \nThe attribute value is the complete name of an object within \nthe storage system.\n\n**11**: **Integer**  \nThe attribute value is an integer.\n\n**11**: **Int**  \nThe attribute value is an integer.\n\n**24**: **Date**  \nThe attribute value is representing a date/time value.\n\n**24**: **Time**  \nThe attribute value is representing a date/time value.\n\n**24**: **DateTime**  \nThe attribute value is representing a date/time value.\n\n**25**: **Identity**  \nThe attributes value is an identity entry value\n\n**26**: **Secret**  \nThe attribute value is a vault ID (vault data is encrypted in secret store)\n\n**27**: **CertificateSecret**  \nThe attribute value is a certificate vault ID (vault data is cleartext in secret store)\n\n**28**: **File**  \nThe attribute value is a vault ID (vault data is cleartext in secret store)\n"
       format: int32
-    Core_WebSDK_ConfigWebResponse_dntoguid:
+    Core_WebSDK_ConfigWebRequest_adddnvalue:
+      required:
+      - AttributeName
+      - Value
       type: object
       properties:
-        ClassName:
+        ObjectID:
+          type: integer
+          description: The ID of the object whose attribute to add. Takes precedence over ObjectDN.
+          format: int64
+        ObjectDN:
           type: string
-          description: A schema class name.
-        GUID:
+          description: The DN of the object whose attribute to add. Only honored if ObjectID is not provided.
+        AttributeName:
           type: string
-          description: An object GUID.
-        HierarchicalGUID:
+          description: The attribute name.
+        Value:
           type: string
-          description: A concatenated string of GUIDs of the object's hierarchy, from the root to the object itself..
+          description: The value.
+    Core_WebSDK_ConfigWebRequest_readdnreferences:
+      required:
+      - AttributeName
+      - ReferenceAttributeName
+      type: object
+      properties:
+        ObjectID:
+          type: integer
+          description: The ID of the object whose attribute to read. Takes precedence over ObjectDN.
+          format: int64
+        ObjectDN:
+          type: string
+          description: The DN of the object whose attribute to read. Only honored if ObjectID is not provided.
+        AttributeName:
+          type: string
+          description: The attribute name.
+        ReferenceAttributeName:
+          type: string
+          description: The name of the reference attribute.
+    Core_WebSDK_ConfigWebResponse_isvalid:
+      type: object
+      properties:
+        Object:
+          type: object
+          properties:
+            TypeName:
+              type: string
+              description: The schema class of the object
+            DN:
+              type: string
+              description: The DN of the object.
+            GUID:
+              type: string
+              description: The GUID of the object.
+            Name:
+              type: string
+              description: The name (CN) of the object.
+            Disabled:
+              type: boolean
+              description: '**true** if the object is excluded from processing; **false** otherwise.'
+            InError:
+              type: boolean
+              description: '**true** if an error processing a request for the object has occurent; **false** otherwise.'
+            Id:
+              type:
+              - integer
+              - 'null'
+              description: The unique ID of this object.
+              format: int64
+            Parent:
+              type: string
+              description: The DN of the parent object.
+            AbsoluteGUID:
+              type: string
+              description: A concatenated string of GUIDs of the object's hierarchy, from the root to the object itself.
+            Revision:
+              type: integer
+              description: 'The revision of this object.
+
+
+                Revisions are updated with each change, and, in case of a container, if a subordinate object is added or deleted.'
+              format: int64
+          description: A `ConfigObject` item, describing an object.
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebRequest_enumeratepolicies:
+      type: object
+      properties:
+        ObjectID:
+          type: integer
+          description: The ID of the object whose attributes to read. Takes precedence over ObjectDN.
+          format: int64
+        ObjectDN:
+          type: string
+          description: The DN of the object whose attributes to read. Only honored if ObjectID is not provided.
+    Core_WebSDK_ConfigWebRequest_readeffectivepolicy:
+      required:
+      - AttributeName
+      type: object
+      properties:
+        ObjectID:
+          type: integer
+          description: The ID of the object whose attribute to read. Takes precedence over ObjectDN.
+          format: int64
+        ObjectDN:
+          type: string
+          description: The DN of the object whose attribute to read. Only honored if ObjectID is not provided.
+        AttributeName:
+          type: string
+          description: The attribute name.
+    Core_WebSDK_ConfigWebResponse_writedn:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebRequest_renameobject:
+      required:
+      - ObjectDN
+      - NewObjectDN
+      type: object
+      properties:
+        ObjectDN:
+          type: string
+          description: The object dn.
+        NewObjectDN:
+          type: string
+          description: The new object DN.
+    Core_WebSDK_ConfigWebResponse_read:
+      type: object
+      properties:
+        Values:
+          type: array
+          items:
+            type: string
+          description: A list of values.
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebSchemaRequest_class:
+      type: object
+      properties:
+        Class:
+          type: string
+          description: The class.
+    Core_WebSDK_ConfigWebResponse_attribute:
+      type: object
+      properties:
+        AttributeDefinition:
+          type: object
+          properties:
+            Syntax:
+              $ref: '#/components/schemas/Core_SchemaAttribute_Syntaxes'
+            Property:
+              $ref: '#/components/schemas/Core_SchemaAttribute_Properties'
+            Name:
+              type: string
+              description: The attribute name
+            Id:
+              type: integer
+              description: Gets the attribute ID
+              format: int64
+          description: A schema attribute definition.
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebSchemaRequest_classes:
+      type: object
+      properties:
+        DerivedFrom:
+          type: string
+          description: The derived from class name.
+    Core_WebSDK_ConfigWebRequest_addpolicyvalue:
+      required:
+      - Class
+      - AttributeName
+      - Value
+      type: object
+      properties:
+        ObjectID:
+          type: integer
+          description: The ID of the object whose attribute to add. Takes precedence over ObjectDN.
+          format: int64
+        ObjectDN:
+          type: string
+          description: The DN of the object whose attribute to add. Only honored if ObjectID is not provided.
+        Class:
+          type: string
+          description: The class.
+        AttributeName:
+          type: string
+          description: The attribute name.
+        Value:
+          type: string
+          description: The value.
+        Locked:
+          type: boolean
+          description: '**true** if locked; otherwise, **false**.'
+    Core_WebSDK_ConfigWebResponse_enumerate:
+      type: object
+      properties:
+        Objects:
+          type: array
+          items:
+            type: object
+            properties:
+              TypeName:
+                type: string
+                description: The schema class of the object
+              DN:
+                type: string
+                description: The DN of the object.
+              GUID:
+                type: string
+                description: The GUID of the object.
+              Name:
+                type: string
+                description: The name (CN) of the object.
+              Disabled:
+                type: boolean
+                description: '**true** if the object is excluded from processing; **false** otherwise.'
+              InError:
+                type: boolean
+                description: '**true** if an error processing a request for the object has occurent; **false** otherwise.'
+              Id:
+                type:
+                - integer
+                - 'null'
+                description: The unique ID of this object.
+                format: int64
+              Parent:
+                type: string
+                description: The DN of the parent object.
+              AbsoluteGUID:
+                type: string
+                description: A concatenated string of GUIDs of the object's hierarchy, from the root to the object itself.
+              Revision:
+                type: integer
+                description: 'The revision of this object.
+
+
+                  Revisions are updated with each change, and, in case of a container, if a subordinate object is added or deleted.'
+                format: int64
+            description: The CyberArk storage system for object referencing.
+          description: A list of `ConfigObject` items, each describing an individual object.
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebRequest_clearattribute:
+      required:
+      - AttributeName
+      type: object
+      properties:
+        ObjectID:
+          type: integer
+          description: The ID of the object whose attribute to clear. Takes precedence over ObjectDN.
+          format: int64
+        ObjectDN:
+          type: string
+          description: The DN of the object whose attribute to clear. Only honored if ObjectID is not provided.
+        AttributeName:
+          type: string
+          description: The attribute name.
+    Core_WebSDK_ConfigWebResponse_getrevision:
+      type: object
+      properties:
         Revision:
           type: integer
           description: The revision.
@@ -1815,6 +2308,202 @@ components:
         Error:
           type: string
           description: An error description, or **null**.
+    Core_WebSDK_ConfigWebResponse_writepolicy:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebRequest_create:
+      required:
+      - ObjectDN
+      - Class
+      type: object
+      properties:
+        ObjectDN:
+          type: string
+          description: The object dn.
+        Class:
+          type: string
+          description: The class.
+        NameAttributeList:
+          type: object
+          description: The name attribute list.
+    Core_WebSDK_ConfigWebResponse_findpolicy:
+      type: object
+      properties:
+        PolicyDN:
+          type: string
+          description: The DN of the object the policy values are inherited from
+        Locked:
+          type:
+          - boolean
+          - 'null'
+          description: '**true** if locked; otherwise, **false**.'
+        Values:
+          type: array
+          items:
+            type: string
+          description: A list of values.
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebRequest_findcontainers:
+      type: object
+      properties:
+        ObjectID:
+          type: integer
+          description: The ID of the object whose children to search. Takes precedence over ObjectDN.
+          format: int64
+        ObjectDN:
+          type: string
+          description: The DN of the object whose children to search. Only honored if ObjectID is not provided.
+        Recursive:
+          type: boolean
+          description: 'Boolean indicating if children of returned objects should be returned as well
+
+            * **true**: Return children and children of children.
+
+            * **false**: Default. Only return objects in the specified container.'
+    Core_WebSDK_ConfigWebRequest_dntoguid:
+      required:
+      - ObjectDN
+      type: object
+      properties:
+        ObjectDN:
+          type: string
+          description: The object dn.
+    Core_WebSDK_ConfigWebRequest_countobjects:
+      type: object
+      properties:
+        ObjectID:
+          type: integer
+          description: The ID of the object whose children to count. Takes precedence over ObjectDN.
+          format: int64
+        ObjectDN:
+          type: string
+          description: The DN of the object whose children to count. Only honored if ObjectID is not provided.
+        Type:
+          type: string
+          description: The object type.
+        Recursive:
+          type: boolean
+          description: 'Boolean indicating if children of returned objects should be returned as well
+
+            * **true**: Return children and children of children.
+
+            * **false**: Default. Only return objects in the specified container.'
+        Pattern:
+          type: string
+          description: "An expression for filtering matches. \n\n\n\nWildcards are asterisk (*) and question mark (?), to escape a wildcard use two backslashes (\\\\)"
+    Core_WebSDK_ConfigWebRequest_idinfo:
+      required:
+      - ObjectID
+      type: object
+      properties:
+        ObjectID:
+          type: integer
+          description: Gets or sets the object id.
+          format: int64
+    Core_WebSDK_ConfigWebResponse_clearpolicyattribute:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebRequest_writedn:
+      required:
+      - AttributeName
+      - Values
+      type: object
+      properties:
+        ObjectID:
+          type: integer
+          description: The ID of the object whose attribute to write. Takes precedence over ObjectDN.
+          format: int64
+        ObjectDN:
+          type: string
+          description: The DN of the object whose attribute to write. Only honored if ObjectID is not provided.
+        AttributeName:
+          type: string
+          description: The attribute name.
+        Values:
+          type: array
+          items:
+            type: string
+          description: The values.
+    Core_WebSDK_ConfigWebRequest_enumerateall:
+      required:
+      - Pattern
+      - ObjectDN
+      type: object
+      properties:
+        Pattern:
+          type: string
+          description: "An expression for filtering matches. \n\n\n\nWildcards are asterisk (*) and question mark (?), to escape a wildcard use two backslashes (\\\\)"
+        ObjectDN:
+          type: string
+          description: The object dn.
+    Core_WebSDK_ConfigWebSchemaRequest_attribute:
+      type: object
+      properties:
+        Attribute:
+          type: string
+          description: The attribute.
+    Core_WebSDK_ConfigWebResponse_removednvalue:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebRequest_removepolicyvalue:
+      required:
+      - Class
+      - AttributeName
+      - Value
+      type: object
+      properties:
+        ObjectID:
+          type: integer
+          description: The ID of the object whose attribute to remove. Takes precedence over ObjectDN.
+          format: int64
+        ObjectDN:
+          type: string
+          description: The DN of the object whose attribute to remove. Only honored if ObjectID is not provided.
+        Class:
+          type: string
+          description: The class.
+        AttributeName:
+          type: string
+          description: The attribute name.
+        Value:
+          type: string
+          description: The value.
+    Core_SchemaClass_Properties:
+      title: Behavioural properties for schema classes
+      enum:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      - 16
+      - 32
+      - 64
+      - 128
+      - 256
+      - 512
+      type: integer
+      description: "\n\n**0**: **None**  \nA default internal enumeration.\n\n**1**: **NonRemovable**  \nObsolete\n\n**2**: **NonEffective**  \nNo objects, of the schema class, can be created.\n\n**4**: **Container**  \nObjects, of this schema class, can contain subordinate objects.\n\n**8**: **SelfContainment**  \nObjects, of this schema class, can contain subordinate objects of this schema class.\n\n**16**: **SuperClass**  \nThe associated schema class name is a super-class list entry for this schema class.\n\n**32**: **ContainedBy**  \nThe associated schema class name is a contained by list entry for this schema class.\n\n**64**: **NamedBy**  \nObsolete\n\n**128**: **Mandatory**  \nThe associated schema attribute name is a mandatory list entry for this schema class.\n\n**256**: **Optional**  \nThe associated schema attribute name is a optional list entry for this schema class.\n\n**512**: **ContainedBySub**  \nThe associated schema class name is a super-class whose sub-classes can contain this schema class.\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
     Core_WebSDK_ConfigWebResponse_find:
       type: object
       properties:
@@ -1867,7 +2556,20 @@ components:
         Error:
           type: string
           description: An error description, or **null**.
-    Core_WebSDK_ConfigWebRequest_create:
+    Core_WebSDK_ConfigWebResponse_readdnreferences:
+      type: object
+      properties:
+        Values:
+          type: array
+          items:
+            type: string
+          description: A list of values.
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebRequest_mutateobject:
       required:
       - ObjectDN
       - Class
@@ -1879,33 +2581,6 @@ components:
         Class:
           type: string
           description: The class.
-        NameAttributeList:
-          type: object
-          description: The name attribute list.
-    Core_WebSDK_ConfigWebResponse_removepolicyvalue:
-      type: object
-      properties:
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_SchemaAttribute_Properties:
-      title: Behavioural properties for schema attributes
-      enum:
-      - 0
-      - 0
-      - 1
-      - 2
-      - 4
-      - 8
-      - 16
-      - 32
-      - 64
-      - 128
-      type: integer
-      description: "\n\n**0**: **SingleValued**  \nDefault\n\n**0**: **None**  \nDefault\n\n**1**: **NonRemovable**  \nObsolete\n\n**2**: **Hidden**  \nObsolete\n\n**4**: **PublicRead**  \nObsolete\n\n**8**: **ReadOnly**  \nObsolete\n\n**16**: **MultiValued**  \nValues, of this schema attribute, can have multiple values.\n\n**32**: **AlwaysWritable**  \nObsolete\n\n**64**: **Transient**  \nThis attribute is transient and can be removed while it is still in use\n\n**128**: **PolicyEnabled**  \nValue can be overridden by policy\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
-      format: int32
     Core_WebSDK_ConfigWebResponse_clearattribute:
       type: object
       properties:
@@ -1914,18 +2589,53 @@ components:
         Error:
           type: string
           description: An error description, or **null**.
-    Core_ConfigPolicy_Properties:
-      title: Behavioural properties for effective attribute values
-      enum:
-      - 0
-      - 1
-      type: integer
-      description: "\n\n**0**: **None**  \nAn unsed internal enumeration.\n\n**1**: **Locked**  \nThe effective attribute value is locked by the owning object.\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
-      format: int32
-    Core_WebSDK_ConfigWebRequest_readdnreferences:
+    Core_WebSDK_ConfigWebResponse_enumeratepolicies:
+      type: object
+      properties:
+        Policies:
+          type: array
+          items:
+            type: object
+            properties:
+              GUID:
+                type: string
+                description: "The _GUID_ associated \nwith this _ConfigPolicy_ object."
+              TypeName:
+                type: string
+                description: A schema class name.
+              AttributeName:
+                type: string
+                description: A schema attribute name.
+              ValueList:
+                type: array
+                items:
+                  type: string
+                description: A list of values
+              Property:
+                $ref: '#/components/schemas/Core_ConfigPolicy_Properties'
+            description: The CyberArk storage system for effective attribute values.
+          description: The policies.
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebResponse_readdn:
+      type: object
+      properties:
+        Values:
+          type: array
+          items:
+            type: string
+          description: A list of values.
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebRequest_readdn:
       required:
       - AttributeName
-      - ReferenceAttributeName
       type: object
       properties:
         ObjectID:
@@ -1938,36 +2648,254 @@ components:
         AttributeName:
           type: string
           description: The attribute name.
-        ReferenceAttributeName:
-          type: string
-          description: The name of the reference attribute.
-    Core_WebSDK_ConfigWebRequest_getrevision:
+    Core_WebSDK_ConfigWebRequest_findobjectsofclass:
       type: object
       properties:
-        ObjectID:
-          type: integer
-          description: The ID of the object whose revision to read. Takes precedence over ObjectDN.
-          format: int64
         ObjectDN:
           type: string
-          description: The DN of the object whose revision to read. Only honored if ObjectID is not provided.
-    Core_WebSDK_ConfigWebRequest_writepolicy:
-      required:
-      - Class
-      - AttributeName
-      - Values
-      type: object
-      properties:
+          description: The object dn.
         ObjectID:
           type: integer
-          description: The ID of the object whose attribute to write. Takes precedence over ObjectDN.
+          description: Gets or sets the object id.
           format: int64
-        ObjectDN:
-          type: string
-          description: The DN of the object whose attribute to write. Only honored if ObjectID is not provided.
         Class:
           type: string
           description: The class.
+        Classes:
+          type: array
+          items:
+            type: string
+          description: The classes.
+        Recursive:
+          type: boolean
+          description: 'Boolean indicating if children of returned objects should be returned as well
+
+            * **true**: Return children and children of children.
+
+            * **false**: Default. Only return objects in the specified container.'
+        Pattern:
+          type: string
+          description: "An expression for filtering matches. \n\n\n\nWildcards are asterisk (*) and question mark (?), to escape a wildcard use two backslashes (\\\\)"
+    Core_WebSDK_ConfigWebResponse_create:
+      type: object
+      properties:
+        Object:
+          type: object
+          properties:
+            TypeName:
+              type: string
+              description: The schema class of the object
+            DN:
+              type: string
+              description: The DN of the object.
+            GUID:
+              type: string
+              description: The GUID of the object.
+            Name:
+              type: string
+              description: The name (CN) of the object.
+            Disabled:
+              type: boolean
+              description: '**true** if the object is excluded from processing; **false** otherwise.'
+            InError:
+              type: boolean
+              description: '**true** if an error processing a request for the object has occurent; **false** otherwise.'
+            Id:
+              type:
+              - integer
+              - 'null'
+              description: The unique ID of this object.
+              format: int64
+            Parent:
+              type: string
+              description: The DN of the parent object.
+            AbsoluteGUID:
+              type: string
+              description: A concatenated string of GUIDs of the object's hierarchy, from the root to the object itself.
+            Revision:
+              type: integer
+              description: 'The revision of this object.
+
+
+                Revisions are updated with each change, and, in case of a container, if a subordinate object is added or deleted.'
+              format: int64
+          description: A `ConfigObject` item, describing an object.
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigCountWebResponse:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Count:
+          type: integer
+          description: The count.
+          format: int64
+      description: Response for a successful config request
+    Core_WebSDK_ConfigWebResponse_gethighestrevision:
+      type: object
+      properties:
+        Revision:
+          type: integer
+          description: The revision.
+          format: int64
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebResponse_findcontainers:
+      type: object
+      properties:
+        Objects:
+          type: array
+          items:
+            type: object
+            properties:
+              TypeName:
+                type: string
+                description: The schema class of the object
+              DN:
+                type: string
+                description: The DN of the object.
+              GUID:
+                type: string
+                description: The GUID of the object.
+              Name:
+                type: string
+                description: The name (CN) of the object.
+              Disabled:
+                type: boolean
+                description: '**true** if the object is excluded from processing; **false** otherwise.'
+              InError:
+                type: boolean
+                description: '**true** if an error processing a request for the object has occurent; **false** otherwise.'
+              Id:
+                type:
+                - integer
+                - 'null'
+                description: The unique ID of this object.
+                format: int64
+              Parent:
+                type: string
+                description: The DN of the parent object.
+              AbsoluteGUID:
+                type: string
+                description: A concatenated string of GUIDs of the object's hierarchy, from the root to the object itself.
+              Revision:
+                type: integer
+                description: 'The revision of this object.
+
+
+                  Revisions are updated with each change, and, in case of a container, if a subordinate object is added or deleted.'
+                format: int64
+            description: The CyberArk storage system for object referencing.
+          description: A list of `ConfigObject` items, each describing an individual object.
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebRequest_enumerate:
+      required:
+      - Recursive
+      - Pattern
+      - ObjectDN
+      type: object
+      properties:
+        Recursive:
+          type: boolean
+          description: 'Boolean indicating if children of returned objects should be returned as well
+
+            * **true**: Return children and children of children.
+
+            * **false**: Default. Only return objects in the specified container.'
+        Pattern:
+          type: string
+          description: "An expression for filtering matches. \n\n\n\nWildcards are asterisk (*) and question mark (?), to escape a wildcard use two backslashes (\\\\)"
+        ObjectDN:
+          type: string
+          description: The object dn.
+    Core_WebSDK_ConfigWebRequest_getobjecttrustees:
+      required:
+      - ObjectDN
+      type: object
+      properties:
+        ObjectDN:
+          type: string
+          description: The object dn.
+    Core_WebSDK_ConfigWebResponse_delete:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_IdentityType:
+      title: Enumeration defining Identity type objects
+      enum:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      - 16
+      - 32
+      type: integer
+      description: "\n\n**0**: **Undefined**  \nUndefined\n\n**1**: **User**  \nUser object\n\n**2**: **Group**  \nGroup object\n\n**4**: **Container**  \nContainer of users and groups\n\n**8**: **DistributionList**  \nDistribution List\n\n**16**: **Machine**  \nMachine\n\n**32**: **Provider**  \nThe Identity Provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
+    Core_WebSDK_ConfigWebResponse_adddnvalue:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebRequest_clearpolicyattribute:
+      required:
+      - Class
+      - AttributeName
+      type: object
+      properties:
+        ObjectID:
+          type: integer
+          description: The ID of the object whose attribute to clear. Takes precedence over ObjectDN.
+          format: int64
+        ObjectDN:
+          type: string
+          description: The DN of the object whose attribute to clear. Only honored if ObjectID is not provided.
+        Class:
+          type: string
+          description: The class.
+        AttributeName:
+          type: string
+          description: The attribute name.
+    Core_WebSDK_ConfigWebResponse_removepolicyvalue:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebRequest_write:
+      type: object
+      properties:
+        ObjectID:
+          type: integer
+          description: The ID of the object whose attributes to write. Takes precedence over ObjectDN.
+          format: int64
+        ObjectDN:
+          type: string
+          description: The DN of the object whose attributes to write. Only honored if ObjectID is not provided.
+        AttributeData:
+          type: object
+          description: Gets or sets many attribute values
         AttributeName:
           type: string
           description: The attribute name.
@@ -1976,18 +2904,124 @@ components:
           items:
             type: string
           description: The values.
-        Locked:
-          type: boolean
-          description: '**true** if locked; otherwise, **false**.'
-    Core_WebSDK_ConfigWebRequest_idinfo:
-      required:
-      - ObjectID
+    Core_WebSDK_ConfigWebResponse_mutateobject:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebResponse_dntoguid:
+      type: object
+      properties:
+        ClassName:
+          type: string
+          description: A schema class name.
+        GUID:
+          type: string
+          description: An object GUID.
+        HierarchicalGUID:
+          type: string
+          description: A concatenated string of GUIDs of the object's hierarchy, from the root to the object itself..
+        Revision:
+          type: integer
+          description: The revision.
+          format: int64
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebRequest_readall:
       type: object
       properties:
         ObjectID:
           type: integer
-          description: Gets or sets the object id.
+          description: The ID of the object whose attributes to read. Takes precedence over ObjectDN.
           format: int64
+        ObjectDN:
+          type: string
+          description: The DN of the object whose attributes to read. Only honored if ObjectID is not provided.
+    Core_WebSDK_ConfigWebRequest_enumerateobjectsderivedfrom:
+      required:
+      - DerivedFrom
+      type: object
+      properties:
+        DerivedFrom:
+          type: string
+          description: The derived from.
+        Pattern:
+          type: string
+          description: "An expression for filtering matches. \n\n\n\nWildcards are asterisk (*) and question mark (?), to escape a wildcard use two backslashes (\\\\)"
+    Core_WebSDK_ConfigWebResponse_findobjectsofclass:
+      type: object
+      properties:
+        Objects:
+          type: array
+          items:
+            type: object
+            properties:
+              TypeName:
+                type: string
+                description: The schema class of the object
+              DN:
+                type: string
+                description: The DN of the object.
+              GUID:
+                type: string
+                description: The GUID of the object.
+              Name:
+                type: string
+                description: The name (CN) of the object.
+              Disabled:
+                type: boolean
+                description: '**true** if the object is excluded from processing; **false** otherwise.'
+              InError:
+                type: boolean
+                description: '**true** if an error processing a request for the object has occurent; **false** otherwise.'
+              Id:
+                type:
+                - integer
+                - 'null'
+                description: The unique ID of this object.
+                format: int64
+              Parent:
+                type: string
+                description: The DN of the parent object.
+              AbsoluteGUID:
+                type: string
+                description: A concatenated string of GUIDs of the object's hierarchy, from the root to the object itself.
+              Revision:
+                type: integer
+                description: 'The revision of this object.
+
+
+                  Revisions are updated with each change, and, in case of a container, if a subordinate object is added or deleted.'
+                format: int64
+            description: The CyberArk storage system for object referencing.
+          description: A list of `ConfigObject` items, each describing an individual object.
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebResponse_addvalue:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebResponse_renameobject:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
     Core_ConfigResult:
       title: Error codes for Config methods
       enum:
@@ -2088,83 +3122,68 @@ components:
         Error:
           type: string
           description: An error description, or **null**.
-    Core_WebSDK_ConfigWebRequest_enumeratepolicies:
+    Core_WebSDK_ConfigWebResponse_enumerateall:
       type: object
       properties:
-        ObjectID:
-          type: integer
-          description: The ID of the object whose attributes to read. Takes precedence over ObjectDN.
-          format: int64
-        ObjectDN:
-          type: string
-          description: The DN of the object whose attributes to read. Only honored if ObjectID is not provided.
-    Core_WebSDK_ConfigWebResponse_attribute:
-      type: object
-      properties:
-        AttributeDefinition:
-          type: object
-          properties:
-            Syntax:
-              $ref: '#/components/schemas/Core_SchemaAttribute_Syntaxes'
-            Property:
-              $ref: '#/components/schemas/Core_SchemaAttribute_Properties'
-            Name:
-              type: string
-              description: The attribute name
-            Id:
-              type: integer
-              description: Gets the attribute ID
-              format: int64
-          description: A schema attribute definition.
+        Objects:
+          type: array
+          items:
+            type: object
+            properties:
+              TypeName:
+                type: string
+                description: The schema class of the object
+              DN:
+                type: string
+                description: The DN of the object.
+              GUID:
+                type: string
+                description: The GUID of the object.
+              Name:
+                type: string
+                description: The name (CN) of the object.
+              Disabled:
+                type: boolean
+                description: '**true** if the object is excluded from processing; **false** otherwise.'
+              InError:
+                type: boolean
+                description: '**true** if an error processing a request for the object has occurent; **false** otherwise.'
+              Id:
+                type:
+                - integer
+                - 'null'
+                description: The unique ID of this object.
+                format: int64
+              Parent:
+                type: string
+                description: The DN of the parent object.
+              AbsoluteGUID:
+                type: string
+                description: A concatenated string of GUIDs of the object's hierarchy, from the root to the object itself.
+              Revision:
+                type: integer
+                description: 'The revision of this object.
+
+
+                  Revisions are updated with each change, and, in case of a container, if a subordinate object is added or deleted.'
+                format: int64
+            description: The CyberArk storage system for object referencing.
+          description: A list of `ConfigObject` items, each describing an individual object.
         Result:
           $ref: '#/components/schemas/Core_ConfigResult'
         Error:
           type: string
           description: An error description, or **null**.
-    Core_WebSDK_ConfigWebRequest_addpolicyvalue:
-      required:
-      - Class
-      - AttributeName
-      - Value
+    Core_WebSDK_ConfigWebRequest_delete:
       type: object
       properties:
         ObjectID:
           type: integer
-          description: The ID of the object whose attribute to add. Takes precedence over ObjectDN.
+          description: The ID of the object to delete. Takes precedence over ObjectDN.
           format: int64
         ObjectDN:
           type: string
-          description: The DN of the object whose attribute to add. Only honored if ObjectID is not provided.
-        Class:
-          type: string
-          description: The class.
-        AttributeName:
-          type: string
-          description: The attribute name.
-        Value:
-          type: string
-          description: The value.
-        Locked:
-          type: boolean
-          description: '**true** if locked; otherwise, **false**.'
-    Core_IdentityEntry_EntryState:
-      title: Enumeration indicating the state of an IdentityEntry
-      enum:
-      - 0
-      - 1
-      - 2
-      - 4
-      - 8
-      type: integer
-      description: "\n\n**0**: **Normal**  \nNo special state associated with the entry\n\n**1**: **Disabled**  \nThe identity has been disabled\n\n**2**: **LockedOut**  \nThe identity has been locked out\n\n**4**: **Deleted**  \nThe identity has been deleted\n\n**8**: **Unverifiable**  \nThe identity could not be verified with a provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
-      format: int32
-    Core_WebSDK_ConfigWebRequest_enumerate:
-      required:
-      - Recursive
-      - Pattern
-      - ObjectDN
-      type: object
-      properties:
+          description: The DN of the object to delete. Only honored if ObjectID is not provided.
         Recursive:
           type: boolean
           description: 'Boolean indicating if children of returned objects should be returned as well
@@ -2172,73 +3191,68 @@ components:
             * **true**: Return children and children of children.
 
             * **false**: Default. Only return objects in the specified container.'
-        Pattern:
+    Core_WebSDK_ConfigWebResponse_write:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
           type: string
-          description: "An expression for filtering matches. \n\n\n\nWildcards are asterisk (*) and question mark (?), to escape a wildcard use two backslashes (\\\\)"
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebRequest_findpolicy:
+      required:
+      - Class
+      - AttributeName
+      type: object
+      properties:
+        ObjectID:
+          type: integer
+          description: The ID of the object to find policy for. Takes precedence over ObjectDN.
+          format: int64
         ObjectDN:
           type: string
-          description: The object dn.
-    Core_WebSDK_ConfigWebResponse_gethighestrevision:
+          description: The DN of the object to find policy for. Only honored if ObjectID is not provided.
+        Class:
+          type: string
+          description: The class.
+        AttributeName:
+          type: string
+          description: The attribute name.
+    Core_WebSDK_ConfigWebRequest_readpolicy:
+      required:
+      - AttributeName
+      - Class
       type: object
       properties:
-        Revision:
+        ObjectID:
           type: integer
-          description: The revision.
+          description: The ID of the object whose attribute to read. Takes precedence over ObjectDN.
           format: int64
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
+        ObjectDN:
           type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebResponse_isvalid:
-      type: object
-      properties:
-        Object:
-          type: object
-          properties:
-            TypeName:
-              type: string
-              description: The schema class of the object
-            DN:
-              type: string
-              description: The DN of the object.
-            GUID:
-              type: string
-              description: The GUID of the object.
-            Name:
-              type: string
-              description: The name (CN) of the object.
-            Disabled:
-              type: boolean
-              description: '**true** if the object is excluded from processing; **false** otherwise.'
-            InError:
-              type: boolean
-              description: '**true** if an error processing a request for the object has occurent; **false** otherwise.'
-            Id:
-              type:
-              - integer
-              - 'null'
-              description: The unique ID of this object.
-              format: int64
-            Parent:
-              type: string
-              description: The DN of the parent object.
-            AbsoluteGUID:
-              type: string
-              description: A concatenated string of GUIDs of the object's hierarchy, from the root to the object itself.
-            Revision:
-              type: integer
-              description: 'The revision of this object.
-
-
-                Revisions are updated with each change, and, in case of a container, if a subordinate object is added or deleted.'
-              format: int64
-          description: A `ConfigObject` item, describing an object.
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
+          description: The DN of the object whose attribute to read. Only honored if ObjectID is not provided.
+        AttributeName:
           type: string
-          description: An error description, or **null**.
+          description: The attribute name.
+        Class:
+          type: string
+          description: The class.
+    Core_SchemaAttribute_Properties:
+      title: Behavioural properties for schema attributes
+      enum:
+      - 0
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      - 16
+      - 32
+      - 64
+      - 128
+      type: integer
+      description: "\n\n**0**: **SingleValued**  \nDefault\n\n**0**: **None**  \nDefault\n\n**1**: **NonRemovable**  \nObsolete\n\n**2**: **Hidden**  \nObsolete\n\n**4**: **PublicRead**  \nObsolete\n\n**8**: **ReadOnly**  \nObsolete\n\n**16**: **MultiValued**  \nValues, of this schema attribute, can have multiple values.\n\n**32**: **AlwaysWritable**  \nObsolete\n\n**64**: **Transient**  \nThis attribute is transient and can be removed while it is still in use\n\n**128**: **PolicyEnabled**  \nValue can be overridden by policy\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
     Core_WebSDK_ConfigWebResponse_classes:
       type: object
       properties:
@@ -2295,1240 +3309,6 @@ components:
         Error:
           type: string
           description: An error description, or **null**.
-    Core_WebSDK_ConfigWebRequest_dntoguid:
-      required:
-      - ObjectDN
-      type: object
-      properties:
-        ObjectDN:
-          type: string
-          description: The object dn.
-    Core_WebSDK_ConfigWebResponse_findcontainers:
-      type: object
-      properties:
-        Objects:
-          type: array
-          items:
-            type: object
-            properties:
-              TypeName:
-                type: string
-                description: The schema class of the object
-              DN:
-                type: string
-                description: The DN of the object.
-              GUID:
-                type: string
-                description: The GUID of the object.
-              Name:
-                type: string
-                description: The name (CN) of the object.
-              Disabled:
-                type: boolean
-                description: '**true** if the object is excluded from processing; **false** otherwise.'
-              InError:
-                type: boolean
-                description: '**true** if an error processing a request for the object has occurent; **false** otherwise.'
-              Id:
-                type:
-                - integer
-                - 'null'
-                description: The unique ID of this object.
-                format: int64
-              Parent:
-                type: string
-                description: The DN of the parent object.
-              AbsoluteGUID:
-                type: string
-                description: A concatenated string of GUIDs of the object's hierarchy, from the root to the object itself.
-              Revision:
-                type: integer
-                description: 'The revision of this object.
-
-
-                  Revisions are updated with each change, and, in case of a container, if a subordinate object is added or deleted.'
-                format: int64
-            description: The CyberArk storage system for object referencing.
-          description: A list of `ConfigObject` items, each describing an individual object.
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebResponse_writepolicy:
-      type: object
-      properties:
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebRequest_readdn:
-      required:
-      - AttributeName
-      type: object
-      properties:
-        ObjectID:
-          type: integer
-          description: The ID of the object whose attribute to read. Takes precedence over ObjectDN.
-          format: int64
-        ObjectDN:
-          type: string
-          description: The DN of the object whose attribute to read. Only honored if ObjectID is not provided.
-        AttributeName:
-          type: string
-          description: The attribute name.
-    Core_WebSDK_ConfigWebRequest_findpolicy:
-      required:
-      - Class
-      - AttributeName
-      type: object
-      properties:
-        ObjectID:
-          type: integer
-          description: The ID of the object to find policy for. Takes precedence over ObjectDN.
-          format: int64
-        ObjectDN:
-          type: string
-          description: The DN of the object to find policy for. Only honored if ObjectID is not provided.
-        Class:
-          type: string
-          description: The class.
-        AttributeName:
-          type: string
-          description: The attribute name.
-    Core_WebSDK_ConfigWebRequest_removepolicyvalue:
-      required:
-      - Class
-      - AttributeName
-      - Value
-      type: object
-      properties:
-        ObjectID:
-          type: integer
-          description: The ID of the object whose attribute to remove. Takes precedence over ObjectDN.
-          format: int64
-        ObjectDN:
-          type: string
-          description: The DN of the object whose attribute to remove. Only honored if ObjectID is not provided.
-        Class:
-          type: string
-          description: The class.
-        AttributeName:
-          type: string
-          description: The attribute name.
-        Value:
-          type: string
-          description: The value.
-    Core_WebSDK_ConfigWebResponse_readdnreferences:
-      type: object
-      properties:
-        Values:
-          type: array
-          items:
-            type: string
-          description: A list of values.
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebRequest_read:
-      required:
-      - AttributeName
-      type: object
-      properties:
-        ObjectID:
-          type: integer
-          description: The ID of the object whose attribute to read. Takes precedence over ObjectDN.
-          format: int64
-        ObjectDN:
-          type: string
-          description: The DN of the object whose attribute to read. Only honored if ObjectID is not provided.
-        AttributeName:
-          type: string
-          description: The attribute name.
-    Core_IdentityType:
-      title: Enumeration defining Identity type objects
-      enum:
-      - 0
-      - 1
-      - 2
-      - 4
-      - 8
-      - 16
-      - 32
-      type: integer
-      description: "\n\n**0**: **Undefined**  \nUndefined\n\n**1**: **User**  \nUser object\n\n**2**: **Group**  \nGroup object\n\n**4**: **Container**  \nContainer of users and groups\n\n**8**: **DistributionList**  \nDistribution List\n\n**16**: **Machine**  \nMachine\n\n**32**: **Provider**  \nThe Identity Provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
-      format: int32
-    Core_WebSDK_ConfigWebResponse_adddnvalue:
-      type: object
-      properties:
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebResponse_clearpolicyattribute:
-      type: object
-      properties:
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebRequest_find:
-      type: object
-      properties:
-        ObjectDN:
-          type: string
-          description: The object dn.
-        Recursive:
-          type: boolean
-          description: 'Boolean indicating if children of returned objects should be returned as well
-
-            * **true**: Return children and children of children.
-
-            * **false**: Default. Only return objects in the specified container.'
-        ObjectPattern:
-          type: string
-          description: The pattern.
-        Class:
-          type: string
-          description: The class.
-        IncludeDerivedClasses:
-          type: boolean
-          description: '**true** if derived classes will be included; otherwise, **false**.'
-        AttributeName:
-          type: string
-          description: The attribute name.
-        AttributeNames:
-          type: array
-          items:
-            type: string
-          description: The attribute name list.
-        Pattern:
-          type: string
-          description: "An expression for filtering matches. \n\n\n\nWildcards are asterisk (*) and question mark (?), to escape a wildcard use two backslashes (\\\\)"
-    Core_WebSDK_ConfigWebResponse_enumerate:
-      type: object
-      properties:
-        Objects:
-          type: array
-          items:
-            type: object
-            properties:
-              TypeName:
-                type: string
-                description: The schema class of the object
-              DN:
-                type: string
-                description: The DN of the object.
-              GUID:
-                type: string
-                description: The GUID of the object.
-              Name:
-                type: string
-                description: The name (CN) of the object.
-              Disabled:
-                type: boolean
-                description: '**true** if the object is excluded from processing; **false** otherwise.'
-              InError:
-                type: boolean
-                description: '**true** if an error processing a request for the object has occurent; **false** otherwise.'
-              Id:
-                type:
-                - integer
-                - 'null'
-                description: The unique ID of this object.
-                format: int64
-              Parent:
-                type: string
-                description: The DN of the parent object.
-              AbsoluteGUID:
-                type: string
-                description: A concatenated string of GUIDs of the object's hierarchy, from the root to the object itself.
-              Revision:
-                type: integer
-                description: 'The revision of this object.
-
-
-                  Revisions are updated with each change, and, in case of a container, if a subordinate object is added or deleted.'
-                format: int64
-            description: The CyberArk storage system for object referencing.
-          description: A list of `ConfigObject` items, each describing an individual object.
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebResponse_addpolicyvalue:
-      type: object
-      properties:
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebResponse_getrevision:
-      type: object
-      properties:
-        Revision:
-          type: integer
-          description: The revision.
-          format: int64
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebRequest_write:
-      type: object
-      properties:
-        ObjectID:
-          type: integer
-          description: The ID of the object whose attributes to write. Takes precedence over ObjectDN.
-          format: int64
-        ObjectDN:
-          type: string
-          description: The DN of the object whose attributes to write. Only honored if ObjectID is not provided.
-        AttributeData:
-          type: object
-          description: Gets or sets many attribute values
-        AttributeName:
-          type: string
-          description: The attribute name.
-        Values:
-          type: array
-          items:
-            type: string
-          description: The values.
-    Core_WebSDK_ConfigWebRequest_readall:
-      type: object
-      properties:
-        ObjectID:
-          type: integer
-          description: The ID of the object whose attributes to read. Takes precedence over ObjectDN.
-          format: int64
-        ObjectDN:
-          type: string
-          description: The DN of the object whose attributes to read. Only honored if ObjectID is not provided.
-    Core_WebSDK_ConfigWebRequest_countobjects:
-      type: object
-      properties:
-        ObjectID:
-          type: integer
-          description: The ID of the object whose children to count. Takes precedence over ObjectDN.
-          format: int64
-        ObjectDN:
-          type: string
-          description: The DN of the object whose children to count. Only honored if ObjectID is not provided.
-        Type:
-          type: string
-          description: The object type.
-        Recursive:
-          type: boolean
-          description: 'Boolean indicating if children of returned objects should be returned as well
-
-            * **true**: Return children and children of children.
-
-            * **false**: Default. Only return objects in the specified container.'
-        Pattern:
-          type: string
-          description: "An expression for filtering matches. \n\n\n\nWildcards are asterisk (*) and question mark (?), to escape a wildcard use two backslashes (\\\\)"
-    Core_WebSDK_ConfigWebResponse_findpolicy:
-      type: object
-      properties:
-        PolicyDN:
-          type: string
-          description: The DN of the object the policy values are inherited from
-        Locked:
-          type:
-          - boolean
-          - 'null'
-          description: '**true** if locked; otherwise, **false**.'
-        Values:
-          type: array
-          items:
-            type: string
-          description: A list of values.
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebRequest_addvalue:
-      required:
-      - AttributeName
-      - Value
-      type: object
-      properties:
-        ObjectID:
-          type: integer
-          description: The ID of the object whose attribute to add. Takes precedence over ObjectDN.
-          format: int64
-        ObjectDN:
-          type: string
-          description: The DN of the object whose attribute to add. Only honored if ObjectID is not provided.
-        AttributeName:
-          type: string
-          description: The attribute name.
-        Value:
-          type: string
-          description: The value.
-    Core_WebSDK_ConfigWebRequest_enumerateall:
-      required:
-      - Pattern
-      - ObjectDN
-      type: object
-      properties:
-        Pattern:
-          type: string
-          description: "An expression for filtering matches. \n\n\n\nWildcards are asterisk (*) and question mark (?), to escape a wildcard use two backslashes (\\\\)"
-        ObjectDN:
-          type: string
-          description: The object dn.
-    Core_WebSDK_ConfigWebRequest_enumerateobjectsderivedfrom:
-      required:
-      - DerivedFrom
-      type: object
-      properties:
-        DerivedFrom:
-          type: string
-          description: The derived from.
-        Pattern:
-          type: string
-          description: "An expression for filtering matches. \n\n\n\nWildcards are asterisk (*) and question mark (?), to escape a wildcard use two backslashes (\\\\)"
-    Core_WebSDK_ConfigWebResponse_addvalue:
-      type: object
-      properties:
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebResponse_removednvalue:
-      type: object
-      properties:
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebRequest_mutateobject:
-      required:
-      - ObjectDN
-      - Class
-      type: object
-      properties:
-        ObjectDN:
-          type: string
-          description: The object dn.
-        Class:
-          type: string
-          description: The class.
-    Core_WebSDK_ConfigWebResponse_defaultdn:
-      type: object
-      properties:
-        DefaultDN:
-          type: string
-          description: The default DN.
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebRequest_removednvalue:
-      required:
-      - AttributeName
-      - Value
-      type: object
-      properties:
-        ObjectID:
-          type: integer
-          description: The ID of the object whose attribute to remove. Takes precedence over ObjectDN.
-          format: int64
-        ObjectDN:
-          type: string
-          description: The DN of the object whose attribute to remove. Only honored if ObjectID is not provided.
-        AttributeName:
-          type: string
-          description: The attribute name.
-        Value:
-          type: string
-          description: The value.
-    Core_WebSDK_ConfigWebResponse_delete:
-      type: object
-      properties:
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebResponse_mutateobject:
-      type: object
-      properties:
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebRequest_removevalue:
-      required:
-      - AttributeName
-      - Value
-      type: object
-      properties:
-        ObjectID:
-          type: integer
-          description: The ID of the object whose attribute to remove. Takes precedence over ObjectDN.
-          format: int64
-        ObjectDN:
-          type: string
-          description: The DN of the object whose attribute to remove. Only honored if ObjectID is not provided.
-        AttributeName:
-          type: string
-          description: The attribute name.
-        Value:
-          type: string
-          description: The value.
-    Core_WebSDK_ConfigWebResponse_read:
-      type: object
-      properties:
-        Values:
-          type: array
-          items:
-            type: string
-          description: A list of values.
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebResponse_create:
-      type: object
-      properties:
-        Object:
-          type: object
-          properties:
-            TypeName:
-              type: string
-              description: The schema class of the object
-            DN:
-              type: string
-              description: The DN of the object.
-            GUID:
-              type: string
-              description: The GUID of the object.
-            Name:
-              type: string
-              description: The name (CN) of the object.
-            Disabled:
-              type: boolean
-              description: '**true** if the object is excluded from processing; **false** otherwise.'
-            InError:
-              type: boolean
-              description: '**true** if an error processing a request for the object has occurent; **false** otherwise.'
-            Id:
-              type:
-              - integer
-              - 'null'
-              description: The unique ID of this object.
-              format: int64
-            Parent:
-              type: string
-              description: The DN of the parent object.
-            AbsoluteGUID:
-              type: string
-              description: A concatenated string of GUIDs of the object's hierarchy, from the root to the object itself.
-            Revision:
-              type: integer
-              description: 'The revision of this object.
-
-
-                Revisions are updated with each change, and, in case of a container, if a subordinate object is added or deleted.'
-              format: int64
-          description: A `ConfigObject` item, describing an object.
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebResponse_guidtodn:
-      type: object
-      properties:
-        ClassName:
-          type: string
-          description: A schema class name.
-        ObjectDN:
-          type: string
-          description: An oject DN.
-        Revision:
-          type: integer
-          description: The revision.
-          format: int64
-        HierarchicalGUID:
-          type: string
-          description: A concatenated string of GUIDs of the object's hierarchy, from the root to the object itself..
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebResponse_findobjectsofclass:
-      type: object
-      properties:
-        Objects:
-          type: array
-          items:
-            type: object
-            properties:
-              TypeName:
-                type: string
-                description: The schema class of the object
-              DN:
-                type: string
-                description: The DN of the object.
-              GUID:
-                type: string
-                description: The GUID of the object.
-              Name:
-                type: string
-                description: The name (CN) of the object.
-              Disabled:
-                type: boolean
-                description: '**true** if the object is excluded from processing; **false** otherwise.'
-              InError:
-                type: boolean
-                description: '**true** if an error processing a request for the object has occurent; **false** otherwise.'
-              Id:
-                type:
-                - integer
-                - 'null'
-                description: The unique ID of this object.
-                format: int64
-              Parent:
-                type: string
-                description: The DN of the parent object.
-              AbsoluteGUID:
-                type: string
-                description: A concatenated string of GUIDs of the object's hierarchy, from the root to the object itself.
-              Revision:
-                type: integer
-                description: 'The revision of this object.
-
-
-                  Revisions are updated with each change, and, in case of a container, if a subordinate object is added or deleted.'
-                format: int64
-            description: The CyberArk storage system for object referencing.
-          description: A list of `ConfigObject` items, each describing an individual object.
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebResponse_removevalue:
-      type: object
-      properties:
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebRequest_clearattribute:
-      required:
-      - AttributeName
-      type: object
-      properties:
-        ObjectID:
-          type: integer
-          description: The ID of the object whose attribute to clear. Takes precedence over ObjectDN.
-          format: int64
-        ObjectDN:
-          type: string
-          description: The DN of the object whose attribute to clear. Only honored if ObjectID is not provided.
-        AttributeName:
-          type: string
-          description: The attribute name.
-    Core_WebSDK_ConfigWebResponse_class:
-      type: object
-      properties:
-        ClassDefinition:
-          type: object
-          properties:
-            Id:
-              type: integer
-              description: The storage ID.
-              format: int32
-            Property:
-              $ref: '#/components/schemas/Core_SchemaClass_Properties'
-            Name:
-              type: string
-              description: 'The name for this _SchemaClass_
-
-                object.'
-            SuperClassNames:
-              type: array
-              items:
-                type: string
-              description: The super class names.
-            ContainmentNames:
-              type: array
-              items:
-                type: string
-              description: The containment names.
-            ContainmentSubNames:
-              type: array
-              items:
-                type: string
-              description: The containment sub names.
-            OptionalNames:
-              type: array
-              items:
-                type: string
-              description: The optional names.
-            OptionalNamesEx:
-              type: array
-              items:
-                type: string
-              description: The optional attribute names.
-            SuperClassesExNames:
-              type: array
-              items:
-                type: string
-              description: The super class names.
-          description: A schema class definition.
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebRequest_findcontainers:
-      type: object
-      properties:
-        ObjectID:
-          type: integer
-          description: The ID of the object whose children to search. Takes precedence over ObjectDN.
-          format: int64
-        ObjectDN:
-          type: string
-          description: The DN of the object whose children to search. Only honored if ObjectID is not provided.
-        Recursive:
-          type: boolean
-          description: 'Boolean indicating if children of returned objects should be returned as well
-
-            * **true**: Return children and children of children.
-
-            * **false**: Default. Only return objects in the specified container.'
-    Core_WebSDK_ConfigWebResponse_readpolicy:
-      type: object
-      properties:
-        Values:
-          type: array
-          items:
-            type: string
-          description: A list of values.
-        Locked:
-          type:
-          - boolean
-          - 'null'
-          description: '**true** if locked; otherwise, **false**.'
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebResponse_readdn:
-      type: object
-      properties:
-        Values:
-          type: array
-          items:
-            type: string
-          description: A list of values.
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebSchemaRequest_classes:
-      type: object
-      properties:
-        DerivedFrom:
-          type: string
-          description: The derived from class name.
-    Core_WebSDK_ConfigWebResponse_enumeratepolicies:
-      type: object
-      properties:
-        Policies:
-          type: array
-          items:
-            type: object
-            properties:
-              GUID:
-                type: string
-                description: "The _GUID_ associated \nwith this _ConfigPolicy_ object."
-              TypeName:
-                type: string
-                description: A schema class name.
-              AttributeName:
-                type: string
-                description: A schema attribute name.
-              ValueList:
-                type: array
-                items:
-                  type: string
-                description: A list of values
-              Property:
-                $ref: '#/components/schemas/Core_ConfigPolicy_Properties'
-            description: The CyberArk storage system for effective attribute values.
-          description: The policies.
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebRequest_renameobject:
-      required:
-      - ObjectDN
-      - NewObjectDN
-      type: object
-      properties:
-        ObjectDN:
-          type: string
-          description: The object dn.
-        NewObjectDN:
-          type: string
-          description: The new object DN.
-    Core_WebSDK_ConfigWebResponse_attributes:
-      type: object
-      properties:
-        AttributeDefinitions:
-          type: array
-          items:
-            type: object
-            properties:
-              Syntax:
-                $ref: '#/components/schemas/Core_SchemaAttribute_Syntaxes'
-              Property:
-                $ref: '#/components/schemas/Core_SchemaAttribute_Properties'
-              Name:
-                type: string
-                description: The attribute name
-              Id:
-                type: integer
-                description: Gets the attribute ID
-                format: int64
-            description: The CyberArk storage system for schema attributes.
-          description: A list of schema attribute definitions.
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebRequest_isvalid:
-      type: object
-      properties:
-        ObjectDN:
-          type: string
-          description: The object dn.
-        ObjectID:
-          type: integer
-          description: Gets or sets the object id.
-          format: int64
-        ObjectGUID:
-          type: string
-          description: The object GUID.
-    Core_WebSDK_ConfigWebRequest_containableclasses:
-      required:
-      - ObjectDN
-      type: object
-      properties:
-        ObjectDN:
-          type: string
-          description: The object dn.
-    Web_SDK_Authentication_OAuthError:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Gets or sets the short error name
-        error_description:
-          type: string
-          description: Gets or sets the description of the error
-      description: REST OAuth Error Response
-    Core_WebSDK_ConfigWebResponse_idinfo:
-      type: object
-      properties:
-        ClassName:
-          type: string
-          description: A schema class name.
-        GUID:
-          type: string
-          description: An object GUID.
-        ObjectDN:
-          type: string
-          description: An oject DN.
-        HierarchicalGUID:
-          type: string
-          description: A concatenated string of GUIDs of the object's hierarchy, from the root to the object itself..
-        Revision:
-          type: integer
-          description: The revision.
-          format: int64
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_SchemaClass_Properties:
-      title: Behavioural properties for schema classes
-      enum:
-      - 0
-      - 1
-      - 2
-      - 4
-      - 8
-      - 16
-      - 32
-      - 64
-      - 128
-      - 256
-      - 512
-      type: integer
-      description: "\n\n**0**: **None**  \nA default internal enumeration.\n\n**1**: **NonRemovable**  \nObsolete\n\n**2**: **NonEffective**  \nNo objects, of the schema class, can be created.\n\n**4**: **Container**  \nObjects, of this schema class, can contain subordinate objects.\n\n**8**: **SelfContainment**  \nObjects, of this schema class, can contain subordinate objects of this schema class.\n\n**16**: **SuperClass**  \nThe associated schema class name is a super-class list entry for this schema class.\n\n**32**: **ContainedBy**  \nThe associated schema class name is a contained by list entry for this schema class.\n\n**64**: **NamedBy**  \nObsolete\n\n**128**: **Mandatory**  \nThe associated schema attribute name is a mandatory list entry for this schema class.\n\n**256**: **Optional**  \nThe associated schema attribute name is a optional list entry for this schema class.\n\n**512**: **ContainedBySub**  \nThe associated schema class name is a super-class whose sub-classes can contain this schema class.\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
-      format: int32
-    Core_WebSDK_ConfigWebRequest_readpolicy:
-      required:
-      - AttributeName
-      - Class
-      type: object
-      properties:
-        ObjectID:
-          type: integer
-          description: The ID of the object whose attribute to read. Takes precedence over ObjectDN.
-          format: int64
-        ObjectDN:
-          type: string
-          description: The DN of the object whose attribute to read. Only honored if ObjectID is not provided.
-        AttributeName:
-          type: string
-          description: The attribute name.
-        Class:
-          type: string
-          description: The class.
-    Core_WebSDK_ConfigWebSchemaRequest_class:
-      type: object
-      properties:
-        Class:
-          type: string
-          description: The class.
-    Core_WebSDK_ConfigWebResponse_enumerateall:
-      type: object
-      properties:
-        Objects:
-          type: array
-          items:
-            type: object
-            properties:
-              TypeName:
-                type: string
-                description: The schema class of the object
-              DN:
-                type: string
-                description: The DN of the object.
-              GUID:
-                type: string
-                description: The GUID of the object.
-              Name:
-                type: string
-                description: The name (CN) of the object.
-              Disabled:
-                type: boolean
-                description: '**true** if the object is excluded from processing; **false** otherwise.'
-              InError:
-                type: boolean
-                description: '**true** if an error processing a request for the object has occurent; **false** otherwise.'
-              Id:
-                type:
-                - integer
-                - 'null'
-                description: The unique ID of this object.
-                format: int64
-              Parent:
-                type: string
-                description: The DN of the parent object.
-              AbsoluteGUID:
-                type: string
-                description: A concatenated string of GUIDs of the object's hierarchy, from the root to the object itself.
-              Revision:
-                type: integer
-                description: 'The revision of this object.
-
-
-                  Revisions are updated with each change, and, in case of a container, if a subordinate object is added or deleted.'
-                format: int64
-            description: The CyberArk storage system for object referencing.
-          description: A list of `ConfigObject` items, each describing an individual object.
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebResponse_writedn:
-      type: object
-      properties:
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebRequest_readeffectivepolicy:
-      required:
-      - AttributeName
-      type: object
-      properties:
-        ObjectID:
-          type: integer
-          description: The ID of the object whose attribute to read. Takes precedence over ObjectDN.
-          format: int64
-        ObjectDN:
-          type: string
-          description: The DN of the object whose attribute to read. Only honored if ObjectID is not provided.
-        AttributeName:
-          type: string
-          description: The attribute name.
-    Core_WebSDK_ConfigWebRequest_guidtodn:
-      required:
-      - ObjectGUID
-      type: object
-      properties:
-        ObjectGUID:
-          type: string
-          description: The object GUID.
-    Core_WebSDK_ConfigCountWebResponse:
-      type: object
-      properties:
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Count:
-          type: integer
-          description: The count.
-          format: int64
-      description: Response for a successful config request
-    Core_WebSDK_ConfigWebResponse_write:
-      type: object
-      properties:
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebResponse_renameobject:
-      type: object
-      properties:
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebRequest_findobjectsofclass:
-      type: object
-      properties:
-        ObjectDN:
-          type: string
-          description: The object dn.
-        ObjectID:
-          type: integer
-          description: Gets or sets the object id.
-          format: int64
-        Class:
-          type: string
-          description: The class.
-        Classes:
-          type: array
-          items:
-            type: string
-          description: The classes.
-        Recursive:
-          type: boolean
-          description: 'Boolean indicating if children of returned objects should be returned as well
-
-            * **true**: Return children and children of children.
-
-            * **false**: Default. Only return objects in the specified container.'
-        Pattern:
-          type: string
-          description: "An expression for filtering matches. \n\n\n\nWildcards are asterisk (*) and question mark (?), to escape a wildcard use two backslashes (\\\\)"
-    Core_WebSDK_ConfigWebResponse_readeffectivepolicy:
-      type: object
-      properties:
-        Values:
-          type: array
-          items:
-            type: string
-          description: A list of values.
-        Overridden:
-          type:
-          - boolean
-          - 'null'
-          description: '**true** if overriden; otherwise, **false**.'
-        Locked:
-          type:
-          - boolean
-          - 'null'
-          description: '**true** if locked; otherwise, **false**.'
-        PolicyDN:
-          type: string
-          description: The DN of the object the policy values are inherited from
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
-    Core_WebSDK_ConfigWebRequest_gethighestrevision:
-      type: object
-      properties:
-        ObjectID:
-          type: integer
-          description: The ID of the object whose revision to read. Takes precedence over ObjectDN.
-          format: int64
-        ObjectDN:
-          type: string
-          description: The DN of the object whose revision to read. Only honored if ObjectID is not provided.
-        Classes:
-          type: array
-          items:
-            type: string
-          description: The classes.
-    Core_WebSDK_ConfigWebRequest_writedn:
-      required:
-      - AttributeName
-      - Values
-      type: object
-      properties:
-        ObjectID:
-          type: integer
-          description: The ID of the object whose attribute to write. Takes precedence over ObjectDN.
-          format: int64
-        ObjectDN:
-          type: string
-          description: The DN of the object whose attribute to write. Only honored if ObjectID is not provided.
-        AttributeName:
-          type: string
-          description: The attribute name.
-        Values:
-          type: array
-          items:
-            type: string
-          description: The values.
-    Core_WebSDK_ConfigWebRequest_clearpolicyattribute:
-      required:
-      - Class
-      - AttributeName
-      type: object
-      properties:
-        ObjectID:
-          type: integer
-          description: The ID of the object whose attribute to clear. Takes precedence over ObjectDN.
-          format: int64
-        ObjectDN:
-          type: string
-          description: The DN of the object whose attribute to clear. Only honored if ObjectID is not provided.
-        Class:
-          type: string
-          description: The class.
-        AttributeName:
-          type: string
-          description: The attribute name.
-    Core_WebSDK_ConfigWebRequest_delete:
-      type: object
-      properties:
-        ObjectID:
-          type: integer
-          description: The ID of the object to delete. Takes precedence over ObjectDN.
-          format: int64
-        ObjectDN:
-          type: string
-          description: The DN of the object to delete. Only honored if ObjectID is not provided.
-        Recursive:
-          type: boolean
-          description: 'Boolean indicating if children of returned objects should be returned as well
-
-            * **true**: Return children and children of children.
-
-            * **false**: Default. Only return objects in the specified container.'
-    Core_WebSDK_ConfigWebRequest_adddnvalue:
-      required:
-      - AttributeName
-      - Value
-      type: object
-      properties:
-        ObjectID:
-          type: integer
-          description: The ID of the object whose attribute to add. Takes precedence over ObjectDN.
-          format: int64
-        ObjectDN:
-          type: string
-          description: The DN of the object whose attribute to add. Only honored if ObjectID is not provided.
-        AttributeName:
-          type: string
-          description: The attribute name.
-        Value:
-          type: string
-          description: The value.
-    Core_WebSDK_ConfigWebResponse_enumerateobjectsderivedfrom:
-      type: object
-      properties:
-        Objects:
-          type: array
-          items:
-            type: object
-            properties:
-              TypeName:
-                type: string
-                description: The schema class of the object
-              DN:
-                type: string
-                description: The DN of the object.
-              GUID:
-                type: string
-                description: The GUID of the object.
-              Name:
-                type: string
-                description: The name (CN) of the object.
-              Disabled:
-                type: boolean
-                description: '**true** if the object is excluded from processing; **false** otherwise.'
-              InError:
-                type: boolean
-                description: '**true** if an error processing a request for the object has occurent; **false** otherwise.'
-              Id:
-                type:
-                - integer
-                - 'null'
-                description: The unique ID of this object.
-                format: int64
-              Parent:
-                type: string
-                description: The DN of the parent object.
-              AbsoluteGUID:
-                type: string
-                description: A concatenated string of GUIDs of the object's hierarchy, from the root to the object itself.
-              Revision:
-                type: integer
-                description: 'The revision of this object.
-
-
-                  Revisions are updated with each change, and, in case of a container, if a subordinate object is added or deleted.'
-                format: int64
-            description: The CyberArk storage system for object referencing.
-          description: A list of `ConfigObject` items, each describing an individual object.
-        Result:
-          $ref: '#/components/schemas/Core_ConfigResult'
-        Error:
-          type: string
-          description: An error description, or **null**.
     Core_WebSDK_ConfigWebResponse_getobjecttrustees:
       type: object
       properties:
@@ -3569,14 +3349,204 @@ components:
         Error:
           type: string
           description: An error description, or **null**.
-    Core_WebSDK_ConfigWebRequest_getobjecttrustees:
+    Core_WebSDK_ConfigWebResponse_defaultdn:
+      type: object
+      properties:
+        DefaultDN:
+          type: string
+          description: The default DN.
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebResponse_addpolicyvalue:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebRequest_writepolicy:
       required:
-      - ObjectDN
+      - Class
+      - AttributeName
+      - Values
+      type: object
+      properties:
+        ObjectID:
+          type: integer
+          description: The ID of the object whose attribute to write. Takes precedence over ObjectDN.
+          format: int64
+        ObjectDN:
+          type: string
+          description: The DN of the object whose attribute to write. Only honored if ObjectID is not provided.
+        Class:
+          type: string
+          description: The class.
+        AttributeName:
+          type: string
+          description: The attribute name.
+        Values:
+          type: array
+          items:
+            type: string
+          description: The values.
+        Locked:
+          type: boolean
+          description: '**true** if locked; otherwise, **false**.'
+    Core_WebSDK_ConfigWebResponse_guidtodn:
+      type: object
+      properties:
+        ClassName:
+          type: string
+          description: A schema class name.
+        ObjectDN:
+          type: string
+          description: An oject DN.
+        Revision:
+          type: integer
+          description: The revision.
+          format: int64
+        HierarchicalGUID:
+          type: string
+          description: A concatenated string of GUIDs of the object's hierarchy, from the root to the object itself..
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_WebSDK_ConfigWebRequest_find:
       type: object
       properties:
         ObjectDN:
           type: string
           description: The object dn.
+        Recursive:
+          type: boolean
+          description: 'Boolean indicating if children of returned objects should be returned as well
+
+            * **true**: Return children and children of children.
+
+            * **false**: Default. Only return objects in the specified container.'
+        ObjectPattern:
+          type: string
+          description: The pattern.
+        Class:
+          type: string
+          description: The class.
+        IncludeDerivedClasses:
+          type: boolean
+          description: '**true** if derived classes will be included; otherwise, **false**.'
+        AttributeName:
+          type: string
+          description: The attribute name.
+        AttributeNames:
+          type: array
+          items:
+            type: string
+          description: The attribute name list.
+        Pattern:
+          type: string
+          description: "An expression for filtering matches. \n\n\n\nWildcards are asterisk (*) and question mark (?), to escape a wildcard use two backslashes (\\\\)"
+    Core_WebSDK_ConfigWebRequest_gethighestrevision:
+      type: object
+      properties:
+        ObjectID:
+          type: integer
+          description: The ID of the object whose revision to read. Takes precedence over ObjectDN.
+          format: int64
+        ObjectDN:
+          type: string
+          description: The DN of the object whose revision to read. Only honored if ObjectID is not provided.
+        Classes:
+          type: array
+          items:
+            type: string
+          description: The classes.
+    Core_WebSDK_ConfigWebRequest_removednvalue:
+      required:
+      - AttributeName
+      - Value
+      type: object
+      properties:
+        ObjectID:
+          type: integer
+          description: The ID of the object whose attribute to remove. Takes precedence over ObjectDN.
+          format: int64
+        ObjectDN:
+          type: string
+          description: The DN of the object whose attribute to remove. Only honored if ObjectID is not provided.
+        AttributeName:
+          type: string
+          description: The attribute name.
+        Value:
+          type: string
+          description: The value.
+    Core_WebSDK_ConfigWebRequest_getrevision:
+      type: object
+      properties:
+        ObjectID:
+          type: integer
+          description: The ID of the object whose revision to read. Takes precedence over ObjectDN.
+          format: int64
+        ObjectDN:
+          type: string
+          description: The DN of the object whose revision to read. Only honored if ObjectID is not provided.
+    Core_WebSDK_ConfigWebResponse_removevalue:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
+    Core_ConfigPolicy_Properties:
+      title: Behavioural properties for effective attribute values
+      enum:
+      - 0
+      - 1
+      type: integer
+      description: "\n\n**0**: **None**  \nAn unsed internal enumeration.\n\n**1**: **Locked**  \nThe effective attribute value is locked by the owning object.\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
+    Core_WebSDK_ConfigWebRequest_isvalid:
+      type: object
+      properties:
+        ObjectDN:
+          type: string
+          description: The object dn.
+        ObjectID:
+          type: integer
+          description: Gets or sets the object id.
+          format: int64
+        ObjectGUID:
+          type: string
+          description: The object GUID.
+    Core_WebSDK_ConfigWebResponse_idinfo:
+      type: object
+      properties:
+        ClassName:
+          type: string
+          description: A schema class name.
+        GUID:
+          type: string
+          description: An object GUID.
+        ObjectDN:
+          type: string
+          description: An oject DN.
+        HierarchicalGUID:
+          type: string
+          description: A concatenated string of GUIDs of the object's hierarchy, from the root to the object itself..
+        Revision:
+          type: integer
+          description: The revision.
+          format: int64
+        Result:
+          $ref: '#/components/schemas/Core_ConfigResult'
+        Error:
+          type: string
+          description: An error description, or **null**.
     Core_WebSDK_ConfigWebResponse_readall:
       type: object
       properties:
@@ -3600,6 +3570,36 @@ components:
         Error:
           type: string
           description: An error description, or **null**.
+    Core_IdentityEntry_EntryState:
+      title: Enumeration indicating the state of an IdentityEntry
+      enum:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      type: integer
+      description: "\n\n**0**: **Normal**  \nNo special state associated with the entry\n\n**1**: **Disabled**  \nThe identity has been disabled\n\n**2**: **LockedOut**  \nThe identity has been locked out\n\n**4**: **Deleted**  \nThe identity has been deleted\n\n**8**: **Unverifiable**  \nThe identity could not be verified with a provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
+    Core_WebSDK_ConfigWebRequest_removevalue:
+      required:
+      - AttributeName
+      - Value
+      type: object
+      properties:
+        ObjectID:
+          type: integer
+          description: The ID of the object whose attribute to remove. Takes precedence over ObjectDN.
+          format: int64
+        ObjectDN:
+          type: string
+          description: The DN of the object whose attribute to remove. Only honored if ObjectID is not provided.
+        AttributeName:
+          type: string
+          description: The attribute name.
+        Value:
+          type: string
+          description: The value.
   securitySchemes:
     AccessToken:
       type: http

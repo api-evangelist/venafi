@@ -434,31 +434,6 @@ paths:
       - AccessToken: []
 components:
   schemas:
-    Core_WebSDK_StatsWebRequest_querytags:
-      required:
-      - StatsType
-      type: object
-      properties:
-        StatsType:
-          type: integer
-          description: The ID of the counter
-          format: int32
-        Filter:
-          type: string
-          description: The filter value
-        TagNumber:
-          type: integer
-          description: If negative then all tag values will be returned
-          format: int32
-    Core_WebSDK_StatsWebRequest_getcounter:
-      required:
-      - StatsType
-      type: object
-      properties:
-        StatsType:
-          type: integer
-          description: The ID of the counter
-          format: int32
     Core_WebSDK_StatsWebResponse_query:
       type: object
       properties:
@@ -505,6 +480,110 @@ components:
         Error:
           type: string
           description: The error
+    Core_WebSDK_StatsWebResponse_createcounter:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: '**true** or **false**'
+        Error:
+          type: string
+          description: The error
+    Core_WebSDK_StatsWebResponse_querytags:
+      type: object
+      properties:
+        TagAValues:
+          type: array
+          items:
+            type: string
+          description: Contains unique tag values for Tag A
+        TagBValues:
+          type: array
+          items:
+            type: string
+          description: Contains unique tag values for Tag B
+        TagCValues:
+          type: array
+          items:
+            type: string
+          description: Contains unique tag values for Tag C
+        Success:
+          type: boolean
+          description: '**true** or **false**'
+        Error:
+          type: string
+          description: The error
+    Core_WebSDK_StatsWebRequest_deletecounter:
+      required:
+      - StatsType
+      type: object
+      properties:
+        StatsType:
+          type: integer
+          description: The ID of the counter
+          format: int32
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
+    Core_WebSDK_StatsWebResponse_deletecounter:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: '**true** or **false**'
+        Error:
+          type: string
+          description: The error
+    Core_WebSDK_StatsWebResponse_countercontainers:
+      type: object
+      properties:
+        CounterContainers:
+          type: array
+          items:
+            type: object
+            properties:
+              Name:
+                type: string
+                description: Stats counter name
+              StatsCode:
+                type: integer
+                description: Stats counter family
+                format: int32
+            description: Represents containers
+          description: The list of counter components and their descriptions
+        Success:
+          type: boolean
+          description: '**true** or **false**'
+        Error:
+          type: string
+          description: The error
+    Core_WebSDK_StatsWebRequest_getcounter:
+      required:
+      - StatsType
+      type: object
+      properties:
+        StatsType:
+          type: integer
+          description: The ID of the counter
+          format: int32
+    Core_StatsTier:
+      title: References a statistics tier
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      type: integer
+      description: "\n\n**0**: **Live**  \nThe live data tier, where data is currently being modified\n\n**1**: **Hour**  \nThe hourly tier. Aggregate data for previous hours is kept\n\n**2**: **Day**  \nThe daily tier. Aggregate data for previous days is kept\n\n**3**: **Month**  \nThe monthly tier. Aggregate data for previous months is kept\n\n**4**: **Year**  \nThe yearly tier. Aggregate data for previous years is kept\n"
+      format: int32
     Core_WebSDK_StatsWebResponse_getcounter:
       type: object
       properties:
@@ -552,24 +631,99 @@ components:
         Error:
           type: string
           description: The error
-    Core_WebSDK_StatsWebResponse_deletecounter:
+    Core_WebSDK_StatsWebRequest_createcounter:
+      required:
+      - StatsType
+      - Name
       type: object
       properties:
-        Success:
-          type: boolean
-          description: '**true** or **false**'
-        Error:
+        StatsType:
+          type: integer
+          description: The ID of the counter
+          format: int32
+        Name:
           type: string
-          description: The error
-    Core_WebSDK_StatsWebResponse_renamecounter:
+          description: The name of the counter
+        Description:
+          type: string
+          description: The description of the counter
+        MetadataAName:
+          type: string
+          description: The name for Tag A
+        MetadataBName:
+          type: string
+          description: The name for Tag B
+        MetadataCName:
+          type: string
+          description: The name for Tag C
+        ValueDescription:
+          type: string
+          description: The description for the counter value
+        Sensitive:
+          type: boolean
+          description: '**true** or **false**; Indicates if the counter can only be viewed by authorized users'
+    Core_WebSDK_StatsWebRequest_renamecounter:
+      required:
+      - StatsType
+      - Name
       type: object
       properties:
-        Success:
+        StatsType:
+          type: integer
+          description: The ID of the counter
+          format: int32
+        Name:
+          type: string
+          description: The name of the counter
+    Core_WebSDK_StatsWebRequest_query:
+      required:
+      - StatsType
+      type: object
+      properties:
+        StatsType:
+          type: integer
+          description: The ID of the counter
+          format: int32
+        Tier:
+          $ref: '#/components/schemas/Core_StatsTier'
+        MaxPoints:
+          type: integer
+          description: The maximum number of data points
+          format: int32
+        GroupByA:
           type: boolean
           description: '**true** or **false**'
-        Error:
+        GroupByB:
+          type: boolean
+          description: '**true** or **false**'
+        GroupByC:
+          type: boolean
+          description: '**true** or **false**'
+        FilterA:
           type: string
-          description: The error
+          description: The filter value
+        FilterB:
+          type: string
+          description: The filter value
+        FilterC:
+          type: string
+          description: The filter value
+    Core_WebSDK_StatsWebRequest_querytags:
+      required:
+      - StatsType
+      type: object
+      properties:
+        StatsType:
+          type: integer
+          description: The ID of the counter
+          format: int32
+        Filter:
+          type: string
+          description: The filter value
+        TagNumber:
+          type: integer
+          description: If negative then all tag values will be returned
+          format: int32
     Core_WebSDK_StatsWebRequest_updatecounter:
       required:
       - StatsType
@@ -597,84 +751,6 @@ components:
         Sensitive:
           type: boolean
           description: '**true** or **false**; Indicates if the counter can only be viewed by authorized users'
-    Core_WebSDK_StatsWebResponse_querytags:
-      type: object
-      properties:
-        TagAValues:
-          type: array
-          items:
-            type: string
-          description: Contains unique tag values for Tag A
-        TagBValues:
-          type: array
-          items:
-            type: string
-          description: Contains unique tag values for Tag B
-        TagCValues:
-          type: array
-          items:
-            type: string
-          description: Contains unique tag values for Tag C
-        Success:
-          type: boolean
-          description: '**true** or **false**'
-        Error:
-          type: string
-          description: The error
-    Core_WebSDK_StatsWebResponse_countercontainers:
-      type: object
-      properties:
-        CounterContainers:
-          type: array
-          items:
-            type: object
-            properties:
-              Name:
-                type: string
-                description: Stats counter name
-              StatsCode:
-                type: integer
-                description: Stats counter family
-                format: int32
-            description: Represents containers
-          description: The list of counter components and their descriptions
-        Success:
-          type: boolean
-          description: '**true** or **false**'
-        Error:
-          type: string
-          description: The error
-    Core_WebSDK_StatsWebRequest_renamecounter:
-      required:
-      - StatsType
-      - Name
-      type: object
-      properties:
-        StatsType:
-          type: integer
-          description: The ID of the counter
-          format: int32
-        Name:
-          type: string
-          description: The name of the counter
-    Core_WebSDK_StatsWebResponse_updatecounter:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: '**true** or **false**'
-        Error:
-          type: string
-          description: The error
-    Core_WebSDK_StatsWebResponse_createcounter:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: '**true** or **false**'
-        Error:
-          type: string
-          description: The error
     Core_WebSDK_StatsWebResponse_getcounters:
       type: object
       properties:
@@ -725,69 +801,6 @@ components:
         Error:
           type: string
           description: The error
-    Core_WebSDK_StatsWebRequest_query:
-      required:
-      - StatsType
-      type: object
-      properties:
-        StatsType:
-          type: integer
-          description: The ID of the counter
-          format: int32
-        Tier:
-          $ref: '#/components/schemas/Core_StatsTier'
-        MaxPoints:
-          type: integer
-          description: The maximum number of data points
-          format: int32
-        GroupByA:
-          type: boolean
-          description: '**true** or **false**'
-        GroupByB:
-          type: boolean
-          description: '**true** or **false**'
-        GroupByC:
-          type: boolean
-          description: '**true** or **false**'
-        FilterA:
-          type: string
-          description: The filter value
-        FilterB:
-          type: string
-          description: The filter value
-        FilterC:
-          type: string
-          description: The filter value
-    Web_SDK_Authentication_OAuthError:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Gets or sets the short error name
-        error_description:
-          type: string
-          description: Gets or sets the description of the error
-      description: REST OAuth Error Response
-    Core_StatsTier:
-      title: References a statistics tier
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      type: integer
-      description: "\n\n**0**: **Live**  \nThe live data tier, where data is currently being modified\n\n**1**: **Hour**  \nThe hourly tier. Aggregate data for previous hours is kept\n\n**2**: **Day**  \nThe daily tier. Aggregate data for previous days is kept\n\n**3**: **Month**  \nThe monthly tier. Aggregate data for previous months is kept\n\n**4**: **Year**  \nThe yearly tier. Aggregate data for previous years is kept\n"
-      format: int32
-    Core_WebSDK_StatsWebRequest_deletecounter:
-      required:
-      - StatsType
-      type: object
-      properties:
-        StatsType:
-          type: integer
-          description: The ID of the counter
-          format: int32
     Core_WebSDK_StatsWebRequest_getcounters:
       type: object
       properties:
@@ -795,37 +808,24 @@ components:
           type: integer
           description: The family of the counter
           format: int32
-    Core_WebSDK_StatsWebRequest_createcounter:
-      required:
-      - StatsType
-      - Name
+    Core_WebSDK_StatsWebResponse_updatecounter:
       type: object
       properties:
-        StatsType:
-          type: integer
-          description: The ID of the counter
-          format: int32
-        Name:
-          type: string
-          description: The name of the counter
-        Description:
-          type: string
-          description: The description of the counter
-        MetadataAName:
-          type: string
-          description: The name for Tag A
-        MetadataBName:
-          type: string
-          description: The name for Tag B
-        MetadataCName:
-          type: string
-          description: The name for Tag C
-        ValueDescription:
-          type: string
-          description: The description for the counter value
-        Sensitive:
+        Success:
           type: boolean
-          description: '**true** or **false**; Indicates if the counter can only be viewed by authorized users'
+          description: '**true** or **false**'
+        Error:
+          type: string
+          description: The error
+    Core_WebSDK_StatsWebResponse_renamecounter:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: '**true** or **false**'
+        Error:
+          type: string
+          description: The error
   securitySchemes:
     AccessToken:
       type: http

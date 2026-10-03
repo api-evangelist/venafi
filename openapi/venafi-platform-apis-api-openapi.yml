@@ -242,261 +242,6 @@ paths:
       - AccessToken: []
 components:
   schemas:
-    Core_WebSDK_BusStatusWebResponse_setmeshdnsname:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: Indicates whether the request was successfully completed
-        Status:
-          type: object
-          properties:
-            ReportingEngine:
-              type: string
-              description: The CN of the TPP engine identity
-            Mesh:
-              type: boolean
-              description: Indicates if bus operates in mesh mode
-            MeshPort:
-              type: integer
-              description: The port used for bus connections
-              format: int32
-            Status:
-              type: object
-              additionalProperties:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    MeshDnsName:
-                      type: string
-                      description: The configured DNS name used to connect to in mesh mode
-                    EngineIdentity:
-                      type: string
-                      description: The identity of the TPP engine
-                    UnreachableBusPartners:
-                      type: array
-                      items:
-                        type: string
-                      description: "**null** if all partners are reachable or if operating in central MQTT broker mode. Otherwise, \na list of engine identities that aren't reachable"
-                    CurrentLatency:
-                      type: integer
-                      description: Database latency
-                      format: int32
-                    CurrentWorkload:
-                      type: integer
-                      description: ToDo workload
-                      format: int32
-                    StandbyMode:
-                      type: integer
-                      description: Standby mode
-                      format: int32
-                    LoadedModules:
-                      type: array
-                      items:
-                        type: string
-                      description: If the application is Trust Protection Foundation service, the list of loaded service modules. Otherwise **null**
-                    ProcessType:
-                      type: string
-                      description: 'The type of the process reporting the status.
-
-                        Possible values:
-
-                        * Application
-
-                        * Service
-
-                        * IIS
-
-
-                        All valid values are defined as constants in the _ProcessTypes_ class'
-                    ProcessId:
-                      type: integer
-                      description: Gets the numerical process identifier
-                      format: int32
-                    ProcessIdentity:
-                      type: string
-                      description: The Windows identity of the reporting application
-                    StartTimeISO8601:
-                      type: string
-                      description: The date and time (UTC) indicating when the status was last updated, in ISO-8601 format
-                    LastSeenISO8601:
-                      type: string
-                      description: The date and time (UTC) indicating when the application was last seen, in ISO-8601 format
-                    SendingHost:
-                      type: string
-                      description: The engine that generated the record
-                    SendingApplication:
-                      type: string
-                      description: The application/process the record describes
-                    NoResponse:
-                      type: boolean
-                      description: '**true** if the engine did not respond to the status request or is offline, **false** if the engine is responsive'
-                    CoreReceivedMessageCount:
-                      type: integer
-                      description: Number of messages Core has received from MQTT
-                      format: int64
-                    CoreBackloggedMessagePeak:
-                      type: integer
-                      description: Highest number of Message Bus messages that had been received from MQTT but not yet been handled by Core
-                      format: int64
-                    BrokerDroppedMessageCount:
-                      type: integer
-                      description: Number of Message Bus messages the broker dropped and didn't deliver because the mailbox was full
-                      format: int64
-                    BrokerAcceptedMessageCount:
-                      type: integer
-                      description: Number of Message Bus messages the broker accepted for delivery
-                      format: int64
-                    BrokerPendingOutgoingPeak:
-                      type: integer
-                      description: Peak number of messages the broker had pending, waiting to be sent over the network
-                      format: int64
-                  description: Response message for bus status requests
-                description: Connected applications
-              description: 'A dictionary, with the engine identity as key, holding a list of status messages for each connected application
-
-
-                **Key**: Engine identity'
-            StatusLastUpdatedISO8601:
-              type: string
-              description: The date and time (UTC) indicating when the status was last updated, in ISO-8601 format
-          description: The bus status
-    Core_WebSDK_BusStatusWebRequest_setmeshdnsname:
-      type: object
-      properties:
-        Engine:
-          type: string
-          description: The name of the engine whose mesh DNS name to set
-        MeshDnsName:
-          type: string
-          description: The DNS name to use when attempting to connect to the engine
-    Core_WebSDK_BusStatusWebRequest_getmeshdnsname:
-      type: object
-      properties:
-        Engine:
-          type: string
-          description: The name of the engine whose mesh DNS name to get
-    Core_WebSDK_BusStatusWebResponse_getstatus:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: Indicates whether the request was successfully completed
-        Status:
-          type: object
-          properties:
-            ReportingEngine:
-              type: string
-              description: The CN of the TPP engine identity
-            Mesh:
-              type: boolean
-              description: Indicates if bus operates in mesh mode
-            MeshPort:
-              type: integer
-              description: The port used for bus connections
-              format: int32
-            Status:
-              type: object
-              additionalProperties:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    MeshDnsName:
-                      type: string
-                      description: The configured DNS name used to connect to in mesh mode
-                    EngineIdentity:
-                      type: string
-                      description: The identity of the TPP engine
-                    UnreachableBusPartners:
-                      type: array
-                      items:
-                        type: string
-                      description: "**null** if all partners are reachable or if operating in central MQTT broker mode. Otherwise, \na list of engine identities that aren't reachable"
-                    CurrentLatency:
-                      type: integer
-                      description: Database latency
-                      format: int32
-                    CurrentWorkload:
-                      type: integer
-                      description: ToDo workload
-                      format: int32
-                    StandbyMode:
-                      type: integer
-                      description: Standby mode
-                      format: int32
-                    LoadedModules:
-                      type: array
-                      items:
-                        type: string
-                      description: If the application is Trust Protection Foundation service, the list of loaded service modules. Otherwise **null**
-                    ProcessType:
-                      type: string
-                      description: 'The type of the process reporting the status.
-
-                        Possible values:
-
-                        * Application
-
-                        * Service
-
-                        * IIS
-
-
-                        All valid values are defined as constants in the _ProcessTypes_ class'
-                    ProcessId:
-                      type: integer
-                      description: Gets the numerical process identifier
-                      format: int32
-                    ProcessIdentity:
-                      type: string
-                      description: The Windows identity of the reporting application
-                    StartTimeISO8601:
-                      type: string
-                      description: The date and time (UTC) indicating when the status was last updated, in ISO-8601 format
-                    LastSeenISO8601:
-                      type: string
-                      description: The date and time (UTC) indicating when the application was last seen, in ISO-8601 format
-                    SendingHost:
-                      type: string
-                      description: The engine that generated the record
-                    SendingApplication:
-                      type: string
-                      description: The application/process the record describes
-                    NoResponse:
-                      type: boolean
-                      description: '**true** if the engine did not respond to the status request or is offline, **false** if the engine is responsive'
-                    CoreReceivedMessageCount:
-                      type: integer
-                      description: Number of messages Core has received from MQTT
-                      format: int64
-                    CoreBackloggedMessagePeak:
-                      type: integer
-                      description: Highest number of Message Bus messages that had been received from MQTT but not yet been handled by Core
-                      format: int64
-                    BrokerDroppedMessageCount:
-                      type: integer
-                      description: Number of Message Bus messages the broker dropped and didn't deliver because the mailbox was full
-                      format: int64
-                    BrokerAcceptedMessageCount:
-                      type: integer
-                      description: Number of Message Bus messages the broker accepted for delivery
-                      format: int64
-                    BrokerPendingOutgoingPeak:
-                      type: integer
-                      description: Peak number of messages the broker had pending, waiting to be sent over the network
-                      format: int64
-                  description: Response message for bus status requests
-                description: Connected applications
-              description: 'A dictionary, with the engine identity as key, holding a list of status messages for each connected application
-
-
-                **Key**: Engine identity'
-            StatusLastUpdatedISO8601:
-              type: string
-              description: The date and time (UTC) indicating when the status was last updated, in ISO-8601 format
-          description: The bus status
     Web_SDK_Authentication_OAuthError:
       type: object
       properties:
@@ -517,6 +262,12 @@ components:
           type: string
           description: '**null** if the request was successfully completed, a string describing the error otherwise'
       description: ''
+    Core_WebSDK_BusStatusWebRequest_getmeshdnsname:
+      type: object
+      properties:
+        Engine:
+          type: string
+          description: The name of the engine whose mesh DNS name to get
     Core_WebSDK_BusStatusWebResponse_getmeshdnsname:
       type: object
       properties:
@@ -650,6 +401,255 @@ components:
           type: string
           description: The component.
       description: Class to represent a Platform request for the WebSDK
+    Core_WebSDK_BusStatusWebRequest_setmeshdnsname:
+      type: object
+      properties:
+        Engine:
+          type: string
+          description: The name of the engine whose mesh DNS name to set
+        MeshDnsName:
+          type: string
+          description: The DNS name to use when attempting to connect to the engine
+    Core_WebSDK_BusStatusWebResponse_getstatus:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: Indicates whether the request was successfully completed
+        Status:
+          type: object
+          properties:
+            ReportingEngine:
+              type: string
+              description: The CN of the TPP engine identity
+            Mesh:
+              type: boolean
+              description: Indicates if bus operates in mesh mode
+            MeshPort:
+              type: integer
+              description: The port used for bus connections
+              format: int32
+            Status:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    MeshDnsName:
+                      type: string
+                      description: The configured DNS name used to connect to in mesh mode
+                    EngineIdentity:
+                      type: string
+                      description: The identity of the TPP engine
+                    UnreachableBusPartners:
+                      type: array
+                      items:
+                        type: string
+                      description: "**null** if all partners are reachable or if operating in central MQTT broker mode. Otherwise, \na list of engine identities that aren't reachable"
+                    CurrentLatency:
+                      type: integer
+                      description: Database latency
+                      format: int32
+                    CurrentWorkload:
+                      type: integer
+                      description: ToDo workload
+                      format: int32
+                    StandbyMode:
+                      type: integer
+                      description: Standby mode
+                      format: int32
+                    LoadedModules:
+                      type: array
+                      items:
+                        type: string
+                      description: If the application is Trust Protection Foundation service, the list of loaded service modules. Otherwise **null**
+                    ProcessType:
+                      type: string
+                      description: 'The type of the process reporting the status.
+
+                        Possible values:
+
+                        * Application
+
+                        * Service
+
+                        * IIS
+
+
+                        All valid values are defined as constants in the _ProcessTypes_ class'
+                    ProcessId:
+                      type: integer
+                      description: Gets the numerical process identifier
+                      format: int32
+                    ProcessIdentity:
+                      type: string
+                      description: The Windows identity of the reporting application
+                    StartTimeISO8601:
+                      type: string
+                      description: The date and time (UTC) indicating when the status was last updated, in ISO-8601 format
+                    LastSeenISO8601:
+                      type: string
+                      description: The date and time (UTC) indicating when the application was last seen, in ISO-8601 format
+                    SendingHost:
+                      type: string
+                      description: The engine that generated the record
+                    SendingApplication:
+                      type: string
+                      description: The application/process the record describes
+                    NoResponse:
+                      type: boolean
+                      description: '**true** if the engine did not respond to the status request or is offline, **false** if the engine is responsive'
+                    CoreReceivedMessageCount:
+                      type: integer
+                      description: Number of messages Core has received from MQTT
+                      format: int64
+                    CoreBackloggedMessagePeak:
+                      type: integer
+                      description: Highest number of Message Bus messages that had been received from MQTT but not yet been handled by Core
+                      format: int64
+                    BrokerDroppedMessageCount:
+                      type: integer
+                      description: Number of Message Bus messages the broker dropped and didn't deliver because the mailbox was full
+                      format: int64
+                    BrokerAcceptedMessageCount:
+                      type: integer
+                      description: Number of Message Bus messages the broker accepted for delivery
+                      format: int64
+                    BrokerPendingOutgoingPeak:
+                      type: integer
+                      description: Peak number of messages the broker had pending, waiting to be sent over the network
+                      format: int64
+                  description: Response message for bus status requests
+                description: Connected applications
+              description: 'A dictionary, with the engine identity as key, holding a list of status messages for each connected application
+
+
+                **Key**: Engine identity'
+            StatusLastUpdatedISO8601:
+              type: string
+              description: The date and time (UTC) indicating when the status was last updated, in ISO-8601 format
+          description: The bus status
+    Core_WebSDK_BusStatusWebResponse_setmeshdnsname:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: Indicates whether the request was successfully completed
+        Status:
+          type: object
+          properties:
+            ReportingEngine:
+              type: string
+              description: The CN of the TPP engine identity
+            Mesh:
+              type: boolean
+              description: Indicates if bus operates in mesh mode
+            MeshPort:
+              type: integer
+              description: The port used for bus connections
+              format: int32
+            Status:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    MeshDnsName:
+                      type: string
+                      description: The configured DNS name used to connect to in mesh mode
+                    EngineIdentity:
+                      type: string
+                      description: The identity of the TPP engine
+                    UnreachableBusPartners:
+                      type: array
+                      items:
+                        type: string
+                      description: "**null** if all partners are reachable or if operating in central MQTT broker mode. Otherwise, \na list of engine identities that aren't reachable"
+                    CurrentLatency:
+                      type: integer
+                      description: Database latency
+                      format: int32
+                    CurrentWorkload:
+                      type: integer
+                      description: ToDo workload
+                      format: int32
+                    StandbyMode:
+                      type: integer
+                      description: Standby mode
+                      format: int32
+                    LoadedModules:
+                      type: array
+                      items:
+                        type: string
+                      description: If the application is Trust Protection Foundation service, the list of loaded service modules. Otherwise **null**
+                    ProcessType:
+                      type: string
+                      description: 'The type of the process reporting the status.
+
+                        Possible values:
+
+                        * Application
+
+                        * Service
+
+                        * IIS
+
+
+                        All valid values are defined as constants in the _ProcessTypes_ class'
+                    ProcessId:
+                      type: integer
+                      description: Gets the numerical process identifier
+                      format: int32
+                    ProcessIdentity:
+                      type: string
+                      description: The Windows identity of the reporting application
+                    StartTimeISO8601:
+                      type: string
+                      description: The date and time (UTC) indicating when the status was last updated, in ISO-8601 format
+                    LastSeenISO8601:
+                      type: string
+                      description: The date and time (UTC) indicating when the application was last seen, in ISO-8601 format
+                    SendingHost:
+                      type: string
+                      description: The engine that generated the record
+                    SendingApplication:
+                      type: string
+                      description: The application/process the record describes
+                    NoResponse:
+                      type: boolean
+                      description: '**true** if the engine did not respond to the status request or is offline, **false** if the engine is responsive'
+                    CoreReceivedMessageCount:
+                      type: integer
+                      description: Number of messages Core has received from MQTT
+                      format: int64
+                    CoreBackloggedMessagePeak:
+                      type: integer
+                      description: Highest number of Message Bus messages that had been received from MQTT but not yet been handled by Core
+                      format: int64
+                    BrokerDroppedMessageCount:
+                      type: integer
+                      description: Number of Message Bus messages the broker dropped and didn't deliver because the mailbox was full
+                      format: int64
+                    BrokerAcceptedMessageCount:
+                      type: integer
+                      description: Number of Message Bus messages the broker accepted for delivery
+                      format: int64
+                    BrokerPendingOutgoingPeak:
+                      type: integer
+                      description: Peak number of messages the broker had pending, waiting to be sent over the network
+                      format: int64
+                  description: Response message for bus status requests
+                description: Connected applications
+              description: 'A dictionary, with the engine identity as key, holding a list of status messages for each connected application
+
+
+                **Key**: Engine identity'
+            StatusLastUpdatedISO8601:
+              type: string
+              description: The date and time (UTC) indicating when the status was last updated, in ISO-8601 format
+          description: The bus status
   securitySchemes:
     AccessToken:
       type: http

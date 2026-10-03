@@ -210,6 +210,18 @@ paths:
         - PlatformAdmin
 components:
   schemas:
+    Filter1:
+      format: json
+      type: string
+    ConnectorsResponse:
+      properties:
+        connectors:
+          items:
+            $ref: '#/components/schemas/ConnectorsInformation'
+          type: array
+      required:
+      - connectors
+      type: object
     Target:
       properties:
         connection:
@@ -235,21 +247,17 @@ components:
       - connection
       - type
       type: object
-    ErrorResponse4:
+    ErrorInformation3:
       properties:
-        errors:
+        args:
           items:
-            $ref: '#/components/schemas/ErrorInformation3'
+            $ref: '#/components/schemas/AnyValue3'
           type: array
-      type: object
-    ConnectorsResponse:
-      properties:
-        connectors:
-          items:
-            $ref: '#/components/schemas/ConnectorsInformation'
-          type: array
-      required:
-      - connectors
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
       type: object
     WebhookProperties:
       description: "Connector properties for webhook-based notifications.\nWebhook notifications are delivered as HTTP POST requests with a JSON body structured as:\n```json\n{\n  \"events\": [\n    {\n      \"eventName\": \"string\",\n      \"eventType\": \"string\",\n      \"message\": \"string\",\n      \"criticality\": 0,\n      \"createdAt\": \"2025-01-15T12:45:00Z\"\n    }\n  ]\n}\n```\nOnly one event is included per request. The webhook service sets `Content-Type: application/json`, `VaaS-Timestamp`, and, when a `secret` is configured in the connection, `VaaS-Signature`.\n"
@@ -262,11 +270,6 @@ components:
       - filter
       - target
       type: object
-    Filter1:
-      format: json
-      type: string
-    AnyValue3:
-      description: Can be any value - string, number, boolean, array or object.
     ConnectorsUpdateRequest:
       properties:
         properties:
@@ -274,6 +277,15 @@ components:
       required:
       - properties
       type: object
+    ErrorResponse4:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation3'
+          type: array
+      type: object
+    AnyValue3:
+      description: Can be any value - string, number, boolean, array or object.
     ConnectorsCreationRequest:
       properties:
         name:
@@ -303,18 +315,6 @@ components:
       - name
       - status
       - properties
-      type: object
-    ErrorInformation3:
-      properties:
-        args:
-          items:
-            $ref: '#/components/schemas/AnyValue3'
-          type: array
-        code:
-          format: int32
-          type: integer
-        message:
-          type: string
       type: object
   securitySchemes:
     service-account:

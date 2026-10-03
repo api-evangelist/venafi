@@ -940,13 +940,6 @@ paths:
       - AccessToken: []
 components:
   schemas:
-    ClientWebSDK_DataContracts_DeleteResponse_delete:
-      type: object
-      properties:
-        DeletedCount:
-          type: integer
-          description: Number of deleted items
-          format: int32
     ClientWebSDK_DataContracts_BulkRequest:
       type: object
       properties:
@@ -1056,6 +1049,13 @@ components:
           type: boolean
           description: Flag indicating, on delete, whether to also delete associated devices
       description: Request to perform bulk operation
+    ClientWebSDK_DataContracts_DeleteResponse_delete:
+      type: object
+      properties:
+        DeletedCount:
+          type: integer
+          description: Number of deleted items
+          format: int32
   securitySchemes:
     AccessToken:
       type: http

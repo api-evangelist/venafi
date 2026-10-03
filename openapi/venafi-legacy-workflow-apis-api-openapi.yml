@@ -344,55 +344,73 @@ paths:
       - AccessToken: []
 components:
   schemas:
-    Core_WebSDK_WorkflowTicketsWebResponse:
+    Core_WebSDK_WorkflowTicketsWebRequest_ticket_delete:
+      required:
+      - GUID
       type: object
       properties:
         GUID:
           type: string
-          description: The unique identifier for the created workflow ticket.
-        GUIDs:
-          type: array
-          items:
-            type: string
-          description: A list of GUIDs associated with the workflow ticket.
-        Result:
-          $ref: '#/components/schemas/Core_WorkflowResult'
-        IssuedDueTo:
+          description: The unique identifier for the workflow ticket.
+    Core_WebSDK_WorkflowTicketsWebRequest_ticket_exists:
+      required:
+      - GUID
+      type: object
+      properties:
+        GUID:
           type: string
-          description: The reason the workflow ticket was issued.
+          description: The unique identifier for the workflow ticket.
+    Core_WebSDK_WorkflowTicketsWebRequest_ticket_enumerate:
+      type: object
+      properties:
+        ObjectDN:
+          type: string
+          description: The distinguished name of the object the workflow ticket is associated with.
+        UserData:
+          type: string
+          description: User-specific data associated with the workflow ticket.
+    Core_IdentityType:
+      title: Enumeration defining Identity type objects
+      enum:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      - 16
+      - 32
+      type: integer
+      description: "\n\n**0**: **Undefined**  \nUndefined\n\n**1**: **User**  \nUser object\n\n**2**: **Group**  \nGroup object\n\n**4**: **Container**  \nContainer of users and groups\n\n**8**: **DistributionList**  \nDistribution List\n\n**16**: **Machine**  \nMachine\n\n**32**: **Provider**  \nThe Identity Provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
+    Core_WebSDK_WorkflowTicketsWebRequest_ticket_status:
+      required:
+      - GUID
+      type: object
+      properties:
+        GUID:
+          type: string
+          description: The unique identifier for the workflow ticket.
+    Core_WebSDK_WorkflowTicketsWebRequest_ticket_updatestatus:
+      required:
+      - GUID
+      - Status
+      type: object
+      properties:
+        GUID:
+          type: string
+          description: The unique identifier for the workflow ticket.
         Status:
           type: string
           description: The status of the workflow ticket.
-        Created:
+        Explanation:
           type: string
-          description: The creation time of the workflow ticket.
-        Updated:
-          type: string
-          description: The last updated time of the workflow ticket.
-        Blocking:
-          type: string
-          description: Indicates if the workflow ticket is blocking.
-        ApprovalFrom:
-          type: string
-          description: The approver of the workflow ticket (obsolete).
-        Approvers:
-          type: array
-          items:
-            type: string
-          description: A list of approvers for the workflow ticket.
-        ApprovalReason:
-          type: string
-          description: The reason for the approval of the workflow ticket.
-        ApprovalExplanation:
-          type: string
-          description: The explanation for the approval of the workflow ticket.
+          description: An explanation for the workflow ticket.
         ScheduledStart:
           type: string
           description: The scheduled start time for the workflow ticket.
         ScheduledStop:
           type: string
           description: The scheduled stop time for the workflow ticket.
-      description: ''
     Core_WorkflowResult:
       title: Enumeration for Workflow operation results
       enum:
@@ -407,54 +425,6 @@ components:
       - 8
       type: integer
       description: "\n\n**0**: **None**  \nNone\n\n**1**: **Success**  \nSuccess\n\n**2**: **GenericFailure**  \nNondescript failure\n\n**3**: **TicketDoesNotExist**  \nThe referenced ticket does not exist\n\n**4**: **InsufficientPrivileges**  \nNot enough rights\n\n**5**: **BadArguments**  \nBad/Invalid arguments were passed\n\n**6**: **ObjectDoesNotExist**  \nThe object DN that the workflow is being attached to does not exist.\n\n**7**: **RemoteError**  \nA remote request failed; see Error property for details\n\n**8**: **WorkflowObjectDoesNotExist**  \nThe object dn for the workflow does not exist.\n"
-      format: int32
-    Core_WebSDK_WorkflowTicketsWebRequest_ticket_status:
-      required:
-      - GUID
-      type: object
-      properties:
-        GUID:
-          type: string
-          description: The unique identifier for the workflow ticket.
-    Core_WebSDK_WorkflowTicketsWebRequest_ticket_delete:
-      required:
-      - GUID
-      type: object
-      properties:
-        GUID:
-          type: string
-          description: The unique identifier for the workflow ticket.
-    Core_IdentityType:
-      title: Enumeration defining Identity type objects
-      enum:
-      - 0
-      - 1
-      - 2
-      - 4
-      - 8
-      - 16
-      - 32
-      type: integer
-      description: "\n\n**0**: **Undefined**  \nUndefined\n\n**1**: **User**  \nUser object\n\n**2**: **Group**  \nGroup object\n\n**4**: **Container**  \nContainer of users and groups\n\n**8**: **DistributionList**  \nDistribution List\n\n**16**: **Machine**  \nMachine\n\n**32**: **Provider**  \nThe Identity Provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
-      format: int32
-    Core_WebSDK_WorkflowTicketsWebRequest_ticket_exists:
-      required:
-      - GUID
-      type: object
-      properties:
-        GUID:
-          type: string
-          description: The unique identifier for the workflow ticket.
-    Core_IdentityEntry_EntryState:
-      title: Enumeration indicating the state of an IdentityEntry
-      enum:
-      - 0
-      - 1
-      - 2
-      - 4
-      - 8
-      type: integer
-      description: "\n\n**0**: **Normal**  \nNo special state associated with the entry\n\n**1**: **Disabled**  \nThe identity has been disabled\n\n**2**: **LockedOut**  \nThe identity has been locked out\n\n**4**: **Deleted**  \nThe identity has been deleted\n\n**8**: **Unverifiable**  \nThe identity could not be verified with a provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
       format: int32
     Core_WebSDK_WorkflowTicketsWebRequest_ticket_create:
       required:
@@ -512,27 +482,17 @@ components:
         UserData:
           type: string
           description: User-specific data associated with the workflow ticket.
-    Core_WebSDK_WorkflowTicketsWebRequest_ticket_updatestatus:
-      required:
-      - GUID
-      - Status
-      type: object
-      properties:
-        GUID:
-          type: string
-          description: The unique identifier for the workflow ticket.
-        Status:
-          type: string
-          description: The status of the workflow ticket.
-        Explanation:
-          type: string
-          description: An explanation for the workflow ticket.
-        ScheduledStart:
-          type: string
-          description: The scheduled start time for the workflow ticket.
-        ScheduledStop:
-          type: string
-          description: The scheduled stop time for the workflow ticket.
+    Core_IdentityEntry_EntryState:
+      title: Enumeration indicating the state of an IdentityEntry
+      enum:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      type: integer
+      description: "\n\n**0**: **Normal**  \nNo special state associated with the entry\n\n**1**: **Disabled**  \nThe identity has been disabled\n\n**2**: **LockedOut**  \nThe identity has been locked out\n\n**4**: **Deleted**  \nThe identity has been deleted\n\n**8**: **Unverifiable**  \nThe identity could not be verified with a provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
     Core_WebSDK_WorkflowTicketsWebRequest_ticket_details:
       required:
       - GUID
@@ -541,15 +501,55 @@ components:
         GUID:
           type: string
           description: The unique identifier for the workflow ticket.
-    Core_WebSDK_WorkflowTicketsWebRequest_ticket_enumerate:
+    Core_WebSDK_WorkflowTicketsWebResponse:
       type: object
       properties:
-        ObjectDN:
+        GUID:
           type: string
-          description: The distinguished name of the object the workflow ticket is associated with.
-        UserData:
+          description: The unique identifier for the created workflow ticket.
+        GUIDs:
+          type: array
+          items:
+            type: string
+          description: A list of GUIDs associated with the workflow ticket.
+        Result:
+          $ref: '#/components/schemas/Core_WorkflowResult'
+        IssuedDueTo:
           type: string
-          description: User-specific data associated with the workflow ticket.
+          description: The reason the workflow ticket was issued.
+        Status:
+          type: string
+          description: The status of the workflow ticket.
+        Created:
+          type: string
+          description: The creation time of the workflow ticket.
+        Updated:
+          type: string
+          description: The last updated time of the workflow ticket.
+        Blocking:
+          type: string
+          description: Indicates if the workflow ticket is blocking.
+        ApprovalFrom:
+          type: string
+          description: The approver of the workflow ticket (obsolete).
+        Approvers:
+          type: array
+          items:
+            type: string
+          description: A list of approvers for the workflow ticket.
+        ApprovalReason:
+          type: string
+          description: The reason for the approval of the workflow ticket.
+        ApprovalExplanation:
+          type: string
+          description: The explanation for the approval of the workflow ticket.
+        ScheduledStart:
+          type: string
+          description: The scheduled start time for the workflow ticket.
+        ScheduledStop:
+          type: string
+          description: The scheduled stop time for the workflow ticket.
+      description: ''
   securitySchemes:
     AccessToken:
       type: http

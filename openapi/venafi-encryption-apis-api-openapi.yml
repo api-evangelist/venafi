@@ -111,20 +111,6 @@ paths:
       - AccessToken: []
 components:
   schemas:
-    Core_WebSDK_CryptoWebResponse_availablekeys:
-      type: object
-      properties:
-        Keynames:
-          type: array
-          items:
-            type: string
-          description: The keynames.
-    Core_WebSDK_CryptoWebResponse_defaultkey:
-      type: object
-      properties:
-        DefaultKey:
-          type: string
-          description: The default key.
     Web_SDK_Authentication_OAuthError:
       type: object
       properties:
@@ -135,6 +121,20 @@ components:
           type: string
           description: Gets or sets the description of the error
       description: REST OAuth Error Response
+    Core_WebSDK_CryptoWebResponse_defaultkey:
+      type: object
+      properties:
+        DefaultKey:
+          type: string
+          description: The default key.
+    Core_WebSDK_CryptoWebResponse_availablekeys:
+      type: object
+      properties:
+        Keynames:
+          type: array
+          items:
+            type: string
+          description: The keynames.
   securitySchemes:
     AccessToken:
       type: http

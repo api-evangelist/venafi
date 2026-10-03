@@ -292,49 +292,6 @@ components:
       required:
       - current
       type: object
-    TenantRenewalConfiguration:
-      properties:
-        defaultIssuingTemplateId:
-          format: UUID
-          type: string
-        id:
-          description: The object ID
-          example: 12a05220-4352-11ee-ac28-c1379e5decf9
-          format: UUID
-          type: string
-        renewalActions:
-          description: A set of options that can be used to specify the actions that should be taken when the auto-renewal process runs.
-          example:
-            provision: false
-            renew: true
-          properties:
-            provision:
-              description: If true, the system with attempt to provision any certificates associated with this application after a successful auto-renewal.
-              type: boolean
-            renew:
-              description: If true, the system will attempt to renew any certificates associated with this application that are expected to expire within the configured number of days.
-              type: boolean
-          required:
-          - renew
-          - provision
-          type: object
-        renewalWindow:
-          description: A set of options to control the time window in which auto-renewal of certificates should be attempted.
-          example:
-            days: 30
-          properties:
-            days:
-              description: Any certificates associated with this object that are expected to expire within the specified number of days will be acted on.
-              format: int64
-              minimum: 1
-              type: integer
-          required:
-          - days
-          type: object
-      required:
-      - id
-      - renewalWindow
-      type: object
     StatusResponseItem:
       description: Details about the upcoming certificate auto-renewal run.
       example:
@@ -413,15 +370,50 @@ components:
       - applications
       - certificates
       type: object
-  examples:
-    ApplicationRenewalConfigurationExampleDefault:
-      value:
-        id: 22153ae0-4352-11ee-b95c-3531a284802b
+    TenantRenewalConfiguration:
+      properties:
+        defaultIssuingTemplateId:
+          format: UUID
+          type: string
+        id:
+          description: The object ID
+          example: 12a05220-4352-11ee-ac28-c1379e5decf9
+          format: UUID
+          type: string
         renewalActions:
-          provision: false
-          renew: false
+          description: A set of options that can be used to specify the actions that should be taken when the auto-renewal process runs.
+          example:
+            provision: false
+            renew: true
+          properties:
+            provision:
+              description: If true, the system with attempt to provision any certificates associated with this application after a successful auto-renewal.
+              type: boolean
+            renew:
+              description: If true, the system will attempt to renew any certificates associated with this application that are expected to expire within the configured number of days.
+              type: boolean
+          required:
+          - renew
+          - provision
+          type: object
         renewalWindow:
-          inherit: true
+          description: A set of options to control the time window in which auto-renewal of certificates should be attempted.
+          example:
+            days: 30
+          properties:
+            days:
+              description: Any certificates associated with this object that are expected to expire within the specified number of days will be acted on.
+              format: int64
+              minimum: 1
+              type: integer
+          required:
+          - days
+          type: object
+      required:
+      - id
+      - renewalWindow
+      type: object
+  examples:
     StatusResponseExample:
       value:
         current:
@@ -444,6 +436,14 @@ components:
               triggered: 47
           state: complete
           timestamp: '2023-08-24T20:57:36.688019837Z'
+    ApplicationRenewalConfigurationExampleDefault:
+      value:
+        id: 22153ae0-4352-11ee-b95c-3531a284802b
+        renewalActions:
+          provision: false
+          renew: false
+        renewalWindow:
+          inherit: true
     ApplicationRenewalConfigurationExampleModified:
       value:
         id: 22153ae0-4352-11ee-b95c-3531a284802b

@@ -445,53 +445,134 @@ paths:
       - AccessToken: []
 components:
   schemas:
-    Core_WebSDK_RecycleBinWebRequest_purge:
+    Core_WebSDK_RecycleBinWebResponse_getitem:
+      type: object
+      properties:
+        Item:
+          type: object
+          properties:
+            Guid:
+              type: string
+              description: The GUID of the recycled item
+            Type:
+              type: string
+              description: Type indicating what the deleted item is
+            TypeDetail:
+              type: string
+              description: Detailed information about the type (e.g. Class if config object, vault type if vault entry)
+            ChildCount:
+              type: integer
+              description: The number of children under this recycle bin item
+              format: int32
+            DN:
+              type: string
+              description: The original DN of the item before it was deleted
+            Name:
+              type: string
+              description: The original name (CN) of the item before it was deleted
+            DeleteOn:
+              type: string
+              description: The Date/Time the item was deleted and moved into the recycle bin
+            PurgeOn:
+              type: string
+              description: The UTC Date/Time the item is scheduled to be purged from the recycle bin, in string format
+            DeletedBy:
+              type: object
+              properties:
+                Prefix:
+                  type: string
+                  description: Gets the prefix of the identity provider owning the entry
+                PrefixedName:
+                  type: string
+                  description: The name of the prefixed.
+                PrefixedUniversal:
+                  type: string
+                  description: Gets the prefixed universal.
+                Name:
+                  type: string
+                  description: Gets the name of the entry
+                FullName:
+                  type: string
+                  description: Gets the full name of the entry
+                Universal:
+                  type: string
+                  description: Gets the universal (machine-readable) name of the entry
+                IsGroup:
+                  type: boolean
+                  description: True if the entry represents a group
+                Type:
+                  $ref: '#/components/schemas/Core_IdentityType'
+                State:
+                  $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
+              description: The prefixed universal identity that deleted the original item
+            RestoreState:
+              $ref: '#/components/schemas/Core_RecycleBinRestoreState'
+            RestorationDN:
+              type: string
+              description: The DN of the item when it gets restored (considers that the parent might have been renamed)
+          description: The recycle bin item
+        Result:
+          $ref: '#/components/schemas/Core_RecycleBinResult'
+        Error:
+          type: string
+          description: The error.
+    Core_WebSDK_RecycleBinWebRequest_getitem:
       type: object
       properties:
         Guid:
           type: string
           description: Gets or sets the GUID of a recycle bin item
-    Core_WebSDK_RecycleBinWebResponse_purgetask:
+    Core_IdentityType:
+      title: Enumeration defining Identity type objects
+      enum:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      - 16
+      - 32
+      type: integer
+      description: "\n\n**0**: **Undefined**  \nUndefined\n\n**1**: **User**  \nUser object\n\n**2**: **Group**  \nGroup object\n\n**4**: **Container**  \nContainer of users and groups\n\n**8**: **DistributionList**  \nDistribution List\n\n**16**: **Machine**  \nMachine\n\n**32**: **Provider**  \nThe Identity Provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
+    Core_WebSDK_RecycleBinWebRequest_purgetask:
       type: object
       properties:
-        Result:
-          $ref: '#/components/schemas/Core_RecycleBinResult'
-        Error:
-          type: string
-          description: The error.
-    Core_WebSDK_RecycleBinWebResponse_getitemdetails:
-      type: object
-      properties:
-        Details:
-          type: array
-          items:
-            type: object
-            properties:
-              Type:
-                $ref: '#/components/schemas/Core_RecycledItemDetail_DetailType'
-              VaultType:
-                $ref: '#/components/schemas/Core_VaultType'
-              SchemaClass:
-                type: string
-                description: Detailed information about the type (e.g. Class if config object, vault type if vault entry)
-              DN:
-                type: string
-                description: The DN of the entry if a config object
-            description: Class representing details for an item in the recycle bin
-          description: The list of details for a single recycle bin item
-        Result:
-          $ref: '#/components/schemas/Core_RecycleBinResult'
-        Error:
-          type: string
-          description: The error.
-    Core_WebSDK_RecycleBinWebResponse_empty:
-      type: object
-      properties:
-        Result:
-          $ref: '#/components/schemas/Core_RecycleBinResult'
-        Error:
-          type: string
-          description: The error.
+        Start:
+          type: boolean
+          description: Gets or sets whether to start a task
+        Stop:
+          type: boolean
+          description: Gets or sets whether to stop a task
+        PurgeAll:
+          type: boolean
+          description: Gets or sets whether to purge all items when requesting to start a purge task
+    Core_RecycleBinResult:
+      title: Enumeration providing result codes for Recycle Bin API operations
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 20000
+      - 30000
+      - 40000
+      type: integer
+      description: "\n\n**0**: **Success**  \nThe request completed succesfully\n\n**1**: **AdminRequired**  \nOnly an administrator can make the request\n\n**2**: **ObjectDoesNotExist**  \nThe provided object name does not exist\n\n**3**: **InvalidGuid**  \nNo recycled item with that GUID exists\n\n**4**: **InvalidRecycleBinItem**  \nThe recycle bin object has invalid information and cannot be restored\n\n**5**: **ItemCannotBeRestored**  \nRestore is currently not possible\n\n**6**: **FailedToGetConfigAccess**  \nCould not obtain a valid _Config_ object\n\n**7**: **FailedToGetSecretStoreAccess**  \nCould not obtain a valid _SecretStore_ object\n\n**8**: **ItemCleanupFailed**  \nFailed to remove the recycle bin item after restoring associated values\n\n**9**: **ActionNotSupported**  \nThe provided action type is not supported\n\n**10**: **ActionFailed**  \nThe action failed to complete successfully\n\n**11**: **RemoteIdentityRequired**  \nA valid identity object was not supplied\n\n**12**: **ActionException**  \nAn exception occurred while running an action\n\n**13**: **RemoteTransportFailure**  \nA request could not be submitted to the remote system due to a transport/network failure\n\n**14**: **ToDoRequestFailed**  \nA request could not be submitted to the ToDo system\n\n**15**: **InvalidParameters**  \nInvalid arguments were passed to a method\n\n**16**: **UnspecifiedError**  \nGeneric failure code\n\n**20000**: **ConfigResultBase**  \nBase Value for _ConfigResult_ codes encoded in _RecycleBinResult_\n\n**30000**: **SecretStoreResultBase**  \nBase Value for _SecretStoreResult_ codes encoded in _RecycleBinResult_\n\n**40000**: **ObjectStoreResultBase**  \nBase Value for _ObjectStoreResult_ codes encoded in _RecycleBinResult_\n"
+      format: int32
     Core_WebSDK_RecycleBinWebResponse_setconfiguration:
       type: object
       properties:
@@ -500,6 +581,58 @@ components:
         Error:
           type: string
           description: The error.
+    Core_WebSDK_RecycleBinWebRequest_setconfiguration:
+      type: object
+      properties:
+        Purge:
+          type: object
+          properties:
+            AllottedTime:
+              type: integer
+              description: Gets or sets the maximum number of minutes the purge process may take
+              format: int32
+            After:
+              type: integer
+              description: Gets or sets the age, in days, an item has to be in the recycle bin before it will be purged
+              format: int32
+            EngineDN:
+              type: string
+              description: Gets/sets the engine designated to run the purge process **null** for any)
+          description: Gets or sets the purge configuration options
+        Deletion:
+          type: object
+          properties:
+            AllottedTime:
+              type: integer
+              description: Gets or sets the maximum number of minutes the deletion process may take
+              format: int32
+            EngineDN:
+              type: string
+              description: Gets/sets the engine designated to run the deletion process **null** for any)
+            QuerySize:
+              type: integer
+              description: Gets or sets he maximum number of items to return in deletion queries
+              format: int32
+            SqlTimeout:
+              type: integer
+              description: Gets or sets he timeout, in minutes, to use for SQL deletion queries
+              format: int32
+            Tasks:
+              type: array
+              items:
+                type: string
+              description: Gets/sets deletion configuration items
+          description: Gets or sets the purge configuration options
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
     Core_WebSDK_RecycleBinWebResponse_getcontents:
       type: object
       properties:
@@ -578,152 +711,22 @@ components:
         Error:
           type: string
           description: The error.
-    Core_WebSDK_RecycleBinWebRequest_getitemdetails:
+    Core_WebSDK_RecycleBinWebResponse_deletiontask:
       type: object
       properties:
-        Guid:
-          type: string
-          description: Gets or sets the GUID of a recycle bin item
-    Core_IdentityType:
-      title: Enumeration defining Identity type objects
-      enum:
-      - 0
-      - 1
-      - 2
-      - 4
-      - 8
-      - 16
-      - 32
-      type: integer
-      description: "\n\n**0**: **Undefined**  \nUndefined\n\n**1**: **User**  \nUser object\n\n**2**: **Group**  \nGroup object\n\n**4**: **Container**  \nContainer of users and groups\n\n**8**: **DistributionList**  \nDistribution List\n\n**16**: **Machine**  \nMachine\n\n**32**: **Provider**  \nThe Identity Provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
-      format: int32
-    Core_WebSDK_RecycleBinWebRequest_purgetask:
-      type: object
-      properties:
-        Start:
-          type: boolean
-          description: Gets or sets whether to start a task
-        Stop:
-          type: boolean
-          description: Gets or sets whether to stop a task
-        PurgeAll:
-          type: boolean
-          description: Gets or sets whether to purge all items when requesting to start a purge task
-    Core_WebSDK_RecycleBinWebRequest_setconfiguration:
-      type: object
-      properties:
-        Purge:
-          type: object
-          properties:
-            AllottedTime:
-              type: integer
-              description: Gets or sets the maximum number of minutes the purge process may take
-              format: int32
-            After:
-              type: integer
-              description: Gets or sets the age, in days, an item has to be in the recycle bin before it will be purged
-              format: int32
-            EngineDN:
-              type: string
-              description: Gets/sets the engine designated to run the purge process **null** for any)
-          description: Gets or sets the purge configuration options
-        Deletion:
-          type: object
-          properties:
-            AllottedTime:
-              type: integer
-              description: Gets or sets the maximum number of minutes the deletion process may take
-              format: int32
-            EngineDN:
-              type: string
-              description: Gets/sets the engine designated to run the deletion process **null** for any)
-            QuerySize:
-              type: integer
-              description: Gets or sets he maximum number of items to return in deletion queries
-              format: int32
-            SqlTimeout:
-              type: integer
-              description: Gets or sets he timeout, in minutes, to use for SQL deletion queries
-              format: int32
-            Tasks:
-              type: array
-              items:
-                type: string
-              description: Gets/sets deletion configuration items
-          description: Gets or sets the purge configuration options
-    Core_WebSDK_RecycleBinWebResponse_getconfiguration:
-      type: object
-      properties:
-        Purge:
-          type: object
-          properties:
-            AllottedTime:
-              type: integer
-              description: Gets or sets the maximum number of minutes the purge process may take
-              format: int32
-            After:
-              type: integer
-              description: Gets or sets the age, in days, an item has to be in the recycle bin before it will be purged
-              format: int32
-            EngineDN:
-              type: string
-              description: Gets/sets the engine designated to run the purge process **null** for any)
-          description: Gets or sets the purge configuration options
-        Deletion:
-          type: object
-          properties:
-            AllottedTime:
-              type: integer
-              description: Gets or sets the maximum number of minutes the deletion process may take
-              format: int32
-            EngineDN:
-              type: string
-              description: Gets/sets the engine designated to run the deletion process **null** for any)
-            QuerySize:
-              type: integer
-              description: Gets or sets he maximum number of items to return in deletion queries
-              format: int32
-            SqlTimeout:
-              type: integer
-              description: Gets or sets he timeout, in minutes, to use for SQL deletion queries
-              format: int32
-            Tasks:
-              type: array
-              items:
-                type: string
-              description: Gets/sets deletion configuration items
-          description: Gets or sets the purge configuration options
         Result:
           $ref: '#/components/schemas/Core_RecycleBinResult'
         Error:
           type: string
           description: The error.
-    Core_RecycleBinResult:
-      title: Enumeration providing result codes for Recycle Bin API operations
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 6
-      - 7
-      - 8
-      - 9
-      - 10
-      - 11
-      - 12
-      - 13
-      - 14
-      - 15
-      - 16
-      - 20000
-      - 30000
-      - 40000
-      type: integer
-      description: "\n\n**0**: **Success**  \nThe request completed succesfully\n\n**1**: **AdminRequired**  \nOnly an administrator can make the request\n\n**2**: **ObjectDoesNotExist**  \nThe provided object name does not exist\n\n**3**: **InvalidGuid**  \nNo recycled item with that GUID exists\n\n**4**: **InvalidRecycleBinItem**  \nThe recycle bin object has invalid information and cannot be restored\n\n**5**: **ItemCannotBeRestored**  \nRestore is currently not possible\n\n**6**: **FailedToGetConfigAccess**  \nCould not obtain a valid _Config_ object\n\n**7**: **FailedToGetSecretStoreAccess**  \nCould not obtain a valid _SecretStore_ object\n\n**8**: **ItemCleanupFailed**  \nFailed to remove the recycle bin item after restoring associated values\n\n**9**: **ActionNotSupported**  \nThe provided action type is not supported\n\n**10**: **ActionFailed**  \nThe action failed to complete successfully\n\n**11**: **RemoteIdentityRequired**  \nA valid identity object was not supplied\n\n**12**: **ActionException**  \nAn exception occurred while running an action\n\n**13**: **RemoteTransportFailure**  \nA request could not be submitted to the remote system due to a transport/network failure\n\n**14**: **ToDoRequestFailed**  \nA request could not be submitted to the ToDo system\n\n**15**: **InvalidParameters**  \nInvalid arguments were passed to a method\n\n**16**: **UnspecifiedError**  \nGeneric failure code\n\n**20000**: **ConfigResultBase**  \nBase Value for _ConfigResult_ codes encoded in _RecycleBinResult_\n\n**30000**: **SecretStoreResultBase**  \nBase Value for _SecretStoreResult_ codes encoded in _RecycleBinResult_\n\n**40000**: **ObjectStoreResultBase**  \nBase Value for _ObjectStoreResult_ codes encoded in _RecycleBinResult_\n"
-      format: int32
+    Core_WebSDK_RecycleBinWebResponse_empty:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Core_RecycleBinResult'
+        Error:
+          type: string
+          description: The error.
     Core_WebSDK_RecycleBinWebResponse_restore:
       type: object
       properties:
@@ -732,6 +735,47 @@ components:
         Error:
           type: string
           description: The error.
+    Core_WebSDK_RecycleBinWebResponse_getitemdetails:
+      type: object
+      properties:
+        Details:
+          type: array
+          items:
+            type: object
+            properties:
+              Type:
+                $ref: '#/components/schemas/Core_RecycledItemDetail_DetailType'
+              VaultType:
+                $ref: '#/components/schemas/Core_VaultType'
+              SchemaClass:
+                type: string
+                description: Detailed information about the type (e.g. Class if config object, vault type if vault entry)
+              DN:
+                type: string
+                description: The DN of the entry if a config object
+            description: Class representing details for an item in the recycle bin
+          description: The list of details for a single recycle bin item
+        Result:
+          $ref: '#/components/schemas/Core_RecycleBinResult'
+        Error:
+          type: string
+          description: The error.
+    Core_WebSDK_RecycleBinWebResponse_purge:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Core_RecycleBinResult'
+        Error:
+          type: string
+          description: The error.
+    Core_RecycledItemDetail_DetailType:
+      title: Type of the item detail
+      enum:
+      - 0
+      - 1
+      type: integer
+      description: "\n\n**0**: **Config**  \nConfig object\n\n**1**: **Vault**  \nVault entry\n"
+      format: int32
     Core_WebSDK_RecycleBinWebRequest:
       type: object
       properties:
@@ -791,20 +835,23 @@ components:
               description: Gets/sets deletion configuration items
           description: Gets or sets the purge configuration options
       description: Class to represent a RecycleBin request for the WebSDK
-    Core_WebSDK_RecycleBinWebRequest_restore:
+    Core_RecycleBinRestoreState:
+      title: Enumeration providing result codes for Recycle Bin API operations
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      type: integer
+      description: "\n\n**0**: **Unknown**  \nRestoration state has not been determined\n\n**1**: **Possible**  \nThe item can be restored\n\n**2**: **SameNameExists**  \nThe item cannot be restored because an item with the same original name blocks restoring\n\n**3**: **ParentDoesNotExist**  \nThe item could be restored but the parent container for it no longer exists\n\n**4**: **OwnerDoesNotExist**  \nThe vault items cannot be restored because the object that owned them no longer exists\n"
+      format: int32
+    Core_WebSDK_RecycleBinWebRequest_purge:
       type: object
       properties:
         Guid:
           type: string
           description: Gets or sets the GUID of a recycle bin item
-    Core_RecycledItemDetail_DetailType:
-      title: Type of the item detail
-      enum:
-      - 0
-      - 1
-      type: integer
-      description: "\n\n**0**: **Config**  \nConfig object\n\n**1**: **Vault**  \nVault entry\n"
-      format: int32
     Core_WebSDK_RecycleBinWebRequest_deletiontask:
       type: object
       properties:
@@ -814,6 +861,37 @@ components:
         Stop:
           type: boolean
           description: Gets or sets whether to stop a task
+    Core_WebSDK_RecycleBinWebRequest_restore:
+      type: object
+      properties:
+        Guid:
+          type: string
+          description: Gets or sets the GUID of a recycle bin item
+    Core_WebSDK_RecycleBinWebRequest_getitemdetails:
+      type: object
+      properties:
+        Guid:
+          type: string
+          description: Gets or sets the GUID of a recycle bin item
+    Core_WebSDK_RecycleBinWebResponse_purgetask:
+      type: object
+      properties:
+        Result:
+          $ref: '#/components/schemas/Core_RecycleBinResult'
+        Error:
+          type: string
+          description: The error.
+    Core_IdentityEntry_EntryState:
+      title: Enumeration indicating the state of an IdentityEntry
+      enum:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      type: integer
+      description: "\n\n**0**: **Normal**  \nNo special state associated with the entry\n\n**1**: **Disabled**  \nThe identity has been disabled\n\n**2**: **LockedOut**  \nThe identity has been locked out\n\n**4**: **Deleted**  \nThe identity has been deleted\n\n**8**: **Unverifiable**  \nThe identity could not be verified with a provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
     Core_VaultType:
       title: Enumerations of data types stored in the vault, if the Data should be secret the Secret bit should be set
       enum:
@@ -856,126 +934,48 @@ components:
       type: integer
       description: "\n\n**0**: **None**  \n\n\n**1**: **PrivateKey**  \nIndicates the stored data is a Private Key\n\n**2**: **Certificate**  \nIndicates the stored data is a Certificate\n\n**4**: **PKCS12**  \nIndicates the stored data is a PKCS12 blob\n\n**8**: **SymmetricKey**  \nIndicates the stored data is a Symmetric Key\n\n**16**: **State**  \nIndicates the stored data is an Assembly State Blob\n\n**32**: **Password**  \nIndicates the stored data is a Password\n\n**64**: **Csr**  \nIndicates the stored data is a Certificate Signing Request\n\n**128**: **Blob**  \nIndicates the stored data is a Generic Blob\n\n**256**: **PKCS8**  \nIndicates the stored data is a DER formated PKCS8 (Private Key)\n\n**512**: **PKCS10**  \nIndicates the stored data is a DER formatted PKCS10 (CSR)\n\n**1024**: **File**  \nIndicates the stored data is a regular file\n\n**2048**: **RSAPublicKey**  \nIndicates the stored data is an RSA public key\n\n**4096**: **PublicKey**  \nIndicates the stored data is a public key\n\n**8192**: **AccessGrant**  \nIndicates the stored data is an access grant\n\n**16384**: **SshCertificate**  \nIndicates the stored data is raw OpenSsh certificate material\n\n**1073758208**: **ArchivedSshCertificate**  \nIndicates the stored data is deleted raw OpenSsh certificate material\n\n**1073741824**: **Archived**  \nOverlay to indicate archived entries\n\n**1073741826**: **ArchivedCertificate**  \nIndicates the stored data is a Certificate\n\n**1073741828**: **ArchivedPKCS12**  \nIndicates the stored data is a PKCS12 blob\n\n**1073741832**: **ArchivedSymmetricKey**  \nIndicates the stored data is a Symmetric Key\n\n**1073741840**: **ArchivedState**  \nIndicates the stored data is an Assembly State Blob\n\n**1073741856**: **ArchivedPassword**  \nIndicates the stored data is a Password\n\n**1073741952**: **ArchivedBlob**  \nIndicates the stored data is a Generic Blob\n\n**1073742080**: **ArchivedPKCS8**  \nIndicates the stored data is a DER formated PKCS8 (Private Key)\n\n**1073742336**: **ArchivedPKCS10**  \nIndicates the stored data is a DER formatted PKCS10 (CSR)\n\n**1073742848**: **ArchivedFile**  \nIndicates the stored data is a regular file\n\n**1073743872**: **ArchivedRSAPublicKey**  \nIndicates the archived data is an RSA public key\n\n**1073745920**: **ArchivedPublicKey**  \nIndicates the stored data is a public key\n\n**-2147483648**: **Refigram**  \nOverlay to indicate Refigram entries.\n\n**-2147483392**: **RefigramPKCS8**  \nIndicates the stored data is a refigram for a private key stored on an HSM\n\n**-1073741568**: **ArchivedRefigramPKCS8**  \nIndicates the stored data is a refigram for a private key stored on an HSM\n\n**-2147479552**: **RefigramPublicKey**  \nIndicates the stored data is a refigram for a public key stored on an HSM\n\n**-1073737728**: **ArchivedRefigramPublicKey**  \nIndicates the stored data is a refigram for a public key stored on an HSM\n\n**-2147483640**: **RefigramSymmetricKey**  \nIndicates the stored data is a refigram for a symmetric key stored on an HSM\n\n**-1073741816**: **ArchivedRefigramSymmetricKey**  \nIndicates the stored data is a refigram for a symmetric key stored on an HSM\n"
       format: int32
-    Core_WebSDK_RecycleBinWebRequest_getitem:
+    Core_WebSDK_RecycleBinWebResponse_getconfiguration:
       type: object
       properties:
-        Guid:
-          type: string
-          description: Gets or sets the GUID of a recycle bin item
-    Web_SDK_Authentication_OAuthError:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Gets or sets the short error name
-        error_description:
-          type: string
-          description: Gets or sets the description of the error
-      description: REST OAuth Error Response
-    Core_RecycleBinRestoreState:
-      title: Enumeration providing result codes for Recycle Bin API operations
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      type: integer
-      description: "\n\n**0**: **Unknown**  \nRestoration state has not been determined\n\n**1**: **Possible**  \nThe item can be restored\n\n**2**: **SameNameExists**  \nThe item cannot be restored because an item with the same original name blocks restoring\n\n**3**: **ParentDoesNotExist**  \nThe item could be restored but the parent container for it no longer exists\n\n**4**: **OwnerDoesNotExist**  \nThe vault items cannot be restored because the object that owned them no longer exists\n"
-      format: int32
-    Core_IdentityEntry_EntryState:
-      title: Enumeration indicating the state of an IdentityEntry
-      enum:
-      - 0
-      - 1
-      - 2
-      - 4
-      - 8
-      type: integer
-      description: "\n\n**0**: **Normal**  \nNo special state associated with the entry\n\n**1**: **Disabled**  \nThe identity has been disabled\n\n**2**: **LockedOut**  \nThe identity has been locked out\n\n**4**: **Deleted**  \nThe identity has been deleted\n\n**8**: **Unverifiable**  \nThe identity could not be verified with a provider\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
-      format: int32
-    Core_WebSDK_RecycleBinWebResponse_getitem:
-      type: object
-      properties:
-        Item:
+        Purge:
           type: object
           properties:
-            Guid:
-              type: string
-              description: The GUID of the recycled item
-            Type:
-              type: string
-              description: Type indicating what the deleted item is
-            TypeDetail:
-              type: string
-              description: Detailed information about the type (e.g. Class if config object, vault type if vault entry)
-            ChildCount:
+            AllottedTime:
               type: integer
-              description: The number of children under this recycle bin item
+              description: Gets or sets the maximum number of minutes the purge process may take
               format: int32
-            DN:
+            After:
+              type: integer
+              description: Gets or sets the age, in days, an item has to be in the recycle bin before it will be purged
+              format: int32
+            EngineDN:
               type: string
-              description: The original DN of the item before it was deleted
-            Name:
+              description: Gets/sets the engine designated to run the purge process **null** for any)
+          description: Gets or sets the purge configuration options
+        Deletion:
+          type: object
+          properties:
+            AllottedTime:
+              type: integer
+              description: Gets or sets the maximum number of minutes the deletion process may take
+              format: int32
+            EngineDN:
               type: string
-              description: The original name (CN) of the item before it was deleted
-            DeleteOn:
-              type: string
-              description: The Date/Time the item was deleted and moved into the recycle bin
-            PurgeOn:
-              type: string
-              description: The UTC Date/Time the item is scheduled to be purged from the recycle bin, in string format
-            DeletedBy:
-              type: object
-              properties:
-                Prefix:
-                  type: string
-                  description: Gets the prefix of the identity provider owning the entry
-                PrefixedName:
-                  type: string
-                  description: The name of the prefixed.
-                PrefixedUniversal:
-                  type: string
-                  description: Gets the prefixed universal.
-                Name:
-                  type: string
-                  description: Gets the name of the entry
-                FullName:
-                  type: string
-                  description: Gets the full name of the entry
-                Universal:
-                  type: string
-                  description: Gets the universal (machine-readable) name of the entry
-                IsGroup:
-                  type: boolean
-                  description: True if the entry represents a group
-                Type:
-                  $ref: '#/components/schemas/Core_IdentityType'
-                State:
-                  $ref: '#/components/schemas/Core_IdentityEntry_EntryState'
-              description: The prefixed universal identity that deleted the original item
-            RestoreState:
-              $ref: '#/components/schemas/Core_RecycleBinRestoreState'
-            RestorationDN:
-              type: string
-              description: The DN of the item when it gets restored (considers that the parent might have been renamed)
-          description: The recycle bin item
-        Result:
-          $ref: '#/components/schemas/Core_RecycleBinResult'
-        Error:
-          type: string
-          description: The error.
-    Core_WebSDK_RecycleBinWebResponse_purge:
-      type: object
-      properties:
-        Result:
-          $ref: '#/components/schemas/Core_RecycleBinResult'
-        Error:
-          type: string
-          description: The error.
-    Core_WebSDK_RecycleBinWebResponse_deletiontask:
-      type: object
-      properties:
+              description: Gets/sets the engine designated to run the deletion process **null** for any)
+            QuerySize:
+              type: integer
+              description: Gets or sets he maximum number of items to return in deletion queries
+              format: int32
+            SqlTimeout:
+              type: integer
+              description: Gets or sets he timeout, in minutes, to use for SQL deletion queries
+              format: int32
+            Tasks:
+              type: array
+              items:
+                type: string
+              description: Gets/sets deletion configuration items
+          description: Gets or sets the purge configuration options
         Result:
           $ref: '#/components/schemas/Core_RecycleBinResult'
         Error:

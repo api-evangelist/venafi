@@ -464,6 +464,154 @@ paths:
       - AccessToken: []
 components:
   schemas:
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
+    Core_WebSDK_Obsolete_EngineUpgradeResponse_Upgrade_Engines:
+      type: object
+      properties:
+        Engines:
+          type: array
+          items:
+            type: object
+            properties:
+              Engine:
+                type: object
+                properties:
+                  DN:
+                    type: string
+                    description: The engine DN
+                  Guid:
+                    type: string
+                    description: The engine Guid
+                  DisplayName:
+                    type: string
+                    description: The engine Display Name
+                  Id:
+                    type: integer
+                    description: The engine Id
+                    format: int64
+                  Name:
+                    type: string
+                    description: The engine Name
+                description: Engine Details
+              Status:
+                type: string
+                description: Engine upgrade status
+              StatusDetails:
+                type: string
+                description: Engine upgrade status details
+              UpgradeStartTime:
+                type: string
+                description: Engine upgrade start time
+              UpgradeStopTime:
+                type: string
+                description: Engine upgrade stop time
+              TaskRunning:
+                type: object
+                properties:
+                  Name:
+                    type: string
+                    description: The task name
+                  DisplayName:
+                    type: string
+                    description: The task display name
+                  StartTime:
+                    type: string
+                    description: The task start time
+                description: The task the engine is currently working on
+              TasksPending:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Name:
+                      type: string
+                      description: The task name
+                    DisplayName:
+                      type: string
+                      description: The task display name
+                  description: A pending task
+                description: Upgrade tasks pending for this engine, index 0 will be the next task to be run
+              TasksCompleted:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Name:
+                      type: string
+                      description: The task name
+                    DisplayName:
+                      type: string
+                      description: The task display name
+                    StartTime:
+                      type: string
+                      description: The task start time
+                    StopTime:
+                      type: string
+                      description: The task completion time
+                    WarningCount:
+                      type: integer
+                      description: The count of warning that occurred during execution of the task
+                      format: int64
+                  description: A completed task
+                description: Upgrade tasks this engine has completed, index 0 was the first completed task
+            description: Provides detailed information about the upgrade status of an individual engine
+          description: The list of engine upgrade statuses
+        Error:
+          type: string
+          description: Error if it exists
+    Core_WebSDK_Obsolete_GroupingIdsResposne:
+      type: object
+      properties:
+        UpgradeHistory:
+          type: array
+          items:
+            type: object
+            properties:
+              Id:
+                type: string
+                description: Upgrade Group
+              StartTime:
+                type: string
+                description: Start time of the upgrade group
+              Versions:
+                type: array
+                items:
+                  type: string
+                description: Upgrade Versions
+            description: ''
+          description: Upgrade Groups
+        Error:
+          type: string
+          description: Error if it exists
+      description: Grouping Ids Response
+    Core_WebSDK_Obsolete_VersionResponse:
+      type: object
+      properties:
+        Version:
+          type: string
+          description: Current engine version.
+      description: Class for platform version response.
+    Core_WebSDK_Obsolete_UpgradeStatusResponse:
+      type: object
+      properties:
+        UpgradeInProgress:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates if upgrade is in progress
+        Error:
+          type: string
+          description: Error description
+      description: Upgrade status response
     Core_WebSDK_Obsolete_UpgradeSummaryResponse:
       type: object
       properties:
@@ -626,156 +774,8 @@ components:
         Error:
           type: string
           description: Error if it exists
-    Web_SDK_Authentication_OAuthError:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Gets or sets the short error name
-        error_description:
-          type: string
-          description: Gets or sets the description of the error
-      description: REST OAuth Error Response
-    Core_WebSDK_Obsolete_EngineUpgradeResponse_Upgrade_Engines:
-      type: object
-      properties:
-        Engines:
-          type: array
-          items:
-            type: object
-            properties:
-              Engine:
-                type: object
-                properties:
-                  DN:
-                    type: string
-                    description: The engine DN
-                  Guid:
-                    type: string
-                    description: The engine Guid
-                  DisplayName:
-                    type: string
-                    description: The engine Display Name
-                  Id:
-                    type: integer
-                    description: The engine Id
-                    format: int64
-                  Name:
-                    type: string
-                    description: The engine Name
-                description: Engine Details
-              Status:
-                type: string
-                description: Engine upgrade status
-              StatusDetails:
-                type: string
-                description: Engine upgrade status details
-              UpgradeStartTime:
-                type: string
-                description: Engine upgrade start time
-              UpgradeStopTime:
-                type: string
-                description: Engine upgrade stop time
-              TaskRunning:
-                type: object
-                properties:
-                  Name:
-                    type: string
-                    description: The task name
-                  DisplayName:
-                    type: string
-                    description: The task display name
-                  StartTime:
-                    type: string
-                    description: The task start time
-                description: The task the engine is currently working on
-              TasksPending:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    Name:
-                      type: string
-                      description: The task name
-                    DisplayName:
-                      type: string
-                      description: The task display name
-                  description: A pending task
-                description: Upgrade tasks pending for this engine, index 0 will be the next task to be run
-              TasksCompleted:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    Name:
-                      type: string
-                      description: The task name
-                    DisplayName:
-                      type: string
-                      description: The task display name
-                    StartTime:
-                      type: string
-                      description: The task start time
-                    StopTime:
-                      type: string
-                      description: The task completion time
-                    WarningCount:
-                      type: integer
-                      description: The count of warning that occurred during execution of the task
-                      format: int64
-                  description: A completed task
-                description: Upgrade tasks this engine has completed, index 0 was the first completed task
-            description: Provides detailed information about the upgrade status of an individual engine
-          description: The list of engine upgrade statuses
-        Error:
-          type: string
-          description: Error if it exists
-    Core_WebSDK_Obsolete_GroupingIdsResposne:
-      type: object
-      properties:
-        UpgradeHistory:
-          type: array
-          items:
-            type: object
-            properties:
-              Id:
-                type: string
-                description: Upgrade Group
-              StartTime:
-                type: string
-                description: Start time of the upgrade group
-              Versions:
-                type: array
-                items:
-                  type: string
-                description: Upgrade Versions
-            description: ''
-          description: Upgrade Groups
-        Error:
-          type: string
-          description: Error if it exists
-      description: Grouping Ids Response
-    Core_WebSDK_Obsolete_VersionResponse:
-      type: object
-      properties:
-        Version:
-          type: string
-          description: Current engine version.
-      description: Class for platform version response.
     IO_Stream:
       type: object
-    Core_WebSDK_Obsolete_UpgradeStatusResponse:
-      type: object
-      properties:
-        UpgradeInProgress:
-          type:
-          - boolean
-          - 'null'
-          description: Indicates if upgrade is in progress
-        Error:
-          type: string
-          description: Error description
-      description: Upgrade status response
   securitySchemes:
     AccessToken:
       type: http
