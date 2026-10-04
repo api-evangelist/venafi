@@ -1,0 +1,291 @@
+slug: venafi
+provider: Venafi
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 26
+edges:
+- tag: Access Management APIs
+  spec_file: venafi-access-management-apis-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.88
+  evidence: POST /vedsdk/oauth/grantrole  Assign a role; POST /vedsdk/oauth/revokerole  Remove a role;
+    POST /vedsdk/oauth/createapplication  Create an application
+  reason: Role grant/revoke, OAuth application (client) registration and JWT mapping administration are
+    identity and access management operations for the platform, matching BC-620.20 (IAM, federation, access
+    rights).
+- tag: Identity APIs
+  spec_file: venafi-identity-apis-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.88
+  evidence: '"Get Group Members", "Get Groups", "Change Password", "Add Group", "Add Group Members", "Verify
+    Identity Entry"'
+  reason: Operations administer identity entries, groups, memberships and passwords — textbook identity
+    and access management within the platform.
+- tag: Certificate Management APIs
+  spec_file: venafi-certificate-management-apis-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.85
+  evidence: '''Enroll or provision a certificate'', ''Renew a certificate'', ''Validate a deployed certificate'',
+    WebSDK_CertificateRequest_RevokeRequest'
+  reason: Full certificate lifecycle — enrolment, renewal, revocation, policy check — which is machine
+    identity and credential management under cybersecurity.
+- tag: Permission APIs
+  spec_file: venafi-permission-apis-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.85
+  evidence: Venafi_Core_WebSDK_PermissionsRest_GrantPermissions  Grant permissions; ...GetEffectivePermissions  Get
+    effective permissions; ...RevokePermissions  Revoke permissions
+  reason: Granting, revoking and resolving effective permissions for principals/trustees on objects is
+    squarely access management within the security platform.
+- tag: Users
+  spec_file: venafi-users-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.85
+  evidence: '"Update user roles", "Enable/disable local login for user", "Update if a user must change
+    their password at next login"'
+  reason: Operations administer user accounts, roles, login enablement and password expiry — core identity
+    and access administration, not HR employee records.
+- tag: Certificate Request
+  spec_file: venafi-certificate-request-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.8
+  evidence: '''Create a certificate request'', ''Resubmit a certificate request'', ''Validate a certificate
+    request'' (CertificationRequestInformation, CSRAttributesInformation)'
+  reason: Certificate enrolment request workflow — issuance of machine-identity credentials, i.e. identity
+    and access/credential management.
+- tag: Certificates
+  spec_file: venafi-certificates-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.8
+  evidence: '''Retire certificates'', ''Recover a set of certificates'', ''Download a certificate'', ''Request
+    validation for a set of certificates'''
+  reason: Core certificate (machine identity) lifecycle operations including retirement and recovery —
+    credential lifecycle management under cybersecurity.
+- tag: SSH Management APIs
+  spec_file: venafi-ssh-management-apis-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.8
+  evidence: GET /vedsdk/ssh/rules  Search key authorization rules; POST /vedsdk/ssh/Rotate  Starts Synchronous
+    Rotation of a specific keyset; AddAuthorizedKeyWebRequest
+  reason: Authorized-key rules, key usage tracking, key removal and keyset rotation are the lifecycle
+    of SSH access credentials — identity and access management (including privileged access) within cybersecurity.
+- tag: Machine Identities
+  spec_file: venafi-machine-identities-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.78
+  evidence: '"Add a machine identity to a machine"; "Remove a machine identity"; schema ProvisionCertificateWorkflowInputInformation'
+  reason: Full lifecycle management of machine identities (creation, update, removal, certificate provisioning)
+    is identity and access management applied to non-human identities; no other candidate fits.
+- tag: Certificate Import
+  spec_file: venafi-certificate-import-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.75
+  evidence: POST /outagedetection/v1/certificates certificateimports_create 'Import a set of raw certificates';
+    schemas ImportedCertificateInformation, CertificateImportRequest2
+  reason: Bringing TLS certificates (machine identities) under management is credential/identity lifecycle
+    work within cybersecurity; no other candidate covers certificate inventory. Sub-capability choice
+    (IAM) is the closest fit for machine-identity credentials, hence moderate confidence.
+- tag: Certificate Policy
+  spec_file: venafi-certificate-policy-api-openapi.yml
+  capability_id: BC-620
+  capability_id_l1: BC-620
+  capability_name: Cybersecurity Management
+  confidence: 0.75
+  evidence: '''Add an issuing template'', ''Overwrite an issuing template''s details'', CertificateIssuingTemplateInformation2,
+    ''Synchronize issuing templates domains with CA'''
+  reason: Defines the rules governing certificate issuance (key types, CA products, allowed domains) —
+    a cybersecurity control definition. Ambiguous between security governance/policy and IAM credential
+    issuance, so only the L1 is asserted.
+- tag: Credential Management
+  spec_file: venafi-credential-management-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.75
+  evidence: '"Test the connection to an external Privilege Access Management by ID"; "Add a set of new
+    shared credentials"; schemas CyberArkConfiguration, HashiCorpConfiguration'
+  reason: Surface configures credential-manager services against external PAM vaults (CyberArk, HashiCorp)
+    and manages shared credentials — privileged credential administration, squarely IAM/PAM.
+- tag: Service Accounts
+  spec_file: venafi-service-accounts-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.75
+  evidence: POST /v1/serviceaccounts  Creates a Service Account; GET /v1/serviceaccounts/scopes  Retrieves
+    all the Service Accounts Scopes; PUT /v1/serviceaccounts/{id}/credentials  Updates a Service Account
+    credentials
+  reason: Lifecycle of non-human service account identities, their scopes and credentials is identity
+    and access management; the operations manage machine/application identities rather than developer
+    portal onboarding.
+- tag: Workload Identity Manager Policies
+  spec_file: venafi-workload-identity-manager-policies-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.75
+  evidence: POST /v1/distributedissuers/policies — "Create a new Workload Issuance policy"; schemas JWTStandardClaimsAuthentication,
+    ClientAuthentication, KeyAlgorithmInformation
+  reason: Operations govern policies controlling issuance of workload (machine) identities and their authentication/key
+    requirements — machine identity and access management rather than any product or commercial capability.
+    Mapped to Identity & Access Management; some ambiguity versus security architecture, hence moderate
+    confidence.
+- tag: AlgorithmSelector APIs
+  spec_file: venafi-algorithmselector-apis-api-openapi.yml
+  capability_id: BC-620
+  capability_id_l1: BC-620
+  capability_name: Cybersecurity Management
+  confidence: 0.72
+  evidence: POST /vedsdk/algorithmselector/getpolicy  Get the allowed algorithms for a container; POST
+    /vedsdk/algorithmselector/setglobalalgorithms  Set the globally allowed algorithms
+  reason: Defining and enforcing which cryptographic algorithms and security strengths are permitted is
+    cryptographic standards/policy administration under Cybersecurity Management; evidence does not clearly
+    distinguish security governance from security architecture, so no L2 asserted.
+- tag: Certificate Auto-renewal Monitoring
+  spec_file: venafi-certificate-auto-renewal-monitoring-api-openapi.yml
+  capability_id: BC-620
+  capability_id_l1: BC-620
+  capability_name: Cybersecurity Management
+  confidence: 0.72
+  evidence: POST /v1/autorenewal/trigger  Attempt to initiate the certificate renewal check process now;
+    GET /v1/autorenewal/status  Get the current certificate auto-renewal monitoring status
+  reason: '''Renewal'' here is TLS certificate renewal monitoring, not subscription renewal — it belongs
+    to certificate/machine-identity lifecycle operations under Cybersecurity Management. Explicitly avoiding
+    the Subscription Lifecycle homograph.'
+- tag: Credential APIs
+  spec_file: venafi-credential-apis-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.72
+  evidence: '"Create CyberArk credential", "Create a new credential", "Enumerate all credentials"'
+  reason: Operations manage stored credentials, including integration with CyberArk privileged access
+    management, for the machine identity platform. That is identity/credential and privileged-access administration
+    (BC-620.20 covers IAM/PAM), not a product-engineering or subscription capability. Some residual ambiguity
+    with secrets management framing, hence not higher.
+- tag: Certificate Approvals
+  spec_file: venafi-certificate-approvals-api-openapi.yml
+  capability_id: BC-620
+  capability_id_l1: BC-620
+  capability_name: Cybersecurity Management
+  confidence: 0.7
+  evidence: POST /v1/certificaterequests/{id}/approval/{decision}  Approve or reject pending certificate
+    request; PUT /v1/certificaterequests/approvalrules/{id}  Update certificate request workflow approval
+    rule
+  reason: Approval decisions and approval rules governing certificate issuance requests are control/governance
+    steps in machine-identity (certificate) management, i.e. Cybersecurity Management; the specific sub-capability
+    (IAM vs security governance) is not pinned down by the evidence.
+- tag: Certificate Installations
+  spec_file: venafi-certificate-installations-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.7
+  evidence: '''Get a certificate installation''s details'' and ''Request validation for a set of certificate
+    installations'' (CertificateInstanceInformation, CertificateOwnership)'
+  reason: Tracks where certificates are installed and validates them — machine-identity credential inventory
+    and validation, a cybersecurity/IAM function rather than general IT monitoring.
+- tag: Certificate Revocation Approvals
+  spec_file: venafi-certificate-revocation-approvals-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.7
+  evidence: '''Create an approval rule for certificate revocation'', ''Update certificate revocation workflow
+    approval rule'' (CertificateRevocationApprovalRuleOpenApi, ApproverProperty)'
+  reason: Governs approval of credential revocation — part of the machine-identity credential lifecycle
+    (revocation) within cybersecurity, not a generic workflow engine.
+- tag: CodeSigning APIs
+  spec_file: venafi-codesigning-apis-api-openapi.yml
+  capability_id: BC-620
+  capability_id_l1: BC-620
+  capability_name: Cybersecurity Management
+  confidence: 0.7
+  evidence: '''Create Environment'', ''Get Projects'', ''Update Project Status'', CodeSigning_SignResult,
+    WebSDK_Product_CodeSigning_CodeSigningRequest_AddApplicationAdministrator'
+  reason: Manages code-signing environments, projects, templates and signing authority — governance of
+    cryptographic signing credentials, a cybersecurity control. Could also be read as software supply-chain
+    engineering, so only the L1 is asserted.
+- tag: Private Key Import
+  spec_file: venafi-private-key-import-api-openapi.yml
+  capability_id: BC-620
+  capability_id_l1: BC-620
+  capability_name: Cybersecurity Management
+  confidence: 0.7
+  evidence: POST /v1/certificates/imports  certificates_import  Import a list of certificates and their
+    associated private key pairs
+  reason: Importing certificates and their private key pairs into the machine-identity control plane is
+    cryptographic key/certificate custody — a cybersecurity capability. No sub-capability is clearly named
+    by the operations.
+- tag: SSH Certificate APIs
+  spec_file: venafi-ssh-certificate-apis-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.7
+  evidence: POST /vedsdk/sshcertificates/request  Requests a new SSH certificate; POST /vedsdk/sshcertificates/CaKeyPair/create  Create
+    new CA Keypair
+  reason: Issuing SSH certificates against CA templates and managing CA keypairs governs credentialed
+    access to hosts — identity and access management within cybersecurity.
+- tag: SecretStore APIs
+  spec_file: venafi-secretstore-apis-api-openapi.yml
+  capability_id: BC-620
+  capability_id_l1: BC-620
+  capability_name: Cybersecurity Management
+  confidence: 0.7
+  evidence: POST /vedsdk/secretstore/add  Add a secret; GET /vedsdk/secretstore/encryptionkeysinuse  Get
+    encryption keys in use; POST /vedsdk/X509CertificateStore/add  Add an X509 certificate
+  reason: A vault for secrets, X509 certificates and encryption keys is cryptographic key/secret custody
+    — a cybersecurity capability. Sub-capability is ambiguous between access management and security architecture,
+    so L1 only.
+- tag: Workload Identity Manager Configurations
+  spec_file: venafi-workload-identity-manager-configurations-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.7
+  evidence: '"Create a new Issuer configuration" under /v1/distributedissuers/configurations, schemas
+    SubCAProviderGetResponse, JWTOIDCAuthentication, ClientAuthorization'
+  reason: Configures distributed certificate issuers that authenticate workload clients (JWT/OIDC) and
+    issue identities via sub-CAs — workload identity and access management within a security platform.
+    Sub-capability choice carries some ambiguity versus security architecture.
+- tag: Workload Identity Manager Sub CA Providers
+  spec_file: venafi-workload-identity-manager-sub-ca-providers-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.7
+  evidence: POST /v1/distributedissuers/subcaproviders — "Create a new Sub CA provider"; schemas CAType,
+    SubCAProviderPKCS11Configuration
+  reason: Configures subordinate certificate authority providers used to issue machine/workload identities
+    — PKI credential issuance infrastructure, which sits under Identity & Access Management. Could arguably
+    be security architecture, so confidence is held at 0.7.
