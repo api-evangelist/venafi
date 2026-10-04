@@ -749,24 +749,95 @@ paths:
         - Guest
 components:
   schemas:
-    ErrorResponse7:
+    TagResponse:
       properties:
-        errors:
-          items:
-            $ref: '#/components/schemas/ErrorInformation5'
-          type: array
-      type: object
-    ErrorInformation5:
-      properties:
-        args:
-          items:
-            $ref: '#/components/schemas/AnyValue5'
-          type: array
-        code:
+        count:
+          description: Number of tags returned
+          example: 7
           format: int32
           type: integer
-        message:
+        tags:
+          items:
+            $ref: '#/components/schemas/TagInformation'
+          type: array
+      type: object
+    TagsAndValuesResponse:
+      properties:
+        tagsAndValues:
+          items:
+            $ref: '#/components/schemas/TagsAndValuesInformation'
+          type: array
+      type: object
+    TagValuesRequest:
+      properties:
+        values:
+          description: Array of value names to associate with the tag
+          example: 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
+          items:
+            description: Array of value names to associate with the tag
+            example: 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
+            type: string
+          minItems: 1
+          type: array
+      required:
+      - values
+      type: object
+    TagsAssignmentAggregatesResponseInformation:
+      description: Represents a mapping of tag name to list of aggregates information
+      example:
+        TagNew:
+        - count: 2
+          entityType: CERTIFICATE
+        - count: 5
+          entityType: APPLICATION
+        tag:value:
+        - count: 6
+          entityType: CERTIFICATE
+        - count: 1
+          entityType: APPLICATION
+      properties:
+        count:
+          description: Number of entities per type
+          example: 2
+          format: int32
+          type: integer
+        entityType:
+          description: Object type that the tag applies to
+          example: CERTIFICATE
           type: string
+      type: object
+    TagValuesResponse:
+      properties:
+        count:
+          description: Number of values returned
+          example: 7
+          format: int32
+          type: integer
+        values:
+          items:
+            $ref: '#/components/schemas/TagValueInformation'
+          type: array
+      type: object
+    TagRequest:
+      description: Array of tag and tag-value objects
+      properties:
+        name:
+          description: Name of the tag
+          example: Application
+          minLength: 1
+          type: string
+        values:
+          description: Array of values associated with the tag
+          example:
+          - TLS Protect
+          - Jetstack
+          items:
+            description: Array of values associated with the tag
+            example: '["TLS Protect","Jetstack"]'
+            type: string
+          type: array
+      required:
+      - name
       type: object
     TagsAssignRequest:
       properties:
@@ -811,130 +882,6 @@ components:
       required:
       - entityIds
       type: object
-    TagsAssignmentAggregatesResponse:
-      properties:
-        aggregates:
-          additionalProperties:
-            description: Represents a mapping of tag name to list of aggregates information
-            example:
-              TagNew:
-              - count: 2
-                entityType: CERTIFICATE
-              - count: 5
-                entityType: APPLICATION
-              tag:value:
-              - count: 6
-                entityType: CERTIFICATE
-              - count: 1
-                entityType: APPLICATION
-            items:
-              $ref: '#/components/schemas/TagsAssignmentAggregatesResponseInformation'
-            type: array
-          description: Represents a mapping of tag name to list of aggregates information
-          example:
-            TagNew:
-            - count: 2
-              entityType: CERTIFICATE
-            - count: 5
-              entityType: APPLICATION
-            tag:value:
-            - count: 6
-              entityType: CERTIFICATE
-            - count: 1
-              entityType: APPLICATION
-          type: object
-      type: object
-    TagsBulkRequest:
-      properties:
-        tags:
-          description: Array of tag and tag-value objects
-          items:
-            $ref: '#/components/schemas/TagRequest'
-          type: array
-      type: object
-    TagsAssignResponse:
-      properties:
-        tagsAssignInformation:
-          items:
-            $ref: '#/components/schemas/TagsAssignResponseInformation'
-          type: array
-      type: object
-    TagRequest:
-      description: Array of tag and tag-value objects
-      properties:
-        name:
-          description: Name of the tag
-          example: Application
-          minLength: 1
-          type: string
-        values:
-          description: Array of values associated with the tag
-          example:
-          - TLS Protect
-          - Jetstack
-          items:
-            description: Array of values associated with the tag
-            example: '["TLS Protect","Jetstack"]'
-            type: string
-          type: array
-      required:
-      - name
-      type: object
-    TagsAndValuesResponse:
-      properties:
-        tagsAndValues:
-          items:
-            $ref: '#/components/schemas/TagsAndValuesInformation'
-          type: array
-      type: object
-    AnyValue5:
-      description: Can be any value - string, number, boolean, array or object.
-    TagsAssignmentAggregatesResponseInformation:
-      description: Represents a mapping of tag name to list of aggregates information
-      example:
-        TagNew:
-        - count: 2
-          entityType: CERTIFICATE
-        - count: 5
-          entityType: APPLICATION
-        tag:value:
-        - count: 6
-          entityType: CERTIFICATE
-        - count: 1
-          entityType: APPLICATION
-      properties:
-        count:
-          description: Number of entities per type
-          example: 2
-          format: int32
-          type: integer
-        entityType:
-          description: Object type that the tag applies to
-          example: CERTIFICATE
-          type: string
-      type: object
-    TagValueInformation:
-      properties:
-        companyId:
-          description: UUID specific to your company
-          example: 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
-          format: uuid
-          type: string
-        id:
-          description: The ID of the value
-          example: 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
-          format: uuid
-          type: string
-        tagId:
-          description: The ID of the tag the value applies to
-          example: 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
-          format: uuid
-          type: string
-        value:
-          description: Name of the value
-          example: TLS Protect
-          type: string
-      type: object
     TagAssignmentErrorInformation:
       description: Error information for tags not assigned
       example:
@@ -951,66 +898,6 @@ components:
         statusCode:
           format: int32
           type: integer
-      type: object
-    TagsAssignmentAggregatesRequest:
-      properties:
-        entityType:
-          description: Object type that the tag applies to. If null, get all object types
-          enum:
-          - CERTIFICATE
-          - CERTIFICATE_INSTANCE
-          - APPLICATION
-          example: CERTIFICATE
-          type: string
-        tags:
-          description: Array of tags
-          example:
-          - TAG
-          - Tag:Value
-          items:
-            description: Array of tags
-            example: '["TAG","Tag:Value"]'
-            type: string
-          maxItems: 100
-          type: array
-          uniqueItems: true
-      required:
-      - tags
-      type: object
-    TagValuesRequest:
-      properties:
-        values:
-          description: Array of value names to associate with the tag
-          example: 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
-          items:
-            description: Array of value names to associate with the tag
-            example: 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
-            type: string
-          minItems: 1
-          type: array
-      required:
-      - values
-      type: object
-    TagValuesResponse:
-      properties:
-        count:
-          description: Number of values returned
-          example: 7
-          format: int32
-          type: integer
-        values:
-          items:
-            $ref: '#/components/schemas/TagValueInformation'
-          type: array
-      type: object
-    TagsAndValuesInformation:
-      properties:
-        tag:
-          $ref: '#/components/schemas/TagInformation'
-        values:
-          items:
-            $ref: '#/components/schemas/TagValueInformation'
-          type: array
       type: object
     TagsAssignResponseInformation:
       properties:
@@ -1055,17 +942,68 @@ components:
           type: array
           uniqueItems: true
       type: object
-    TagResponse:
+    TagsAssignmentAggregatesResponse:
       properties:
-        count:
-          description: Number of tags returned
-          example: 7
+        aggregates:
+          additionalProperties:
+            description: Represents a mapping of tag name to list of aggregates information
+            example:
+              TagNew:
+              - count: 2
+                entityType: CERTIFICATE
+              - count: 5
+                entityType: APPLICATION
+              tag:value:
+              - count: 6
+                entityType: CERTIFICATE
+              - count: 1
+                entityType: APPLICATION
+            items:
+              $ref: '#/components/schemas/TagsAssignmentAggregatesResponseInformation'
+            type: array
+          description: Represents a mapping of tag name to list of aggregates information
+          example:
+            TagNew:
+            - count: 2
+              entityType: CERTIFICATE
+            - count: 5
+              entityType: APPLICATION
+            tag:value:
+            - count: 6
+              entityType: CERTIFICATE
+            - count: 1
+              entityType: APPLICATION
+          type: object
+      type: object
+    AnyValue5:
+      description: Can be any value - string, number, boolean, array or object.
+    TagsAndValuesInformation:
+      properties:
+        tag:
+          $ref: '#/components/schemas/TagInformation'
+        values:
+          items:
+            $ref: '#/components/schemas/TagValueInformation'
+          type: array
+      type: object
+    ErrorResponse7:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation5'
+          type: array
+      type: object
+    ErrorInformation5:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue5'
+          type: array
+        code:
           format: int32
           type: integer
-        tags:
-          items:
-            $ref: '#/components/schemas/TagInformation'
-          type: array
+        message:
+          type: string
       type: object
     TagInformation:
       properties:
@@ -1091,6 +1029,68 @@ components:
           description: Name of the tag
           example: Application
           type: string
+      type: object
+    TagValueInformation:
+      properties:
+        companyId:
+          description: UUID specific to your company
+          example: 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
+          format: uuid
+          type: string
+        id:
+          description: The ID of the value
+          example: 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
+          format: uuid
+          type: string
+        tagId:
+          description: The ID of the tag the value applies to
+          example: 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
+          format: uuid
+          type: string
+        value:
+          description: Name of the value
+          example: TLS Protect
+          type: string
+      type: object
+    TagsBulkRequest:
+      properties:
+        tags:
+          description: Array of tag and tag-value objects
+          items:
+            $ref: '#/components/schemas/TagRequest'
+          type: array
+      type: object
+    TagsAssignResponse:
+      properties:
+        tagsAssignInformation:
+          items:
+            $ref: '#/components/schemas/TagsAssignResponseInformation'
+          type: array
+      type: object
+    TagsAssignmentAggregatesRequest:
+      properties:
+        entityType:
+          description: Object type that the tag applies to. If null, get all object types
+          enum:
+          - CERTIFICATE
+          - CERTIFICATE_INSTANCE
+          - APPLICATION
+          example: CERTIFICATE
+          type: string
+        tags:
+          description: Array of tags
+          example:
+          - TAG
+          - Tag:Value
+          items:
+            description: Array of tags
+            example: '["TAG","Tag:Value"]'
+            type: string
+          maxItems: 100
+          type: array
+          uniqueItems: true
+      required:
+      - tags
       type: object
   securitySchemes:
     service-account:

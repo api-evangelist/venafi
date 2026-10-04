@@ -311,16 +311,6 @@ paths:
       - AccessToken: []
 components:
   schemas:
-    Web_SDK_Authentication_OAuthError:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Gets or sets the short error name
-        error_description:
-          type: string
-          description: Gets or sets the description of the error
-      description: REST OAuth Error Response
     Core_WebSDK_FolderRestrictionsResponse:
       type: object
       properties:
@@ -352,19 +342,16 @@ components:
             description: Represents details about an engine
           description: List of engines that can be used for processing a folder
       description: Folder Restrictions Response
-    Core_WebSDK_AddOperationResponse:
+    Web_SDK_Authentication_OAuthError:
       type: object
       properties:
-        AddedCount:
-          type: integer
-          description: Count of added restrictions
-          format: int32
-        Errors:
-          type: array
-          items:
-            type: string
-          description: List of errors that occurred while processing the request
-      description: Represents request to add a new part
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
     Core_WebSDK_EngineRestrictionsResponse:
       type: object
       properties:
@@ -396,6 +383,19 @@ components:
             description: Represents details about a folder
           description: List of engine restrictions
       description: Engine Restrictions Response
+    Core_WebSDK_AddOperationResponse:
+      type: object
+      properties:
+        AddedCount:
+          type: integer
+          description: Count of added restrictions
+          format: int32
+        Errors:
+          type: array
+          items:
+            type: string
+          description: List of errors that occurred while processing the request
+      description: Represents request to add a new part
     Core_WebSDK_EngineRestrictionsRequest_engine__engineGuid_:
       required:
       - FolderGuids

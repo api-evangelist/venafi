@@ -347,6 +347,14 @@ paths:
         - ResourceOwner
 components:
   schemas:
+    ProvisionCertificateWorkflowInputInformation:
+      properties:
+        wsClientId:
+          minLength: 1
+          type: string
+      required:
+      - wsClientId
+      type: object
     MachineIdentityWorkflowInformation:
       properties:
         workflowId:
@@ -354,15 +362,16 @@ components:
         workflowName:
           type: string
       type: object
-    MachineIdentityDocumentResponse:
+    AnyValue2:
+      description: Can be any value - string, number, boolean, array or object.
+    MachineIdentitySearchRequest:
       properties:
-        machineIdentities:
-          items:
-            $ref: '#/components/schemas/MachineIdentityDocumentInformation'
-          type: array
-        totalCount:
-          format: int64
-          type: integer
+        expression:
+          $ref: '#/components/schemas/AnyValue2'
+        ordering:
+          $ref: '#/components/schemas/Ordering'
+        paging:
+          $ref: '#/components/schemas/Paging'
       type: object
     Ordering:
       properties:
@@ -371,26 +380,54 @@ components:
             $ref: '#/components/schemas/OrderObject'
           type: array
       type: object
-    AnyValue2:
-      description: Can be any value - string, number, boolean, array or object.
-    OrderObject:
+    MachineIdentityInformation:
       properties:
-        direction:
-          enum:
-          - ASC
-          - DESC
+        binding:
+          $ref: '#/components/schemas/AnyValue2'
+        certificateId:
+          format: uuid
           type: string
-        field:
+        companyId:
+          format: uuid
+          type: string
+        creationDate:
+          format: date-time
+          type: string
+        id:
+          format: uuid
+          type: string
+        keystore:
+          $ref: '#/components/schemas/AnyValue2'
+        lastSeenOn:
+          format: date-time
+          type: string
+        machineId:
+          format: uuid
+          type: string
+        metadata:
+          $ref: '#/components/schemas/AnyValue2'
+        modificationDate:
+          format: date-time
+          type: string
+        status:
+          enum:
+          - NEW
+          - PENDING
+          - INSTALLED
+          - DISCOVERED
+          - VALIDATED
+          - MISSING
+          - FAILED
+          type: string
+        tsgId:
           type: string
       type: object
-    MachineIdentityWorkflowRequest:
+    ErrorResponse2:
       properties:
-        workflowInput:
-          $ref: '#/components/schemas/ProvisionCertificateWorkflowInputInformation'
-        workflowName:
-          type: string
-      required:
-      - workflowName
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation2'
+          type: array
       type: object
     MachineIdentityDocumentInformation:
       properties:
@@ -446,35 +483,36 @@ components:
           - FAILED
           type: string
       type: object
-    MachineIdentityCreationRequest:
+    MachineIdentityWorkflowRequest:
       properties:
-        binding:
-          $ref: '#/components/schemas/AnyValue2'
-        certificateId:
-          format: uuid
-          type: string
-        keystore:
-          $ref: '#/components/schemas/AnyValue2'
-        machineId:
-          format: uuid
+        workflowInput:
+          $ref: '#/components/schemas/ProvisionCertificateWorkflowInputInformation'
+        workflowName:
           type: string
       required:
-      - certificateId
-      - machineId
+      - workflowName
       type: object
-    MachineIdentityResponse:
+    ErrorInformation2:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue2'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+    MachineIdentityDocumentResponse:
       properties:
         machineIdentities:
           items:
-            $ref: '#/components/schemas/MachineIdentityInformation'
+            $ref: '#/components/schemas/MachineIdentityDocumentInformation'
           type: array
-      type: object
-    ErrorResponse2:
-      properties:
-        errors:
-          items:
-            $ref: '#/components/schemas/ErrorInformation2'
-          type: array
+        totalCount:
+          format: int64
+          type: integer
       type: object
     Paging:
       properties:
@@ -495,76 +533,38 @@ components:
         keystore:
           $ref: '#/components/schemas/AnyValue2'
       type: object
-    ErrorInformation2:
-      properties:
-        args:
-          items:
-            $ref: '#/components/schemas/AnyValue2'
-          type: array
-        code:
-          format: int32
-          type: integer
-        message:
-          type: string
-      type: object
-    ProvisionCertificateWorkflowInputInformation:
-      properties:
-        wsClientId:
-          minLength: 1
-          type: string
-      required:
-      - wsClientId
-      type: object
-    MachineIdentitySearchRequest:
-      properties:
-        expression:
-          $ref: '#/components/schemas/AnyValue2'
-        ordering:
-          $ref: '#/components/schemas/Ordering'
-        paging:
-          $ref: '#/components/schemas/Paging'
-      type: object
-    MachineIdentityInformation:
+    MachineIdentityCreationRequest:
       properties:
         binding:
           $ref: '#/components/schemas/AnyValue2'
         certificateId:
           format: uuid
           type: string
-        companyId:
-          format: uuid
-          type: string
-        creationDate:
-          format: date-time
-          type: string
-        id:
-          format: uuid
-          type: string
         keystore:
           $ref: '#/components/schemas/AnyValue2'
-        lastSeenOn:
-          format: date-time
-          type: string
         machineId:
           format: uuid
           type: string
-        metadata:
-          $ref: '#/components/schemas/AnyValue2'
-        modificationDate:
-          format: date-time
-          type: string
-        status:
+      required:
+      - certificateId
+      - machineId
+      type: object
+    OrderObject:
+      properties:
+        direction:
           enum:
-          - NEW
-          - PENDING
-          - INSTALLED
-          - DISCOVERED
-          - VALIDATED
-          - MISSING
-          - FAILED
+          - ASC
+          - DESC
           type: string
-        tsgId:
+        field:
           type: string
+      type: object
+    MachineIdentityResponse:
+      properties:
+        machineIdentities:
+          items:
+            $ref: '#/components/schemas/MachineIdentityInformation'
+          type: array
       type: object
   securitySchemes:
     service-account:

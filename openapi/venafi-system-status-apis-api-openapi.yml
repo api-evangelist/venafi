@@ -568,38 +568,6 @@ components:
         Error:
           type: string
           description: Error if it exists
-    Core_WebSDK_Obsolete_GroupingIdsResposne:
-      type: object
-      properties:
-        UpgradeHistory:
-          type: array
-          items:
-            type: object
-            properties:
-              Id:
-                type: string
-                description: Upgrade Group
-              StartTime:
-                type: string
-                description: Start time of the upgrade group
-              Versions:
-                type: array
-                items:
-                  type: string
-                description: Upgrade Versions
-            description: ''
-          description: Upgrade Groups
-        Error:
-          type: string
-          description: Error if it exists
-      description: Grouping Ids Response
-    Core_WebSDK_Obsolete_VersionResponse:
-      type: object
-      properties:
-        Version:
-          type: string
-          description: Current engine version.
-      description: Class for platform version response.
     Core_WebSDK_Obsolete_UpgradeStatusResponse:
       type: object
       properties:
@@ -612,6 +580,13 @@ components:
           type: string
           description: Error description
       description: Upgrade status response
+    Core_WebSDK_Obsolete_VersionResponse:
+      type: object
+      properties:
+        Version:
+          type: string
+          description: Current engine version.
+      description: Class for platform version response.
     Core_WebSDK_Obsolete_UpgradeSummaryResponse:
       type: object
       properties:
@@ -683,6 +658,33 @@ components:
           type: string
           description: Error description
       description: Status of an upgrade
+    Core_WebSDK_Obsolete_GroupingIdsResposne:
+      type: object
+      properties:
+        UpgradeHistory:
+          type: array
+          items:
+            type: object
+            properties:
+              Id:
+                type: string
+                description: Upgrade Group
+              StartTime:
+                type: string
+                description: Start time of the upgrade group
+              Versions:
+                type: array
+                items:
+                  type: string
+                description: Upgrade Versions
+            description: ''
+          description: Upgrade Groups
+        Error:
+          type: string
+          description: Error if it exists
+      description: Grouping Ids Response
+    IO_Stream:
+      type: object
     Core_WebSDK_Obsolete_EngineUpgradeResponse_Upgrade_Engine:
       type: object
       properties:
@@ -774,8 +776,6 @@ components:
         Error:
           type: string
           description: Error if it exists
-    IO_Stream:
-      type: object
   securitySchemes:
     AccessToken:
       type: http

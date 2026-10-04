@@ -479,7 +479,30 @@ paths:
       - AccessToken: []
 components:
   schemas:
-    Core_WebSDK_AlgorithmSelectorWebResponse_getglobalalgorithms:
+    Core_PkixNISTStrengthCategory:
+      title: The NIST defined strength of an algorithm
+      enum:
+      - 0
+      - 65536
+      - 131072
+      - 196608
+      - 262144
+      - 327680
+      - 65535
+      - 2147418112
+      - 0
+      type: integer
+      description: "\n\n**0**: **Uncategorized**  \nThe algorithm has not yet received a NIST security level categorization\n\n**65536**: **NISTSecurityCategory1**  \nNIST Security Category 1\n\n**131072**: **NISTSecurityCategory2**  \nNIST Security Category 2\n\n**196608**: **NISTSecurityCategory3**  \nNIST Security Category 3\n\n**262144**: **NISTSecurityCategory4**  \nNIST Security Category 4\n\n**327680**: **NISTSecurityCategory5**  \nNIST Security Category 5\n\n**65535**: **NISTSecurityStrength**  \nMask for NIST Security Bit Strength values\n\n**2147418112**: **NISTSecurityCategory**  \nMask for all NIST Security Category values\n\n**2147483648**: **Stronger**  \nInclude algorithms stronger than the specified flag, while searching\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
+      format: int32
+    Core_WebSDK_AlgorithmSelectorWebRequest_get:
+      required:
+      - ObjectDN
+      type: object
+      properties:
+        ObjectDN:
+          type: string
+          description: The distinguished name of the requested object
+    Core_WebSDK_AlgorithmSelectorWebResponse_getallselectors:
       type: object
       properties:
         Selectors:
@@ -506,7 +529,7 @@ components:
         Error:
           type: string
           description: The error associated with the request
-    Core_WebSDK_AlgorithmSelectorWebRequest_get:
+    Core_WebSDK_AlgorithmSelectorWebRequest_getallowedalgorithms:
       required:
       - ObjectDN
       type: object
@@ -514,6 +537,44 @@ components:
         ObjectDN:
           type: string
           description: The distinguished name of the requested object
+        SchemaClass:
+          type: string
+          description: The schema class where algorithm selector policy is applied
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
+    Core_WebSDK_AlgorithmSelectorWebRequest_find:
+      required:
+      - AlgorithmStrength
+      type: object
+      properties:
+        AlgorithmStrength:
+          type:
+          - integer
+          - 'null'
+          description: The strength of algorithms to be returned. Algorithms not matching the strength will be filtered out
+          format: int32
+        IncludeStronger:
+          type: boolean
+          description: 'If **true** algorithms with a strength greater than _AlgorithmStrength_,
+
+            or a category greater than _AlgorithmCategory_, will also be returned'
+    Core_WebSDK_AlgorithmSelectorWebResponse_commit:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: True if the request was successful
+        Error:
+          type: string
+          description: The error associated with the request
     Core_WebSDK_AlgorithmSelectorWebRequest_commitpolicy:
       required:
       - ObjectDN
@@ -532,46 +593,51 @@ components:
           items:
             type: string
           description: A list of Venafi PKIX Parameter Set Oid identifying an algorithm
-    Core_WebSDK_AlgorithmSelectorWebResponse_commitpolicy:
+    Core_WebSDK_AlgorithmSelectorWebResponse_get:
       type: object
       properties:
+        Selector:
+          type: object
+          properties:
+            Algorithm:
+              type: string
+              description: Gets the display name for the selected algorithm
+            PkixParameterSetOid:
+              type: string
+              description: Gets the Venafi Pkix Parameter Set Oid for the selected algorithm
+            Description:
+              type: string
+              description: Gets the description text for the selected algorithm
+            StrengthCategory:
+              $ref: '#/components/schemas/Core_PkixNISTStrengthCategory'
+          description: The Algorithm Selector
         Success:
           type: boolean
           description: True if the request was successful
         Error:
           type: string
           description: The error associated with the request
-    Web_SDK_Authentication_OAuthError:
+    Core_WebSDK_AlgorithmSelectorWebResponse_getglobalalgorithms:
       type: object
       properties:
-        error:
-          type: string
-          description: Gets or sets the short error name
-        error_description:
-          type: string
-          description: Gets or sets the description of the error
-      description: REST OAuth Error Response
-    Core_WebSDK_AlgorithmSelectorWebRequest_setglobalalgorithms:
-      required:
-      - PKIXParameterSets
-      type: object
-      properties:
-        PKIXParameterSets:
+        Selectors:
           type: array
           items:
-            type: string
-          description: A list of Venafi PKIX Parameter Set Oid identifying an algorithm
-    Core_WebSDK_AlgorithmSelectorWebRequest_getselector:
-      required:
-      - PKIXParameterSet
-      type: object
-      properties:
-        PKIXParameterSet:
-          type: string
-          description: The Venafi PKIX Parameter Set Oid identifying an algorithm
-    Core_WebSDK_AlgorithmSelectorWebResponse_commit:
-      type: object
-      properties:
+            type: object
+            properties:
+              Algorithm:
+                type: string
+                description: Gets the display name for the selected algorithm
+              PkixParameterSetOid:
+                type: string
+                description: Gets the Venafi Pkix Parameter Set Oid for the selected algorithm
+              Description:
+                type: string
+                description: Gets the description text for the selected algorithm
+              StrengthCategory:
+                $ref: '#/components/schemas/Core_PkixNISTStrengthCategory'
+            description: ''
+          description: The Algorithm Selectors
         Success:
           type: boolean
           description: True if the request was successful
@@ -617,41 +683,16 @@ components:
         PKIXParameterSet:
           type: string
           description: The Venafi PKIX Parameter Set Oid identifying an algorithm
-    Core_WebSDK_AlgorithmSelectorWebRequest_getallowedalgorithms:
+    Core_WebSDK_AlgorithmSelectorWebRequest_setglobalalgorithms:
       required:
-      - ObjectDN
+      - PKIXParameterSets
       type: object
       properties:
-        ObjectDN:
-          type: string
-          description: The distinguished name of the requested object
-        SchemaClass:
-          type: string
-          description: The schema class where algorithm selector policy is applied
-    Core_WebSDK_AlgorithmSelectorWebResponse_getselector:
-      type: object
-      properties:
-        Selector:
-          type: object
-          properties:
-            Algorithm:
-              type: string
-              description: Gets the display name for the selected algorithm
-            PkixParameterSetOid:
-              type: string
-              description: Gets the Venafi Pkix Parameter Set Oid for the selected algorithm
-            Description:
-              type: string
-              description: Gets the description text for the selected algorithm
-            StrengthCategory:
-              $ref: '#/components/schemas/Core_PkixNISTStrengthCategory'
-          description: The Algorithm Selector
-        Success:
-          type: boolean
-          description: True if the request was successful
-        Error:
-          type: string
-          description: The error associated with the request
+        PKIXParameterSets:
+          type: array
+          items:
+            type: string
+          description: A list of Venafi PKIX Parameter Set Oid identifying an algorithm
     Core_WebSDK_AlgorithmSelectorWebResponse_getallowedalgorithms:
       type: object
       properties:
@@ -679,6 +720,15 @@ components:
         Error:
           type: string
           description: The error associated with the request
+    Core_WebSDK_AlgorithmSelectorWebResponse_commitpolicy:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: True if the request was successful
+        Error:
+          type: string
+          description: The error associated with the request
     Core_WebSDK_AlgorithmSelectorWebRequest_getpolicy:
       required:
       - ObjectDN
@@ -691,31 +741,6 @@ components:
         SchemaClass:
           type: string
           description: The schema class where algorithm selector policy is applied
-    Core_WebSDK_AlgorithmSelectorWebRequest_find:
-      required:
-      - AlgorithmStrength
-      type: object
-      properties:
-        AlgorithmStrength:
-          type:
-          - integer
-          - 'null'
-          description: The strength of algorithms to be returned. Algorithms not matching the strength will be filtered out
-          format: int32
-        IncludeStronger:
-          type: boolean
-          description: 'If **true** algorithms with a strength greater than _AlgorithmStrength_,
-
-            or a category greater than _AlgorithmCategory_, will also be returned'
-    Core_WebSDK_AlgorithmSelectorWebResponse_setglobalalgorithms:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: True if the request was successful
-        Error:
-          type: string
-          description: The error associated with the request
     Core_WebSDK_AlgorithmSelectorWebResponse_find:
       type: object
       properties:
@@ -743,22 +768,7 @@ components:
         Error:
           type: string
           description: The error associated with the request
-    Core_PkixNISTStrengthCategory:
-      title: The NIST defined strength of an algorithm
-      enum:
-      - 0
-      - 65536
-      - 131072
-      - 196608
-      - 262144
-      - 327680
-      - 65535
-      - 2147418112
-      - 0
-      type: integer
-      description: "\n\n**0**: **Uncategorized**  \nThe algorithm has not yet received a NIST security level categorization\n\n**65536**: **NISTSecurityCategory1**  \nNIST Security Category 1\n\n**131072**: **NISTSecurityCategory2**  \nNIST Security Category 2\n\n**196608**: **NISTSecurityCategory3**  \nNIST Security Category 3\n\n**262144**: **NISTSecurityCategory4**  \nNIST Security Category 4\n\n**327680**: **NISTSecurityCategory5**  \nNIST Security Category 5\n\n**65535**: **NISTSecurityStrength**  \nMask for NIST Security Bit Strength values\n\n**2147418112**: **NISTSecurityCategory**  \nMask for all NIST Security Category values\n\n**2147483648**: **Stronger**  \nInclude algorithms stronger than the specified flag, while searching\n\n_This field is a flag and the actual value will be the sum of all applicable enumeration values._\n"
-      format: int32
-    Core_WebSDK_AlgorithmSelectorWebResponse_get:
+    Core_WebSDK_AlgorithmSelectorWebResponse_getselector:
       type: object
       properties:
         Selector:
@@ -782,27 +792,17 @@ components:
         Error:
           type: string
           description: The error associated with the request
-    Core_WebSDK_AlgorithmSelectorWebResponse_getallselectors:
+    Core_WebSDK_AlgorithmSelectorWebRequest_getselector:
+      required:
+      - PKIXParameterSet
       type: object
       properties:
-        Selectors:
-          type: array
-          items:
-            type: object
-            properties:
-              Algorithm:
-                type: string
-                description: Gets the display name for the selected algorithm
-              PkixParameterSetOid:
-                type: string
-                description: Gets the Venafi Pkix Parameter Set Oid for the selected algorithm
-              Description:
-                type: string
-                description: Gets the description text for the selected algorithm
-              StrengthCategory:
-                $ref: '#/components/schemas/Core_PkixNISTStrengthCategory'
-            description: ''
-          description: The Algorithm Selectors
+        PKIXParameterSet:
+          type: string
+          description: The Venafi PKIX Parameter Set Oid identifying an algorithm
+    Core_WebSDK_AlgorithmSelectorWebResponse_setglobalalgorithms:
+      type: object
+      properties:
         Success:
           type: boolean
           description: True if the request was successful

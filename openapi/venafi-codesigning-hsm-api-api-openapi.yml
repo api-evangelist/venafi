@@ -530,234 +530,6 @@ components:
         Success:
           type: boolean
           description: '**true** if the operation was successful, **false** otherwise.'
-    Web_Hsm_HsmCryptoResponse_decrypt:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: '**true** if the operation was successful, **false** otherwise.'
-        Error:
-          type: string
-          description: 'Appears only when there is an error. Possible reasons include:                * Missing or invalid KeyID'
-        TryLater:
-          type: boolean
-          description: '**true** if the operation was not performed due to a flow condition that requires to resend the request at a later time.'
-        ResultData:
-          type: string
-          description: The result of the cryptographic operation, in Base64 format.
-    Web_Hsm_HsmCryptoResponse:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: '**true** if the operation was successful, **false** otherwise.'
-        Error:
-          type: string
-          description: Returns the error that occurred if the operation was not successful.
-        TryLater:
-          type: boolean
-          description: '**true** if the operation was not performed due to a flow condition that requires to resend the request at a later time.'
-        RequestThumbprint:
-          type: string
-          description: Includes the Flow Process Instance Identification digest, in case the operation is blocked by a Flow that requires approval.
-        ResultData:
-          type: string
-          description: The result of the cryptographic operation, in Base64 format.
-      description: Data object for a cryptographic operation response.
-    Web_Hsm_HsmTelemetryRequest:
-      type: object
-      properties:
-        ClientInfo:
-          type: object
-          properties:
-            ClientLibraryName:
-              type: string
-              description: The Library Name used to make the request
-            ClientLibraryVersion:
-              type: string
-              description: The version of the client library
-            ClientLibraryLocation:
-              type: string
-              description: The location of the client library
-          description: Details about the client making the request.
-        ProcessInfo:
-          type: object
-          properties:
-            Executable:
-              type: string
-              description: The executable invoking the crypto operation
-            ExecutableSigner:
-              type: string
-              description: The signer of the requesting executable
-            ExecutableIssuer:
-              type: string
-              description: The issuer of the requesting executable's authenticode certificate
-            ExecutableSize:
-              type: integer
-              description: The size of the requesting executable
-              format: int64
-            ExecutableHash:
-              type: string
-              description: The hash of the requesting executable
-            CommandLine:
-              type: string
-              description: The command line invoked for this crypto request
-            Username:
-              type: string
-              description: The (login account) name of the user making the request
-            Machine:
-              type: string
-              description: The machine the request is made from
-            Platform:
-              type: string
-              description: The OS Platform the request is made from
-            ClientTime:
-              type: string
-              description: 'Timestamp from the client in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ'
-            RequestId:
-              type: string
-              description: A 16-byte (null terminated) random string used as a request identifier
-          description: Information about the process triggering the request.
-        ClientOperation:
-          type: string
-          description: The operation that failed (i.e. sign, login, getobjects).
-        ClientOperationError:
-          type: string
-          description: The message from the client to be recorded.
-        KeyLabel:
-          type: string
-          description: The Label relevant to the request, or **null**.
-        KeyId:
-          type: string
-          description: The Key ID relevant to the request, or **null**.
-        LabelFilter:
-          type: array
-          items:
-            type: string
-          description: The LabelFilters relevant to the request as a list of string, or **null**.
-      description: Data object for sending code sign client telemetry.
-    Web_Hsm_HsmCryptoResponse_derive:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: '**true** if the operation was successful, **false** otherwise.'
-        Error:
-          type: string
-          description: 'Appears only when there is an error. Possible reasons include:                * Missing or invalid KeyID'
-        TryLater:
-          type: boolean
-          description: '**true** if the operation was not performed due to a flow condition that requires to resend the request at a later time.'
-        ResultData:
-          type: string
-          description: The result of the cryptographic operation, in Base64 format.
-    Web_Hsm_HsmGpgResponse_getgpgpublickey:
-      type: object
-      properties:
-        Fingerprint:
-          type: string
-          description: The GPG fingerprint of the key.
-        Location:
-          type: string
-          description: The public URI of the GPG public key document for the key.
-        PublicKey:
-          type: string
-          description: The GPG public key, in Base64 format.
-        Success:
-          type: boolean
-          description: '**true** if the operation was successful, **false** otherwise.'
-    Web_Hsm_HsmStoreRequest_storeobject:
-      required:
-      - KeyId
-      - KeyCreationTimestamp
-      - KeyContext
-      - PublicKey
-      - PrivateKey
-      - PrivateKeyPassword
-      type: object
-      properties:
-        KeyId:
-          type: string
-          description: The environment to use for the cryptographic operation.
-        KeyCreationTimestamp:
-          type: string
-          description: The context (if an environment holds more than one key) to use for the operation.
-        KeyContext:
-          type: string
-          description: The context (if an environment holds more than one key) to use for the operation.
-        PublicKey:
-          type: string
-          description: The ASN.1 PublicKey structure (in Base64 encoding) of the key to upload
-        PrivateKey:
-          type: string
-          description: The PKCS#8 ASN.1 PrivateKey structure (in Base64 encoding) of the key to upload
-        PrivateKeyPassword:
-          type: string
-          description: The passphrase that was used to encrypt the PKCS#8 private key.
-    Web_Hsm_HsmObjectRequest_getobjects:
-      type: object
-      properties:
-        EnvironmentFilter:
-          type: array
-          items:
-            type: integer
-            format: int32
-          description: 'An array of comma separated HSM EnvironmentTypes. A single environment can contain up to three public and private keys and certificates. If an environment contains more than one keypair, the KeyContext identifies the purpose of the key:
-
-            * 0 = Certificate environment.A single certificate and keypair.
-
-            * 1 = GNU Privacy Guard (GPG) environment. Three keypairs (sign, encrypt, auth) and optional certificates.
-
-            * 2 = .Net Strongname environment.No certificate; RSA only.
-
-            * 3 = Cryptographic Service Provider (CSP). Two key pairs (sign and encrypt), certificates optional.
-
-            * Example: "EnvironmentFilter": [1,2]'
-        IncludeArchived:
-          type: boolean
-          description: '**true** if archived objects (previous objects, since expired or renewed) should be returned as well.'
-        IncludeChains:
-          type: boolean
-          description: '**true** if intermediate and root objects for certificates being returned should be included as well.'
-        KeyId:
-          type: string
-          description: The environment relevant to the request, or **null**.
-        LabelFilter:
-          type: array
-          items:
-            type: string
-          description: If provided, limits the returned objects to objects whose Label matches one of the specified pattern.
-        ObjectTypeFilter:
-          type: array
-          items:
-            type: integer
-            format: int32
-          description: List of object types to return. If not provided, all object types will be returned. Expects Pkcs#11/Cryptoki CKO_ object types.
-    Web_Hsm_HsmBaseResponse_IsHsm:
-      type: object
-      properties:
-        vedauth:
-          type: string
-          description: Returns the URL that should be used for authentication requests
-        pks:
-          type: string
-          description: Returns the URL of the public key server (/pks)
-        timestamp:
-          type: string
-          description: Returns the URL of the timestamp server (/timestamp)
-        csc:
-          type: string
-          description: Returns the URL of the client distribution page (/csc)
-    Web_Hsm_HsmStoreResponse:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: '**true** if the operation was successful, **false** otherwise.'
-        Error:
-          type: string
-          description: Returns the error that occurred if the operation was not successful.
-      description: Data object for an object retrieval response.
     Web_Hsm_HsmCryptoRequest_decrypt:
       required:
       - KeyId
@@ -770,378 +542,6 @@ components:
         Data:
           type: string
           description: The public key data needed for decryption.
-    Web_SDK_Authentication_OAuthError:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Gets or sets the short error name
-        error_description:
-          type: string
-          description: Gets or sets the description of the error
-      description: REST OAuth Error Response
-    Core_Cryptography_Cryptoki_CryptokiObjectType:
-      title: Enumeration of Cryptoki object types
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 6
-      - 7
-      - 8
-      type: integer
-      description: "\n\n**0**: **Data**  \n\n\n**1**: **Certificate**  \n\n\n**2**: **PublicKey**  \n\n\n**3**: **PrivateKey**  \n\n\n**4**: **SecretKey**  \n\n\n**5**: **HwFeature**  \n\n\n**6**: **DomainParameters**  \n\n\n**7**: **Mechanism**  \n\n\n**8**: **OtpKey**  \n\n"
-      format: int32
-    Web_Hsm_HsmCryptoRequest_sign:
-      required:
-      - ClientInfo
-      - Data
-      - KeyContext
-      - KeyId
-      - Mechanism
-      - ProcessInfo
-      type: object
-      properties:
-        ClientInfo:
-          type: object
-          properties:
-            ClientLibraryName:
-              type: string
-              description: The Library Name used to make the request
-            ClientLibraryVersion:
-              type: string
-              description: The version of the client library
-            ClientLibraryLocation:
-              type: string
-              description: The location of the client library
-          description: Details about the client making the request.
-        ClientMechanism:
-          type: integer
-          description: Use only when the server requires a different Mechanism. For example, when signing and hashing on the client side, set this field to describe the actual mechanism for a full operation (when signing this would include the digest).
-          format: int32
-        Data:
-          type: string
-          description: The data (in Base64 encoding) the cryptographic operation is applied to.
-        Justification:
-          type: string
-          description: A justification for the operation.
-        KeyContext:
-          type: string
-          description: The context (if an environment holds more than one key) to use for the operation.
-        KeyContextToWrap:
-          type: string
-          description: For wrapping operations, the Context of the key to wrap.
-        KeyId:
-          type: string
-          description: The environment to use for the cryptographic operation.
-        Mechanism:
-          type: integer
-          description: The Mechanism ID that represents the encryption algorithm for signing the software.                 For Rsa Pkcs, specify 1. To get additional values, use the LibHSM documentation on your signing workstation. See md_Documentation_RESTCrypto.html.
-          format: int32
-        Parameter:
-          type: object
-          properties:
-            ParameterType:
-              type: string
-              description: String indicating the parameter type
-            IVLength:
-              type: integer
-              description: IV Length, needs to be set for Encrypt
-              format: int32
-            IV:
-              type: string
-              description: IV, encoded in Base64, needs to be set for Decrypt
-            AAD:
-              type: string
-              description: AAD, encoded in Base64
-            HashAlg:
-              type: integer
-              description: Hash Algorithm
-              format: int32
-            KDF:
-              type: integer
-              description: Key Derivation Function
-              format: int32
-            MGF:
-              type: integer
-              description: Mask Generation Function
-              format: int32
-            Source:
-              type: integer
-              description: Source of the encoding parameter
-              format: int32
-            SourceData:
-              type: string
-              description: The base64 representation of the data used as the input for the encoding parameter source
-            HmacKeyData:
-              type: string
-              description: The base64 representation of the HMAC key to use for key derivation
-            PrependData:
-              type: string
-              description: The base64 representation of the data prepended for key derivation
-            AppendData:
-              type: string
-              description: The base64 representation of the data appended for key derivation
-            SharedData:
-              type: string
-              description: The base64 representation of the shared data used for key derivation
-            PublicData:
-              type: string
-              description: The base64 representation of the key derivation public data
-            SaltLen:
-              type: integer
-              description: Length, in bytes, of the salt used
-              format: int32
-            HedgeVariant:
-              type: integer
-              description: Hedge Required value for AdditionalContext _CryptokiHedgeType_
-              format: int32
-            ContextData:
-              type: string
-              description: The base64 representation of the context data
-            Mechanism:
-              type: integer
-              description: Mechanism used for Pre-Hash signing
-              format: int32
-          description: Parameters for the specific cryptographic operation.
-        Password:
-          type: string
-          description: For 2FA, the password.
-        ProcessInfo:
-          type: object
-          properties:
-            Executable:
-              type: string
-              description: The executable invoking the crypto operation
-            ExecutableSigner:
-              type: string
-              description: The signer of the requesting executable
-            ExecutableIssuer:
-              type: string
-              description: The issuer of the requesting executable's authenticode certificate
-            ExecutableSize:
-              type: integer
-              description: The size of the requesting executable
-              format: int64
-            ExecutableHash:
-              type: string
-              description: The hash of the requesting executable
-            CommandLine:
-              type: string
-              description: The command line invoked for this crypto request
-            Username:
-              type: string
-              description: The (login account) name of the user making the request
-            Machine:
-              type: string
-              description: The machine the request is made from
-            Platform:
-              type: string
-              description: The OS Platform the request is made from
-            ClientTime:
-              type: string
-              description: 'Timestamp from the client in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ'
-            RequestId:
-              type: string
-              description: A 16-byte (null terminated) random string used as a request identifier
-          description: Information about the process triggering the request.
-        Username:
-          type: string
-          description: For 2FA, the username.
-        VerifyData:
-          type: string
-          description: For verifying operations, the data to verify against. In Base64 encoding.
-        WrappingKeyId:
-          type: string
-          description: For wrapping operations, the KeyId of the key to wrap with.
-    Web_Hsm_HsmTelemetryResponse:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: '**true** if the operation was successful, **false** otherwise.'
-        Error:
-          type: string
-          description: Returns the error that occurred if the operation was not successful.
-      description: Data object for a telemetry submission response.
-    Web_Hsm_HsmObjectResponse_getchain:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: '**true** if the operation was successful, **false** otherwise.'
-        Error:
-          type: string
-          description: Returns the error that occurred if the operation was not successful.
-        Certificates:
-          type: array
-          items:
-            type: object
-            properties:
-              Trusted:
-                type: boolean
-                description: '**true** if the certificate is considered trusted.'
-              TargetStore:
-                type: string
-                description: The store the certificate should be placed in on the client; **null** for "My"
-              CACert:
-                type: boolean
-                description: '**true** if the certificate is a root or intermediate certificate.'
-              Value:
-                type: string
-                description: The DER-encoded certificate.
-              CheckValue:
-                type: string
-                description: The first three bytes of the SHA-1 hash of the certificate object’s Value attribute, encoded in Base64.
-              StartDate:
-                type: string
-                description: Valid-From date for the certificate, in yyyyMMdd format.
-              EndDate:
-                type: string
-                description: Valid-To date for the certificate, in yyyyMMdd format.
-              Subject:
-                type: string
-                description: The DER-encoded X.500 Subject of the certificate, in Base64 format.
-              Issuer:
-                type: string
-                description: The DER-encoded X.500 Issuer of the certificate, in Base64 format.
-              EnvironmentType:
-                type: integer
-                description: 'The type of the environment where this object exists in. Takes LibHsmEnv types:
-
-                  0-Certificate, 1-GPG, 2-.Net, 3-CSP, 4-KeyPair, 5-SecretKey, 6-Apple'
-                format: int32
-              KeyId:
-                type: string
-                description: The Environment GUID for this object.
-              CreatedOn:
-                type: string
-                description: The ISO8601 date/time the object was created.
-              KeyContext:
-                type: string
-                description: The key context if the environment holds more than one keypair.
-              Authentication:
-                type: boolean
-                description: '**true** if the object is intended for authentication purposes.'
-              Signing:
-                type: boolean
-                description: '**true** if the object is intended for signing/verification purposes.'
-              Encipherment:
-                type: boolean
-                description: '**true** if the object is intended for encryption/decryption purposes.'
-              Handle:
-                type: integer
-                description: The server-side handle of the object. Not all objects will have non-zero handle values.
-                format: int64
-              ObjectType:
-                $ref: '#/components/schemas/Core_Cryptography_Cryptoki_CryptokiObjectType'
-              Label:
-                type: string
-                description: The label of the object.
-              Id:
-                type: string
-                description: The ID of the object, in Base64 format.
-              Copyable:
-                type: boolean
-                description: True if the object store allows the object to be copied.
-              Modifiable:
-                type: boolean
-                description: True if the object store allows the object to be modified.
-              Private:
-                type: boolean
-                description: True if the object is private and only visible after authentication.
-              Token:
-                type: boolean
-                description: True if the object lives on a token. All Code Sign Manager objects are considered on-token unless they are pending.
-              Pending:
-                type: boolean
-                description: True if the object has not yet been issued.
-            description: HSM certificate object.
-          description: List of certificate objects.
-    Core_Cryptography_Cryptoki_CryptokiKeyType:
-      title: Enumeration of Cryptoki key types
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 16
-      - 17
-      - 18
-      - 19
-      - 20
-      - 21
-      - 22
-      - 23
-      - 24
-      - 25
-      - 26
-      - 27
-      - 28
-      - 29
-      - 30
-      - 31
-      - 32
-      - 33
-      - 34
-      - 35
-      - 36
-      - 37
-      - 38
-      - 64
-      - 65
-      - 73
-      - 74
-      - 75
-      - 0
-      - 82
-      - 0
-      - 0
-      - 0
-      type: integer
-      description: "\n\n**0**: **RSA**  \nRSA Asymmetric Key\n\n**1**: **DSA**  \nDSA (Digital Signature Algorithm) Asymmetric Key\n\n**2**: **DH**  \nThe Diffie-Hellman Asymmetric Key\n\n**3**: **EC**  \nEC (Elliptic-Curve) Asymmetric key\n\n**4**: **X9_42_DH**  \nX9.42 DH Financial Services Asymmetric Key\n\n**5**: **KEA**  \nKEA (Key Exchange Algorithm) Asymmetric Key\n\n**16**: **GenericSecret**  \nGeneric Symmetric Key\n\n**17**: **RC2**  \nRC2 Symmetric Key\n\n**18**: **RC4**  \nRC4 Symmetric Key\n\n**19**: **DES**  \nDES Symmetric Key\n\n**20**: **DES2**  \nDES2 Symmetric Key\n\n**21**: **DES3**  \nDES3 Symmetric Key\n\n**22**: **CAST**  \nCAST Symmetric Key\n\n**23**: **CAST3**  \nCAST3 Symmetric Key\n\n**24**: **CAST128**  \nCAST128 Symmetric Key\n\n**25**: **RC5**  \nRC5 Symmetric Key\n\n**26**: **IDEA**  \nIDEA Symmetric Key\n\n**27**: **Skipjack**  \nSkipjack Symmetric Key\n\n**28**: **BATON**  \nBATON Symmetric Key\n\n**29**: **Juniper**  \nJuniper Symmetric Key\n\n**30**: **CDMF**  \nCDMF Symmetric Key\n\n**31**: **AES**  \nAES Symmetric Key\n\n**32**: **Blowfish**  \nBlowfish Symmetric Key\n\n**33**: **Twofish**  \nTwofish Symmetric Key\n\n**34**: **SecurID**  \nSecurID Symmetric Key\n\n**35**: **HOTP**  \nHOTP Symmetric Key\n\n**36**: **ACTI**  \nACTI Symmetric Key\n\n**37**: **Camellia**  \nCamellia Symmetric Key\n\n**38**: **ARIA**  \nARIA Symmetric Key\n\n**64**: **EC_EDWARDS**  \nEC Edwards Asymmetric Key\n\n**65**: **EC_MONTGOMERY**  \nEC Montgomery Asymmetric Key\n\n**73**: **MlKem**  \nML-KEM\n\n**74**: **MlDsa**  \nML-DSA\n\n**75**: **SlhDsa**  \nSLH-DSA\n\n**2147483648**: **VendorDefined**  \nFlag to indicate vendor-defined key\n\n**82**: **Falcon**  \nFalcon\n\n**2147483649**: **PQComposite**  \nA composite PQ / Traditional key\n\n**2147483650**: **PQHybrid**  \nA hybrid Traditional + PQ Key\n\n**4294967295**: **Unknown**  \nUnknown (not part of PKCS#11)\n"
-      format: int32
-    Web_Hsm_HsmCryptoRequest_derive:
-      required:
-      - KeyId
-      - Mechanism
-      - Data
-      type: object
-      properties:
-        KeyId:
-          type: string
-          description: The KeyId will be the DN or GUID of the environment to created the derivation for.
-        Mechanism:
-          type: integer
-          description: 'The Mechanism ID that represents the encryption algorithm. The only mechanisms supported for derivation are EC and ECDH.               **NOTE: You will need to include the parameters defiend by mechanism.**'
-          format: int32
-        Data:
-          type: string
-          description: The public key info used to create the derivation.
-    Web_Hsm_HsmGpgRequest_getgpgpublickey:
-      required:
-      - KeyId
-      type: object
-      properties:
-        KeyId:
-          type: string
-          description: 'The GUID that uniquely identifies the GPG environment. The Key ID allows the WKS to retrieve the GPG public key for signing of electronic information.
-
-            To get the value, use the **Guid** from the POST Codesign/GetEnvironment response.'
-        KeyContext:
-          type: string
-          description: The context (if an environment holds more than one key) to use for the operation.
-    Web_Hsm_HsmObjectRequest_getchain:
-      type: object
-      properties:
-        KeyId:
-          type: string
-          description: The key in which to get the certificate chain for.
     Web_Hsm_HsmObjectResponse_getobjects:
       type: object
       properties:
@@ -1466,6 +866,187 @@ components:
         Success:
           type: boolean
           description: '**true** if the operation was successful, **false** otherwise.'
+    Web_Hsm_HsmCryptoRequest_sign:
+      required:
+      - ClientInfo
+      - Data
+      - KeyContext
+      - KeyId
+      - Mechanism
+      - ProcessInfo
+      type: object
+      properties:
+        ClientInfo:
+          type: object
+          properties:
+            ClientLibraryName:
+              type: string
+              description: The Library Name used to make the request
+            ClientLibraryVersion:
+              type: string
+              description: The version of the client library
+            ClientLibraryLocation:
+              type: string
+              description: The location of the client library
+          description: Details about the client making the request.
+        ClientMechanism:
+          type: integer
+          description: Use only when the server requires a different Mechanism. For example, when signing and hashing on the client side, set this field to describe the actual mechanism for a full operation (when signing this would include the digest).
+          format: int32
+        Data:
+          type: string
+          description: The data (in Base64 encoding) the cryptographic operation is applied to.
+        Justification:
+          type: string
+          description: A justification for the operation.
+        KeyContext:
+          type: string
+          description: The context (if an environment holds more than one key) to use for the operation.
+        KeyContextToWrap:
+          type: string
+          description: For wrapping operations, the Context of the key to wrap.
+        KeyId:
+          type: string
+          description: The environment to use for the cryptographic operation.
+        Mechanism:
+          type: integer
+          description: The Mechanism ID that represents the encryption algorithm for signing the software.                 For Rsa Pkcs, specify 1. To get additional values, use the LibHSM documentation on your signing workstation. See md_Documentation_RESTCrypto.html.
+          format: int32
+        Parameter:
+          type: object
+          properties:
+            ParameterType:
+              type: string
+              description: String indicating the parameter type
+            IVLength:
+              type: integer
+              description: IV Length, needs to be set for Encrypt
+              format: int32
+            IV:
+              type: string
+              description: IV, encoded in Base64, needs to be set for Decrypt
+            AAD:
+              type: string
+              description: AAD, encoded in Base64
+            HashAlg:
+              type: integer
+              description: Hash Algorithm
+              format: int32
+            KDF:
+              type: integer
+              description: Key Derivation Function
+              format: int32
+            MGF:
+              type: integer
+              description: Mask Generation Function
+              format: int32
+            Source:
+              type: integer
+              description: Source of the encoding parameter
+              format: int32
+            SourceData:
+              type: string
+              description: The base64 representation of the data used as the input for the encoding parameter source
+            HmacKeyData:
+              type: string
+              description: The base64 representation of the HMAC key to use for key derivation
+            PrependData:
+              type: string
+              description: The base64 representation of the data prepended for key derivation
+            AppendData:
+              type: string
+              description: The base64 representation of the data appended for key derivation
+            SharedData:
+              type: string
+              description: The base64 representation of the shared data used for key derivation
+            PublicData:
+              type: string
+              description: The base64 representation of the key derivation public data
+            SaltLen:
+              type: integer
+              description: Length, in bytes, of the salt used
+              format: int32
+            HedgeVariant:
+              type: integer
+              description: Hedge Required value for AdditionalContext _CryptokiHedgeType_
+              format: int32
+            ContextData:
+              type: string
+              description: The base64 representation of the context data
+            Mechanism:
+              type: integer
+              description: Mechanism used for Pre-Hash signing
+              format: int32
+          description: Parameters for the specific cryptographic operation.
+        Password:
+          type: string
+          description: For 2FA, the password.
+        ProcessInfo:
+          type: object
+          properties:
+            Executable:
+              type: string
+              description: The executable invoking the crypto operation
+            ExecutableSigner:
+              type: string
+              description: The signer of the requesting executable
+            ExecutableIssuer:
+              type: string
+              description: The issuer of the requesting executable's authenticode certificate
+            ExecutableSize:
+              type: integer
+              description: The size of the requesting executable
+              format: int64
+            ExecutableHash:
+              type: string
+              description: The hash of the requesting executable
+            CommandLine:
+              type: string
+              description: The command line invoked for this crypto request
+            Username:
+              type: string
+              description: The (login account) name of the user making the request
+            Machine:
+              type: string
+              description: The machine the request is made from
+            Platform:
+              type: string
+              description: The OS Platform the request is made from
+            ClientTime:
+              type: string
+              description: 'Timestamp from the client in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ'
+            RequestId:
+              type: string
+              description: A 16-byte (null terminated) random string used as a request identifier
+          description: Information about the process triggering the request.
+        Username:
+          type: string
+          description: For 2FA, the username.
+        VerifyData:
+          type: string
+          description: For verifying operations, the data to verify against. In Base64 encoding.
+        WrappingKeyId:
+          type: string
+          description: For wrapping operations, the KeyId of the key to wrap with.
+    Web_Hsm_HsmCryptoResponse:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: '**true** if the operation was successful, **false** otherwise.'
+        Error:
+          type: string
+          description: Returns the error that occurred if the operation was not successful.
+        TryLater:
+          type: boolean
+          description: '**true** if the operation was not performed due to a flow condition that requires to resend the request at a later time.'
+        RequestThumbprint:
+          type: string
+          description: Includes the Flow Process Instance Identification digest, in case the operation is blocked by a Flow that requires approval.
+        ResultData:
+          type: string
+          description: The result of the cryptographic operation, in Base64 format.
+      description: Data object for a cryptographic operation response.
     Web_Hsm_HsmJWTRequest_signjwt:
       required:
       - ClientInfo
@@ -1535,6 +1116,425 @@ components:
         Payload:
           type: string
           description: The data (in Base64 encoding) the cryptographic operation is applied to.
+    Web_Hsm_HsmStoreRequest_storeobject:
+      required:
+      - KeyId
+      - KeyCreationTimestamp
+      - KeyContext
+      - PublicKey
+      - PrivateKey
+      - PrivateKeyPassword
+      type: object
+      properties:
+        KeyId:
+          type: string
+          description: The environment to use for the cryptographic operation.
+        KeyCreationTimestamp:
+          type: string
+          description: The context (if an environment holds more than one key) to use for the operation.
+        KeyContext:
+          type: string
+          description: The context (if an environment holds more than one key) to use for the operation.
+        PublicKey:
+          type: string
+          description: The ASN.1 PublicKey structure (in Base64 encoding) of the key to upload
+        PrivateKey:
+          type: string
+          description: The PKCS#8 ASN.1 PrivateKey structure (in Base64 encoding) of the key to upload
+        PrivateKeyPassword:
+          type: string
+          description: The passphrase that was used to encrypt the PKCS#8 private key.
+    Web_Hsm_HsmBaseResponse_IsHsm:
+      type: object
+      properties:
+        vedauth:
+          type: string
+          description: Returns the URL that should be used for authentication requests
+        pks:
+          type: string
+          description: Returns the URL of the public key server (/pks)
+        timestamp:
+          type: string
+          description: Returns the URL of the timestamp server (/timestamp)
+        csc:
+          type: string
+          description: Returns the URL of the client distribution page (/csc)
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
+    Web_Hsm_HsmGpgResponse_getgpgpublickey:
+      type: object
+      properties:
+        Fingerprint:
+          type: string
+          description: The GPG fingerprint of the key.
+        Location:
+          type: string
+          description: The public URI of the GPG public key document for the key.
+        PublicKey:
+          type: string
+          description: The GPG public key, in Base64 format.
+        Success:
+          type: boolean
+          description: '**true** if the operation was successful, **false** otherwise.'
+    Core_Cryptography_Cryptoki_CryptokiObjectType:
+      title: Enumeration of Cryptoki object types
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      type: integer
+      description: "\n\n**0**: **Data**  \n\n\n**1**: **Certificate**  \n\n\n**2**: **PublicKey**  \n\n\n**3**: **PrivateKey**  \n\n\n**4**: **SecretKey**  \n\n\n**5**: **HwFeature**  \n\n\n**6**: **DomainParameters**  \n\n\n**7**: **Mechanism**  \n\n\n**8**: **OtpKey**  \n\n"
+      format: int32
+    Web_Hsm_HsmObjectRequest_getobjects:
+      type: object
+      properties:
+        EnvironmentFilter:
+          type: array
+          items:
+            type: integer
+            format: int32
+          description: 'An array of comma separated HSM EnvironmentTypes. A single environment can contain up to three public and private keys and certificates. If an environment contains more than one keypair, the KeyContext identifies the purpose of the key:
+
+            * 0 = Certificate environment.A single certificate and keypair.
+
+            * 1 = GNU Privacy Guard (GPG) environment. Three keypairs (sign, encrypt, auth) and optional certificates.
+
+            * 2 = .Net Strongname environment.No certificate; RSA only.
+
+            * 3 = Cryptographic Service Provider (CSP). Two key pairs (sign and encrypt), certificates optional.
+
+            * Example: "EnvironmentFilter": [1,2]'
+        IncludeArchived:
+          type: boolean
+          description: '**true** if archived objects (previous objects, since expired or renewed) should be returned as well.'
+        IncludeChains:
+          type: boolean
+          description: '**true** if intermediate and root objects for certificates being returned should be included as well.'
+        KeyId:
+          type: string
+          description: The environment relevant to the request, or **null**.
+        LabelFilter:
+          type: array
+          items:
+            type: string
+          description: If provided, limits the returned objects to objects whose Label matches one of the specified pattern.
+        ObjectTypeFilter:
+          type: array
+          items:
+            type: integer
+            format: int32
+          description: List of object types to return. If not provided, all object types will be returned. Expects Pkcs#11/Cryptoki CKO_ object types.
+    Web_Hsm_HsmCryptoRequest_derive:
+      required:
+      - KeyId
+      - Mechanism
+      - Data
+      type: object
+      properties:
+        KeyId:
+          type: string
+          description: The KeyId will be the DN or GUID of the environment to created the derivation for.
+        Mechanism:
+          type: integer
+          description: 'The Mechanism ID that represents the encryption algorithm. The only mechanisms supported for derivation are EC and ECDH.               **NOTE: You will need to include the parameters defiend by mechanism.**'
+          format: int32
+        Data:
+          type: string
+          description: The public key info used to create the derivation.
+    Core_Cryptography_Cryptoki_CryptokiKeyType:
+      title: Enumeration of Cryptoki key types
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 16
+      - 17
+      - 18
+      - 19
+      - 20
+      - 21
+      - 22
+      - 23
+      - 24
+      - 25
+      - 26
+      - 27
+      - 28
+      - 29
+      - 30
+      - 31
+      - 32
+      - 33
+      - 34
+      - 35
+      - 36
+      - 37
+      - 38
+      - 64
+      - 65
+      - 73
+      - 74
+      - 75
+      - 0
+      - 82
+      - 0
+      - 0
+      - 0
+      type: integer
+      description: "\n\n**0**: **RSA**  \nRSA Asymmetric Key\n\n**1**: **DSA**  \nDSA (Digital Signature Algorithm) Asymmetric Key\n\n**2**: **DH**  \nThe Diffie-Hellman Asymmetric Key\n\n**3**: **EC**  \nEC (Elliptic-Curve) Asymmetric key\n\n**4**: **X9_42_DH**  \nX9.42 DH Financial Services Asymmetric Key\n\n**5**: **KEA**  \nKEA (Key Exchange Algorithm) Asymmetric Key\n\n**16**: **GenericSecret**  \nGeneric Symmetric Key\n\n**17**: **RC2**  \nRC2 Symmetric Key\n\n**18**: **RC4**  \nRC4 Symmetric Key\n\n**19**: **DES**  \nDES Symmetric Key\n\n**20**: **DES2**  \nDES2 Symmetric Key\n\n**21**: **DES3**  \nDES3 Symmetric Key\n\n**22**: **CAST**  \nCAST Symmetric Key\n\n**23**: **CAST3**  \nCAST3 Symmetric Key\n\n**24**: **CAST128**  \nCAST128 Symmetric Key\n\n**25**: **RC5**  \nRC5 Symmetric Key\n\n**26**: **IDEA**  \nIDEA Symmetric Key\n\n**27**: **Skipjack**  \nSkipjack Symmetric Key\n\n**28**: **BATON**  \nBATON Symmetric Key\n\n**29**: **Juniper**  \nJuniper Symmetric Key\n\n**30**: **CDMF**  \nCDMF Symmetric Key\n\n**31**: **AES**  \nAES Symmetric Key\n\n**32**: **Blowfish**  \nBlowfish Symmetric Key\n\n**33**: **Twofish**  \nTwofish Symmetric Key\n\n**34**: **SecurID**  \nSecurID Symmetric Key\n\n**35**: **HOTP**  \nHOTP Symmetric Key\n\n**36**: **ACTI**  \nACTI Symmetric Key\n\n**37**: **Camellia**  \nCamellia Symmetric Key\n\n**38**: **ARIA**  \nARIA Symmetric Key\n\n**64**: **EC_EDWARDS**  \nEC Edwards Asymmetric Key\n\n**65**: **EC_MONTGOMERY**  \nEC Montgomery Asymmetric Key\n\n**73**: **MlKem**  \nML-KEM\n\n**74**: **MlDsa**  \nML-DSA\n\n**75**: **SlhDsa**  \nSLH-DSA\n\n**2147483648**: **VendorDefined**  \nFlag to indicate vendor-defined key\n\n**82**: **Falcon**  \nFalcon\n\n**2147483649**: **PQComposite**  \nA composite PQ / Traditional key\n\n**2147483650**: **PQHybrid**  \nA hybrid Traditional + PQ Key\n\n**4294967295**: **Unknown**  \nUnknown (not part of PKCS#11)\n"
+      format: int32
+    Web_Hsm_HsmObjectResponse_getchain:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: '**true** if the operation was successful, **false** otherwise.'
+        Error:
+          type: string
+          description: Returns the error that occurred if the operation was not successful.
+        Certificates:
+          type: array
+          items:
+            type: object
+            properties:
+              Trusted:
+                type: boolean
+                description: '**true** if the certificate is considered trusted.'
+              TargetStore:
+                type: string
+                description: The store the certificate should be placed in on the client; **null** for "My"
+              CACert:
+                type: boolean
+                description: '**true** if the certificate is a root or intermediate certificate.'
+              Value:
+                type: string
+                description: The DER-encoded certificate.
+              CheckValue:
+                type: string
+                description: The first three bytes of the SHA-1 hash of the certificate object’s Value attribute, encoded in Base64.
+              StartDate:
+                type: string
+                description: Valid-From date for the certificate, in yyyyMMdd format.
+              EndDate:
+                type: string
+                description: Valid-To date for the certificate, in yyyyMMdd format.
+              Subject:
+                type: string
+                description: The DER-encoded X.500 Subject of the certificate, in Base64 format.
+              Issuer:
+                type: string
+                description: The DER-encoded X.500 Issuer of the certificate, in Base64 format.
+              EnvironmentType:
+                type: integer
+                description: 'The type of the environment where this object exists in. Takes LibHsmEnv types:
+
+                  0-Certificate, 1-GPG, 2-.Net, 3-CSP, 4-KeyPair, 5-SecretKey, 6-Apple'
+                format: int32
+              KeyId:
+                type: string
+                description: The Environment GUID for this object.
+              CreatedOn:
+                type: string
+                description: The ISO8601 date/time the object was created.
+              KeyContext:
+                type: string
+                description: The key context if the environment holds more than one keypair.
+              Authentication:
+                type: boolean
+                description: '**true** if the object is intended for authentication purposes.'
+              Signing:
+                type: boolean
+                description: '**true** if the object is intended for signing/verification purposes.'
+              Encipherment:
+                type: boolean
+                description: '**true** if the object is intended for encryption/decryption purposes.'
+              Handle:
+                type: integer
+                description: The server-side handle of the object. Not all objects will have non-zero handle values.
+                format: int64
+              ObjectType:
+                $ref: '#/components/schemas/Core_Cryptography_Cryptoki_CryptokiObjectType'
+              Label:
+                type: string
+                description: The label of the object.
+              Id:
+                type: string
+                description: The ID of the object, in Base64 format.
+              Copyable:
+                type: boolean
+                description: True if the object store allows the object to be copied.
+              Modifiable:
+                type: boolean
+                description: True if the object store allows the object to be modified.
+              Private:
+                type: boolean
+                description: True if the object is private and only visible after authentication.
+              Token:
+                type: boolean
+                description: True if the object lives on a token. All Code Sign Manager objects are considered on-token unless they are pending.
+              Pending:
+                type: boolean
+                description: True if the object has not yet been issued.
+            description: HSM certificate object.
+          description: List of certificate objects.
+    Web_Hsm_HsmTelemetryRequest:
+      type: object
+      properties:
+        ClientInfo:
+          type: object
+          properties:
+            ClientLibraryName:
+              type: string
+              description: The Library Name used to make the request
+            ClientLibraryVersion:
+              type: string
+              description: The version of the client library
+            ClientLibraryLocation:
+              type: string
+              description: The location of the client library
+          description: Details about the client making the request.
+        ProcessInfo:
+          type: object
+          properties:
+            Executable:
+              type: string
+              description: The executable invoking the crypto operation
+            ExecutableSigner:
+              type: string
+              description: The signer of the requesting executable
+            ExecutableIssuer:
+              type: string
+              description: The issuer of the requesting executable's authenticode certificate
+            ExecutableSize:
+              type: integer
+              description: The size of the requesting executable
+              format: int64
+            ExecutableHash:
+              type: string
+              description: The hash of the requesting executable
+            CommandLine:
+              type: string
+              description: The command line invoked for this crypto request
+            Username:
+              type: string
+              description: The (login account) name of the user making the request
+            Machine:
+              type: string
+              description: The machine the request is made from
+            Platform:
+              type: string
+              description: The OS Platform the request is made from
+            ClientTime:
+              type: string
+              description: 'Timestamp from the client in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ'
+            RequestId:
+              type: string
+              description: A 16-byte (null terminated) random string used as a request identifier
+          description: Information about the process triggering the request.
+        ClientOperation:
+          type: string
+          description: The operation that failed (i.e. sign, login, getobjects).
+        ClientOperationError:
+          type: string
+          description: The message from the client to be recorded.
+        KeyLabel:
+          type: string
+          description: The Label relevant to the request, or **null**.
+        KeyId:
+          type: string
+          description: The Key ID relevant to the request, or **null**.
+        LabelFilter:
+          type: array
+          items:
+            type: string
+          description: The LabelFilters relevant to the request as a list of string, or **null**.
+      description: Data object for sending code sign client telemetry.
+    Web_Hsm_HsmTelemetryResponse:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: '**true** if the operation was successful, **false** otherwise.'
+        Error:
+          type: string
+          description: Returns the error that occurred if the operation was not successful.
+      description: Data object for a telemetry submission response.
+    Web_Hsm_HsmGpgRequest_getgpgpublickey:
+      required:
+      - KeyId
+      type: object
+      properties:
+        KeyId:
+          type: string
+          description: 'The GUID that uniquely identifies the GPG environment. The Key ID allows the WKS to retrieve the GPG public key for signing of electronic information.
+
+            To get the value, use the **Guid** from the POST Codesign/GetEnvironment response.'
+        KeyContext:
+          type: string
+          description: The context (if an environment holds more than one key) to use for the operation.
+    Web_Hsm_HsmObjectRequest_getchain:
+      type: object
+      properties:
+        KeyId:
+          type: string
+          description: The key in which to get the certificate chain for.
+    Web_Hsm_HsmCryptoResponse_decrypt:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: '**true** if the operation was successful, **false** otherwise.'
+        Error:
+          type: string
+          description: 'Appears only when there is an error. Possible reasons include:                * Missing or invalid KeyID'
+        TryLater:
+          type: boolean
+          description: '**true** if the operation was not performed due to a flow condition that requires to resend the request at a later time.'
+        ResultData:
+          type: string
+          description: The result of the cryptographic operation, in Base64 format.
+    Web_Hsm_HsmCryptoResponse_derive:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: '**true** if the operation was successful, **false** otherwise.'
+        Error:
+          type: string
+          description: 'Appears only when there is an error. Possible reasons include:                * Missing or invalid KeyID'
+        TryLater:
+          type: boolean
+          description: '**true** if the operation was not performed due to a flow condition that requires to resend the request at a later time.'
+        ResultData:
+          type: string
+          description: The result of the cryptographic operation, in Base64 format.
+    Web_Hsm_HsmStoreResponse:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: '**true** if the operation was successful, **false** otherwise.'
+        Error:
+          type: string
+          description: Returns the error that occurred if the operation was not successful.
+      description: Data object for an object retrieval response.
   securitySchemes:
     AccessToken:
       type: http

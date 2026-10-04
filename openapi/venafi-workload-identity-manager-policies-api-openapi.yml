@@ -262,6 +262,23 @@ components:
         stateOrProvince:
           $ref: '#/components/schemas/Property'
       type: object
+    ClientAuthentication:
+      discriminator:
+        mapping:
+          JWT_JWKS: '#/components/schemas/JWTJWKSAuthentication'
+          JWT_OIDC: '#/components/schemas/JWTOIDCAuthentication'
+          JWT_STANDARD_CLAIMS: '#/components/schemas/JWTStandardClaimsAuthentication'
+        propertyName: type
+      oneOf:
+      - $ref: '#/components/schemas/JWTStandardClaimsAuthentication'
+      - $ref: '#/components/schemas/JWTJWKSAuthentication'
+      - $ref: '#/components/schemas/JWTOIDCAuthentication'
+      properties:
+        type:
+          type: string
+      required:
+      - type
+      type: object
     AdvancedSettings:
       properties:
         enableIssuanceAuditLog:
@@ -277,31 +294,94 @@ components:
           example: false
           type: boolean
       type: object
-    Error1:
-      description: A single error. The numeric `code` is stable and matches the codes listed at the start of each cause in the endpoints' error-response descriptions, so clients can branch on it instead of parsing `message`.
+    JWTOIDCAuthentication:
       properties:
-        args:
-          description: Positional values interpolated into the message (e.g. the offending field value or entity id).
+        allowedPolicyIds:
+          description: Array of UUIDs of policies that the client is permitted to use. Server-populated on responses from the parent configuration's policyIds; ignored on requests.
+          example:
+          - 8ae92800-b1e0-11ed-859d-b39255f965ee
           items:
-            type: object
+            format: uuid
+            type: string
+          readOnly: true
           type: array
-        code:
-          description: Stable numeric error code identifying the specific failure.
-          format: int32
-          type: integer
-        message:
-          description: Human-readable description of the error.
+        audience:
+          description: OpenId audience
+          example: Client1
+          maxLength: 256
           type: string
+        baseUrl:
+          description: JWT OpenId base URL
+          example: https://openid.example.com
+          maxLength: 2048
+          type: string
+        type:
+          description: Discriminator for the client authentication method
+          enum:
+          - JWT_OIDC
+          type: string
+      required:
+      - type
+      - audience
+      - baseUrl
       type: object
-    ExtendedPolicyGetResponse:
-      allOf:
-      - $ref: '#/components/schemas/PolicyGetResponse'
-      - properties:
-          configurations:
-            items:
-              $ref: '#/components/schemas/ConfigurationGetResponse'
-            type: array
-        type: object
+    JWTStandardClaimsAuthentication:
+      properties:
+        audience:
+          description: Recipients that the JWT is intended for
+          example: Client1
+          maxLength: 256
+          type: string
+        clients:
+          description: List with clients, identified by processing JWTs that include standard/registered claims
+          items:
+            $ref: '#/components/schemas/JWTClient'
+          minItems: 1
+          type: array
+        type:
+          description: Discriminator for the client authentication method
+          enum:
+          - JWT_STANDARD_CLAIMS
+          type: string
+      required:
+      - type
+      - audience
+      - clients
+      type: object
+    ClientAuthorization:
+      properties:
+        customClaimsAliases:
+          $ref: '#/components/schemas/CustomClaimsAliases'
+      type: object
+    KeyUsage:
+      description: Key usage
+      enum:
+      - digitalSignature
+      - nonRepudiation
+      - keyEncipherment
+      - dataEncipherment
+      - keyAgreement
+      - keyCertSign
+      - cRLSign
+      - encipherOnly
+      - decipherOnly
+      type: string
+    ErrorResponse3:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/Error1'
+          type: array
+      type: object
+    CloudProviders:
+      properties:
+        aws:
+          $ref: '#/components/schemas/AWSCloudProvider'
+        azure:
+          $ref: '#/components/schemas/AzureCloudProvider'
+        google:
+          $ref: '#/components/schemas/GoogleCloudProvider'
+      type: object
     ConfigurationGetResponse:
       discriminator:
         mapping:
@@ -349,28 +429,93 @@ components:
       required:
       - issuerKind
       type: object
-    JWTStandardClaimsAuthentication:
+    DistributedIssuerConfigurationGetResponse:
       properties:
-        audience:
-          description: Recipients that the JWT is intended for
-          example: Client1
-          maxLength: 256
-          type: string
-        clients:
-          description: List with clients, identified by processing JWTs that include standard/registered claims
+        advancedSettings:
+          $ref: '#/components/schemas/AdvancedSettings'
+        clientAuthentication:
+          $ref: '#/components/schemas/ClientAuthentication'
+        clientAuthorization:
+          $ref: '#/components/schemas/ClientAuthorization'
+        cloudProviders:
+          $ref: '#/components/schemas/CloudProviders'
+        controllerAllowedPolicyIds:
+          description: Array of UUIDs of policies that the kubernetes controller is permitted to use
+          example:
+          - 8ae92800-b1e0-11ed-859d-b39255f965ee
           items:
-            $ref: '#/components/schemas/JWTClient'
-          minItems: 1
+            format: uuid
+            type: string
           type: array
-        type:
-          description: Discriminator for the client authentication method
+        issuerKind:
+          description: The kind of issuer this configuration represents
           enum:
-          - JWT_STANDARD_CLAIMS
+          - DISTRIBUTED_ISSUER
           type: string
+        longLivedCertCount:
+          description: Number of long lived certificates
+          example: 2
+          format: int64
+          type: integer
+        minTlsVersion:
+          $ref: '#/components/schemas/MinTLSVersion'
+        policyIds:
+          description: Array of UUIDs of policies to associate with the configuration
+          example:
+          - 8ae92800-b1e0-11ed-859d-b39255f965ee
+          items:
+            format: uuid
+            type: string
+          type: array
+        serviceAccountIds:
+          items:
+            format: uuid
+            type: string
+          type: array
+        shortLivedCertCount:
+          description: Number of short lived certificates
+          example: 20
+          format: int64
+          type: integer
+        totalCertCount:
+          description: Total number of certificates — the sum of `longLivedCertCount`, `shortLivedCertCount` and `ultraShortLivedCertCount`. Derived, read-only.
+          example: 222
+          format: int64
+          type: integer
+        ultraShortLivedCertCount:
+          description: Number of ultra short lived certificates
+          example: 200
+          format: int64
+          type: integer
+        unixSocketAllowedPolicyIds:
+          description: Array of UUIDs of policies that are permitted to be used when using the unix socket
+          example:
+          - 8ae92800-b1e0-11ed-859d-b39255f965ee
+          items:
+            format: uuid
+            type: string
+          type: array
       required:
-      - type
-      - audience
-      - clients
+      - issuerKind
+      type: object
+    PolicyDeleteResponse:
+      properties:
+        id:
+          description: UUID of the policy
+          example: 8ae92800-b1e0-11ed-859d-b39255f965ee
+          format: uuid
+          type: string
+        name:
+          description: Name of the policy
+          example: Some policy
+          type: string
+      type: object
+    PolicyListResponse:
+      properties:
+        policies:
+          items:
+            $ref: '#/components/schemas/ExtendedPolicyGetResponse'
+          type: array
       type: object
     PolicyUpdateRequest:
       properties:
@@ -420,56 +565,45 @@ components:
           format: PnYnMnDTnHnMnS
           type: string
       type: object
-    AWSCloudProvider:
+    KeyAlgorithmInformation:
+      description: Key algorithm
       properties:
-        accountIds:
-          description: Array of AWS account IDs each of which should be a 12-digit identifier
-          example:
-          - '123456789012'
+        allowedValues:
+          description: Key algorithm allowed values
           items:
-            type: string
+            $ref: '#/components/schemas/KeyAlgorithm1'
           minItems: 1
           type: array
-        regions:
-          description: Array of AWS regions
-          example:
-          - us-west-1
-          items:
-            enum:
-            - us-east-1
-            - us-east-2
-            - us-west-1
-            - us-west-2
-            - af-south-1
-            - ap-east-1
-            - ap-south-2
-            - ap-southeast-3
-            - ap-southeast-4
-            - ap-south-1
-            - ap-northeast-3
-            - ap-northeast-2
-            - ap-southeast-1
-            - ap-southeast-2
-            - ap-northeast-1
-            - ca-central-1
-            - eu-central-1
-            - eu-west-1
-            - eu-west-2
-            - eu-south-1
-            - eu-west-3
-            - eu-south-2
-            - eu-north-1
-            - eu-central-2
-            - me-south-1
-            - me-central-1
-            - sa-east-1
-            - us-gov-east-1
-            - us-gov-west-1
-            type: string
-          type: array
+        defaultValue:
+          $ref: '#/components/schemas/KeyAlgorithm1'
       required:
-      - accountIds
-      - regions
+      - allowedValues
+      - defaultValue
+      type: object
+    ExtendedPolicyGetResponse:
+      allOf:
+      - $ref: '#/components/schemas/PolicyGetResponse'
+      - properties:
+          configurations:
+            items:
+              $ref: '#/components/schemas/ConfigurationGetResponse'
+            type: array
+        type: object
+    ForwardTrustProxyConfigurationGetResponse:
+      description: Configuration that issues forward-trust proxy intermediate certificates. It references only a Sub CA provider; the policy, client authentication/authorization, cloud-provider, advanced-settings, min-TLS-version and service-account fields do not apply.
+      properties:
+        issuerKind:
+          description: The kind of issuer this configuration represents
+          enum:
+          - FORWARD_TRUST_PROXY
+          type: string
+        subCaProviderId:
+          description: UUID of the Sub CA provider associated with the configuration
+          example: 7268d820-a08d-11ed-bbc0-252385d6d389
+          format: uuid
+          type: string
+      required:
+      - issuerKind
       type: object
     JWTJWKSAuthentication:
       properties:
@@ -498,159 +632,6 @@ components:
       required:
       - type
       - urls
-      type: object
-    KeyAlgorithmInformation:
-      description: Key algorithm
-      properties:
-        allowedValues:
-          description: Key algorithm allowed values
-          items:
-            $ref: '#/components/schemas/KeyAlgorithm1'
-          minItems: 1
-          type: array
-        defaultValue:
-          $ref: '#/components/schemas/KeyAlgorithm1'
-      required:
-      - allowedValues
-      - defaultValue
-      type: object
-    KeyAlgorithm1:
-      description: Key algorithm type
-      enum:
-      - RSA_2048
-      - RSA_3072
-      - RSA_4096
-      - EC_P256
-      - EC_P384
-      - EC_P521
-      - EC_ED25519
-      example: EC_P256
-      type: string
-    JWTClient:
-      properties:
-        allowedPolicyIds:
-          description: Array of UUIDs of policies that the client is permitted to use
-          example:
-          - 8ae92800-b1e0-11ed-859d-b39255f965ee
-          items:
-            format: uuid
-            type: string
-          minItems: 1
-          type: array
-        issuer:
-          description: Issuer of the JWT
-          example: https://kubernetes.default.svc
-          maxLength: 2048
-          type: string
-        jwksUri:
-          description: URL used to pull the trusted signing keys used for validation
-          example: https://www.example.com:6443/jwks
-          maxLength: 2048
-          type: string
-        name:
-          description: Name of the client
-          example: Some client
-          maxLength: 64
-          type: string
-        subjects:
-          description: Array of subjects of the JWT
-          example:
-          - system:serviceaccount:venafi:application-team-1
-          items:
-            type: string
-          minItems: 1
-          type: array
-      required:
-      - allowedPolicyIds
-      - issuer
-      - name
-      - subjects
-      type: object
-    PolicyDeleteResponse:
-      properties:
-        id:
-          description: UUID of the policy
-          example: 8ae92800-b1e0-11ed-859d-b39255f965ee
-          format: uuid
-          type: string
-        name:
-          description: Name of the policy
-          example: Some policy
-          type: string
-      type: object
-    PolicyListResponse:
-      properties:
-        policies:
-          items:
-            $ref: '#/components/schemas/ExtendedPolicyGetResponse'
-          type: array
-      type: object
-    ClientAuthentication:
-      discriminator:
-        mapping:
-          JWT_JWKS: '#/components/schemas/JWTJWKSAuthentication'
-          JWT_OIDC: '#/components/schemas/JWTOIDCAuthentication'
-          JWT_STANDARD_CLAIMS: '#/components/schemas/JWTStandardClaimsAuthentication'
-        propertyName: type
-      oneOf:
-      - $ref: '#/components/schemas/JWTStandardClaimsAuthentication'
-      - $ref: '#/components/schemas/JWTJWKSAuthentication'
-      - $ref: '#/components/schemas/JWTOIDCAuthentication'
-      properties:
-        type:
-          type: string
-      required:
-      - type
-      type: object
-    ErrorResponse3:
-      properties:
-        errors:
-          items:
-            $ref: '#/components/schemas/Error1'
-          type: array
-      type: object
-    CloudProviders:
-      properties:
-        aws:
-          $ref: '#/components/schemas/AWSCloudProvider'
-        azure:
-          $ref: '#/components/schemas/AzureCloudProvider'
-        google:
-          $ref: '#/components/schemas/GoogleCloudProvider'
-      type: object
-    MinTLSVersion:
-      description: Minimum required TLS protocol version
-      enum:
-      - TLS12
-      - TLS13
-      type: string
-    SANs:
-      description: Subject alternative names
-      properties:
-        dnsNames:
-          $ref: '#/components/schemas/Property'
-        ipAddresses:
-          $ref: '#/components/schemas/Property'
-        rfc822Names:
-          $ref: '#/components/schemas/Property'
-        uniformResourceIdentifiers:
-          $ref: '#/components/schemas/Property'
-      type: object
-    ForwardTrustProxyConfigurationGetResponse:
-      description: Configuration that issues forward-trust proxy intermediate certificates. It references only a Sub CA provider; the policy, client authentication/authorization, cloud-provider, advanced-settings, min-TLS-version and service-account fields do not apply.
-      properties:
-        issuerKind:
-          description: The kind of issuer this configuration represents
-          enum:
-          - FORWARD_TRUST_PROXY
-          type: string
-        subCaProviderId:
-          description: UUID of the Sub CA provider associated with the configuration
-          example: 7268d820-a08d-11ed-bbc0-252385d6d389
-          format: uuid
-          type: string
-      required:
-      - issuerKind
       type: object
     Property:
       properties:
@@ -737,62 +718,38 @@ components:
       - projectIdentifiers
       - regions
       type: object
-    KeyUsage:
-      description: Key usage
-      enum:
-      - digitalSignature
-      - nonRepudiation
-      - keyEncipherment
-      - dataEncipherment
-      - keyAgreement
-      - keyCertSign
-      - cRLSign
-      - encipherOnly
-      - decipherOnly
-      type: string
-    ExtendedKeyUsage:
-      description: Extended key usage
-      enum:
-      - ANY
-      - SERVER_AUTH
-      - CLIENT_AUTH
-      - CODE_SIGNING
-      - EMAIL_PROTECTION
-      - IPSEC_ENDSYSTEM
-      - IPSEC_TUNNEL
-      - IPSEC_USER
-      - TIME_STAMPING
-      - OCSP_SIGNING
-      - DVCS
-      - SBGP_CERT_AA_SERVER_AUTH
-      - SCVP_RESPONDER
-      - EAP_OVER_PPP
-      - EAP_OVER_LAN
-      - SCVP_SERVER
-      - SCVP_CLIENT
-      - IPSEC_IKE
-      - CAPWAP_AC
-      - CAPWAP_WTP
-      - IPSEC_IKE_INTERMEDIATE
-      - SMARTCARD_LOGON
-      type: string
-    PolicyCreateRequest:
-      allOf:
-      - $ref: '#/components/schemas/PolicyUpdateRequest'
-      - required:
-        - extendedKeyUsages
-        - keyAlgorithm
-        - keyUsages
-        - name
-        - sans
-        - subject
-        - validityPeriod
-        type: object
-    ClientAuthorization:
+    AzureCloudProvider:
       properties:
-        customClaimsAliases:
-          $ref: '#/components/schemas/CustomClaimsAliases'
+        subscriptionIds:
+          description: Array of Azure subscription IDs each of which should be UUID
+          example:
+          - 8d10da13-8125-4ba9-a717-bf7490507b3d
+          items:
+            format: uuid
+            type: string
+          minItems: 1
+          type: array
+      required:
+      - subscriptionIds
       type: object
+    CustomClaimsAliases:
+      properties:
+        allowAllPolicies:
+          maxLength: 128
+          type: string
+        allowedPolicies:
+          maxLength: 128
+          type: string
+        configuration:
+          maxLength: 128
+          type: string
+      type: object
+    MinTLSVersion:
+      description: Minimum required TLS protocol version
+      enum:
+      - TLS12
+      - TLS13
+      type: string
     PolicyGetResponse:
       properties:
         companyId:
@@ -857,132 +814,175 @@ components:
           format: PnYnMnDTnHnMnS
           type: string
       type: object
-    DistributedIssuerConfigurationGetResponse:
+    AWSCloudProvider:
       properties:
-        advancedSettings:
-          $ref: '#/components/schemas/AdvancedSettings'
-        clientAuthentication:
-          $ref: '#/components/schemas/ClientAuthentication'
-        clientAuthorization:
-          $ref: '#/components/schemas/ClientAuthorization'
-        cloudProviders:
-          $ref: '#/components/schemas/CloudProviders'
-        controllerAllowedPolicyIds:
-          description: Array of UUIDs of policies that the kubernetes controller is permitted to use
+        accountIds:
+          description: Array of AWS account IDs each of which should be a 12-digit identifier
           example:
-          - 8ae92800-b1e0-11ed-859d-b39255f965ee
+          - '123456789012'
           items:
-            format: uuid
             type: string
+          minItems: 1
           type: array
-        issuerKind:
-          description: The kind of issuer this configuration represents
-          enum:
-          - DISTRIBUTED_ISSUER
-          type: string
-        longLivedCertCount:
-          description: Number of long lived certificates
-          example: 2
-          format: int64
-          type: integer
-        minTlsVersion:
-          $ref: '#/components/schemas/MinTLSVersion'
-        policyIds:
-          description: Array of UUIDs of policies to associate with the configuration
+        regions:
+          description: Array of AWS regions
           example:
-          - 8ae92800-b1e0-11ed-859d-b39255f965ee
+          - us-west-1
           items:
-            format: uuid
-            type: string
-          type: array
-        serviceAccountIds:
-          items:
-            format: uuid
-            type: string
-          type: array
-        shortLivedCertCount:
-          description: Number of short lived certificates
-          example: 20
-          format: int64
-          type: integer
-        totalCertCount:
-          description: Total number of certificates — the sum of `longLivedCertCount`, `shortLivedCertCount` and `ultraShortLivedCertCount`. Derived, read-only.
-          example: 222
-          format: int64
-          type: integer
-        ultraShortLivedCertCount:
-          description: Number of ultra short lived certificates
-          example: 200
-          format: int64
-          type: integer
-        unixSocketAllowedPolicyIds:
-          description: Array of UUIDs of policies that are permitted to be used when using the unix socket
-          example:
-          - 8ae92800-b1e0-11ed-859d-b39255f965ee
-          items:
-            format: uuid
+            enum:
+            - us-east-1
+            - us-east-2
+            - us-west-1
+            - us-west-2
+            - af-south-1
+            - ap-east-1
+            - ap-south-2
+            - ap-southeast-3
+            - ap-southeast-4
+            - ap-south-1
+            - ap-northeast-3
+            - ap-northeast-2
+            - ap-southeast-1
+            - ap-southeast-2
+            - ap-northeast-1
+            - ca-central-1
+            - eu-central-1
+            - eu-west-1
+            - eu-west-2
+            - eu-south-1
+            - eu-west-3
+            - eu-south-2
+            - eu-north-1
+            - eu-central-2
+            - me-south-1
+            - me-central-1
+            - sa-east-1
+            - us-gov-east-1
+            - us-gov-west-1
             type: string
           type: array
       required:
-      - issuerKind
+      - accountIds
+      - regions
       type: object
-    AzureCloudProvider:
+    PolicyCreateRequest:
+      allOf:
+      - $ref: '#/components/schemas/PolicyUpdateRequest'
+      - required:
+        - extendedKeyUsages
+        - keyAlgorithm
+        - keyUsages
+        - name
+        - sans
+        - subject
+        - validityPeriod
+        type: object
+    Error1:
+      description: A single error. The numeric `code` is stable and matches the codes listed at the start of each cause in the endpoints' error-response descriptions, so clients can branch on it instead of parsing `message`.
       properties:
-        subscriptionIds:
-          description: Array of Azure subscription IDs each of which should be UUID
+        args:
+          description: Positional values interpolated into the message (e.g. the offending field value or entity id).
+          items:
+            type: object
+          type: array
+        code:
+          description: Stable numeric error code identifying the specific failure.
+          format: int32
+          type: integer
+        message:
+          description: Human-readable description of the error.
+          type: string
+      type: object
+    SANs:
+      description: Subject alternative names
+      properties:
+        dnsNames:
+          $ref: '#/components/schemas/Property'
+        ipAddresses:
+          $ref: '#/components/schemas/Property'
+        rfc822Names:
+          $ref: '#/components/schemas/Property'
+        uniformResourceIdentifiers:
+          $ref: '#/components/schemas/Property'
+      type: object
+    JWTClient:
+      properties:
+        allowedPolicyIds:
+          description: Array of UUIDs of policies that the client is permitted to use
           example:
-          - 8d10da13-8125-4ba9-a717-bf7490507b3d
+          - 8ae92800-b1e0-11ed-859d-b39255f965ee
           items:
             format: uuid
             type: string
           minItems: 1
           type: array
-      required:
-      - subscriptionIds
-      type: object
-    JWTOIDCAuthentication:
-      properties:
-        allowedPolicyIds:
-          description: Array of UUIDs of policies that the client is permitted to use. Server-populated on responses from the parent configuration's policyIds; ignored on requests.
-          example:
-          - 8ae92800-b1e0-11ed-859d-b39255f965ee
-          items:
-            format: uuid
-            type: string
-          readOnly: true
-          type: array
-        audience:
-          description: OpenId audience
-          example: Client1
-          maxLength: 256
-          type: string
-        baseUrl:
-          description: JWT OpenId base URL
-          example: https://openid.example.com
+        issuer:
+          description: Issuer of the JWT
+          example: https://kubernetes.default.svc
           maxLength: 2048
           type: string
-        type:
-          description: Discriminator for the client authentication method
-          enum:
-          - JWT_OIDC
+        jwksUri:
+          description: URL used to pull the trusted signing keys used for validation
+          example: https://www.example.com:6443/jwks
+          maxLength: 2048
           type: string
+        name:
+          description: Name of the client
+          example: Some client
+          maxLength: 64
+          type: string
+        subjects:
+          description: Array of subjects of the JWT
+          example:
+          - system:serviceaccount:venafi:application-team-1
+          items:
+            type: string
+          minItems: 1
+          type: array
       required:
-      - type
-      - audience
-      - baseUrl
+      - allowedPolicyIds
+      - issuer
+      - name
+      - subjects
       type: object
-    CustomClaimsAliases:
-      properties:
-        allowAllPolicies:
-          maxLength: 128
-          type: string
-        allowedPolicies:
-          maxLength: 128
-          type: string
-        configuration:
-          maxLength: 128
-          type: string
-      type: object
+    KeyAlgorithm1:
+      description: Key algorithm type
+      enum:
+      - RSA_2048
+      - RSA_3072
+      - RSA_4096
+      - EC_P256
+      - EC_P384
+      - EC_P521
+      - EC_ED25519
+      example: EC_P256
+      type: string
+    ExtendedKeyUsage:
+      description: Extended key usage
+      enum:
+      - ANY
+      - SERVER_AUTH
+      - CLIENT_AUTH
+      - CODE_SIGNING
+      - EMAIL_PROTECTION
+      - IPSEC_ENDSYSTEM
+      - IPSEC_TUNNEL
+      - IPSEC_USER
+      - TIME_STAMPING
+      - OCSP_SIGNING
+      - DVCS
+      - SBGP_CERT_AA_SERVER_AUTH
+      - SCVP_RESPONDER
+      - EAP_OVER_PPP
+      - EAP_OVER_LAN
+      - SCVP_SERVER
+      - SCVP_CLIENT
+      - IPSEC_IKE
+      - CAPWAP_AC
+      - CAPWAP_WTP
+      - IPSEC_IKE_INTERMEDIATE
+      - SMARTCARD_LOGON
+      type: string
   securitySchemes:
     service-account:
       in: header

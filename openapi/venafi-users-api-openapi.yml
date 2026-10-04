@@ -404,11 +404,6 @@ components:
       - WEB_UI
       - API
       type: string
-    SystemRole:
-      enum:
-      - SYSTEM_ADMIN
-      - CONDOR_METRICS
-      type: string
     UserResponse:
       properties:
         users:
@@ -416,8 +411,70 @@ components:
             $ref: '#/components/schemas/UserInformation2'
           type: array
       type: object
+    RolesRequest:
+      properties:
+        roles:
+          additionalProperties:
+            $ref: '#/components/schemas/Role2'
+          type: object
+        systemAdmin:
+          type: boolean
+      type: object
+    UserType:
+      enum:
+      - EXTERNAL
+      - INTERNAL
+      type: string
     AnyValue6:
       description: Can be any value - string, number, boolean, array or object.
+    ErrorResponse8:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation6'
+          type: array
+      type: object
+    LocalLoginRequest:
+      properties:
+        localLoginDisabled:
+          type: boolean
+      type: object
+    UserAccountTypeRequest:
+      properties:
+        accountType:
+          $ref: '#/components/schemas/UserAccountType'
+      required:
+      - accountType
+      type: object
+    UserForceLocalPasswordExpirationRequest:
+      properties:
+        forceLocalPasswordExpiration:
+          type: boolean
+      required:
+      - forceLocalPasswordExpiration
+      type: object
+    SystemRole:
+      enum:
+      - SYSTEM_ADMIN
+      - CONDOR_METRICS
+      type: string
+    SSOStatus:
+      enum:
+      - ACTIVE
+      - INACTIVE
+      type: string
+    ErrorInformation6:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue6'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
     UserInformation2:
       properties:
         companyId:
@@ -498,69 +555,12 @@ components:
       - GUEST
       - PLATFORM_ADMIN
       type: string
-    RolesRequest:
-      properties:
-        roles:
-          additionalProperties:
-            $ref: '#/components/schemas/Role2'
-          type: object
-        systemAdmin:
-          type: boolean
-      type: object
-    ErrorInformation6:
-      properties:
-        args:
-          items:
-            $ref: '#/components/schemas/AnyValue6'
-          type: array
-        code:
-          format: int32
-          type: integer
-        message:
-          type: string
-      type: object
-    SSOStatus:
-      enum:
-      - ACTIVE
-      - INACTIVE
-      type: string
-    UserType:
-      enum:
-      - EXTERNAL
-      - INTERNAL
-      type: string
-    LocalLoginRequest:
-      properties:
-        localLoginDisabled:
-          type: boolean
-      type: object
-    ErrorResponse8:
-      properties:
-        errors:
-          items:
-            $ref: '#/components/schemas/ErrorInformation6'
-          type: array
-      type: object
     UserStatus:
       enum:
       - PENDING_ACTIVATION
       - ACTIVE
       - INACTIVE
       type: string
-    UserForceLocalPasswordExpirationRequest:
-      properties:
-        forceLocalPasswordExpiration:
-          type: boolean
-      required:
-      - forceLocalPasswordExpiration
-      type: object
-    UserAccountTypeRequest:
-      properties:
-        accountType:
-          $ref: '#/components/schemas/UserAccountType'
-      required:
-      - accountType
-      type: object
   securitySchemes:
     service-account:
       in: header

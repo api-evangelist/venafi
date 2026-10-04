@@ -290,16 +290,18 @@ paths:
       - AccessToken: []
 components:
   schemas:
-    Web_SDK_Authentication_OAuthError:
+    Web_SDK_Authentication_AuthorizeOAuthRequest_jwt:
       type: object
       properties:
-        error:
+        client_id:
           type: string
-          description: Gets or sets the short error name
-        error_description:
+          description: Client (Application) ID
+        jwt:
           type: string
-          description: Gets or sets the description of the error
-      description: REST OAuth Error Response
+          description: Trusted Json Web Token
+        scope:
+          type: string
+          description: Desired Scope
     Web_SDK_Authentication_AuthorizeOAuthResponse_jwt:
       type: object
       properties:
@@ -315,46 +317,6 @@ components:
         identity:
           type: string
           description: The identity the grant is for
-    Web_SDK_Authentication_TokenOAuthRequest:
-      type: object
-      properties:
-        refresh_token:
-          type: string
-          description: Gets or sets the refresh token being used to obtain a new access token.
-        client_id:
-          type: string
-          description: Gets or sets the client id.
-        grant_type:
-          type: string
-          description: OAuth grant type.
-        device_code:
-          type: string
-          description: The device verification code, "device_code" from the device authorization response.
-      description: RFC6749 token request.
-    Web_SDK_Authentication_AuthorizeOAuthResponse_device:
-      type: object
-      properties:
-        access_token:
-          type: string
-          description: The scope (WebSDK, CSP, etc) this grant applies to
-        refresh_token:
-          type: string
-          description: The token to use to get an updated access token
-        scope:
-          type: string
-          description: The scope of the grant
-        identity:
-          type: string
-          description: The identity the grant is for
-    Web_SDK_Authentication_AuthorizeOAuthRequest_certificate:
-      type: object
-      properties:
-        client_id:
-          type: string
-          description: Client (Application) ID
-        scope:
-          type: string
-          description: Desired Scope
     Web_SDK_Authentication_AuthorizeVerifyResponse:
       type: object
       properties:
@@ -404,7 +366,52 @@ components:
           type: string
           description: The application this grant applies to
       description: Holds information about a particular access grant
-    Web_SDK_Authentication_AuthorizeOAuthResponse_integrated:
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
+    Web_SDK_Authentication_TokenOAuthRequest:
+      type: object
+      properties:
+        refresh_token:
+          type: string
+          description: Gets or sets the refresh token being used to obtain a new access token.
+        client_id:
+          type: string
+          description: Gets or sets the client id.
+        grant_type:
+          type: string
+          description: OAuth grant type.
+        device_code:
+          type: string
+          description: The device verification code, "device_code" from the device authorization response.
+      description: RFC6749 token request.
+    Web_SDK_Authentication_AuthorizeOAuthRequest_certificate:
+      type: object
+      properties:
+        client_id:
+          type: string
+          description: Client (Application) ID
+        scope:
+          type: string
+          description: Desired Scope
+    Web_SDK_Authentication_AuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: One of the errors defined in RFC 6749 Section 5.2
+        error_description:
+          type: string
+          description: Detailed error explanation
+      description: Class to generate OAuth Authentication Server error responses (See RFC6749, Section 5.2)
+    Web_SDK_Authentication_AuthorizeOAuthResponse_device:
       type: object
       properties:
         access_token:
@@ -419,7 +426,7 @@ components:
         identity:
           type: string
           description: The identity the grant is for
-    Web_SDK_Authentication_AuthorizeOAuthResponse_certificate:
+    Web_SDK_Authentication_AuthorizeOAuthResponse_oauth:
       type: object
       properties:
         access_token:
@@ -443,7 +450,7 @@ components:
         scope:
           type: string
           description: Desired Scope
-    Web_SDK_Authentication_AuthorizeOAuthResponse_oauth:
+    Web_SDK_Authentication_AuthorizeOAuthResponse_integrated:
       type: object
       properties:
         access_token:
@@ -458,52 +465,6 @@ components:
         identity:
           type: string
           description: The identity the grant is for
-    Web_SDK_Authentication_AuthorizeOAuthRequest_oauth:
-      type: object
-      properties:
-        client_id:
-          type: string
-          description: Client (Application) ID
-        username:
-          type: string
-          description: Valid username; can be prefixed with provider
-        password:
-          type: string
-          description: Valid password for _Username_
-        scope:
-          type: string
-          description: Desired Scope
-    Web_SDK_Authentication_AuthorizeOAuthRequest_device:
-      type: object
-      properties:
-        client_id:
-          type: string
-          description: Client (Application) ID
-        scope:
-          type: string
-          description: Desired Scope
-    Web_SDK_Authentication_AuthError:
-      type: object
-      properties:
-        error:
-          type: string
-          description: One of the errors defined in RFC 6749 Section 5.2
-        error_description:
-          type: string
-          description: Detailed error explanation
-      description: Class to generate OAuth Authentication Server error responses (See RFC6749, Section 5.2)
-    Web_SDK_Authentication_AuthorizeOAuthRequest_jwt:
-      type: object
-      properties:
-        client_id:
-          type: string
-          description: Client (Application) ID
-        jwt:
-          type: string
-          description: Trusted Json Web Token
-        scope:
-          type: string
-          description: Desired Scope
     Web_SDK_Authentication_AuthorizeOAuthResponse:
       type: object
       properties:
@@ -557,6 +518,45 @@ components:
           description: The minimum amount of time in seconds that the client should wait between polling requests to the token endpoint.
           format: int64
       description: Holds information about a particular access grant
+    Web_SDK_Authentication_AuthorizeOAuthResponse_certificate:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: The scope (WebSDK, CSP, etc) this grant applies to
+        refresh_token:
+          type: string
+          description: The token to use to get an updated access token
+        scope:
+          type: string
+          description: The scope of the grant
+        identity:
+          type: string
+          description: The identity the grant is for
+    Web_SDK_Authentication_AuthorizeOAuthRequest_device:
+      type: object
+      properties:
+        client_id:
+          type: string
+          description: Client (Application) ID
+        scope:
+          type: string
+          description: Desired Scope
+    Web_SDK_Authentication_AuthorizeOAuthRequest_oauth:
+      type: object
+      properties:
+        client_id:
+          type: string
+          description: Client (Application) ID
+        username:
+          type: string
+          description: Valid username; can be prefixed with provider
+        password:
+          type: string
+          description: Valid password for _Username_
+        scope:
+          type: string
+          description: Desired Scope
   securitySchemes:
     AccessToken:
       type: http

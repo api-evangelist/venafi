@@ -106,6 +106,37 @@ paths:
       - AccessToken: []
 components:
   schemas:
+    WebSDK_CertificateRequest_DiscoveryImportResponse:
+      type: object
+      properties:
+        zoneName:
+          type: string
+          description: The Distinguished Name (DN) of the policy where the certificates were imported.
+        createdCertificates:
+          type: integer
+          description: A list of certificates that were newly created in the system.
+          format: int32
+        createdInstances:
+          type: integer
+          description: A count of newly created application instances, representing discovered applications that were added to the policy structure.
+          format: int32
+        updatedCertificates:
+          type: integer
+          description: A list of existing certificates that were already present in the policy and updated with new discovery data.
+          format: int32
+        updatedInstances:
+          type: integer
+          description: A count of application instances that were found and updated with new configuration details.
+          format: int32
+        Error:
+          type: string
+          description: A detailed error message if the import process failed. If an error occurs, no certificates or applications will be imported or updated.
+        warnings:
+          type: array
+          items:
+            type: string
+          description: A list of non-critical warnings, such as applications that failed to be created, skipped endpoints due to missing certificate data, or naming conflicts resolved automatically.
+      description: Discovery import response.
     WebSDK_CertificateRequest_DiscoveryImportRequest:
       type: object
       properties:
@@ -145,37 +176,6 @@ components:
           type: string
           description: The Distinguished Name (DN) of the policy where discovered certificates should be stored.
       description: Request to import discovery results.
-    WebSDK_CertificateRequest_DiscoveryImportResponse:
-      type: object
-      properties:
-        zoneName:
-          type: string
-          description: The Distinguished Name (DN) of the policy where the certificates were imported.
-        createdCertificates:
-          type: integer
-          description: A list of certificates that were newly created in the system.
-          format: int32
-        createdInstances:
-          type: integer
-          description: A count of newly created application instances, representing discovered applications that were added to the policy structure.
-          format: int32
-        updatedCertificates:
-          type: integer
-          description: A list of existing certificates that were already present in the policy and updated with new discovery data.
-          format: int32
-        updatedInstances:
-          type: integer
-          description: A count of application instances that were found and updated with new configuration details.
-          format: int32
-        Error:
-          type: string
-          description: A detailed error message if the import process failed. If an error occurs, no certificates or applications will be imported or updated.
-        warnings:
-          type: array
-          items:
-            type: string
-          description: A list of non-critical warnings, such as applications that failed to be created, skipped endpoints due to missing certificate data, or naming conflicts resolved automatically.
-      description: Discovery import response.
     WebSDK_CertificateRequest_DiscoveryDeleteResponse:
       type: object
       properties:

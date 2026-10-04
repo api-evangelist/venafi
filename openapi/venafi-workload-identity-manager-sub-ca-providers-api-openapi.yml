@@ -343,79 +343,6 @@ paths:
         - PKIAdmin
 components:
   schemas:
-    SubCAProviderCreateRequest:
-      allOf:
-      - $ref: '#/components/schemas/SubCAProviderUpdateRequest'
-      - properties:
-          caAccountId:
-            description: UUID of the CA account used by this Sub CA provider
-            example: 4ece3180-b1e0-11ed-862d-ad36b18e787a
-            format: uuid
-            type: string
-          caType:
-            $ref: '#/components/schemas/CAType'
-        required:
-        - caAccountId
-        - caProductOptionId
-        - caType
-        - commonName
-        - keyAlgorithm
-        - name
-        - validityPeriod
-        type: object
-    CAType:
-      description: Type of CA this Sub CA provider works with
-      enum:
-      - MOCKCA
-      - DIGICERT
-      - GLOBALSIGN
-      - BUILTIN
-      - ENTRUST
-      - MICROSOFT
-      - ACME
-      - ZTPKI
-      - GLOBALSIGNMSSL
-      - TPP
-      example: BUILTIN
-      type: string
-    ErrorResponse3:
-      properties:
-        errors:
-          items:
-            $ref: '#/components/schemas/Error1'
-          type: array
-      type: object
-    SubCAProviderListResponse:
-      properties:
-        subCaProviders:
-          items:
-            $ref: '#/components/schemas/SubCAProviderGetResponse'
-          type: array
-      type: object
-    SubCAProviderDeleteResponse:
-      properties:
-        id:
-          description: UUID of the Sub CA provider
-          example: 2f3c6030-b1e0-11ed-a3ed-e3dbaf56a746
-          format: uuid
-          type: string
-        name:
-          description: Name of the Sub CA provider
-          example: Some Sub CA
-          type: string
-      type: object
-    KeyAlgorithm1:
-      description: Key algorithm type
-      enum:
-      - RSA_2048
-      - RSA_3072
-      - RSA_4096
-      - EC_P256
-      - EC_P384
-      - EC_P521
-      - EC_ED25519
-      example: EC_P256
-      type: string
     SubCAProviderUpdateRequest:
       properties:
         caProductOptionId:
@@ -495,6 +422,38 @@ components:
           description: Human-readable description of the error.
           type: string
       type: object
+    SubCAProviderDeleteResponse:
+      properties:
+        id:
+          description: UUID of the Sub CA provider
+          example: 2f3c6030-b1e0-11ed-a3ed-e3dbaf56a746
+          format: uuid
+          type: string
+        name:
+          description: Name of the Sub CA provider
+          example: Some Sub CA
+          type: string
+      type: object
+    SubCAProviderCreateRequest:
+      allOf:
+      - $ref: '#/components/schemas/SubCAProviderUpdateRequest'
+      - properties:
+          caAccountId:
+            description: UUID of the CA account used by this Sub CA provider
+            example: 4ece3180-b1e0-11ed-862d-ad36b18e787a
+            format: uuid
+            type: string
+          caType:
+            $ref: '#/components/schemas/CAType'
+        required:
+        - caAccountId
+        - caProductOptionId
+        - caType
+        - commonName
+        - keyAlgorithm
+        - name
+        - validityPeriod
+        type: object
     SubCAProviderPKCS11Configuration:
       properties:
         allowedClientLibraries:
@@ -523,6 +482,32 @@ components:
           example: true
           type: boolean
       type: object
+    SubCAProviderListResponse:
+      properties:
+        subCaProviders:
+          items:
+            $ref: '#/components/schemas/SubCAProviderGetResponse'
+          type: array
+      type: object
+    ErrorResponse3:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/Error1'
+          type: array
+      type: object
+    KeyAlgorithm1:
+      description: Key algorithm type
+      enum:
+      - RSA_2048
+      - RSA_3072
+      - RSA_4096
+      - EC_P256
+      - EC_P384
+      - EC_P521
+      - EC_ED25519
+      example: EC_P256
+      type: string
     SubCAProviderGetResponse:
       properties:
         caAccountId:
@@ -605,6 +590,21 @@ components:
           format: PnYnMnDTnHnMnS
           type: string
       type: object
+    CAType:
+      description: Type of CA this Sub CA provider works with
+      enum:
+      - MOCKCA
+      - DIGICERT
+      - GLOBALSIGN
+      - BUILTIN
+      - ENTRUST
+      - MICROSOFT
+      - ACME
+      - ZTPKI
+      - GLOBALSIGNMSSL
+      - TPP
+      example: BUILTIN
+      type: string
   securitySchemes:
     service-account:
       in: header

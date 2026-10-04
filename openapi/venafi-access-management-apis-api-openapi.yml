@@ -1481,7 +1481,53 @@ paths:
       - AccessToken: []
 components:
   schemas:
-    Core_WebSDK_OAuthWebResponse_grantcount:
+    Core_WebSDK_RightsWebRequest_grantsystemrole:
+      type: object
+      properties:
+        UniversalID:
+          type: string
+          description: The universal ID.
+        Role:
+          type: string
+          description: The Role
+    Core_WebSDK_OAuthWebRequest_deletejwtmapping:
+      type: object
+      properties:
+        Name:
+          type: string
+          description: Gets or sets the name of an application
+    Core_WebSDK_OAuthWebRequest_getapplication:
+      type: object
+      properties:
+        ApplicationId:
+          type: string
+          description: Gets or sets the application identifier
+    Core_WebSDK_OAuthWebRequest_getgrants:
+      type: object
+      properties:
+        GranteePrefixedUniversal:
+          type: string
+          description: Grantee Prefixed Universal Identity
+        ApplicationId:
+          type: string
+          description: Gets or sets the application identifier
+        Start:
+          type: integer
+          description: Gets or sets the start index for paged APIs
+          format: int32
+        Count:
+          type: integer
+          description: Gets or sets the maximum number of results to return for paged APIs
+          format: int32
+        OrderBy:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthOrderByField'
+        Descending:
+          type: boolean
+          description: Gets or sets ordering direction for query APIs
+        ResolveIdentities:
+          type: boolean
+          description: If **true**, prefixed universals will be resolved and included in the response in the _IdentityEntries_ field
+    Core_WebSDK_OAuthWebResponse_createapplication:
       type: object
       properties:
         Success:
@@ -1494,10 +1540,229 @@ components:
         Error:
           type: string
           description: Gets or sets the error
+        Application:
+          type: object
+          properties:
+            Name:
+              type: string
+              description: Gets or sets the name of the application
+            Description:
+              type: string
+              description: Gets or sets the description of the application
+            Vendor:
+              type: string
+              description: Gets or sets the vendor that created the application
+            Url:
+              type: string
+              description: Gets or sets the URL to get more information about the application
+            Scope:
+              type: string
+              description: Gets or sets the scope the application requires
+            MaximumScope:
+              type: string
+              description: Gets or sets the maximum scope the application knows to use
+            AccessValidity:
+              type:
+              - integer
+              - 'null'
+              description: Gets or sets the amount of time grant rules using this application should have their access token valid for
+              format: int64
+            GrantValidity:
+              type:
+              - integer
+              - 'null'
+              description: '**null** means the grant never expires'
+              format: int64
+            Renewable:
+              type:
+              - boolean
+              - 'null'
+              description: Gets or sets if grant rules created under this application should be marked for renewal
+            GrantCount:
+              type:
+              - integer
+              - 'null'
+              description: Gets or sets the number of grants issued for the application
+              format: int32
+            UserCount:
+              type:
+              - integer
+              - 'null'
+              description: Gets or sets the number of users having grants issued for the application
+              format: int32
+            UnusedExpiration:
+              type:
+              - integer
+              - 'null'
+              description: Gets or sets the number of seconds an access token has to be expired before a grant for this application is considered expired
+              format: int64
+            ID:
+              type: string
+              description: Gets or sets the identifier of the application
+          description: Gets or sets an _OAuthApplication_
+    Core_WebSDK_OAuthWebResponse_deletejwtmapping:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
+
+            Success variable in the response body will indicate if the **API** call itself was successful.'
+        Result:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
+        Error:
+          type: string
+          description: Gets or sets the error
+    Core_WebSDK_OAuthWebRequest_revokegrants:
+      type: object
+      properties:
+        ApplicationId:
+          type: string
+          description: Gets or sets the application identifier
+        GranteePrefixedUniversal:
+          type: string
+          description: Grantee Prefixed Universal Identity
+    Core_WebSDK_OAuthWebRequest_enumeraterules:
+      type: object
+      properties:
+        ApplicationId:
+          type: string
+          description: Gets or sets the application identifier
+        Start:
+          type: integer
+          description: Gets or sets the start index for paged APIs
+          format: int32
         Count:
           type: integer
-          description: Gets or sets the requested count
+          description: Gets or sets the maximum number of results to return for paged APIs
           format: int32
+        OrderBy:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthOrderByField'
+        Descending:
+          type: boolean
+          description: Gets or sets ordering direction for query APIs
+        ResolveIdentities:
+          type: boolean
+          description: If **true**, prefixed universals will be resolved and included in the response in the _IdentityEntries_ field
+    Core_WebSDK_OAuthWebRequest_enumeratejwtmappings:
+      type: object
+      properties:
+        Start:
+          type: integer
+          description: Gets or sets the start index for paged APIs
+          format: int32
+        Count:
+          type: integer
+          description: Gets or sets the maximum number of results to return for paged APIs
+          format: int32
+        OrderBy:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthOrderByField'
+        Descending:
+          type: boolean
+          description: Gets or sets ordering direction for query APIs
+        ResolveIdentities:
+          type: boolean
+          description: If **true**, prefixed universals will be resolved and included in the response in the _IdentityEntries_ field
+    Core_WebSDK_OAuthWebRequest_deleterule:
+      type: object
+      properties:
+        TrusteePrefixedUniversal:
+          type: string
+          description: Gets or sets the prefixed universal for the trustee
+        ApplicationId:
+          type: string
+          description: Gets or sets the application identifier
+    Core_WebSDK_OAuthWebRequest_updaterule:
+      type: object
+      properties:
+        Rule:
+          type: object
+          properties:
+            Description:
+              type: string
+              description: Gets or sets the application the description of the rule
+            MaximumScope:
+              type: string
+              description: Gets or sets the maximum scope this rule will grant
+            AccessValidity:
+              type:
+              - integer
+              - 'null'
+              description: Gets or sets the time an access token issued under this rule is valid
+              format: int64
+            GrantValidity:
+              type:
+              - integer
+              - 'null'
+              description: Gets or sets how long before a grant issued under this rule expires and can no longer be renewed
+              format: int64
+            Renewable:
+              type:
+              - boolean
+              - 'null'
+              description: Gets or sets if a grant issued under this rule is renewable
+            TrusteePrefixedUniversal:
+              type: string
+              description: Gets or sets the identity (user/group) this rule applies to
+            ApplicationId:
+              type: string
+              description: Gets or sets the application that can request access under this rule
+          description: Gets or sets the _OAuthRule_ to update
+    Core_WebSDK_OAuthWebRequest_getapplications:
+      type: object
+      properties:
+        Filter:
+          type: string
+          description: Gets or sets a generic filter string
+        ApplicationIds:
+          type: array
+          items:
+            type: string
+          description: Gets or sets a list of the application identifiers
+    Core_WebSDK_OAuthWebResponse_revokegrants:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
+
+            Success variable in the response body will indicate if the **API** call itself was successful.'
+        Result:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
+        Error:
+          type: string
+          description: Gets or sets the error
+    Core_WebSDK_OAuthWebRequest_deleteapplication:
+      type: object
+      properties:
+        ApplicationId:
+          type: string
+          description: Gets or sets the application identifier
+    Core_WebSDK_OAuthWebRequest_enumerateapplications:
+      type: object
+      properties:
+        Start:
+          type: integer
+          description: Gets or sets the start index for paged APIs
+          format: int32
+        Count:
+          type: integer
+          description: Gets or sets the maximum number of results to return for paged APIs
+          format: int32
+        OrderBy:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthOrderByField'
+        Descending:
+          type: boolean
+          description: Gets or sets ordering direction for query APIs
+    Core_WebSDK_OAuthWebRequest_deleterules:
+      type: object
+      properties:
+        TrusteePrefixedUniversal:
+          type: string
+          description: Gets or sets the prefixed universal for the trustee
+        ApplicationId:
+          type: string
+          description: Gets or sets the application identifier
     Core_WebSDK_OAuthWebResponse_getapplications:
       type: object
       properties:
@@ -1574,193 +1839,7 @@ components:
                 description: Gets or sets the identifier of the application
             description: Holds information about a particular OAuth application
           description: Gets or sets a collection of _OAuthApplication_
-    Core_WebSDK_OAuthWebResponse_enumeratejwtmappings:
-      type: object
-      properties:
-        JwtMappings:
-          type: array
-          items:
-            type: object
-            properties:
-              IssuerUri:
-                type: string
-                description: The Issuer URI for the mapping
-              JwksUri:
-                type: string
-                description: 'Optional alternate JwksUri (JWKS/OpenID) used when the IssuerUri differs from the discovery location.
-
-                  When supplied this value can be used by the server to directly locate keys instead of deriving from IssuerUri.
-
-                  Nullable and not required for legacy mappings.'
-              PurposeField:
-                type: string
-                description: The JWT field to determine the purpose
-              PurposeMatch:
-                type: string
-                description: The value that must match the purpose field to accept the JWT
-              IdField:
-                type: string
-                description: The JWT field to determine the identity
-              IdMatch:
-                type: string
-                description: The regular expression to apply to the identity field to determine the grant identity (or **null** if _GranteePrefixedUniversal_ is used
-              GranteePrefixedUniversal:
-                type: string
-                description: The fixed prefixed universal identity to use as grant identity
-              Name:
-                type: string
-                description: Gets or sets the identifier of the application
-            description: Holds information about a particular OAuth application
-          description: Gets or sets a collection of _OAuthJwtMapping_
-        Success:
-          type: boolean
-          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
-
-            Success variable in the response body will indicate if the **API** call itself was successful.'
-        Result:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
-        Error:
-          type: string
-          description: Gets or sets the error
-    Core_WebSDK_OAuthWebRequest_setconfiguration:
-      type: object
-      properties:
-        Configuration:
-          type: object
-          properties:
-            SessionPoolSize:
-              type: integer
-              description: Gets or sets the WebSDK Session Pool (Cache) size, in number of entries
-              format: int32
-            SessionPoolAge:
-              type: integer
-              description: Gets or sets the maximum time an entry can be kept in the sesion pool, in seconds
-              format: int32
-            SessionPoolExpirationInterval:
-              type: integer
-              description: Gets or sets how often the session expiration process runs
-              format: int32
-            SessionRightsRefreshInterval:
-              type: integer
-              description: Gets or sets the maximum number of seconds since the last request after which the stored rights of a session are refreshed from the database
-              format: int32
-            StrictExpiration:
-              type: boolean
-              description: Gets or sets the session cache expiration strategy
-            StatisticsApiTracking:
-              type: boolean
-              description: Gets or sets the if API usage is tracked via statistics
-            StatisticsTrackingIncludesTime:
-              type: boolean
-              description: Gets or sets the if API usage statistics track API execution times
-            OpenApiEnabled:
-              type: boolean
-              description: Gets or sets the OpenAPI documentation is accessible
-            OpenApiUi:
-              type: string
-              description: Gets or sets the UI to use for OpenAPI documentation
-            DefaultAccessTokenValidity:
-              type: integer
-              description: Gets or sets the number of seconds an access token is valid if not overriden by application or rule
-              format: int32
-            DefaultGrantValidity:
-              type: integer
-              description: Gets or sets the number of seconds a grant is valid if not overriden by application or rule
-              format: int32
-            DefaultGrantRefreshable:
-              type: boolean
-              description: Gets or sets whether or not a grant can be refreshed, if not override by application or rule
-            UnusedAccessTokenExpiration:
-              type: integer
-              description: Gets or sets the number of seconds an access token must be expired to consider the grant expired, even if the actual grant expiration is further out
-              format: int32
-            RefreshEndpointEnabled:
-              type: boolean
-              description: Gets or sets whether the token refresh endpoint is enabled
-            AuthorizeByPassword:
-              type: boolean
-              description: Gets or sets whether the authentication server accepts username/password as authentication credentials
-            AuthorizeByCertificate:
-              type: boolean
-              description: Gets or sets whether the authentication server accepts certificates as authentication credentials
-            AuthorizeByIntegrated:
-              type: boolean
-              description: Gets or sets whether the authentication server accepts integrated (Windows) authentication
-            AuthorizeByJwt:
-              type: boolean
-              description: Gets or sets whether the authentication server accepts JWT authentication
-            AuthorizeDevice:
-              type: boolean
-              description: Gets or sets whether the authentication server accepts device authentication requests
-            DeviceConfiguration:
-              type: object
-              properties:
-                VerificationUri:
-                  type: string
-                  description: Gets or sets the Uri to verify (confirm) a device authorization request
-                VerificationUriCompleteFormat:
-                  type: string
-                  description: Gets or sets the Uri to verify (confirm) a device authorization request, with a {0} placeholder for string.format use to hold the unique request id
-              description: Gets or sets device authorization specific settings
-            CertificateConfiguration:
-              type: object
-              properties:
-                AttemptSIDExtensionBeforeSourceField:
-                  type: boolean
-                  description: Gets or sets whether we should first check and use SID extension from certificate prior to fallback to other source field
-                SourceField:
-                  type: string
-                  description: Gets or sets the certificate field to use to determine identity
-                AuthorizedIssuerDns:
-                  type: array
-                  items:
-                    type: string
-                  description: Gets or sets the vault IDs of the certificates trusted as issuers of certificates used to authenticate
-              description: Gets or sets device authorization specific settings
-            JwtConfiguration:
-              type: object
-              properties:
-                ClockSkew:
-                  type: integer
-                  description: Gets or sets how much time drift is allowed for checking iat and nbf fields
-                  format: int32
-                CacheConfiguration:
-                  type: object
-                  properties:
-                    DegreeOfParallelism:
-                      type: integer
-                      description: Maximum number of threads that can fetch keys concurrently
-                      format: int32
-                    RefreshDelay:
-                      type: integer
-                      description: Refresh mappings / keys delay in seconds; throttles refresh attempts
-                      format: int32
-                    MinTtl:
-                      type: integer
-                      description: Keys minimum TTL (seconds) in the cache; after they fetched, they will live in the cache at least this amount of time
-                      format: int32
-                    MaxTtl:
-                      type: integer
-                      description: Keys maximum TTL (seconds) in the cache; even if the keys are valid, after this amount of time they will be refreshed
-                      format: int32
-                    Timeout:
-                      type: integer
-                      description: HTTP request timeout (for accessing JWKS URI, OIDC discovery endpoint, etc).
-                      format: int32
-                    NoHttps:
-                      type: boolean
-                      description: If true, AuthServer allows HTTP for OIDC / JWKS endpoints. Use this option ONLY for testing purposes.
-                    NoOidcIssuerCheck:
-                      type: boolean
-                      description: If true, AuthServer skips issuer check for OpenID provider metadata. Use this option ONLY for testing purposes.
-                    AutoRefresh:
-                      type: integer
-                      description: Automatic configuration refresh interval (in seconds). AuthServer re-queries mappings from the DB and downloads keys again for each issuer.
-                      format: int32
-                  description: JWT cache configuration
-              description: Gets or sets JWT authorization specific settings
-          description: Gets or sets OAuth configuration
-    Core_WebSDK_OAuthWebResponse_usercount:
+    Core_WebSDK_OAuthWebResponse_grantcount:
       type: object
       properties:
         Success:
@@ -1777,7 +1856,48 @@ components:
           type: integer
           description: Gets or sets the requested count
           format: int32
-    Core_WebSDK_OAuthWebResponse_getrules:
+    Core_WebSDK_OAuthWebResponse_listroles:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
+
+            Success variable in the response body will indicate if the **API** call itself was successful.'
+        Result:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
+        Error:
+          type: string
+          description: Gets or sets the error
+        Roles:
+          type: array
+          items:
+            type: object
+            properties:
+              Role:
+                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthRole'
+              Grantee:
+                type: string
+                description: The identity this role applies to
+              ApplicationId:
+                type: string
+                description: The application this role applies to (or **null** if the role isn't application-specific)
+            description: Data class representing rights for a particular role
+          description: Gets or sets a list roles
+    Core_WebSDK_OAuthWebResponse_revokerole:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
+
+            Success variable in the response body will indicate if the **API** call itself was successful.'
+        Result:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
+        Error:
+          type: string
+          description: Gets or sets the error
+    Core_WebSDK_OAuthWebResponse_enumeraterules:
       type: object
       properties:
         Success:
@@ -1826,7 +1946,7 @@ components:
                 description: Gets or sets the application that can request access under this rule
             description: Data class holding properties describing a rule used to obtain an OAuth grant automatically
           description: Gets or sets a list of _OAuthRule_ objects
-    Core_WebSDK_OAuthWebResponse_revokerole:
+    Core_WebSDK_OAuthWebResponse_deleterules:
       type: object
       properties:
         Success:
@@ -1839,7 +1959,17 @@ components:
         Error:
           type: string
           description: Gets or sets the error
-    Core_WebSDK_OAuthWebResponse_updatejwtmapping:
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
+    Core_WebSDK_OAuthWebResponse_deleteapplication:
       type: object
       properties:
         Success:
@@ -1852,7 +1982,147 @@ components:
         Error:
           type: string
           description: Gets or sets the error
-    Core_WebSDK_OAuthWebRequest_grantrole:
+    Core_WebSDK_OAuthWebResponse_deleterule:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
+
+            Success variable in the response body will indicate if the **API** call itself was successful.'
+        Result:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
+        Error:
+          type: string
+          description: Gets or sets the error
+    Core_WebSDK_OAuthWebRequest_getjwtmappings:
+      type: object
+      properties:
+        Filter:
+          type: string
+          description: Gets or sets a generic filter string
+        IssuerUris:
+          type: array
+          items:
+            type: string
+          description: Gets or sets a list of Issuer URIs
+        ResolveIdentities:
+          type: boolean
+          description: If **true**, prefixed universals will be resolved and included in the response in the _IdentityEntries_ field
+    Core_WebSDK_OAuthWebRequest_enumerategrants:
+      type: object
+      properties:
+        ApplicationId:
+          type: string
+          description: Gets or sets the application identifier
+        Start:
+          type: integer
+          description: Gets or sets the start index for paged APIs
+          format: int32
+        Count:
+          type: integer
+          description: Gets or sets the maximum number of results to return for paged APIs
+          format: int32
+        OrderBy:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthOrderByField'
+        Descending:
+          type: boolean
+          description: Gets or sets ordering direction for query APIs
+        ResolveIdentities:
+          type: boolean
+          description: If **true**, prefixed universals will be resolved and included in the response in the _IdentityEntries_ field
+    Core_WebSDK_OAuthWebResponse_createrule:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
+
+            Success variable in the response body will indicate if the **API** call itself was successful.'
+        Result:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
+        Error:
+          type: string
+          description: Gets or sets the error
+        Rule:
+          type: object
+          properties:
+            Description:
+              type: string
+              description: Gets or sets the application the description of the rule
+            MaximumScope:
+              type: string
+              description: Gets or sets the maximum scope this rule will grant
+            AccessValidity:
+              type:
+              - integer
+              - 'null'
+              description: Gets or sets the time an access token issued under this rule is valid
+              format: int64
+            GrantValidity:
+              type:
+              - integer
+              - 'null'
+              description: Gets or sets how long before a grant issued under this rule expires and can no longer be renewed
+              format: int64
+            Renewable:
+              type:
+              - boolean
+              - 'null'
+              description: Gets or sets if a grant issued under this rule is renewable
+            TrusteePrefixedUniversal:
+              type: string
+              description: Gets or sets the identity (user/group) this rule applies to
+            ApplicationId:
+              type: string
+              description: Gets or sets the application that can request access under this rule
+          description: Gets or sets the _OAuthRule_
+    Core_WebSDK_OAuthWebResponse_getjwtmapping:
+      type: object
+      properties:
+        JwtMapping:
+          type: object
+          properties:
+            IssuerUri:
+              type: string
+              description: The Issuer URI for the mapping
+            JwksUri:
+              type: string
+              description: 'Optional alternate JwksUri (JWKS/OpenID) used when the IssuerUri differs from the discovery location.
+
+                When supplied this value can be used by the server to directly locate keys instead of deriving from IssuerUri.
+
+                Nullable and not required for legacy mappings.'
+            PurposeField:
+              type: string
+              description: The JWT field to determine the purpose
+            PurposeMatch:
+              type: string
+              description: The value that must match the purpose field to accept the JWT
+            IdField:
+              type: string
+              description: The JWT field to determine the identity
+            IdMatch:
+              type: string
+              description: The regular expression to apply to the identity field to determine the grant identity (or **null** if _GranteePrefixedUniversal_ is used
+            GranteePrefixedUniversal:
+              type: string
+              description: The fixed prefixed universal identity to use as grant identity
+            Name:
+              type: string
+              description: Gets or sets the identifier of the application
+          description: Gets or sets the _OAuthJwtMapping_
+        Success:
+          type: boolean
+          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
+
+            Success variable in the response body will indicate if the **API** call itself was successful.'
+        Result:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
+        Error:
+          type: string
+          description: Gets or sets the error
+    Core_WebSDK_OAuthWebRequest_revokerole:
       type: object
       properties:
         GranteePrefixedUniversal:
@@ -1860,9 +2130,162 @@ components:
           description: Grantee Prefixed Universal Identity
         Role:
           $ref: '#/components/schemas/Web_SDK_Authentication_OAuthRole'
-        ApplicationId:
+    Core_WebSDK_OAuthWebResponse_getjwtmappings:
+      type: object
+      properties:
+        JwtMappings:
+          type: array
+          items:
+            type: object
+            properties:
+              IssuerUri:
+                type: string
+                description: The Issuer URI for the mapping
+              JwksUri:
+                type: string
+                description: 'Optional alternate JwksUri (JWKS/OpenID) used when the IssuerUri differs from the discovery location.
+
+                  When supplied this value can be used by the server to directly locate keys instead of deriving from IssuerUri.
+
+                  Nullable and not required for legacy mappings.'
+              PurposeField:
+                type: string
+                description: The JWT field to determine the purpose
+              PurposeMatch:
+                type: string
+                description: The value that must match the purpose field to accept the JWT
+              IdField:
+                type: string
+                description: The JWT field to determine the identity
+              IdMatch:
+                type: string
+                description: The regular expression to apply to the identity field to determine the grant identity (or **null** if _GranteePrefixedUniversal_ is used
+              GranteePrefixedUniversal:
+                type: string
+                description: The fixed prefixed universal identity to use as grant identity
+              Name:
+                type: string
+                description: Gets or sets the identifier of the application
+            description: Holds information about a particular OAuth application
+          description: Gets or sets a collection of _OAuthJwtMapping_
+        Success:
+          type: boolean
+          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
+
+            Success variable in the response body will indicate if the **API** call itself was successful.'
+        Result:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
+        Error:
           type: string
-          description: Gets or sets the application identifier
+          description: Gets or sets the error
+    Core_WebSDK_OAuthWebRequest_getjwtmapping:
+      type: object
+      properties:
+        Name:
+          type: string
+          description: Gets or sets the name of an application
+        ResolveIdentities:
+          type: boolean
+          description: If **true**, prefixed universals will be resolved and included in the response in the _IdentityEntries_ field
+    Web_SDK_Authentication_OAuthResult:
+      title: Enumeration providing result codes for OAuth API
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+      - 20
+      - 21
+      - 22
+      - 23
+      type: integer
+      description: "\n\n**0**: **Success**  \nThe request completed successfully\n\n**1**: **Failure**  \nThe request could not be completed successfully\n\n**2**: **ApplicationNotFound**  \nThe requested application could not be found\n\n**3**: **GrantNotFound**  \nThe requested grant could not be found\n\n**4**: **RuleNotFound**  \nThe requested rule could not be found\n\n**5**: **DriverError**  \nA driver error was encountered while processing the request\n\n**6**: **InvalidParameters**  \nInvalid parameters were provided\n\n**7**: **TokenHashError**  \nA token hash error was encountered while processing the request\n\n**8**: **ExceptionThrown**  \nAn exception was thrown while processing the request\n\n**9**: **InsufficientPrivileges**  \nThe caller has insufficient permissions to perform an operation\n\n**10**: **ObjectInvalid**  \nThe object is not properly configured to process the request\n\n**11**: **AccessTokenExpired**  \nThe access token used has expired\n\n**12**: **AuthenticationMissing**  \nMissing authentication information\n\n**13**: **AuthenticationInvalid**  \nAuthentication information is not in a valid format\n\n**14**: **UnsignedCodeForbidden**  \nOperation forbidden for unsigned code\n\n**15**: **RemoteTransportFailure**  \nA request could not be submitted to the remote system due to a transport/network failure\n\n**16**: **RightsAssignmentError**  \nA rights assignment request failed\n\n**17**: **InvalidScope**  \nA requested scope was invalid\n\n**18**: **RemoteIdentityRequired**  \nA valid identity object was not supplied\n\n**19**: **ApplicationAlreadyExists**  \nThe application already exists\n\n**20**: **RuleAlreadyExists**  \nThe rule already exists\n\n**21**: **JwtMappingNotFound**  \nThe JWT mapping could not be found\n\n**22**: **JwtMappingAlreadyExists**  \nA JWT mapping with the same name already exists\n\n**23**: **ScopeMismatch**  \nA provided scope doesn't meet given constraints\n"
+      format: int32
+    Core_WebSDK_RightsWebResponse_revokesystemrole:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: The subsystem.
+    Core_WebSDK_OAuthWebRequest_updateapplication:
+      type: object
+      properties:
+        Application:
+          type: object
+          properties:
+            Name:
+              type: string
+              description: Gets or sets the name of the application
+            Description:
+              type: string
+              description: Gets or sets the description of the application
+            Vendor:
+              type: string
+              description: Gets or sets the vendor that created the application
+            Url:
+              type: string
+              description: Gets or sets the URL to get more information about the application
+            Scope:
+              type: string
+              description: Gets or sets the scope the application requires
+            MaximumScope:
+              type: string
+              description: Gets or sets the maximum scope the application knows to use
+            AccessValidity:
+              type:
+              - integer
+              - 'null'
+              description: Gets or sets the amount of time grant rules using this application should have their access token valid for
+              format: int64
+            GrantValidity:
+              type:
+              - integer
+              - 'null'
+              description: '**null** means the grant never expires'
+              format: int64
+            Renewable:
+              type:
+              - boolean
+              - 'null'
+              description: Gets or sets if grant rules created under this application should be marked for renewal
+            GrantCount:
+              type:
+              - integer
+              - 'null'
+              description: Gets or sets the number of grants issued for the application
+              format: int32
+            UserCount:
+              type:
+              - integer
+              - 'null'
+              description: Gets or sets the number of users having grants issued for the application
+              format: int32
+            UnusedExpiration:
+              type:
+              - integer
+              - 'null'
+              description: Gets or sets the number of seconds an access token has to be expired before a grant for this application is considered expired
+              format: int64
+            ID:
+              type: string
+              description: Gets or sets the identifier of the application
+          description: Gets or sets the _OAuthApplication_ to update
     Core_WebSDK_OAuthWebResponse_grantrole:
       type: object
       properties:
@@ -1876,12 +2299,6 @@ components:
         Error:
           type: string
           description: Gets or sets the error
-    Core_WebSDK_OAuthWebRequest_getapplication:
-      type: object
-      properties:
-        ApplicationId:
-          type: string
-          description: Gets or sets the application identifier
     Core_WebSDK_OAuthWebResponse_enumerategrants:
       type: object
       properties:
@@ -1956,157 +2373,91 @@ components:
                 description: Gets or sets the identity that the permission to obtain a grant was issued to.  if the permission was assigned to the user directly)
             description: Holds information about a particular access grant
           description: Gets or sets a list of _OAuthGrant_ items
-    Core_WebSDK_OAuthWebRequest_createrule:
+    Core_WebSDK_OAuthWebResponse_enumerateapplications:
       type: object
       properties:
-        ApplicationId:
-          type: string
-          description: Gets or sets the application identifier
-        TrusteePrefixedUniversal:
-          type: string
-          description: Gets or sets the prefixed universal for the trustee
-        MaximumScope:
-          type: string
-          description: Gets or sets the maximum scope for an application
-        Description:
-          type: string
-          description: Gets or sets the description for an application or rule
-        AccessValidity:
-          type:
-          - integer
-          - 'null'
-          description: Gets or sets the duration (in seconds) access tokens should be available for
-          format: int64
-        GrantValidity:
-          type:
-          - integer
-          - 'null'
-          description: Gets or sets the duration (in seconds) grants should be available for
-          format: int64
-        Renewable:
-          type:
-          - boolean
-          - 'null'
-          description: Gets or sets whether grants for an application should be renewable
-    Core_WebSDK_OAuthWebRequest_getrules:
-      type: object
-      properties:
-        ApplicationId:
-          type: string
-          description: Gets or sets the application identifier
-        TrusteePrefixedUniversal:
-          type: string
-          description: Gets or sets the prefixed universal for the trustee
-        TrusteePrefixedUniversals:
-          type: array
-          items:
-            type: string
-          description: Gets or sets a list of trustee universals to search on
-        MaximumScope:
-          type: string
-          description: Gets or sets the maximum scope for an application
-        Renewable:
-          type:
-          - boolean
-          - 'null'
-          description: Gets or sets whether grants for an application should be renewable
-        NoExpire:
-          type:
-          - boolean
-          - 'null'
-          description: Gets or sets filtering rules that have no expiration. **true** to find rules that don't expire.
-        ResolveIdentities:
+        Success:
           type: boolean
-          description: If **true**, prefixed universals will be resolved and included in the response in the _IdentityEntries_ field
-    Core_WebSDK_RightsWebResponse_revokesystemrole:
+          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
+
+            Success variable in the response body will indicate if the **API** call itself was successful.'
+        Result:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
+        Error:
+          type: string
+          description: Gets or sets the error
+        Application:
+          type: object
+          properties:
+            Name:
+              type: string
+              description: Gets or sets the name of the application
+            Description:
+              type: string
+              description: Gets or sets the description of the application
+            Vendor:
+              type: string
+              description: Gets or sets the vendor that created the application
+            Url:
+              type: string
+              description: Gets or sets the URL to get more information about the application
+            Scope:
+              type: string
+              description: Gets or sets the scope the application requires
+            MaximumScope:
+              type: string
+              description: Gets or sets the maximum scope the application knows to use
+            AccessValidity:
+              type:
+              - integer
+              - 'null'
+              description: Gets or sets the amount of time grant rules using this application should have their access token valid for
+              format: int64
+            GrantValidity:
+              type:
+              - integer
+              - 'null'
+              description: '**null** means the grant never expires'
+              format: int64
+            Renewable:
+              type:
+              - boolean
+              - 'null'
+              description: Gets or sets if grant rules created under this application should be marked for renewal
+            GrantCount:
+              type:
+              - integer
+              - 'null'
+              description: Gets or sets the number of grants issued for the application
+              format: int32
+            UserCount:
+              type:
+              - integer
+              - 'null'
+              description: Gets or sets the number of users having grants issued for the application
+              format: int32
+            UnusedExpiration:
+              type:
+              - integer
+              - 'null'
+              description: Gets or sets the number of seconds an access token has to be expired before a grant for this application is considered expired
+              format: int64
+            ID:
+              type: string
+              description: Gets or sets the identifier of the application
+          description: Gets or sets an _OAuthApplication_
+    Core_WebSDK_OAuthWebRequest_usercount:
+      type: object
+      properties:
+        ApplicationId:
+          type: string
+          description: Gets or sets the application identifier
+    Core_WebSDK_RightsWebResponse_grantsystemrole:
       type: object
       properties:
         Success:
           type: boolean
           description: The subsystem.
-    Core_WebSDK_OAuthWebResponse_createjwtmapping:
-      type: object
-      properties:
-        JwtMapping:
-          type: object
-          properties:
-            IssuerUri:
-              type: string
-              description: The Issuer URI for the mapping
-            JwksUri:
-              type: string
-              description: 'Optional alternate JwksUri (JWKS/OpenID) used when the IssuerUri differs from the discovery location.
-
-                When supplied this value can be used by the server to directly locate keys instead of deriving from IssuerUri.
-
-                Nullable and not required for legacy mappings.'
-            PurposeField:
-              type: string
-              description: The JWT field to determine the purpose
-            PurposeMatch:
-              type: string
-              description: The value that must match the purpose field to accept the JWT
-            IdField:
-              type: string
-              description: The JWT field to determine the identity
-            IdMatch:
-              type: string
-              description: The regular expression to apply to the identity field to determine the grant identity (or **null** if _GranteePrefixedUniversal_ is used
-            GranteePrefixedUniversal:
-              type: string
-              description: The fixed prefixed universal identity to use as grant identity
-            Name:
-              type: string
-              description: Gets or sets the identifier of the application
-          description: Gets or sets the _OAuthJwtMapping_
-        Success:
-          type: boolean
-          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
-
-            Success variable in the response body will indicate if the **API** call itself was successful.'
-        Result:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
-        Error:
-          type: string
-          description: Gets or sets the error
-    Core_WebSDK_OAuthWebResponse_listroles:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
-
-            Success variable in the response body will indicate if the **API** call itself was successful.'
-        Result:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
-        Error:
-          type: string
-          description: Gets or sets the error
-        Roles:
-          type: array
-          items:
-            type: object
-            properties:
-              Role:
-                $ref: '#/components/schemas/Web_SDK_Authentication_OAuthRole'
-              Grantee:
-                type: string
-                description: The identity this role applies to
-              ApplicationId:
-                type: string
-                description: The application this role applies to (or **null** if the role isn't application-specific)
-            description: Data class representing rights for a particular role
-          description: Gets or sets a list roles
-    Web_SDK_Authentication_OAuthError:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Gets or sets the short error name
-        error_description:
-          type: string
-          description: Gets or sets the description of the error
-      description: REST OAuth Error Response
     Core_WebSDK_OAuthWebResponse_getconfiguration:
       type: object
       properties:
@@ -2255,41 +2606,6 @@ components:
                   description: JWT cache configuration
               description: Gets or sets JWT authorization specific settings
           description: Gets or sets OAuth configuration
-    Core_WebSDK_OAuthWebRequest_updatejwtmapping:
-      type: object
-      properties:
-        JwtMapping:
-          type: object
-          properties:
-            IssuerUri:
-              type: string
-              description: The Issuer URI for the mapping
-            JwksUri:
-              type: string
-              description: 'Optional alternate JwksUri (JWKS/OpenID) used when the IssuerUri differs from the discovery location.
-
-                When supplied this value can be used by the server to directly locate keys instead of deriving from IssuerUri.
-
-                Nullable and not required for legacy mappings.'
-            PurposeField:
-              type: string
-              description: The JWT field to determine the purpose
-            PurposeMatch:
-              type: string
-              description: The value that must match the purpose field to accept the JWT
-            IdField:
-              type: string
-              description: The JWT field to determine the identity
-            IdMatch:
-              type: string
-              description: The regular expression to apply to the identity field to determine the grant identity (or **null** if _GranteePrefixedUniversal_ is used
-            GranteePrefixedUniversal:
-              type: string
-              description: The fixed prefixed universal identity to use as grant identity
-            Name:
-              type: string
-              description: Gets or sets the identifier of the application
-          description: Gets or sets the _OAuthJwtMapping_
     Core_WebSDK_OAuthWebResponse_getgrants:
       type: object
       properties:
@@ -2364,634 +2680,7 @@ components:
                 description: Gets or sets the identity that the permission to obtain a grant was issued to.  if the permission was assigned to the user directly)
             description: Holds information about a particular access grant
           description: Gets or sets a list of _OAuthGrant_ items
-    Core_WebSDK_OAuthWebResponse_getrole:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
-
-            Success variable in the response body will indicate if the **API** call itself was successful.'
-        Result:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
-        Error:
-          type: string
-          description: Gets or sets the error
-        Role:
-          type: object
-          properties:
-            PermittedApplications:
-              type: array
-              items:
-                type: string
-              description: Gets the list of applications the user has rights to
-            OwnedApplications:
-              type: array
-              items:
-                type: object
-                properties:
-                  ApplicationId:
-                    type: string
-                    description: Application ID
-                  Role:
-                    $ref: '#/components/schemas/Web_SDK_Authentication_OAuthRole'
-                description: Clean serialization for the wire
-              description: Gets the list of applications the user owns
-            Role:
-              $ref: '#/components/schemas/Web_SDK_Authentication_OAuthRole'
-          description: Gets or sets an OAuth role
-    Core_WebSDK_OAuthWebRequest_getapplications:
-      type: object
-      properties:
-        Filter:
-          type: string
-          description: Gets or sets a generic filter string
-        ApplicationIds:
-          type: array
-          items:
-            type: string
-          description: Gets or sets a list of the application identifiers
-    Core_WebSDK_RightsWebRequest_grantsystemrole:
-      type: object
-      properties:
-        UniversalID:
-          type: string
-          description: The universal ID.
-        Role:
-          type: string
-          description: The Role
-    Core_WebSDK_OAuthWebRequest_deleterules:
-      type: object
-      properties:
-        TrusteePrefixedUniversal:
-          type: string
-          description: Gets or sets the prefixed universal for the trustee
-        ApplicationId:
-          type: string
-          description: Gets or sets the application identifier
-    Core_WebSDK_OAuthWebResponse_deleteapplication:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
-
-            Success variable in the response body will indicate if the **API** call itself was successful.'
-        Result:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
-        Error:
-          type: string
-          description: Gets or sets the error
-    Core_WebSDK_OAuthWebResponse_createrule:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
-
-            Success variable in the response body will indicate if the **API** call itself was successful.'
-        Result:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
-        Error:
-          type: string
-          description: Gets or sets the error
-        Rule:
-          type: object
-          properties:
-            Description:
-              type: string
-              description: Gets or sets the application the description of the rule
-            MaximumScope:
-              type: string
-              description: Gets or sets the maximum scope this rule will grant
-            AccessValidity:
-              type:
-              - integer
-              - 'null'
-              description: Gets or sets the time an access token issued under this rule is valid
-              format: int64
-            GrantValidity:
-              type:
-              - integer
-              - 'null'
-              description: Gets or sets how long before a grant issued under this rule expires and can no longer be renewed
-              format: int64
-            Renewable:
-              type:
-              - boolean
-              - 'null'
-              description: Gets or sets if a grant issued under this rule is renewable
-            TrusteePrefixedUniversal:
-              type: string
-              description: Gets or sets the identity (user/group) this rule applies to
-            ApplicationId:
-              type: string
-              description: Gets or sets the application that can request access under this rule
-          description: Gets or sets the _OAuthRule_
-    Core_WebSDK_OAuthWebRequest_grantcount:
-      type: object
-      properties:
-        ApplicationId:
-          type: string
-          description: Gets or sets the application identifier
-    Core_WebSDK_RightsWebResponse_grantsystemrole:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: The subsystem.
-    Core_WebSDK_OAuthWebRequest_revokerole:
-      type: object
-      properties:
-        GranteePrefixedUniversal:
-          type: string
-          description: Grantee Prefixed Universal Identity
-        Role:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthRole'
-    Core_WebSDK_OAuthWebRequest_enumerateapplications:
-      type: object
-      properties:
-        Start:
-          type: integer
-          description: Gets or sets the start index for paged APIs
-          format: int32
-        Count:
-          type: integer
-          description: Gets or sets the maximum number of results to return for paged APIs
-          format: int32
-        OrderBy:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthOrderByField'
-        Descending:
-          type: boolean
-          description: Gets or sets ordering direction for query APIs
-    Web_SDK_Authentication_OAuthOrderByField:
-      title: Enumeration providing ordering options for OAuth results
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      type: integer
-      description: "\n\n**0**: **Default**  \nNo order specified\n\n**1**: **Name**  \nOrder results by name\n\n**2**: **Vendor**  \nOrder results by vendor\n\n**3**: **AccessValidity**  \nOrder results by access validity\n\n**4**: **GrantValidity**  \nOrder results by grant validity\n"
-      format: int32
-    Core_WebSDK_OAuthWebRequest_getgrants:
-      type: object
-      properties:
-        GranteePrefixedUniversal:
-          type: string
-          description: Grantee Prefixed Universal Identity
-        ApplicationId:
-          type: string
-          description: Gets or sets the application identifier
-        Start:
-          type: integer
-          description: Gets or sets the start index for paged APIs
-          format: int32
-        Count:
-          type: integer
-          description: Gets or sets the maximum number of results to return for paged APIs
-          format: int32
-        OrderBy:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthOrderByField'
-        Descending:
-          type: boolean
-          description: Gets or sets ordering direction for query APIs
-        ResolveIdentities:
-          type: boolean
-          description: If **true**, prefixed universals will be resolved and included in the response in the _IdentityEntries_ field
-    Core_WebSDK_OAuthWebRequest_updateapplication:
-      type: object
-      properties:
-        Application:
-          type: object
-          properties:
-            Name:
-              type: string
-              description: Gets or sets the name of the application
-            Description:
-              type: string
-              description: Gets or sets the description of the application
-            Vendor:
-              type: string
-              description: Gets or sets the vendor that created the application
-            Url:
-              type: string
-              description: Gets or sets the URL to get more information about the application
-            Scope:
-              type: string
-              description: Gets or sets the scope the application requires
-            MaximumScope:
-              type: string
-              description: Gets or sets the maximum scope the application knows to use
-            AccessValidity:
-              type:
-              - integer
-              - 'null'
-              description: Gets or sets the amount of time grant rules using this application should have their access token valid for
-              format: int64
-            GrantValidity:
-              type:
-              - integer
-              - 'null'
-              description: '**null** means the grant never expires'
-              format: int64
-            Renewable:
-              type:
-              - boolean
-              - 'null'
-              description: Gets or sets if grant rules created under this application should be marked for renewal
-            GrantCount:
-              type:
-              - integer
-              - 'null'
-              description: Gets or sets the number of grants issued for the application
-              format: int32
-            UserCount:
-              type:
-              - integer
-              - 'null'
-              description: Gets or sets the number of users having grants issued for the application
-              format: int32
-            UnusedExpiration:
-              type:
-              - integer
-              - 'null'
-              description: Gets or sets the number of seconds an access token has to be expired before a grant for this application is considered expired
-              format: int64
-            ID:
-              type: string
-              description: Gets or sets the identifier of the application
-          description: Gets or sets the _OAuthApplication_ to update
-    Core_WebSDK_OAuthWebRequest_revokegrants:
-      type: object
-      properties:
-        ApplicationId:
-          type: string
-          description: Gets or sets the application identifier
-        GranteePrefixedUniversal:
-          type: string
-          description: Grantee Prefixed Universal Identity
-    Core_WebSDK_OAuthWebRequest_deleteapplication:
-      type: object
-      properties:
-        ApplicationId:
-          type: string
-          description: Gets or sets the application identifier
-    Core_WebSDK_OAuthWebResponse_deletejwtmapping:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
-
-            Success variable in the response body will indicate if the **API** call itself was successful.'
-        Result:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
-        Error:
-          type: string
-          description: Gets or sets the error
-    Core_WebSDK_OAuthWebResponse_createapplication:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
-
-            Success variable in the response body will indicate if the **API** call itself was successful.'
-        Result:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
-        Error:
-          type: string
-          description: Gets or sets the error
-        Application:
-          type: object
-          properties:
-            Name:
-              type: string
-              description: Gets or sets the name of the application
-            Description:
-              type: string
-              description: Gets or sets the description of the application
-            Vendor:
-              type: string
-              description: Gets or sets the vendor that created the application
-            Url:
-              type: string
-              description: Gets or sets the URL to get more information about the application
-            Scope:
-              type: string
-              description: Gets or sets the scope the application requires
-            MaximumScope:
-              type: string
-              description: Gets or sets the maximum scope the application knows to use
-            AccessValidity:
-              type:
-              - integer
-              - 'null'
-              description: Gets or sets the amount of time grant rules using this application should have their access token valid for
-              format: int64
-            GrantValidity:
-              type:
-              - integer
-              - 'null'
-              description: '**null** means the grant never expires'
-              format: int64
-            Renewable:
-              type:
-              - boolean
-              - 'null'
-              description: Gets or sets if grant rules created under this application should be marked for renewal
-            GrantCount:
-              type:
-              - integer
-              - 'null'
-              description: Gets or sets the number of grants issued for the application
-              format: int32
-            UserCount:
-              type:
-              - integer
-              - 'null'
-              description: Gets or sets the number of users having grants issued for the application
-              format: int32
-            UnusedExpiration:
-              type:
-              - integer
-              - 'null'
-              description: Gets or sets the number of seconds an access token has to be expired before a grant for this application is considered expired
-              format: int64
-            ID:
-              type: string
-              description: Gets or sets the identifier of the application
-          description: Gets or sets an _OAuthApplication_
-    Core_WebSDK_OAuthWebRequest_usercount:
-      type: object
-      properties:
-        ApplicationId:
-          type: string
-          description: Gets or sets the application identifier
-    Web_SDK_Authentication_OAuthRole:
-      title: Roles associated with OAuth APIs
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 6
-      type: integer
-      description: "\n\n**0**: **User**  \nUser can see only his/her own items (ie, anything related to grants issued to a specific verified identity)\n\n**1**: **Auditor**  \nUser can see everything but change nothing\n\n**2**: **Maintainer**  \nUser may:\n- Modify application settings for specific applications\nUse _PermittedApplications_ for to get the list of applications for which the user is a _Maintainer_\n\n**3**: **Owner**  \nUser may:\n- Modify application settings for specific applications\n- Modify/delete rules related to specific applications\n- Delete specific applications\n- Can grant/revoke application maintainer for specific applications (delegate Maintainer to new users)\n- Can grant/revoke application admin for specific applications (delegate Owner to new users)\n- Revoke grants issued by application rules\nUse _PermittedApplications_ for to get the list of applications for which the user is an _Owner_\n\n**4**: **MixedOwnerMaintainer**  \nUser is _Maintainer_ for some applications, and _Owner_ for others. To determine\npermissions for specific applications, use the OAuthRights.HasXxxRights(application_id) methods and provide the application ID\nUse _PermittedApplications_ for to get the list of applications for which the user is either an _Owner_ or _Maintainer_\n\n**5**: **GrantAdmin**  \nUser may:\n- Read all applications\n- Read all rules\n- Read/revoke all grants\n\n**6**: **Admin**  \nUser may:\n- Create/modify/delete of all applications\n- Create/modify/delete of rules\n- Create/delete of grants\n- Can grant/revoke application maintainer and admin role (delegate Owner/Maintainer to new users)\n- Can configure global settings (session parameters, auth parameters, etc)\n"
-      format: int32
-    Core_WebSDK_OAuthWebRequest_createjwtmapping:
-      type: object
-      properties:
-        Name:
-          type: string
-          description: Gets or sets the name of an application
-        IssuerUri:
-          type: string
-          description: Gets or sets the Issuer URI
-        PurposeField:
-          type: string
-          description: Gets or sets the name of the JWT field indicating the purpose
-        PurposeMatch:
-          type: string
-          description: Gets or sets the value that the _PurposeField_ must have to accept the token
-        IdField:
-          type: string
-          description: Gets or sets the name of the JWT field indicating the identity owning the token
-        IdMatch:
-          type: string
-          description: "Gets or sets the regular expression to apply against the _IdField_ to obtain the identity. \nIf _GranteePrefixedUniversal_ is null, the first matching group of the expression will be used to obtain an identity"
-        GranteePrefixedUniversal:
-          type: string
-          description: Grantee Prefixed Universal Identity
-        JwksUri:
-          type: string
-          description: Optional alternate JWKS endpoint when key discovery location differs from IssuerUri.
-    Core_WebSDK_OAuthWebResponse_setconfiguration:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
-
-            Success variable in the response body will indicate if the **API** call itself was successful.'
-        Result:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
-        Error:
-          type: string
-          description: Gets or sets the error
-    Core_WebSDK_OAuthWebRequest_enumeraterules:
-      type: object
-      properties:
-        ApplicationId:
-          type: string
-          description: Gets or sets the application identifier
-        Start:
-          type: integer
-          description: Gets or sets the start index for paged APIs
-          format: int32
-        Count:
-          type: integer
-          description: Gets or sets the maximum number of results to return for paged APIs
-          format: int32
-        OrderBy:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthOrderByField'
-        Descending:
-          type: boolean
-          description: Gets or sets ordering direction for query APIs
-        ResolveIdentities:
-          type: boolean
-          description: If **true**, prefixed universals will be resolved and included in the response in the _IdentityEntries_ field
-    Core_WebSDK_OAuthWebResponse_deleterules:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
-
-            Success variable in the response body will indicate if the **API** call itself was successful.'
-        Result:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
-        Error:
-          type: string
-          description: Gets or sets the error
-    Core_WebSDK_OAuthWebResponse_getscopes:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
-
-            Success variable in the response body will indicate if the **API** call itself was successful.'
-        Result:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
-        Error:
-          type: string
-          description: Gets or sets the error
-        Scopes:
-          type: array
-          items:
-            type: object
-            properties:
-              Scope:
-                type: string
-                description: Gets/sets the scope value
-              RestrictionList:
-                type: array
-                items:
-                  type: string
-                description: Gets/sets restrictions to the scope
-            description: Data class to hold a single scope and its restrictions
-          description: Gets or sets a list of scopes
-    Core_WebSDK_OAuthWebRequest_getjwtmappings:
-      type: object
-      properties:
-        Filter:
-          type: string
-          description: Gets or sets a generic filter string
-        IssuerUris:
-          type: array
-          items:
-            type: string
-          description: Gets or sets a list of Issuer URIs
-        ResolveIdentities:
-          type: boolean
-          description: If **true**, prefixed universals will be resolved and included in the response in the _IdentityEntries_ field
-    Core_WebSDK_OAuthWebRequest_updaterule:
-      type: object
-      properties:
-        Rule:
-          type: object
-          properties:
-            Description:
-              type: string
-              description: Gets or sets the application the description of the rule
-            MaximumScope:
-              type: string
-              description: Gets or sets the maximum scope this rule will grant
-            AccessValidity:
-              type:
-              - integer
-              - 'null'
-              description: Gets or sets the time an access token issued under this rule is valid
-              format: int64
-            GrantValidity:
-              type:
-              - integer
-              - 'null'
-              description: Gets or sets how long before a grant issued under this rule expires and can no longer be renewed
-              format: int64
-            Renewable:
-              type:
-              - boolean
-              - 'null'
-              description: Gets or sets if a grant issued under this rule is renewable
-            TrusteePrefixedUniversal:
-              type: string
-              description: Gets or sets the identity (user/group) this rule applies to
-            ApplicationId:
-              type: string
-              description: Gets or sets the application that can request access under this rule
-          description: Gets or sets the _OAuthRule_ to update
-    Core_WebSDK_OAuthWebResponse_revokegrants:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
-
-            Success variable in the response body will indicate if the **API** call itself was successful.'
-        Result:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
-        Error:
-          type: string
-          description: Gets or sets the error
-    Core_WebSDK_OAuthWebRequest_createapplication:
-      type: object
-      properties:
-        ApplicationId:
-          type: string
-          description: Gets or sets the application identifier
-        Scope:
-          type: string
-          description: Gets or sets the scope for an application
-        MaximumScope:
-          type: string
-          description: Gets or sets the maximum scope for an application
-        Name:
-          type: string
-          description: Gets or sets the name of an application
-        Vendor:
-          type: string
-          description: Gets or sets the vendor of an application
-        Description:
-          type: string
-          description: Gets or sets the description for an application or rule
-        Url:
-          type: string
-          description: Gets or sets a url to learn more about the application
-        AccessValidity:
-          type:
-          - integer
-          - 'null'
-          description: Gets or sets the duration (in seconds) access tokens should be available for
-          format: int64
-        GrantValidity:
-          type:
-          - integer
-          - 'null'
-          description: Gets or sets the duration (in seconds) grants should be available for
-          format: int64
-        Renewable:
-          type:
-          - boolean
-          - 'null'
-          description: Gets or sets whether grants for an application should be renewable
-    Core_WebSDK_OAuthWebRequest_enumerategrants:
-      type: object
-      properties:
-        ApplicationId:
-          type: string
-          description: Gets or sets the application identifier
-        Start:
-          type: integer
-          description: Gets or sets the start index for paged APIs
-          format: int32
-        Count:
-          type: integer
-          description: Gets or sets the maximum number of results to return for paged APIs
-          format: int32
-        OrderBy:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthOrderByField'
-        Descending:
-          type: boolean
-          description: Gets or sets ordering direction for query APIs
-        ResolveIdentities:
-          type: boolean
-          description: If **true**, prefixed universals will be resolved and included in the response in the _IdentityEntries_ field
-    Core_WebSDK_OAuthWebRequest_enumeratejwtmappings:
-      type: object
-      properties:
-        Start:
-          type: integer
-          description: Gets or sets the start index for paged APIs
-          format: int32
-        Count:
-          type: integer
-          description: Gets or sets the maximum number of results to return for paged APIs
-          format: int32
-        OrderBy:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthOrderByField'
-        Descending:
-          type: boolean
-          description: Gets or sets ordering direction for query APIs
-        ResolveIdentities:
-          type: boolean
-          description: If **true**, prefixed universals will be resolved and included in the response in the _IdentityEntries_ field
-    Core_WebSDK_OAuthWebResponse_enumeraterules:
+    Core_WebSDK_OAuthWebResponse_getrules:
       type: object
       properties:
         Success:
@@ -3040,6 +2729,504 @@ components:
                 description: Gets or sets the application that can request access under this rule
             description: Data class holding properties describing a rule used to obtain an OAuth grant automatically
           description: Gets or sets a list of _OAuthRule_ objects
+    Core_WebSDK_OAuthWebRequest_grantcount:
+      type: object
+      properties:
+        ApplicationId:
+          type: string
+          description: Gets or sets the application identifier
+    Core_WebSDK_OAuthWebRequest_getrules:
+      type: object
+      properties:
+        ApplicationId:
+          type: string
+          description: Gets or sets the application identifier
+        TrusteePrefixedUniversal:
+          type: string
+          description: Gets or sets the prefixed universal for the trustee
+        TrusteePrefixedUniversals:
+          type: array
+          items:
+            type: string
+          description: Gets or sets a list of trustee universals to search on
+        MaximumScope:
+          type: string
+          description: Gets or sets the maximum scope for an application
+        Renewable:
+          type:
+          - boolean
+          - 'null'
+          description: Gets or sets whether grants for an application should be renewable
+        NoExpire:
+          type:
+          - boolean
+          - 'null'
+          description: Gets or sets filtering rules that have no expiration. **true** to find rules that don't expire.
+        ResolveIdentities:
+          type: boolean
+          description: If **true**, prefixed universals will be resolved and included in the response in the _IdentityEntries_ field
+    Core_WebSDK_OAuthWebResponse_getscopes:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
+
+            Success variable in the response body will indicate if the **API** call itself was successful.'
+        Result:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
+        Error:
+          type: string
+          description: Gets or sets the error
+        Scopes:
+          type: array
+          items:
+            type: object
+            properties:
+              Scope:
+                type: string
+                description: Gets/sets the scope value
+              RestrictionList:
+                type: array
+                items:
+                  type: string
+                description: Gets/sets restrictions to the scope
+            description: Data class to hold a single scope and its restrictions
+          description: Gets or sets a list of scopes
+    Core_WebSDK_OAuthWebResponse_updaterule:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
+
+            Success variable in the response body will indicate if the **API** call itself was successful.'
+        Result:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
+        Error:
+          type: string
+          description: Gets or sets the error
+    Core_WebSDK_OAuthWebResponse_updatejwtmapping:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
+
+            Success variable in the response body will indicate if the **API** call itself was successful.'
+        Result:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
+        Error:
+          type: string
+          description: Gets or sets the error
+    Core_WebSDK_OAuthWebResponse_usercount:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
+
+            Success variable in the response body will indicate if the **API** call itself was successful.'
+        Result:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
+        Error:
+          type: string
+          description: Gets or sets the error
+        Count:
+          type: integer
+          description: Gets or sets the requested count
+          format: int32
+    Web_SDK_Authentication_OAuthRole:
+      title: Roles associated with OAuth APIs
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      type: integer
+      description: "\n\n**0**: **User**  \nUser can see only his/her own items (ie, anything related to grants issued to a specific verified identity)\n\n**1**: **Auditor**  \nUser can see everything but change nothing\n\n**2**: **Maintainer**  \nUser may:\n- Modify application settings for specific applications\nUse _PermittedApplications_ for to get the list of applications for which the user is a _Maintainer_\n\n**3**: **Owner**  \nUser may:\n- Modify application settings for specific applications\n- Modify/delete rules related to specific applications\n- Delete specific applications\n- Can grant/revoke application maintainer for specific applications (delegate Maintainer to new users)\n- Can grant/revoke application admin for specific applications (delegate Owner to new users)\n- Revoke grants issued by application rules\nUse _PermittedApplications_ for to get the list of applications for which the user is an _Owner_\n\n**4**: **MixedOwnerMaintainer**  \nUser is _Maintainer_ for some applications, and _Owner_ for others. To determine\npermissions for specific applications, use the OAuthRights.HasXxxRights(application_id) methods and provide the application ID\nUse _PermittedApplications_ for to get the list of applications for which the user is either an _Owner_ or _Maintainer_\n\n**5**: **GrantAdmin**  \nUser may:\n- Read all applications\n- Read all rules\n- Read/revoke all grants\n\n**6**: **Admin**  \nUser may:\n- Create/modify/delete of all applications\n- Create/modify/delete of rules\n- Create/delete of grants\n- Can grant/revoke application maintainer and admin role (delegate Owner/Maintainer to new users)\n- Can configure global settings (session parameters, auth parameters, etc)\n"
+      format: int32
+    Core_WebSDK_OAuthWebResponse_createjwtmapping:
+      type: object
+      properties:
+        JwtMapping:
+          type: object
+          properties:
+            IssuerUri:
+              type: string
+              description: The Issuer URI for the mapping
+            JwksUri:
+              type: string
+              description: 'Optional alternate JwksUri (JWKS/OpenID) used when the IssuerUri differs from the discovery location.
+
+                When supplied this value can be used by the server to directly locate keys instead of deriving from IssuerUri.
+
+                Nullable and not required for legacy mappings.'
+            PurposeField:
+              type: string
+              description: The JWT field to determine the purpose
+            PurposeMatch:
+              type: string
+              description: The value that must match the purpose field to accept the JWT
+            IdField:
+              type: string
+              description: The JWT field to determine the identity
+            IdMatch:
+              type: string
+              description: The regular expression to apply to the identity field to determine the grant identity (or **null** if _GranteePrefixedUniversal_ is used
+            GranteePrefixedUniversal:
+              type: string
+              description: The fixed prefixed universal identity to use as grant identity
+            Name:
+              type: string
+              description: Gets or sets the identifier of the application
+          description: Gets or sets the _OAuthJwtMapping_
+        Success:
+          type: boolean
+          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
+
+            Success variable in the response body will indicate if the **API** call itself was successful.'
+        Result:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
+        Error:
+          type: string
+          description: Gets or sets the error
+    Core_WebSDK_OAuthWebResponse_getrole:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
+
+            Success variable in the response body will indicate if the **API** call itself was successful.'
+        Result:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
+        Error:
+          type: string
+          description: Gets or sets the error
+        Role:
+          type: object
+          properties:
+            PermittedApplications:
+              type: array
+              items:
+                type: string
+              description: Gets the list of applications the user has rights to
+            OwnedApplications:
+              type: array
+              items:
+                type: object
+                properties:
+                  ApplicationId:
+                    type: string
+                    description: Application ID
+                  Role:
+                    $ref: '#/components/schemas/Web_SDK_Authentication_OAuthRole'
+                description: Clean serialization for the wire
+              description: Gets the list of applications the user owns
+            Role:
+              $ref: '#/components/schemas/Web_SDK_Authentication_OAuthRole'
+          description: Gets or sets an OAuth role
+    Core_WebSDK_RightsWebRequest_revokesystemrole:
+      type: object
+      properties:
+        UniversalID:
+          type: string
+          description: The universal ID.
+        Role:
+          type: string
+          description: The Role
+    Web_SDK_Authentication_OAuthOrderByField:
+      title: Enumeration providing ordering options for OAuth results
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      type: integer
+      description: "\n\n**0**: **Default**  \nNo order specified\n\n**1**: **Name**  \nOrder results by name\n\n**2**: **Vendor**  \nOrder results by vendor\n\n**3**: **AccessValidity**  \nOrder results by access validity\n\n**4**: **GrantValidity**  \nOrder results by grant validity\n"
+      format: int32
+    Core_WebSDK_OAuthWebRequest_setconfiguration:
+      type: object
+      properties:
+        Configuration:
+          type: object
+          properties:
+            SessionPoolSize:
+              type: integer
+              description: Gets or sets the WebSDK Session Pool (Cache) size, in number of entries
+              format: int32
+            SessionPoolAge:
+              type: integer
+              description: Gets or sets the maximum time an entry can be kept in the sesion pool, in seconds
+              format: int32
+            SessionPoolExpirationInterval:
+              type: integer
+              description: Gets or sets how often the session expiration process runs
+              format: int32
+            SessionRightsRefreshInterval:
+              type: integer
+              description: Gets or sets the maximum number of seconds since the last request after which the stored rights of a session are refreshed from the database
+              format: int32
+            StrictExpiration:
+              type: boolean
+              description: Gets or sets the session cache expiration strategy
+            StatisticsApiTracking:
+              type: boolean
+              description: Gets or sets the if API usage is tracked via statistics
+            StatisticsTrackingIncludesTime:
+              type: boolean
+              description: Gets or sets the if API usage statistics track API execution times
+            OpenApiEnabled:
+              type: boolean
+              description: Gets or sets the OpenAPI documentation is accessible
+            OpenApiUi:
+              type: string
+              description: Gets or sets the UI to use for OpenAPI documentation
+            DefaultAccessTokenValidity:
+              type: integer
+              description: Gets or sets the number of seconds an access token is valid if not overriden by application or rule
+              format: int32
+            DefaultGrantValidity:
+              type: integer
+              description: Gets or sets the number of seconds a grant is valid if not overriden by application or rule
+              format: int32
+            DefaultGrantRefreshable:
+              type: boolean
+              description: Gets or sets whether or not a grant can be refreshed, if not override by application or rule
+            UnusedAccessTokenExpiration:
+              type: integer
+              description: Gets or sets the number of seconds an access token must be expired to consider the grant expired, even if the actual grant expiration is further out
+              format: int32
+            RefreshEndpointEnabled:
+              type: boolean
+              description: Gets or sets whether the token refresh endpoint is enabled
+            AuthorizeByPassword:
+              type: boolean
+              description: Gets or sets whether the authentication server accepts username/password as authentication credentials
+            AuthorizeByCertificate:
+              type: boolean
+              description: Gets or sets whether the authentication server accepts certificates as authentication credentials
+            AuthorizeByIntegrated:
+              type: boolean
+              description: Gets or sets whether the authentication server accepts integrated (Windows) authentication
+            AuthorizeByJwt:
+              type: boolean
+              description: Gets or sets whether the authentication server accepts JWT authentication
+            AuthorizeDevice:
+              type: boolean
+              description: Gets or sets whether the authentication server accepts device authentication requests
+            DeviceConfiguration:
+              type: object
+              properties:
+                VerificationUri:
+                  type: string
+                  description: Gets or sets the Uri to verify (confirm) a device authorization request
+                VerificationUriCompleteFormat:
+                  type: string
+                  description: Gets or sets the Uri to verify (confirm) a device authorization request, with a {0} placeholder for string.format use to hold the unique request id
+              description: Gets or sets device authorization specific settings
+            CertificateConfiguration:
+              type: object
+              properties:
+                AttemptSIDExtensionBeforeSourceField:
+                  type: boolean
+                  description: Gets or sets whether we should first check and use SID extension from certificate prior to fallback to other source field
+                SourceField:
+                  type: string
+                  description: Gets or sets the certificate field to use to determine identity
+                AuthorizedIssuerDns:
+                  type: array
+                  items:
+                    type: string
+                  description: Gets or sets the vault IDs of the certificates trusted as issuers of certificates used to authenticate
+              description: Gets or sets device authorization specific settings
+            JwtConfiguration:
+              type: object
+              properties:
+                ClockSkew:
+                  type: integer
+                  description: Gets or sets how much time drift is allowed for checking iat and nbf fields
+                  format: int32
+                CacheConfiguration:
+                  type: object
+                  properties:
+                    DegreeOfParallelism:
+                      type: integer
+                      description: Maximum number of threads that can fetch keys concurrently
+                      format: int32
+                    RefreshDelay:
+                      type: integer
+                      description: Refresh mappings / keys delay in seconds; throttles refresh attempts
+                      format: int32
+                    MinTtl:
+                      type: integer
+                      description: Keys minimum TTL (seconds) in the cache; after they fetched, they will live in the cache at least this amount of time
+                      format: int32
+                    MaxTtl:
+                      type: integer
+                      description: Keys maximum TTL (seconds) in the cache; even if the keys are valid, after this amount of time they will be refreshed
+                      format: int32
+                    Timeout:
+                      type: integer
+                      description: HTTP request timeout (for accessing JWKS URI, OIDC discovery endpoint, etc).
+                      format: int32
+                    NoHttps:
+                      type: boolean
+                      description: If true, AuthServer allows HTTP for OIDC / JWKS endpoints. Use this option ONLY for testing purposes.
+                    NoOidcIssuerCheck:
+                      type: boolean
+                      description: If true, AuthServer skips issuer check for OpenID provider metadata. Use this option ONLY for testing purposes.
+                    AutoRefresh:
+                      type: integer
+                      description: Automatic configuration refresh interval (in seconds). AuthServer re-queries mappings from the DB and downloads keys again for each issuer.
+                      format: int32
+                  description: JWT cache configuration
+              description: Gets or sets JWT authorization specific settings
+          description: Gets or sets OAuth configuration
+    Core_WebSDK_OAuthWebResponse_enumeratejwtmappings:
+      type: object
+      properties:
+        JwtMappings:
+          type: array
+          items:
+            type: object
+            properties:
+              IssuerUri:
+                type: string
+                description: The Issuer URI for the mapping
+              JwksUri:
+                type: string
+                description: 'Optional alternate JwksUri (JWKS/OpenID) used when the IssuerUri differs from the discovery location.
+
+                  When supplied this value can be used by the server to directly locate keys instead of deriving from IssuerUri.
+
+                  Nullable and not required for legacy mappings.'
+              PurposeField:
+                type: string
+                description: The JWT field to determine the purpose
+              PurposeMatch:
+                type: string
+                description: The value that must match the purpose field to accept the JWT
+              IdField:
+                type: string
+                description: The JWT field to determine the identity
+              IdMatch:
+                type: string
+                description: The regular expression to apply to the identity field to determine the grant identity (or **null** if _GranteePrefixedUniversal_ is used
+              GranteePrefixedUniversal:
+                type: string
+                description: The fixed prefixed universal identity to use as grant identity
+              Name:
+                type: string
+                description: Gets or sets the identifier of the application
+            description: Holds information about a particular OAuth application
+          description: Gets or sets a collection of _OAuthJwtMapping_
+        Success:
+          type: boolean
+          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
+
+            Success variable in the response body will indicate if the **API** call itself was successful.'
+        Result:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
+        Error:
+          type: string
+          description: Gets or sets the error
+    Core_WebSDK_OAuthWebRequest_grantrole:
+      type: object
+      properties:
+        GranteePrefixedUniversal:
+          type: string
+          description: Grantee Prefixed Universal Identity
+        Role:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthRole'
+        ApplicationId:
+          type: string
+          description: Gets or sets the application identifier
+    Core_WebSDK_OAuthWebRequest_updatejwtmapping:
+      type: object
+      properties:
+        JwtMapping:
+          type: object
+          properties:
+            IssuerUri:
+              type: string
+              description: The Issuer URI for the mapping
+            JwksUri:
+              type: string
+              description: 'Optional alternate JwksUri (JWKS/OpenID) used when the IssuerUri differs from the discovery location.
+
+                When supplied this value can be used by the server to directly locate keys instead of deriving from IssuerUri.
+
+                Nullable and not required for legacy mappings.'
+            PurposeField:
+              type: string
+              description: The JWT field to determine the purpose
+            PurposeMatch:
+              type: string
+              description: The value that must match the purpose field to accept the JWT
+            IdField:
+              type: string
+              description: The JWT field to determine the identity
+            IdMatch:
+              type: string
+              description: The regular expression to apply to the identity field to determine the grant identity (or **null** if _GranteePrefixedUniversal_ is used
+            GranteePrefixedUniversal:
+              type: string
+              description: The fixed prefixed universal identity to use as grant identity
+            Name:
+              type: string
+              description: Gets or sets the identifier of the application
+          description: Gets or sets the _OAuthJwtMapping_
+    Core_WebSDK_OAuthWebRequest_createrule:
+      type: object
+      properties:
+        ApplicationId:
+          type: string
+          description: Gets or sets the application identifier
+        TrusteePrefixedUniversal:
+          type: string
+          description: Gets or sets the prefixed universal for the trustee
+        MaximumScope:
+          type: string
+          description: Gets or sets the maximum scope for an application
+        Description:
+          type: string
+          description: Gets or sets the description for an application or rule
+        AccessValidity:
+          type:
+          - integer
+          - 'null'
+          description: Gets or sets the duration (in seconds) access tokens should be available for
+          format: int64
+        GrantValidity:
+          type:
+          - integer
+          - 'null'
+          description: Gets or sets the duration (in seconds) grants should be available for
+          format: int64
+        Renewable:
+          type:
+          - boolean
+          - 'null'
+          description: Gets or sets whether grants for an application should be renewable
+    Core_WebSDK_OAuthWebResponse_updateapplication:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
+
+            Success variable in the response body will indicate if the **API** call itself was successful.'
+        Result:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
+        Error:
+          type: string
+          description: Gets or sets the error
     Core_WebSDK_OAuthWebResponse_getapplication:
       type: object
       properties:
@@ -3116,274 +3303,87 @@ components:
                 description: Gets or sets the identifier of the application
             description: Holds information about a particular OAuth application
           description: Gets or sets a collection of _OAuthApplication_
-    Core_WebSDK_OAuthWebRequest_getjwtmapping:
+    Core_WebSDK_OAuthWebRequest_createapplication:
       type: object
       properties:
-        Name:
-          type: string
-          description: Gets or sets the name of an application
-        ResolveIdentities:
-          type: boolean
-          description: If **true**, prefixed universals will be resolved and included in the response in the _IdentityEntries_ field
-    Core_WebSDK_OAuthWebResponse_getjwtmapping:
-      type: object
-      properties:
-        JwtMapping:
-          type: object
-          properties:
-            IssuerUri:
-              type: string
-              description: The Issuer URI for the mapping
-            JwksUri:
-              type: string
-              description: 'Optional alternate JwksUri (JWKS/OpenID) used when the IssuerUri differs from the discovery location.
-
-                When supplied this value can be used by the server to directly locate keys instead of deriving from IssuerUri.
-
-                Nullable and not required for legacy mappings.'
-            PurposeField:
-              type: string
-              description: The JWT field to determine the purpose
-            PurposeMatch:
-              type: string
-              description: The value that must match the purpose field to accept the JWT
-            IdField:
-              type: string
-              description: The JWT field to determine the identity
-            IdMatch:
-              type: string
-              description: The regular expression to apply to the identity field to determine the grant identity (or **null** if _GranteePrefixedUniversal_ is used
-            GranteePrefixedUniversal:
-              type: string
-              description: The fixed prefixed universal identity to use as grant identity
-            Name:
-              type: string
-              description: Gets or sets the identifier of the application
-          description: Gets or sets the _OAuthJwtMapping_
-        Success:
-          type: boolean
-          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
-
-            Success variable in the response body will indicate if the **API** call itself was successful.'
-        Result:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
-        Error:
-          type: string
-          description: Gets or sets the error
-    Core_WebSDK_OAuthWebResponse_updateapplication:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
-
-            Success variable in the response body will indicate if the **API** call itself was successful.'
-        Result:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
-        Error:
-          type: string
-          description: Gets or sets the error
-    Core_WebSDK_OAuthWebRequest_deleterule:
-      type: object
-      properties:
-        TrusteePrefixedUniversal:
-          type: string
-          description: Gets or sets the prefixed universal for the trustee
         ApplicationId:
           type: string
           description: Gets or sets the application identifier
-    Core_WebSDK_RightsWebRequest_revokesystemrole:
-      type: object
-      properties:
-        UniversalID:
+        Scope:
           type: string
-          description: The universal ID.
-        Role:
+          description: Gets or sets the scope for an application
+        MaximumScope:
           type: string
-          description: The Role
-    Core_WebSDK_OAuthWebResponse_updaterule:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
-
-            Success variable in the response body will indicate if the **API** call itself was successful.'
-        Result:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
-        Error:
+          description: Gets or sets the maximum scope for an application
+        Name:
           type: string
-          description: Gets or sets the error
-    Core_WebSDK_OAuthWebResponse_getjwtmappings:
-      type: object
-      properties:
-        JwtMappings:
-          type: array
-          items:
-            type: object
-            properties:
-              IssuerUri:
-                type: string
-                description: The Issuer URI for the mapping
-              JwksUri:
-                type: string
-                description: 'Optional alternate JwksUri (JWKS/OpenID) used when the IssuerUri differs from the discovery location.
-
-                  When supplied this value can be used by the server to directly locate keys instead of deriving from IssuerUri.
-
-                  Nullable and not required for legacy mappings.'
-              PurposeField:
-                type: string
-                description: The JWT field to determine the purpose
-              PurposeMatch:
-                type: string
-                description: The value that must match the purpose field to accept the JWT
-              IdField:
-                type: string
-                description: The JWT field to determine the identity
-              IdMatch:
-                type: string
-                description: The regular expression to apply to the identity field to determine the grant identity (or **null** if _GranteePrefixedUniversal_ is used
-              GranteePrefixedUniversal:
-                type: string
-                description: The fixed prefixed universal identity to use as grant identity
-              Name:
-                type: string
-                description: Gets or sets the identifier of the application
-            description: Holds information about a particular OAuth application
-          description: Gets or sets a collection of _OAuthJwtMapping_
-        Success:
-          type: boolean
-          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
-
-            Success variable in the response body will indicate if the **API** call itself was successful.'
-        Result:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
-        Error:
+          description: Gets or sets the name of an application
+        Vendor:
           type: string
-          description: Gets or sets the error
-    Core_WebSDK_OAuthWebResponse_deleterule:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
-
-            Success variable in the response body will indicate if the **API** call itself was successful.'
-        Result:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
-        Error:
+          description: Gets or sets the vendor of an application
+        Description:
           type: string
-          description: Gets or sets the error
-    Core_WebSDK_OAuthWebResponse_enumerateapplications:
-      type: object
-      properties:
-        Success:
-          type: boolean
-          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
-
-            Success variable in the response body will indicate if the **API** call itself was successful.'
-        Result:
-          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
-        Error:
+          description: Gets or sets the description for an application or rule
+        Url:
           type: string
-          description: Gets or sets the error
-        Application:
-          type: object
-          properties:
-            Name:
-              type: string
-              description: Gets or sets the name of the application
-            Description:
-              type: string
-              description: Gets or sets the description of the application
-            Vendor:
-              type: string
-              description: Gets or sets the vendor that created the application
-            Url:
-              type: string
-              description: Gets or sets the URL to get more information about the application
-            Scope:
-              type: string
-              description: Gets or sets the scope the application requires
-            MaximumScope:
-              type: string
-              description: Gets or sets the maximum scope the application knows to use
-            AccessValidity:
-              type:
-              - integer
-              - 'null'
-              description: Gets or sets the amount of time grant rules using this application should have their access token valid for
-              format: int64
-            GrantValidity:
-              type:
-              - integer
-              - 'null'
-              description: '**null** means the grant never expires'
-              format: int64
-            Renewable:
-              type:
-              - boolean
-              - 'null'
-              description: Gets or sets if grant rules created under this application should be marked for renewal
-            GrantCount:
-              type:
-              - integer
-              - 'null'
-              description: Gets or sets the number of grants issued for the application
-              format: int32
-            UserCount:
-              type:
-              - integer
-              - 'null'
-              description: Gets or sets the number of users having grants issued for the application
-              format: int32
-            UnusedExpiration:
-              type:
-              - integer
-              - 'null'
-              description: Gets or sets the number of seconds an access token has to be expired before a grant for this application is considered expired
-              format: int64
-            ID:
-              type: string
-              description: Gets or sets the identifier of the application
-          description: Gets or sets an _OAuthApplication_
-    Core_WebSDK_OAuthWebRequest_deletejwtmapping:
+          description: Gets or sets a url to learn more about the application
+        AccessValidity:
+          type:
+          - integer
+          - 'null'
+          description: Gets or sets the duration (in seconds) access tokens should be available for
+          format: int64
+        GrantValidity:
+          type:
+          - integer
+          - 'null'
+          description: Gets or sets the duration (in seconds) grants should be available for
+          format: int64
+        Renewable:
+          type:
+          - boolean
+          - 'null'
+          description: Gets or sets whether grants for an application should be renewable
+    Core_WebSDK_OAuthWebRequest_createjwtmapping:
       type: object
       properties:
         Name:
           type: string
           description: Gets or sets the name of an application
-    Web_SDK_Authentication_OAuthResult:
-      title: Enumeration providing result codes for OAuth API
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 6
-      - 7
-      - 8
-      - 9
-      - 10
-      - 11
-      - 12
-      - 13
-      - 14
-      - 15
-      - 16
-      - 17
-      - 18
-      - 19
-      - 20
-      - 21
-      - 22
-      - 23
-      type: integer
-      description: "\n\n**0**: **Success**  \nThe request completed successfully\n\n**1**: **Failure**  \nThe request could not be completed successfully\n\n**2**: **ApplicationNotFound**  \nThe requested application could not be found\n\n**3**: **GrantNotFound**  \nThe requested grant could not be found\n\n**4**: **RuleNotFound**  \nThe requested rule could not be found\n\n**5**: **DriverError**  \nA driver error was encountered while processing the request\n\n**6**: **InvalidParameters**  \nInvalid parameters were provided\n\n**7**: **TokenHashError**  \nA token hash error was encountered while processing the request\n\n**8**: **ExceptionThrown**  \nAn exception was thrown while processing the request\n\n**9**: **InsufficientPrivileges**  \nThe caller has insufficient permissions to perform an operation\n\n**10**: **ObjectInvalid**  \nThe object is not properly configured to process the request\n\n**11**: **AccessTokenExpired**  \nThe access token used has expired\n\n**12**: **AuthenticationMissing**  \nMissing authentication information\n\n**13**: **AuthenticationInvalid**  \nAuthentication information is not in a valid format\n\n**14**: **UnsignedCodeForbidden**  \nOperation forbidden for unsigned code\n\n**15**: **RemoteTransportFailure**  \nA request could not be submitted to the remote system due to a transport/network failure\n\n**16**: **RightsAssignmentError**  \nA rights assignment request failed\n\n**17**: **InvalidScope**  \nA requested scope was invalid\n\n**18**: **RemoteIdentityRequired**  \nA valid identity object was not supplied\n\n**19**: **ApplicationAlreadyExists**  \nThe application already exists\n\n**20**: **RuleAlreadyExists**  \nThe rule already exists\n\n**21**: **JwtMappingNotFound**  \nThe JWT mapping could not be found\n\n**22**: **JwtMappingAlreadyExists**  \nA JWT mapping with the same name already exists\n\n**23**: **ScopeMismatch**  \nA provided scope doesn't meet given constraints\n"
-      format: int32
+        IssuerUri:
+          type: string
+          description: Gets or sets the Issuer URI
+        PurposeField:
+          type: string
+          description: Gets or sets the name of the JWT field indicating the purpose
+        PurposeMatch:
+          type: string
+          description: Gets or sets the value that the _PurposeField_ must have to accept the token
+        IdField:
+          type: string
+          description: Gets or sets the name of the JWT field indicating the identity owning the token
+        IdMatch:
+          type: string
+          description: "Gets or sets the regular expression to apply against the _IdField_ to obtain the identity. \nIf _GranteePrefixedUniversal_ is null, the first matching group of the expression will be used to obtain an identity"
+        GranteePrefixedUniversal:
+          type: string
+          description: Grantee Prefixed Universal Identity
+        JwksUri:
+          type: string
+          description: Optional alternate JWKS endpoint when key discovery location differs from IssuerUri.
+    Core_WebSDK_OAuthWebResponse_setconfiguration:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          description: 'All requests that are have a valid grant and scope will be accepted with a 200 (OK) HTTP response code. The
+
+            Success variable in the response body will indicate if the **API** call itself was successful.'
+        Result:
+          $ref: '#/components/schemas/Web_SDK_Authentication_OAuthResult'
+        Error:
+          type: string
+          description: Gets or sets the error
   securitySchemes:
     AccessToken:
       type: http

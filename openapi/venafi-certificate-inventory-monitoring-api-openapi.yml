@@ -276,6 +276,33 @@ paths:
         - PKIAdmin
 components:
   schemas:
+    ErrorInformation3:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue3'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+    InventoryMonitoringConfigurationResponse:
+      properties:
+        companyId:
+          description: UUID specific to your company
+          example: 2b391680-74ce-11ed-bf7a-a3d5ccdf275c
+          format: uuid
+          type: string
+        configuration:
+          $ref: '#/components/schemas/InventoryMonitoringConfiguration'
+        id:
+          description: UUID of the configuration
+          example: 2e8d71a0-74ce-11ed-9051-cfa579eae364
+          format: uuid
+          type: string
+      type: object
     CertificateExpirationInventoryMonitoringConfig:
       allOf:
       - $ref: '#/components/schemas/InventoryMonitoringConfig'
@@ -303,42 +330,55 @@ components:
             type: array
         type: object
       type: object
-    InventoryMonitoringConfigurationResponse:
+    AnyValue3:
+      description: Can be any value - string, number, boolean, array or object.
+    InventoryMonitoringConfigRequest:
       properties:
-        companyId:
-          description: UUID specific to your company
-          example: 2b391680-74ce-11ed-bf7a-a3d5ccdf275c
-          format: uuid
+        inventoryMonitoringConfiguration:
+          oneOf:
+          - $ref: '#/components/schemas/CertificateExpirationInventoryMonitoringConfig'
+          type: object
+      type: object
+    InventoryMonitoringSchedulerInformation:
+      properties:
+        name:
+          description: Name of the configuration
           type: string
-        configuration:
-          $ref: '#/components/schemas/InventoryMonitoringConfiguration'
-        id:
-          description: UUID of the configuration
-          example: 2e8d71a0-74ce-11ed-9051-cfa579eae364
-          format: uuid
+        status:
+          description: Status of the configuration
+          enum:
+          - PENDING
+          - RUNNING
+          - DONE
+          - FAILED
           type: string
       type: object
-    ErrorInformation3:
+    Channel:
+      enum:
+      - email
+      type: string
+    ErrorResponse4:
       properties:
-        args:
+        errors:
           items:
-            $ref: '#/components/schemas/AnyValue3'
+            $ref: '#/components/schemas/ErrorInformation3'
           type: array
-        code:
-          format: int32
-          type: integer
-        message:
-          type: string
       type: object
-    InventoryMonitoringConfiguration:
+    InventoryMonitoringConfig:
       discriminator:
+        mapping:
+          CERTIFICATE_EXPIRATION: '#/components/schemas/CertificateExpirationInventoryMonitoringConfig'
         propertyName: inventoryMonitoringConfigurationType
       properties:
         inventoryMonitoringConfigurationType:
           type: string
-      required:
-      - inventoryMonitoringConfigurationType
       type: object
+    Persona:
+      enum:
+      - Application Owners
+      - All PKI Admins
+      - All Admins
+      type: string
     TenantExpirationNotificationConfiguration:
       properties:
         additionalRecipients:
@@ -383,51 +423,15 @@ components:
           type: array
           uniqueItems: true
       type: object
-    InventoryMonitoringConfig:
+    InventoryMonitoringConfiguration:
       discriminator:
-        mapping:
-          CERTIFICATE_EXPIRATION: '#/components/schemas/CertificateExpirationInventoryMonitoringConfig'
         propertyName: inventoryMonitoringConfigurationType
       properties:
         inventoryMonitoringConfigurationType:
           type: string
+      required:
+      - inventoryMonitoringConfigurationType
       type: object
-    InventoryMonitoringSchedulerInformation:
-      properties:
-        name:
-          description: Name of the configuration
-          type: string
-        status:
-          description: Status of the configuration
-          enum:
-          - PENDING
-          - RUNNING
-          - DONE
-          - FAILED
-          type: string
-      type: object
-    InventoryMonitoringConfigRequest:
-      properties:
-        inventoryMonitoringConfiguration:
-          oneOf:
-          - $ref: '#/components/schemas/CertificateExpirationInventoryMonitoringConfig'
-          type: object
-      type: object
-    ErrorResponse4:
-      properties:
-        errors:
-          items:
-            $ref: '#/components/schemas/ErrorInformation3'
-          type: array
-      type: object
-    AnyValue3:
-      description: Can be any value - string, number, boolean, array or object.
-    Persona:
-      enum:
-      - Application Owners
-      - All PKI Admins
-      - All Admins
-      type: string
     Recipient:
       properties:
         id:
@@ -444,10 +448,6 @@ components:
       - type
       - id
       type: object
-    Channel:
-      enum:
-      - email
-      type: string
   examples:
     TenantExpirationNotificationConfigurationExample:
       value:

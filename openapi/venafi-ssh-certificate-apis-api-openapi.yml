@@ -166,19 +166,42 @@ paths:
       - AccessToken: []
 components:
   schemas:
-    SshCertificate_WebSDK_DataContract_Requests_RetrieveTemplateWebRequest:
+    SshCertificate_WebSDK_DataContract_RequestCertificateResponse:
       type: object
       properties:
-        IncludeCAKeyPairDetails:
-          type: boolean
-          description: Whether or not to include the CA key pair details in the response.
         DN:
           type: string
-          description: The DN of the requested object.
+          description: The DN of the created SSH certificate object.
         Guid:
           type: string
-          description: A value that uniquely identifies the object.
-      description: The class for retrieve template request.
+          description: A value that uniquely identifies the certificate object.
+        ProcessingDetails:
+          type: object
+          properties:
+            Status:
+              type: string
+              description: The current status of the certificate.
+            StatusDescription:
+              type: string
+              description: Description of the current certificate status
+          description: Provide the processing details of the certificate.
+        Response:
+          type: object
+          properties:
+            Success:
+              type: boolean
+              description: 'true: The operation succeeded
+
+                false: The operation failed.'
+            ErrorCode:
+              type: integer
+              description: Omitted if Success is true. The code that describes the error if any.
+              format: int32
+            ErrorMessage:
+              type: string
+              description: Omitted if Success is true.The corresponding error message if any.
+          description: SshWebResponse object with result of the operation.
+      description: The class for requesting new certificate response.
     SshCertificate_WebSDK_DataContract_RetrieveTemplateResponse:
       type: object
       properties:
@@ -355,6 +378,38 @@ components:
               description: Omitted if Success is true.The corresponding error message if any.
           description: SshWebResponse object with result of the operation.
       description: The class for retrieving ssh certificate template response
+    SshCertificate_WebSDK_DataContract_Requests_RetrieveCertificateWebRequest:
+      type: object
+      properties:
+        PrivateKeyPassphrase:
+          type: string
+          description: The passphrase which will be used to wrap the generated private key before it is returned in the API response.
+        IncludePrivateKeyData:
+          type: boolean
+          description: Whether or not to include the private key material.
+        IncludeCertificateDetails:
+          type: boolean
+          description: Whether or not to include the certificate details in the response.
+        DN:
+          type: string
+          description: The DN of the requested object.
+        Guid:
+          type: string
+          description: A value that uniquely identifies the object.
+      description: The class for retrieve certificate request.
+    SshCertificate_WebSDK_DataContract_Requests_RetrieveTemplateWebRequest:
+      type: object
+      properties:
+        IncludeCAKeyPairDetails:
+          type: boolean
+          description: Whether or not to include the CA key pair details in the response.
+        DN:
+          type: string
+          description: The DN of the requested object.
+        Guid:
+          type: string
+          description: A value that uniquely identifies the object.
+      description: The class for retrieve template request.
     SshCertificate_WebSDK_DataContract_RetrieveCertificateResponse:
       type: object
       properties:
@@ -560,6 +615,31 @@ components:
           description: How much time the server will hold the connection waiting for certificate issuance before a Pending response is returned.
           format: int32
       description: The class for new certificate request.
+    SshCertificate_WebSDK_DataContract_Requests_CreateNewCAKeypairWebRequest:
+      type: object
+      properties:
+        Name:
+          type: string
+          description: The friendly name of the CA key.
+        ParentDN:
+          type: string
+          description: The DN of the parent container.
+        KeyAlgorithm:
+          type: string
+          description: DEPRECATED - use PkixParameterSet instead
+        PkixParameterSet:
+          type: string
+          description: The PKIX Parameter Set describing the key algorithm which will be used to generate new key material.
+        KeyStorage:
+          type: string
+          description: The location where the key will be generated and stored.
+        PrivateKeyData:
+          type: string
+          description: The private key material which will be imported.
+        PrivateKeyPassphrase:
+          type: string
+          description: The passphrase which will be used to decrypt the PrivateKeyData.
+      description: The class for new CA keypair.
     List_1_SshCertificate_WebSDK_DataContract_AvailableTemplateResponse_:
       type: array
       items:
@@ -629,86 +709,6 @@ components:
               description: Omitted if Success is true.The corresponding error message if any.
           description: SshWebResponse object with result of the operation.
       description: The class for requesting new CaKeyPair response.
-    SshCertificate_WebSDK_DataContract_Requests_RetrieveCertificateWebRequest:
-      type: object
-      properties:
-        PrivateKeyPassphrase:
-          type: string
-          description: The passphrase which will be used to wrap the generated private key before it is returned in the API response.
-        IncludePrivateKeyData:
-          type: boolean
-          description: Whether or not to include the private key material.
-        IncludeCertificateDetails:
-          type: boolean
-          description: Whether or not to include the certificate details in the response.
-        DN:
-          type: string
-          description: The DN of the requested object.
-        Guid:
-          type: string
-          description: A value that uniquely identifies the object.
-      description: The class for retrieve certificate request.
-    SshCertificate_WebSDK_DataContract_Requests_CreateNewCAKeypairWebRequest:
-      type: object
-      properties:
-        Name:
-          type: string
-          description: The friendly name of the CA key.
-        ParentDN:
-          type: string
-          description: The DN of the parent container.
-        KeyAlgorithm:
-          type: string
-          description: DEPRECATED - use PkixParameterSet instead
-        PkixParameterSet:
-          type: string
-          description: The PKIX Parameter Set describing the key algorithm which will be used to generate new key material.
-        KeyStorage:
-          type: string
-          description: The location where the key will be generated and stored.
-        PrivateKeyData:
-          type: string
-          description: The private key material which will be imported.
-        PrivateKeyPassphrase:
-          type: string
-          description: The passphrase which will be used to decrypt the PrivateKeyData.
-      description: The class for new CA keypair.
-    SshCertificate_WebSDK_DataContract_RequestCertificateResponse:
-      type: object
-      properties:
-        DN:
-          type: string
-          description: The DN of the created SSH certificate object.
-        Guid:
-          type: string
-          description: A value that uniquely identifies the certificate object.
-        ProcessingDetails:
-          type: object
-          properties:
-            Status:
-              type: string
-              description: The current status of the certificate.
-            StatusDescription:
-              type: string
-              description: Description of the current certificate status
-          description: Provide the processing details of the certificate.
-        Response:
-          type: object
-          properties:
-            Success:
-              type: boolean
-              description: 'true: The operation succeeded
-
-                false: The operation failed.'
-            ErrorCode:
-              type: integer
-              description: Omitted if Success is true. The code that describes the error if any.
-              format: int32
-            ErrorMessage:
-              type: string
-              description: Omitted if Success is true.The corresponding error message if any.
-          description: SshWebResponse object with result of the operation.
-      description: The class for requesting new certificate response.
   securitySchemes:
     AccessToken:
       type: http

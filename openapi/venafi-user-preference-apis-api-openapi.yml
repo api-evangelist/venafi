@@ -139,21 +139,6 @@ paths:
       - AccessToken: []
 components:
   schemas:
-    Core_Preferences_ResultCode:
-      title: Preference result codes
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 6
-      - 7
-      - 8
-      type: integer
-      description: "\n\n**0**: **Success**  \nThe success\n\n**1**: **DatabaseError**  \nThe database error\n\n**2**: **MissingDSN**  \nThe missing DSN\n\n**3**: **MissingDatabaseName**  \nThe missing database name\n\n**4**: **AssemblyNotSignedOrTrusted**  \nThe assembly not signed or trusted\n\n**5**: **InvalidTppProductName**  \nThe invalid TPP product name\n\n**6**: **UniqueIndexViolationError**  \nThe unique index violation error\n\n**7**: **NotMasterAdmin**  \nNot master admin\n\n**8**: **InvalidId**  \nInvalid preference ID\n"
-      format: int32
     Core_WebSDK_PreferenceWebResponse:
       type: object
       properties:
@@ -226,6 +211,21 @@ components:
             description: CyberArk User Preference Storage.
           description: The preferences.
       description: Data class for handling preference web request
+    Core_Preferences_ResultCode:
+      title: Preference result codes
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      type: integer
+      description: "\n\n**0**: **Success**  \nThe success\n\n**1**: **DatabaseError**  \nThe database error\n\n**2**: **MissingDSN**  \nThe missing DSN\n\n**3**: **MissingDatabaseName**  \nThe missing database name\n\n**4**: **AssemblyNotSignedOrTrusted**  \nThe assembly not signed or trusted\n\n**5**: **InvalidTppProductName**  \nThe invalid TPP product name\n\n**6**: **UniqueIndexViolationError**  \nThe unique index violation error\n\n**7**: **NotMasterAdmin**  \nNot master admin\n\n**8**: **InvalidId**  \nInvalid preference ID\n"
+      format: int32
   securitySchemes:
     AccessToken:
       type: http

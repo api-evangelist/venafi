@@ -515,70 +515,6 @@ components:
           type: string
           description: Error.
       description: List of all PKI objects.
-    Drivers_Applications_HashiCorp_REST_CreateRoleRequest_:
-      required:
-      - FolderDn
-      - RoleName
-      type: object
-      properties:
-        FolderDn:
-          type: string
-          description: Dn of the policy object.
-        RoleName:
-          type: string
-          description: HashiCorp role name.
-    Drivers_Applications_HashiCorp_REST_Role:
-      type: object
-      properties:
-        Guid:
-          type: string
-          description: Guid of policy object.
-        FolderDn:
-          type: string
-          description: Dn of the policy object.
-        RoleName:
-          type: string
-          description: HashiCorp role name.
-        WhitelistedDomains:
-          type: array
-          items:
-            type: string
-          description: Whitelisted domains.
-        OrganizationalUnits:
-          type: array
-          items:
-            type: string
-          description: Organizational unit.
-        Organization:
-          type: string
-          description: Organization.
-        City:
-          type: string
-          description: City.
-        State:
-          type: string
-          description: State.
-        Country:
-          type: string
-          description: Country.
-        KeyAlgorithm:
-          type: string
-          description: Key algorithm.
-        KeyBitSize:
-          type: string
-          description: Key strength.
-        PkixParameterSet:
-          type: string
-          description: Pkix Parameter Set
-        EnhancedKeyUsage:
-          type: array
-          items:
-            type: string
-          description: Enhanced key usage (server_flag, client_flag, code_signing_flag, email_protection_flag).
-        Error:
-          type: string
-          description: Error.
-      description: HashiCorp Role policy object.
     Drivers_Applications_HashiCorp_REST_CreateRoleResponse:
       type: object
       properties:
@@ -589,6 +525,22 @@ components:
           type: string
           description: Error.
       description: Response for role creation request.
+    Drivers_Applications_HashiCorp_REST_CreatePkiResponse:
+      type: object
+      properties:
+        Guid:
+          type: string
+          description: Guid of PKI object.
+        CertificateGuid:
+          type: string
+          description: Guid of associated certificate object.
+        Error:
+          type: string
+          description: Error.
+        CertificateDN:
+          type: string
+          description: DN of certificate object.
+      description: Response for PKI create request.
     Drivers_Applications_HashiCorp_REST_PkiResponse:
       type: object
       properties:
@@ -780,22 +732,70 @@ components:
             type: string
           description: Roles.
       description: Create HashiCorp PKI request.
-    Drivers_Applications_HashiCorp_REST_CreatePkiResponse:
+    Drivers_Applications_HashiCorp_REST_Role:
       type: object
       properties:
         Guid:
           type: string
-          description: Guid of PKI object.
-        CertificateGuid:
+          description: Guid of policy object.
+        FolderDn:
           type: string
-          description: Guid of associated certificate object.
+          description: Dn of the policy object.
+        RoleName:
+          type: string
+          description: HashiCorp role name.
+        WhitelistedDomains:
+          type: array
+          items:
+            type: string
+          description: Whitelisted domains.
+        OrganizationalUnits:
+          type: array
+          items:
+            type: string
+          description: Organizational unit.
+        Organization:
+          type: string
+          description: Organization.
+        City:
+          type: string
+          description: City.
+        State:
+          type: string
+          description: State.
+        Country:
+          type: string
+          description: Country.
+        KeyAlgorithm:
+          type: string
+          description: Key algorithm.
+        KeyBitSize:
+          type: string
+          description: Key strength.
+        PkixParameterSet:
+          type: string
+          description: Pkix Parameter Set
+        EnhancedKeyUsage:
+          type: array
+          items:
+            type: string
+          description: Enhanced key usage (server_flag, client_flag, code_signing_flag, email_protection_flag).
         Error:
           type: string
           description: Error.
-        CertificateDN:
+      description: HashiCorp Role policy object.
+    Drivers_Applications_HashiCorp_REST_CreateRoleRequest_:
+      required:
+      - FolderDn
+      - RoleName
+      type: object
+      properties:
+        FolderDn:
           type: string
-          description: DN of certificate object.
-      description: Response for PKI create request.
+          description: Dn of the policy object.
+        RoleName:
+          type: string
+          description: HashiCorp role name.
   securitySchemes:
     AccessToken:
       type: http

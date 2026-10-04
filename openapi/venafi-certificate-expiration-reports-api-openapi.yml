@@ -114,7 +114,27 @@ paths:
         roles:
         - PKIAdmin
 components:
+  examples:
+    TenantExpirationReportsConfigurationExample:
+      value:
+        additionalRecipients:
+        - id: 22153ae0-4352-11ee-b95c-3531a284802b
+          type: User
+        - id: 22153ae0-4352-11ee-b95c-12345abcd123
+          type: Team
+        channels:
+        - email
+        enabled: true
+        expiringWithinDays: 30
+        ignoreAfterDays: 30
+        roles:
+        - SYSTEM_ADMIN
+        schedule: 0 0 * * Mon
   schemas:
+    Channel:
+      enum:
+      - email
+      type: string
     Role1:
       enum:
       - SYSTEM_ADMIN
@@ -186,26 +206,6 @@ components:
       - type
       - id
       type: object
-    Channel:
-      enum:
-      - email
-      type: string
-  examples:
-    TenantExpirationReportsConfigurationExample:
-      value:
-        additionalRecipients:
-        - id: 22153ae0-4352-11ee-b95c-3531a284802b
-          type: User
-        - id: 22153ae0-4352-11ee-b95c-12345abcd123
-          type: Team
-        channels:
-        - email
-        enabled: true
-        expiringWithinDays: 30
-        ignoreAfterDays: 30
-        roles:
-        - SYSTEM_ADMIN
-        schedule: 0 0 * * Mon
   securitySchemes:
     service-account:
       in: header
