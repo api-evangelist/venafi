@@ -26,5 +26,5 @@
     node_path: Venafi/ProtectCloud
     trigger: true
     builder: n8n (built-in node)
-  status: pending-generation
+  status: not-a-workflow
   arazzo: null
