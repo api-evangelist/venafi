@@ -303,6 +303,13 @@ paths:
         - PKIAdmin
 components:
   schemas:
+    IssuingTemplateDomainsSyncResponse:
+      properties:
+        issuingTemplatesInformationList:
+          items:
+            $ref: '#/components/schemas/IssuingTemplateDomainsSyncInformation'
+          type: array
+      type: object
     CertificateIssuingTemplateInformation2:
       properties:
         certificateAuthority:
@@ -460,27 +467,6 @@ components:
         trackingData:
           $ref: '#/components/schemas/TrackingDataInformation'
       type: object
-    ErrorResponse10:
-      properties:
-        errors:
-          items:
-            $ref: '#/components/schemas/ErrorInformation8'
-          type: array
-      type: object
-    KeyTypeInformation2:
-      discriminator:
-        propertyName: keyType
-      properties:
-        keyType:
-          type: string
-      type: object
-    IssuingTemplateDomainsSyncResponse:
-      properties:
-        issuingTemplatesInformationList:
-          items:
-            $ref: '#/components/schemas/IssuingTemplateDomainsSyncInformation'
-          type: array
-      type: object
     RecommendedSettingsRequest:
       properties:
         key:
@@ -566,112 +552,6 @@ components:
       required:
       - certificateAuthority
       type: object
-    TrackingDataInformation:
-      discriminator:
-        propertyName: certificateAuthority
-      properties:
-        certificateAuthority:
-          type: string
-      required:
-      - certificateAuthority
-      type: object
-    RecommendedSettingsKeyTypeInformation2:
-      properties:
-        curve:
-          enum:
-          - P256
-          - P384
-          - P521
-          - ED25519
-          - UNKNOWN
-          type: string
-        length:
-          format: int32
-          type: integer
-        type:
-          enum:
-          - RSA
-          - EC
-          type: string
-      type: object
-    CertificateIssuingTemplateResponse:
-      properties:
-        certificateIssuingTemplates:
-          items:
-            $ref: '#/components/schemas/CertificateIssuingTemplateInformation2'
-          type: array
-      type: object
-    RecommendedSettingsKeyTypeParameter:
-      properties:
-        curve:
-          enum:
-          - P256
-          - P384
-          - P521
-          - ED25519
-          - UNKNOWN
-          type: string
-        length:
-          format: int32
-          type: integer
-        type:
-          enum:
-          - RSA
-          - EC
-          type: string
-      type: object
-    AnyValue8:
-      description: Can be any value - string, number, boolean, array or object.
-    ErrorInformation8:
-      properties:
-        args:
-          items:
-            $ref: '#/components/schemas/AnyValue8'
-          type: array
-        code:
-          format: int32
-          type: integer
-        message:
-          type: string
-      type: object
-    IssuingTemplateDomainsSyncInformation:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorInformation8'
-        issuingTemplateId:
-          format: uuid
-          type: string
-        status:
-          enum:
-          - COMPLETED
-          - FAILED
-          type: string
-      type: object
-    IssuingTemplatesDomainsSyncRequest:
-      properties:
-        action:
-          enum:
-          - REPLACE
-          type: string
-        certificateAuthorityAccountId:
-          format: uuid
-          type: string
-        issuingTemplatesIds:
-          description: Set of UUIDs of the issuing templates
-          example:
-          - 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
-          items:
-            description: Set of UUIDs of the issuing templates
-            format: uuid
-            type: string
-          minItems: 1
-          type: array
-          uniqueItems: true
-      required:
-      - action
-      - certificateAuthorityAccountId
-      - issuingTemplatesIds
-      type: object
     KeyTypeParameters2:
       properties:
         keyCurves:
@@ -696,6 +576,25 @@ components:
           type: string
       required:
       - keyType
+      type: object
+    RecommendedSettingsKeyTypeInformation2:
+      properties:
+        curve:
+          enum:
+          - P256
+          - P384
+          - P521
+          - ED25519
+          - UNKNOWN
+          type: string
+        length:
+          format: int32
+          type: integer
+        type:
+          enum:
+          - RSA
+          - EC
+          type: string
       type: object
     CertificateIssuingTemplateRequest:
       properties:
@@ -830,6 +729,76 @@ components:
       - name
       - product
       type: object
+    ErrorInformation8:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue8'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+    KeyTypeInformation2:
+      discriminator:
+        propertyName: keyType
+      properties:
+        keyType:
+          type: string
+      type: object
+    IssuingTemplatesDomainsSyncRequest:
+      properties:
+        action:
+          enum:
+          - REPLACE
+          type: string
+        certificateAuthorityAccountId:
+          format: uuid
+          type: string
+        issuingTemplatesIds:
+          description: Set of UUIDs of the issuing templates
+          example:
+          - 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
+          items:
+            description: Set of UUIDs of the issuing templates
+            format: uuid
+            type: string
+          minItems: 1
+          type: array
+          uniqueItems: true
+      required:
+      - action
+      - certificateAuthorityAccountId
+      - issuingTemplatesIds
+      type: object
+    RecommendedSettingsKeyTypeParameter:
+      properties:
+        curve:
+          enum:
+          - P256
+          - P384
+          - P521
+          - ED25519
+          - UNKNOWN
+          type: string
+        length:
+          format: int32
+          type: integer
+        type:
+          enum:
+          - RSA
+          - EC
+          type: string
+      type: object
+    ErrorResponse10:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation8'
+          type: array
+      type: object
     RecommendedSettingsInformation2:
       properties:
         key:
@@ -855,6 +824,37 @@ components:
         subjectSTValue:
           type: string
       type: object
+    CertificateIssuingTemplateResponse:
+      properties:
+        certificateIssuingTemplates:
+          items:
+            $ref: '#/components/schemas/CertificateIssuingTemplateInformation2'
+          type: array
+      type: object
+    IssuingTemplateDomainsSyncInformation:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorInformation8'
+        issuingTemplateId:
+          format: uuid
+          type: string
+        status:
+          enum:
+          - COMPLETED
+          - FAILED
+          type: string
+      type: object
+    TrackingDataInformation:
+      discriminator:
+        propertyName: certificateAuthority
+      properties:
+        certificateAuthority:
+          type: string
+      required:
+      - certificateAuthority
+      type: object
+    AnyValue8:
+      description: Can be any value - string, number, boolean, array or object.
   securitySchemes:
     service-account:
       in: header

@@ -65,23 +65,12 @@ paths:
         - Guest
 components:
   schemas:
-    CompanyType:
+    UserStatus:
       enum:
-      - INTERNAL
-      - CA
-      - TPP_CUSTOMER
-      - REGULAR
-      - OTHER
+      - PENDING_ACTIVATION
+      - ACTIVE
+      - INACTIVE
       type: string
-    UserAccountResponse:
-      properties:
-        apiKey:
-          $ref: '#/components/schemas/ApiKeyInformation'
-        company:
-          $ref: '#/components/schemas/CompanyInformation'
-        user:
-          $ref: '#/components/schemas/UserInformation2'
-      type: object
     ProductEntitlement1:
       enum:
       - ANY
@@ -90,235 +79,6 @@ components:
       - OUTAGE_DETECTION
       - CODESIGN
       type: string
-    ApiKeyStatus:
-      enum:
-      - PENDING_ACTIVATION
-      - ACTIVE
-      - INACTIVE
-      - PENDING_ROTATION
-      - ROTATED
-      - EXPIRED
-      type: string
-    SSOStatus:
-      enum:
-      - ACTIVE
-      - INACTIVE
-      type: string
-    Role2:
-      enum:
-      - SECURITY_ADMIN
-      - DEVOPS_LEAD
-      - DEVOPS_USER
-      - OUTAGEDETECTION_ADMIN
-      - RESOURCE_OWNER
-      - PKI_ADMIN
-      - GUEST
-      - PLATFORM_ADMIN
-      type: string
-    UserAccountType:
-      enum:
-      - WEB_UI
-      - API
-      type: string
-    CompanyInformation:
-      properties:
-        active:
-          type: boolean
-        companyType:
-          $ref: '#/components/schemas/CompanyType'
-        creationDate:
-          format: date-time
-          type: string
-        domains:
-          items:
-            type: string
-          type: array
-        id:
-          format: uuid
-          type: string
-        instanceId:
-          type: string
-        name:
-          type: string
-        productEntitlements:
-          items:
-            $ref: '#/components/schemas/ProductEntitlementInformation'
-          type: array
-        tsgId:
-          type: string
-        urlPrefix:
-          type: string
-      required:
-      - id
-      - productEntitlements
-      type: object
-    Capability:
-      enum:
-      - DEFAULT
-      - ISSUANCE
-      - VALIDATION
-      - ENTERPRISE
-      - PROVISIONING
-      - SINGLE_SIGN_ON
-      - DISTRIBUTED_ISSUER
-      - CLOUD_PROVIDERS
-      - CREDENTIAL_MANAGER
-      - KUBERNETES_DISCOVERY
-      - KUBERNETES_ENTERPRISE_COMPONENTS
-      - KUBERNETES_ENTERPRISE_COMPONENTS_CERT_MANAGER
-      - KUBERNETES_ENTERPRISE_COMPONENTS_VEI
-      - KUBERNETES_ENTERPRISE_COMPONENTS_APE
-      - KUBERNETES_ENTERPRISE_COMPONENTS_OS
-      - KUBERNETES_INTEGRATION_TLSPDC
-      type: string
-    AnyValue6:
-      description: Can be any value - string, number, boolean, array or object.
-    ApiKeyInformation:
-      properties:
-        apiKeyStatus:
-          $ref: '#/components/schemas/ApiKeyStatus'
-        apiVersion:
-          $ref: '#/components/schemas/ApiVersion'
-        companyId:
-          description: UUID of a company.
-          format: uuid
-          type: string
-        creationDate:
-          description: The date and time the API key was created.
-          format: date-time
-          type: string
-        key:
-          description: UUID of an API key.
-          format: uuid
-          type: string
-        memberedTeams:
-          description: Membered teams of the user associated with this API key.
-          items:
-            description: Membered teams of the user associated with this API key.
-            format: uuid
-            type: string
-          type: array
-          uniqueItems: true
-        productRoles:
-          additionalProperties:
-            description: Product roles of the user associated with this API key.
-            items:
-              $ref: '#/components/schemas/Role2'
-            type: array
-            uniqueItems: true
-          description: Product roles of the user associated with this API key.
-          type: object
-        systemRoles:
-          description: System roles of the user associated with this API key.
-          items:
-            $ref: '#/components/schemas/SystemRole'
-          type: array
-          uniqueItems: true
-        urlPrefix:
-          description: Tenant URL Prefix.
-          type: string
-        userId:
-          description: UUID of a user.
-          format: uuid
-          type: string
-        username:
-          description: Email address of the registered user.
-          type: string
-        validityEndDate:
-          description: The date and time the API key will no longer be valid.
-          format: date-time
-          type: string
-        validityStartDate:
-          description: The date and time the API key became valid.
-          format: date-time
-          type: string
-      type: object
-    ErrorResponse8:
-      properties:
-        errors:
-          items:
-            $ref: '#/components/schemas/ErrorInformation6'
-          type: array
-      type: object
-    VisibilityConstraintsInformation:
-      properties:
-        fullAccessDurationDays:
-          format: int32
-          minimum: 0
-          type: integer
-        limitedAccessNotificationDays:
-          format: int32
-          minimum: 0
-          type: integer
-        limitedVisibilityCertCount:
-          format: int32
-          minimum: 0
-          type: integer
-        limitedVisibilityCertInstallPerCertCount:
-          format: int32
-          minimum: 0
-          type: integer
-      type: object
-    ApiVersion:
-      description: Indicates version of the API.
-      enum:
-      - ALL
-      - V1
-      type: string
-    SystemRole:
-      enum:
-      - SYSTEM_ADMIN
-      - CONDOR_METRICS
-      type: string
-    ErrorInformation6:
-      properties:
-        args:
-          items:
-            $ref: '#/components/schemas/AnyValue6'
-          type: array
-        code:
-          format: int32
-          type: integer
-        message:
-          type: string
-      type: object
-    UserType:
-      enum:
-      - EXTERNAL
-      - INTERNAL
-      type: string
-    ProductEntitlementInformation:
-      properties:
-        capabilities:
-          items:
-            $ref: '#/components/schemas/CapabilityInformation'
-          type: array
-        label:
-          $ref: '#/components/schemas/ProductEntitlement1'
-        visibilityConstraintsInformation:
-          $ref: '#/components/schemas/VisibilityConstraintsInformation'
-      required:
-      - capabilities
-      - label
-      - visibilityConstraintsInformation
-      type: object
-    CapabilityInformation:
-      properties:
-        isTrial:
-          type: boolean
-        name:
-          $ref: '#/components/schemas/Capability'
-        productExpiryDate:
-          format: date-time
-          type: string
-        productGraceExpiryDate:
-          format: date-time
-          type: string
-      required:
-      - isTrial
-      - name
-      - productExpiryDate
-      type: object
     UserInformation2:
       properties:
         companyId:
@@ -388,12 +148,252 @@ components:
         username:
           type: string
       type: object
-    UserStatus:
+    Capability:
+      enum:
+      - DEFAULT
+      - ISSUANCE
+      - VALIDATION
+      - ENTERPRISE
+      - PROVISIONING
+      - SINGLE_SIGN_ON
+      - DISTRIBUTED_ISSUER
+      - CLOUD_PROVIDERS
+      - CREDENTIAL_MANAGER
+      - KUBERNETES_DISCOVERY
+      - KUBERNETES_ENTERPRISE_COMPONENTS
+      - KUBERNETES_ENTERPRISE_COMPONENTS_CERT_MANAGER
+      - KUBERNETES_ENTERPRISE_COMPONENTS_VEI
+      - KUBERNETES_ENTERPRISE_COMPONENTS_APE
+      - KUBERNETES_ENTERPRISE_COMPONENTS_OS
+      - KUBERNETES_INTEGRATION_TLSPDC
+      type: string
+    CompanyType:
+      enum:
+      - INTERNAL
+      - CA
+      - TPP_CUSTOMER
+      - REGULAR
+      - OTHER
+      type: string
+    VisibilityConstraintsInformation:
+      properties:
+        fullAccessDurationDays:
+          format: int32
+          minimum: 0
+          type: integer
+        limitedAccessNotificationDays:
+          format: int32
+          minimum: 0
+          type: integer
+        limitedVisibilityCertCount:
+          format: int32
+          minimum: 0
+          type: integer
+        limitedVisibilityCertInstallPerCertCount:
+          format: int32
+          minimum: 0
+          type: integer
+      type: object
+    CapabilityInformation:
+      properties:
+        isTrial:
+          type: boolean
+        name:
+          $ref: '#/components/schemas/Capability'
+        productExpiryDate:
+          format: date-time
+          type: string
+        productGraceExpiryDate:
+          format: date-time
+          type: string
+      required:
+      - isTrial
+      - name
+      - productExpiryDate
+      type: object
+    ApiVersion:
+      description: Indicates version of the API.
+      enum:
+      - ALL
+      - V1
+      type: string
+    ApiKeyStatus:
       enum:
       - PENDING_ACTIVATION
       - ACTIVE
       - INACTIVE
+      - PENDING_ROTATION
+      - ROTATED
+      - EXPIRED
       type: string
+    UserAccountType:
+      enum:
+      - WEB_UI
+      - API
+      type: string
+    SSOStatus:
+      enum:
+      - ACTIVE
+      - INACTIVE
+      type: string
+    ErrorResponse8:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation6'
+          type: array
+      type: object
+    ErrorInformation6:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue6'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+    Role2:
+      enum:
+      - SECURITY_ADMIN
+      - DEVOPS_LEAD
+      - DEVOPS_USER
+      - OUTAGEDETECTION_ADMIN
+      - RESOURCE_OWNER
+      - PKI_ADMIN
+      - GUEST
+      - PLATFORM_ADMIN
+      type: string
+    AnyValue6:
+      description: Can be any value - string, number, boolean, array or object.
+    ApiKeyInformation:
+      properties:
+        apiKeyStatus:
+          $ref: '#/components/schemas/ApiKeyStatus'
+        apiVersion:
+          $ref: '#/components/schemas/ApiVersion'
+        companyId:
+          description: UUID of a company.
+          format: uuid
+          type: string
+        creationDate:
+          description: The date and time the API key was created.
+          format: date-time
+          type: string
+        key:
+          description: UUID of an API key.
+          format: uuid
+          type: string
+        memberedTeams:
+          description: Membered teams of the user associated with this API key.
+          items:
+            description: Membered teams of the user associated with this API key.
+            format: uuid
+            type: string
+          type: array
+          uniqueItems: true
+        productRoles:
+          additionalProperties:
+            description: Product roles of the user associated with this API key.
+            items:
+              $ref: '#/components/schemas/Role2'
+            type: array
+            uniqueItems: true
+          description: Product roles of the user associated with this API key.
+          type: object
+        systemRoles:
+          description: System roles of the user associated with this API key.
+          items:
+            $ref: '#/components/schemas/SystemRole'
+          type: array
+          uniqueItems: true
+        urlPrefix:
+          description: Tenant URL Prefix.
+          type: string
+        userId:
+          description: UUID of a user.
+          format: uuid
+          type: string
+        username:
+          description: Email address of the registered user.
+          type: string
+        validityEndDate:
+          description: The date and time the API key will no longer be valid.
+          format: date-time
+          type: string
+        validityStartDate:
+          description: The date and time the API key became valid.
+          format: date-time
+          type: string
+      type: object
+    UserType:
+      enum:
+      - EXTERNAL
+      - INTERNAL
+      type: string
+    SystemRole:
+      enum:
+      - SYSTEM_ADMIN
+      - CONDOR_METRICS
+      type: string
+    UserAccountResponse:
+      properties:
+        apiKey:
+          $ref: '#/components/schemas/ApiKeyInformation'
+        company:
+          $ref: '#/components/schemas/CompanyInformation'
+        user:
+          $ref: '#/components/schemas/UserInformation2'
+      type: object
+    CompanyInformation:
+      properties:
+        active:
+          type: boolean
+        companyType:
+          $ref: '#/components/schemas/CompanyType'
+        creationDate:
+          format: date-time
+          type: string
+        domains:
+          items:
+            type: string
+          type: array
+        id:
+          format: uuid
+          type: string
+        instanceId:
+          type: string
+        name:
+          type: string
+        productEntitlements:
+          items:
+            $ref: '#/components/schemas/ProductEntitlementInformation'
+          type: array
+        tsgId:
+          type: string
+        urlPrefix:
+          type: string
+      required:
+      - id
+      - productEntitlements
+      type: object
+    ProductEntitlementInformation:
+      properties:
+        capabilities:
+          items:
+            $ref: '#/components/schemas/CapabilityInformation'
+          type: array
+        label:
+          $ref: '#/components/schemas/ProductEntitlement1'
+        visibilityConstraintsInformation:
+          $ref: '#/components/schemas/VisibilityConstraintsInformation'
+      required:
+      - capabilities
+      - label
+      - visibilityConstraintsInformation
+      type: object
   securitySchemes:
     service-account:
       in: header

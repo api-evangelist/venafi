@@ -749,16 +749,12 @@ paths:
         - Guest
 components:
   schemas:
-    TagResponse:
+    TagsBulkRequest:
       properties:
-        count:
-          description: Number of tags returned
-          example: 7
-          format: int32
-          type: integer
         tags:
+          description: Array of tag and tag-value objects
           items:
-            $ref: '#/components/schemas/TagInformation'
+            $ref: '#/components/schemas/TagRequest'
           type: array
       type: object
     TagsAndValuesResponse:
@@ -768,136 +764,30 @@ components:
             $ref: '#/components/schemas/TagsAndValuesInformation'
           type: array
       type: object
-    TagValuesRequest:
+    TagInformation:
       properties:
-        values:
-          description: Array of value names to associate with the tag
+        companyId:
+          description: UUID specific to your company
           example: 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
-          items:
-            description: Array of value names to associate with the tag
-            example: 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
-            type: string
-          minItems: 1
-          type: array
-      required:
-      - values
-      type: object
-    TagsAssignmentAggregatesResponseInformation:
-      description: Represents a mapping of tag name to list of aggregates information
-      example:
-        TagNew:
-        - count: 2
-          entityType: CERTIFICATE
-        - count: 5
-          entityType: APPLICATION
-        tag:value:
-        - count: 6
-          entityType: CERTIFICATE
-        - count: 1
-          entityType: APPLICATION
-      properties:
-        count:
-          description: Number of entities per type
-          example: 2
-          format: int32
-          type: integer
-        entityType:
-          description: Object type that the tag applies to
-          example: CERTIFICATE
+          format: uuid
           type: string
-      type: object
-    TagValuesResponse:
-      properties:
-        count:
-          description: Number of values returned
-          example: 7
-          format: int32
-          type: integer
-        values:
-          items:
-            $ref: '#/components/schemas/TagValueInformation'
-          type: array
-      type: object
-    TagRequest:
-      description: Array of tag and tag-value objects
-      properties:
+        id:
+          description: UUID of the tag
+          example: 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
+          format: uuid
+          type: string
+        isReserved:
+          description: Used by Venafi to reserve system tags
+          example: false
+          type: boolean
+        key:
+          description: Same as tag name, though all lowercase
+          example: application
+          type: string
         name:
           description: Name of the tag
           example: Application
-          minLength: 1
           type: string
-        values:
-          description: Array of values associated with the tag
-          example:
-          - TLS Protect
-          - Jetstack
-          items:
-            description: Array of values associated with the tag
-            example: '["TLS Protect","Jetstack"]'
-            type: string
-          type: array
-      required:
-      - name
-      type: object
-    TagsAssignRequest:
-      properties:
-        action:
-          description: Action to perform
-          enum:
-          - REPLACE
-          - ADD
-          - DELETE
-          - DELETE_ALL
-          example: REPLACE
-          type: string
-        entityIds:
-          description: Array of UUIDs of the objects
-          example:
-          - 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
-          items:
-            description: Array of UUIDs of the objects
-            format: uuid
-            type: string
-          minItems: 1
-          type: array
-          uniqueItems: true
-        entityType:
-          description: Object type that the tag applies to
-          enum:
-          - CERTIFICATE
-          - CERTIFICATE_INSTANCE
-          - APPLICATION
-          example: CERTIFICATE
-          type: string
-        targetedTags:
-          description: Array of tags to apply
-          example:
-          - 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
-          items:
-            description: Array of tags to apply
-            example: '["265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c"]'
-            type: string
-          type: array
-          uniqueItems: true
-      required:
-      - entityIds
-      type: object
-    TagAssignmentErrorInformation:
-      description: Error information for tags not assigned
-      example:
-        errorInformation:
-          message: not assigned
-          statusCode: 1111
-      properties:
-        args:
-          items:
-            $ref: '#/components/schemas/AnyValue5'
-          type: array
-        message:
-          type: string
-        statusCode:
-          format: int32
-          type: integer
       type: object
     TagsAssignResponseInformation:
       properties:
@@ -942,6 +832,106 @@ components:
           type: array
           uniqueItems: true
       type: object
+    ErrorResponse7:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation5'
+          type: array
+      type: object
+    TagsAndValuesInformation:
+      properties:
+        tag:
+          $ref: '#/components/schemas/TagInformation'
+        values:
+          items:
+            $ref: '#/components/schemas/TagValueInformation'
+          type: array
+      type: object
+    ErrorInformation5:
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue5'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+    TagsAssignRequest:
+      properties:
+        action:
+          description: Action to perform
+          enum:
+          - REPLACE
+          - ADD
+          - DELETE
+          - DELETE_ALL
+          example: REPLACE
+          type: string
+        entityIds:
+          description: Array of UUIDs of the objects
+          example:
+          - 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
+          items:
+            description: Array of UUIDs of the objects
+            format: uuid
+            type: string
+          minItems: 1
+          type: array
+          uniqueItems: true
+        entityType:
+          description: Object type that the tag applies to
+          enum:
+          - CERTIFICATE
+          - CERTIFICATE_INSTANCE
+          - APPLICATION
+          example: CERTIFICATE
+          type: string
+        targetedTags:
+          description: Array of tags to apply
+          example:
+          - 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
+          items:
+            description: Array of tags to apply
+            example: '["265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c"]'
+            type: string
+          type: array
+          uniqueItems: true
+      required:
+      - entityIds
+      type: object
+    TagValuesResponse:
+      properties:
+        count:
+          description: Number of values returned
+          example: 7
+          format: int32
+          type: integer
+        values:
+          items:
+            $ref: '#/components/schemas/TagValueInformation'
+          type: array
+      type: object
+    TagAssignmentErrorInformation:
+      description: Error information for tags not assigned
+      example:
+        errorInformation:
+          message: not assigned
+          statusCode: 1111
+      properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue5'
+          type: array
+        message:
+          type: string
+        statusCode:
+          format: int32
+          type: integer
+      type: object
     TagsAssignmentAggregatesResponse:
       properties:
         aggregates:
@@ -975,61 +965,53 @@ components:
               entityType: APPLICATION
           type: object
       type: object
-    AnyValue5:
-      description: Can be any value - string, number, boolean, array or object.
-    TagsAndValuesInformation:
+    TagsAssignmentAggregatesResponseInformation:
+      description: Represents a mapping of tag name to list of aggregates information
+      example:
+        TagNew:
+        - count: 2
+          entityType: CERTIFICATE
+        - count: 5
+          entityType: APPLICATION
+        tag:value:
+        - count: 6
+          entityType: CERTIFICATE
+        - count: 1
+          entityType: APPLICATION
       properties:
-        tag:
-          $ref: '#/components/schemas/TagInformation'
-        values:
-          items:
-            $ref: '#/components/schemas/TagValueInformation'
-          type: array
-      type: object
-    ErrorResponse7:
-      properties:
-        errors:
-          items:
-            $ref: '#/components/schemas/ErrorInformation5'
-          type: array
-      type: object
-    ErrorInformation5:
-      properties:
-        args:
-          items:
-            $ref: '#/components/schemas/AnyValue5'
-          type: array
-        code:
+        count:
+          description: Number of entities per type
+          example: 2
           format: int32
           type: integer
-        message:
+        entityType:
+          description: Object type that the tag applies to
+          example: CERTIFICATE
           type: string
       type: object
-    TagInformation:
+    TagRequest:
+      description: Array of tag and tag-value objects
       properties:
-        companyId:
-          description: UUID specific to your company
-          example: 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
-          format: uuid
-          type: string
-        id:
-          description: UUID of the tag
-          example: 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
-          format: uuid
-          type: string
-        isReserved:
-          description: Used by Venafi to reserve system tags
-          example: false
-          type: boolean
-        key:
-          description: Same as tag name, though all lowercase
-          example: application
-          type: string
         name:
           description: Name of the tag
           example: Application
+          minLength: 1
           type: string
+        values:
+          description: Array of values associated with the tag
+          example:
+          - TLS Protect
+          - Jetstack
+          items:
+            description: Array of values associated with the tag
+            example: '["TLS Protect","Jetstack"]'
+            type: string
+          type: array
+      required:
+      - name
       type: object
+    AnyValue5:
+      description: Can be any value - string, number, boolean, array or object.
     TagValueInformation:
       properties:
         companyId:
@@ -1052,20 +1034,31 @@ components:
           example: TLS Protect
           type: string
       type: object
-    TagsBulkRequest:
+    TagResponse:
       properties:
+        count:
+          description: Number of tags returned
+          example: 7
+          format: int32
+          type: integer
         tags:
-          description: Array of tag and tag-value objects
           items:
-            $ref: '#/components/schemas/TagRequest'
+            $ref: '#/components/schemas/TagInformation'
           type: array
       type: object
-    TagsAssignResponse:
+    TagValuesRequest:
       properties:
-        tagsAssignInformation:
+        values:
+          description: Array of value names to associate with the tag
+          example: 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
           items:
-            $ref: '#/components/schemas/TagsAssignResponseInformation'
+            description: Array of value names to associate with the tag
+            example: 265f6d30-a0bb-11ed-aee0-89fe7e5f5d0c
+            type: string
+          minItems: 1
           type: array
+      required:
+      - values
       type: object
     TagsAssignmentAggregatesRequest:
       properties:
@@ -1091,6 +1084,13 @@ components:
           uniqueItems: true
       required:
       - tags
+      type: object
+    TagsAssignResponse:
+      properties:
+        tagsAssignInformation:
+          items:
+            $ref: '#/components/schemas/TagsAssignResponseInformation'
+          type: array
       type: object
   securitySchemes:
     service-account:

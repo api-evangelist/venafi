@@ -479,16 +479,22 @@ paths:
       - AccessToken: []
 components:
   schemas:
-    Web_SDK_Authentication_OAuthError:
+    Drivers_Applications_HashiCorp_REST_CreatePkiResponse:
       type: object
       properties:
-        error:
+        Guid:
           type: string
-          description: Gets or sets the short error name
-        error_description:
+          description: Guid of PKI object.
+        CertificateGuid:
           type: string
-          description: Gets or sets the description of the error
-      description: REST OAuth Error Response
+          description: Guid of associated certificate object.
+        Error:
+          type: string
+          description: Error.
+        CertificateDN:
+          type: string
+          description: DN of certificate object.
+      description: Response for PKI create request.
     Drivers_Applications_HashiCorp_REST_Pkis:
       type: object
       properties:
@@ -515,32 +521,6 @@ components:
           type: string
           description: Error.
       description: List of all PKI objects.
-    Drivers_Applications_HashiCorp_REST_CreateRoleResponse:
-      type: object
-      properties:
-        Guid:
-          type: string
-          description: Guid of created role.
-        Error:
-          type: string
-          description: Error.
-      description: Response for role creation request.
-    Drivers_Applications_HashiCorp_REST_CreatePkiResponse:
-      type: object
-      properties:
-        Guid:
-          type: string
-          description: Guid of PKI object.
-        CertificateGuid:
-          type: string
-          description: Guid of associated certificate object.
-        Error:
-          type: string
-          description: Error.
-        CertificateDN:
-          type: string
-          description: DN of certificate object.
-      description: Response for PKI create request.
     Drivers_Applications_HashiCorp_REST_PkiResponse:
       type: object
       properties:
@@ -784,6 +764,26 @@ components:
           type: string
           description: Error.
       description: HashiCorp Role policy object.
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
+    Drivers_Applications_HashiCorp_REST_CreateRoleResponse:
+      type: object
+      properties:
+        Guid:
+          type: string
+          description: Guid of created role.
+        Error:
+          type: string
+          description: Error.
+      description: Response for role creation request.
     Drivers_Applications_HashiCorp_REST_CreateRoleRequest_:
       required:
       - FolderDn

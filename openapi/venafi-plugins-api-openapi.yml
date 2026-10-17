@@ -234,25 +234,34 @@ paths:
           name: ngts.plugin.get
 components:
   schemas:
-    PluginType:
-      description: Used for differentiation between different types of plugins.
+    WorkType:
+      description: Defines the type of supported workflow for the plugin.
       enum:
-      - MACHINE
-      - CA
-      - TPP
-      - CREDENTIAL_MANAGER
-      title: PluginType
+      - DISCOVERY
+      - CREDENTIAL
+      - PROVISIONING
+      - ISSUANCE
+      - CERTIFICATE_IMPORT
+      title: WorkType
       type: string
-    PluginResponse:
+    PublicPluginCreationRequest:
       properties:
-        plugins:
-          items:
-            $ref: '#/components/schemas/Plugin'
-          type: array
+        maintainer:
+          description: Refers to the organization, individual, email, location, or website responsible for maintaining the plugin.
+          type:
+          - string
+          - 'null'
+        manifest:
+          $ref: '#/components/schemas/Manifest'
+        pluginType:
+          $ref: '#/components/schemas/PluginType'
       required:
-      - plugins
-      title: PluginResponse
+      - manifest
+      - pluginType
+      title: PublicPluginCreationRequest
       type: object
+      x-stoplight:
+        id: sto5fs3n5bxmf
     Plugin:
       properties:
         creationTime:
@@ -301,6 +310,34 @@ components:
       - creationTime
       title: Plugin
       type: object
+    PluginType:
+      description: Used for differentiation between different types of plugins.
+      enum:
+      - MACHINE
+      - CA
+      - TPP
+      - CREDENTIAL_MANAGER
+      title: PluginType
+      type: string
+    Deployment:
+      properties:
+        executionTarget:
+          default: vsat
+          description: HELP
+          type: string
+        image:
+          description: URL for where the plugin image resides.
+          type: string
+      required:
+      - image
+      - executionTarget
+      title: Deployment
+      type: object
+      x-examples:
+        Example 1:
+          deployment:
+            executionTarget: vsat
+            image: public.ecr.aws/docker/library/nginx:mainline-alpine3.18-slim
     LocalizationResource:
       description: Translation map for the UI being rendered. This map is used with the manifest schema. The keys represent the values provided for the "x-localizationKey" property in the domain entity definition, and each key's value is used to represent field labels, enum values, or error messages.
       properties:
@@ -358,40 +395,16 @@ components:
               server: Server SSL Profile
             username:
               label: Username
-    PublicPluginUpdateRequest:
+    PluginResponse:
       properties:
-        image:
-          type:
-          - string
-          - 'null'
-        maintainer:
-          type:
-          - string
-          - 'null'
-        manifest:
-          $ref: '#/components/schemas/Manifest'
-      title: PublicPluginUpdateRequest
-      type: object
-      x-stoplight:
-        id: 8ypau6to0udah
-    PublicPluginCreationRequest:
-      properties:
-        maintainer:
-          description: Refers to the organization, individual, email, location, or website responsible for maintaining the plugin.
-          type:
-          - string
-          - 'null'
-        manifest:
-          $ref: '#/components/schemas/Manifest'
-        pluginType:
-          $ref: '#/components/schemas/PluginType'
+        plugins:
+          items:
+            $ref: '#/components/schemas/Plugin'
+          type: array
       required:
-      - manifest
-      - pluginType
-      title: PublicPluginCreationRequest
+      - plugins
+      title: PluginResponse
       type: object
-      x-stoplight:
-        id: sto5fs3n5bxmf
     Manifest:
       properties:
         deployment:
@@ -652,35 +665,22 @@ components:
               username:
                 label: Username
           name: Sample Manifest
-    Deployment:
+    PublicPluginUpdateRequest:
       properties:
-        executionTarget:
-          default: vsat
-          description: HELP
-          type: string
         image:
-          description: URL for where the plugin image resides.
-          type: string
-      required:
-      - image
-      - executionTarget
-      title: Deployment
+          type:
+          - string
+          - 'null'
+        maintainer:
+          type:
+          - string
+          - 'null'
+        manifest:
+          $ref: '#/components/schemas/Manifest'
+      title: PublicPluginUpdateRequest
       type: object
-      x-examples:
-        Example 1:
-          deployment:
-            executionTarget: vsat
-            image: public.ecr.aws/docker/library/nginx:mainline-alpine3.18-slim
-    WorkType:
-      description: Defines the type of supported workflow for the plugin.
-      enum:
-      - DISCOVERY
-      - CREDENTIAL
-      - PROVISIONING
-      - ISSUANCE
-      - CERTIFICATE_IMPORT
-      title: WorkType
-      type: string
+      x-stoplight:
+        id: 8ypau6to0udah
   securitySchemes:
     service-account:
       in: header

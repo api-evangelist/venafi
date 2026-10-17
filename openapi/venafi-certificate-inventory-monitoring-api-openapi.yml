@@ -276,87 +276,22 @@ paths:
         - PKIAdmin
 components:
   schemas:
-    ErrorInformation3:
+    Recipient:
       properties:
-        args:
-          items:
-            $ref: '#/components/schemas/AnyValue3'
-          type: array
-        code:
-          format: int32
-          type: integer
-        message:
-          type: string
-      type: object
-    InventoryMonitoringConfigurationResponse:
-      properties:
-        companyId:
-          description: UUID specific to your company
-          example: 2b391680-74ce-11ed-bf7a-a3d5ccdf275c
-          format: uuid
-          type: string
-        configuration:
-          $ref: '#/components/schemas/InventoryMonitoringConfiguration'
         id:
-          description: UUID of the configuration
-          example: 2e8d71a0-74ce-11ed-9051-cfa579eae364
-          format: uuid
+          description: The ID of a user or team who should be included as a recipient.
+          format: UUID
           type: string
-      type: object
-    CertificateExpirationInventoryMonitoringConfig:
-      allOf:
-      - $ref: '#/components/schemas/InventoryMonitoringConfig'
-      - properties:
-          applicationIds:
-            description: Application IDs that the webhook applies to
-            items:
-              description: Application IDs that the webhook applies to
-              format: uuid
-              type: string
-            type: array
-            uniqueItems: true
-          enabled:
-            description: Enables or disables webhook messages.
-            type: boolean
-          includeUnassignedCertificates:
-            description: Enables or disables notifications for unassigned certificates.
-            type: boolean
-          thresholds:
-            description: Array of certificate expiration thresholds, in days, for when notifications will be sent. Limit is 3 values.
-            items:
-              description: Array of certificate expiration thresholds, in days, for when notifications will be sent. Limit is 3 values.
-              format: int32
-              type: integer
-            type: array
-        type: object
-      type: object
-    AnyValue3:
-      description: Can be any value - string, number, boolean, array or object.
-    InventoryMonitoringConfigRequest:
-      properties:
-        inventoryMonitoringConfiguration:
-          oneOf:
-          - $ref: '#/components/schemas/CertificateExpirationInventoryMonitoringConfig'
-          type: object
-      type: object
-    InventoryMonitoringSchedulerInformation:
-      properties:
-        name:
-          description: Name of the configuration
-          type: string
-        status:
-          description: Status of the configuration
+        type:
+          description: The type of the recipient.
           enum:
-          - PENDING
-          - RUNNING
-          - DONE
-          - FAILED
+          - User
+          - Team
           type: string
+      required:
+      - type
+      - id
       type: object
-    Channel:
-      enum:
-      - email
-      type: string
     ErrorResponse4:
       properties:
         errors:
@@ -364,21 +299,6 @@ components:
             $ref: '#/components/schemas/ErrorInformation3'
           type: array
       type: object
-    InventoryMonitoringConfig:
-      discriminator:
-        mapping:
-          CERTIFICATE_EXPIRATION: '#/components/schemas/CertificateExpirationInventoryMonitoringConfig'
-        propertyName: inventoryMonitoringConfigurationType
-      properties:
-        inventoryMonitoringConfigurationType:
-          type: string
-      type: object
-    Persona:
-      enum:
-      - Application Owners
-      - All PKI Admins
-      - All Admins
-      type: string
     TenantExpirationNotificationConfiguration:
       properties:
         additionalRecipients:
@@ -423,6 +343,12 @@ components:
           type: array
           uniqueItems: true
       type: object
+    Persona:
+      enum:
+      - Application Owners
+      - All PKI Admins
+      - All Admins
+      type: string
     InventoryMonitoringConfiguration:
       discriminator:
         propertyName: inventoryMonitoringConfigurationType
@@ -432,21 +358,95 @@ components:
       required:
       - inventoryMonitoringConfigurationType
       type: object
-    Recipient:
+    AnyValue3:
+      description: Can be any value - string, number, boolean, array or object.
+    ErrorInformation3:
       properties:
+        args:
+          items:
+            $ref: '#/components/schemas/AnyValue3'
+          type: array
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+    InventoryMonitoringConfig:
+      discriminator:
+        mapping:
+          CERTIFICATE_EXPIRATION: '#/components/schemas/CertificateExpirationInventoryMonitoringConfig'
+        propertyName: inventoryMonitoringConfigurationType
+      properties:
+        inventoryMonitoringConfigurationType:
+          type: string
+      type: object
+    Channel:
+      enum:
+      - email
+      type: string
+    InventoryMonitoringConfigRequest:
+      properties:
+        inventoryMonitoringConfiguration:
+          oneOf:
+          - $ref: '#/components/schemas/CertificateExpirationInventoryMonitoringConfig'
+          type: object
+      type: object
+    InventoryMonitoringConfigurationResponse:
+      properties:
+        companyId:
+          description: UUID specific to your company
+          example: 2b391680-74ce-11ed-bf7a-a3d5ccdf275c
+          format: uuid
+          type: string
+        configuration:
+          $ref: '#/components/schemas/InventoryMonitoringConfiguration'
         id:
-          description: The ID of a user or team who should be included as a recipient.
-          format: UUID
+          description: UUID of the configuration
+          example: 2e8d71a0-74ce-11ed-9051-cfa579eae364
+          format: uuid
           type: string
-        type:
-          description: The type of the recipient.
+      type: object
+    InventoryMonitoringSchedulerInformation:
+      properties:
+        name:
+          description: Name of the configuration
+          type: string
+        status:
+          description: Status of the configuration
           enum:
-          - User
-          - Team
+          - PENDING
+          - RUNNING
+          - DONE
+          - FAILED
           type: string
-      required:
-      - type
-      - id
+      type: object
+    CertificateExpirationInventoryMonitoringConfig:
+      allOf:
+      - $ref: '#/components/schemas/InventoryMonitoringConfig'
+      - properties:
+          applicationIds:
+            description: Application IDs that the webhook applies to
+            items:
+              description: Application IDs that the webhook applies to
+              format: uuid
+              type: string
+            type: array
+            uniqueItems: true
+          enabled:
+            description: Enables or disables webhook messages.
+            type: boolean
+          includeUnassignedCertificates:
+            description: Enables or disables notifications for unassigned certificates.
+            type: boolean
+          thresholds:
+            description: Array of certificate expiration thresholds, in days, for when notifications will be sent. Limit is 3 values.
+            items:
+              description: Array of certificate expiration thresholds, in days, for when notifications will be sent. Limit is 3 values.
+              format: int32
+              type: integer
+            type: array
+        type: object
       type: object
   examples:
     TenantExpirationNotificationConfigurationExample:

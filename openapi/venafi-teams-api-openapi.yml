@@ -447,16 +447,12 @@ paths:
         - ResourceOwner
 components:
   schemas:
-    TeamMembersRequest:
+    TeamsResponse:
       properties:
-        members:
+        teams:
           items:
-            format: uuid
-            type: string
+            $ref: '#/components/schemas/TeamInformation2'
           type: array
-          uniqueItems: true
-      required:
-      - members
       type: object
     TeamInformation2:
       properties:
@@ -502,38 +498,6 @@ components:
             $ref: '#/components/schemas/UserMatchingRule'
           type: array
       type: object
-    UpdateTeamRequest:
-      properties:
-        name:
-          maxLength: 100
-          type: string
-        role:
-          $ref: '#/components/schemas/TeamRole'
-        userMatchingRules:
-          items:
-            $ref: '#/components/schemas/UserMatchingRule'
-          maxItems: 20
-          type: array
-      type: object
-    AnyValue6:
-      description: Can be any value - string, number, boolean, array or object.
-    Operator:
-      enum:
-      - EQUALS
-      - NOT_EQUALS
-      - CONTAINS
-      - NOT_CONTAINS
-      - STARTS_WITH
-      - ENDS_WITH
-      type: string
-    TeamRole:
-      enum:
-      - SYSTEM_ADMIN
-      - PKI_ADMIN
-      - RESOURCE_OWNER
-      - GUEST
-      - PLATFORM_ADMIN
-      type: string
     TeamOwnersRequest:
       properties:
         owners:
@@ -545,6 +509,11 @@ components:
       required:
       - owners
       type: object
+    SystemRole:
+      enum:
+      - SYSTEM_ADMIN
+      - CONDOR_METRICS
+      type: string
     UserMatchingRule:
       properties:
         claimName:
@@ -589,16 +558,54 @@ components:
       - owners
       - role
       type: object
-    SystemRole:
+    TeamRole:
       enum:
       - SYSTEM_ADMIN
-      - CONDOR_METRICS
+      - PKI_ADMIN
+      - RESOURCE_OWNER
+      - GUEST
+      - PLATFORM_ADMIN
       type: string
-    TeamsResponse:
+    TeamMembersRequest:
       properties:
-        teams:
+        members:
           items:
-            $ref: '#/components/schemas/TeamInformation2'
+            format: uuid
+            type: string
+          type: array
+          uniqueItems: true
+      required:
+      - members
+      type: object
+    Role2:
+      enum:
+      - SECURITY_ADMIN
+      - DEVOPS_LEAD
+      - DEVOPS_USER
+      - OUTAGEDETECTION_ADMIN
+      - RESOURCE_OWNER
+      - PKI_ADMIN
+      - GUEST
+      - PLATFORM_ADMIN
+      type: string
+    UpdateTeamRequest:
+      properties:
+        name:
+          maxLength: 100
+          type: string
+        role:
+          $ref: '#/components/schemas/TeamRole'
+        userMatchingRules:
+          items:
+            $ref: '#/components/schemas/UserMatchingRule'
+          maxItems: 20
+          type: array
+      type: object
+    ErrorResponse8:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/ErrorInformation6'
           type: array
       type: object
     ErrorInformation6:
@@ -613,23 +620,16 @@ components:
         message:
           type: string
       type: object
-    ErrorResponse8:
-      properties:
-        errors:
-          items:
-            $ref: '#/components/schemas/ErrorInformation6'
-          type: array
-      type: object
-    Role2:
+    AnyValue6:
+      description: Can be any value - string, number, boolean, array or object.
+    Operator:
       enum:
-      - SECURITY_ADMIN
-      - DEVOPS_LEAD
-      - DEVOPS_USER
-      - OUTAGEDETECTION_ADMIN
-      - RESOURCE_OWNER
-      - PKI_ADMIN
-      - GUEST
-      - PLATFORM_ADMIN
+      - EQUALS
+      - NOT_EQUALS
+      - CONTAINS
+      - NOT_CONTAINS
+      - STARTS_WITH
+      - ENDS_WITH
       type: string
   securitySchemes:
     service-account:

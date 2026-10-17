@@ -464,16 +464,86 @@ paths:
       - AccessToken: []
 components:
   schemas:
-    Web_SDK_Authentication_OAuthError:
+    IO_Stream:
+      type: object
+    Core_WebSDK_Obsolete_VersionResponse:
       type: object
       properties:
-        error:
+        Version:
           type: string
-          description: Gets or sets the short error name
-        error_description:
+          description: Current engine version.
+      description: Class for platform version response.
+    Core_WebSDK_Obsolete_UpgradeSummaryResponse:
+      type: object
+      properties:
+        UpgradeSummary:
+          type: object
+          properties:
+            Status:
+              type: string
+              description: Overall system upgrade status
+            StatusDetails:
+              type: string
+              description: Overall system upgrade status details
+            UpgradeStartTime:
+              type: string
+              description: System upgrade start time
+            UpgradeStopTime:
+              type: string
+              description: System upgrade stop time
+            RemainingTasks:
+              type:
+              - integer
+              - 'null'
+              description: Number of remaining tasks for the system upgrade
+              format: int32
+            CompletedTasks:
+              type:
+              - integer
+              - 'null'
+              description: Number of completed tasks for the system upgrade
+              format: int32
+            OriginVersion:
+              type: string
+              description: Product version prior to the most recent system upgrade
+            TargetVersion:
+              type: string
+              description: Target product version
+            EnginesComplete:
+              type:
+              - integer
+              - 'null'
+              description: Number of engines that have completed the upgrade
+              format: int32
+            EnginesRunning:
+              type:
+              - integer
+              - 'null'
+              description: Number of engines that are running the upgrade
+              format: int32
+            EnginesBlocked:
+              type:
+              - integer
+              - 'null'
+              description: Number of engines that are blocked
+              format: int32
+            EnginesInError:
+              type:
+              - integer
+              - 'null'
+              description: Number of engines that are in error
+              format: int32
+            EnginesPendingInstall:
+              type:
+              - integer
+              - 'null'
+              description: Number of engines that are pending installation of the new version
+              format: int32
+          description: ''
+        Error:
           type: string
-          description: Gets or sets the description of the error
-      description: REST OAuth Error Response
+          description: Error description
+      description: Status of an upgrade
     Core_WebSDK_Obsolete_EngineUpgradeResponse_Upgrade_Engines:
       type: object
       properties:
@@ -568,96 +638,6 @@ components:
         Error:
           type: string
           description: Error if it exists
-    Core_WebSDK_Obsolete_UpgradeStatusResponse:
-      type: object
-      properties:
-        UpgradeInProgress:
-          type:
-          - boolean
-          - 'null'
-          description: Indicates if upgrade is in progress
-        Error:
-          type: string
-          description: Error description
-      description: Upgrade status response
-    Core_WebSDK_Obsolete_VersionResponse:
-      type: object
-      properties:
-        Version:
-          type: string
-          description: Current engine version.
-      description: Class for platform version response.
-    Core_WebSDK_Obsolete_UpgradeSummaryResponse:
-      type: object
-      properties:
-        UpgradeSummary:
-          type: object
-          properties:
-            Status:
-              type: string
-              description: Overall system upgrade status
-            StatusDetails:
-              type: string
-              description: Overall system upgrade status details
-            UpgradeStartTime:
-              type: string
-              description: System upgrade start time
-            UpgradeStopTime:
-              type: string
-              description: System upgrade stop time
-            RemainingTasks:
-              type:
-              - integer
-              - 'null'
-              description: Number of remaining tasks for the system upgrade
-              format: int32
-            CompletedTasks:
-              type:
-              - integer
-              - 'null'
-              description: Number of completed tasks for the system upgrade
-              format: int32
-            OriginVersion:
-              type: string
-              description: Product version prior to the most recent system upgrade
-            TargetVersion:
-              type: string
-              description: Target product version
-            EnginesComplete:
-              type:
-              - integer
-              - 'null'
-              description: Number of engines that have completed the upgrade
-              format: int32
-            EnginesRunning:
-              type:
-              - integer
-              - 'null'
-              description: Number of engines that are running the upgrade
-              format: int32
-            EnginesBlocked:
-              type:
-              - integer
-              - 'null'
-              description: Number of engines that are blocked
-              format: int32
-            EnginesInError:
-              type:
-              - integer
-              - 'null'
-              description: Number of engines that are in error
-              format: int32
-            EnginesPendingInstall:
-              type:
-              - integer
-              - 'null'
-              description: Number of engines that are pending installation of the new version
-              format: int32
-          description: ''
-        Error:
-          type: string
-          description: Error description
-      description: Status of an upgrade
     Core_WebSDK_Obsolete_GroupingIdsResposne:
       type: object
       properties:
@@ -683,8 +663,18 @@ components:
           type: string
           description: Error if it exists
       description: Grouping Ids Response
-    IO_Stream:
+    Core_WebSDK_Obsolete_UpgradeStatusResponse:
       type: object
+      properties:
+        UpgradeInProgress:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates if upgrade is in progress
+        Error:
+          type: string
+          description: Error description
+      description: Upgrade status response
     Core_WebSDK_Obsolete_EngineUpgradeResponse_Upgrade_Engine:
       type: object
       properties:
@@ -776,6 +766,16 @@ components:
         Error:
           type: string
           description: Error if it exists
+    Web_SDK_Authentication_OAuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Gets or sets the short error name
+        error_description:
+          type: string
+          description: Gets or sets the description of the error
+      description: REST OAuth Error Response
   securitySchemes:
     AccessToken:
       type: http
